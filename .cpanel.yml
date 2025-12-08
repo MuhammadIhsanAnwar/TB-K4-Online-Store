@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/neoz6813/public_html/urbanhype.neoverse.my.id/
+    - /bin/rsync -av --delete /home/neoz6813/public_html/repository-urbanhype.neoverse.my.id/ $DEPLOYPATH
