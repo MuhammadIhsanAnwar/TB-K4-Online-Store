@@ -1,5 +1,5 @@
 ---
 deployment:
 tasks:
-- export DEPLOYPATH=/home/usercpanel/public_html/urbanhype.neoverse.my.id
+- export DEPLOYPATH=/home/neoz6813/public_html/urbanhype.neoverse.my.id
 - /bin/cp -r * $DEPLOYPATH
