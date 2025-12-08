@@ -1,4 +1,5 @@
 deployment:
   tasks:
+    - export REPOPATH=/home/neoz6813/repositories/TB-K4-Online-Store/
     - export DEPLOYPATH=/home/neoz6813/public_html/urbanhype.neoverse.my.id/
-    - /bin/rsync -av --delete /home/neoz6813/public_html/repository-urbanhype.neoverse.my.id/ $DEPLOYPATH
+    - /bin/rsync -av --delete $REPOPATH $DEPLOYPATH
