@@ -1,15 +1,5 @@
-#!/bin/bash
-
-# --- Path sumber dan target ---
-REPOPATH="/home/neoz6813/repositories/TB-K4-Online-Store/"
-DEPLOYPATH="/home/neoz6813/public_html/urbanhype.neoverse.my.id/"
-
-# --- Pastikan folder target ada ---
-mkdir -p "$DEPLOYPATH"
-
-# --- Jalankan rsync dengan log ---
-rsync -av --progress --stats "$REPOPATH" "$DEPLOYPATH"
-
-# --- Konfirmasi ---
-echo "Deployment selesai. Isi folder target:"
-ls -l "$DEPLOYPATH"
+---
+deployment:
+tasks:
+- export DEPLOYPATH=/home/usercpanel/public_html/urbanhype.neoverse.my.id
+- /bin/cp -r * $DEPLOYPATH
