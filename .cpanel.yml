@@ -1,17 +1,5 @@
-#!/bin/bash
-
-REPOPATH="/home/neoz6813/repositories/TB-K4-Online-Store/"
-DEPLOYPATH="/home/neoz6813/public_html/urbanhype.neoverse.my.id/"
-
-# pastikan folder tujuan ada
-mkdir -p "$DEPLOYPATH"
-
-# masuk ke folder repository
-cd "$REPOPATH"
-
-# copy semua isi repo ke root hosting
-cp -r * "$DEPLOYPATH"
-
-# tampilkan isi folder target
-echo "Isi folder root hosting:"
-ls -l "$DEPLOYPATH"
+---
+deployment:
+tasks:
+- export DEPLOYPATH=/home/neoz6813/public_html/urbanhype.neoverse.my.id
+- /bin/cp -r * $DEPLOYPATH
