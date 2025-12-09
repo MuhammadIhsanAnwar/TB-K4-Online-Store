@@ -1,13 +1,26 @@
 <?php
 include "../admin/koneksi.php";
 
-$username        = $_POST['username'];
-$nama_lengkap    = $_POST['nama_lengkap'];
-$jenis_kelamin   = $_POST['jenis_kelamin'];
-$tanggal_lahir   = $_POST['tanggal_lahir'];
-$alamat          = $_POST['alamat'];
-$email           = $_POST['email'];
-$password        = password_hash($_POST['password'], PASSWORD_DEFAULT);
+// CEK POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: register_user.php"); // redirect jika bukan POST
+    exit;
+}
+
+// AMBIL DATA
+$username        = $_POST['username'] ?? '';
+$nama_lengkap    = $_POST['nama_lengkap'] ?? '';
+$jenis_kelamin   = $_POST['jenis_kelamin'] ?? '';
+$tanggal_lahir   = $_POST['tanggal_lahir'] ?? '';
+$alamat          = $_POST['alamat'] ?? '';
+$email           = $_POST['email'] ?? '';
+$password        = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
+
+// VALIDASI SEDERHANA
+if (!$username || !$nama_lengkap || !$jenis_kelamin || !$tanggal_lahir || !$alamat || !$email || !$password) {
+    echo "<script>alert('Semua field wajib diisi!');history.back();</script>";
+    exit;
+}
 
 // CEK USERNAME / EMAIL SUDAH ADA BELUM
 $cek = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE email='$email' OR username='$username'");

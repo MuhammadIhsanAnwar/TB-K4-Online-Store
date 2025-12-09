@@ -1,10 +1,16 @@
 <?php
 include "../admin/koneksi.php";
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+// CEK POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: login_user.php"); // redirect jika bukan POST
+    exit;
+}
 
-// ===== VALIDASI PASSWORD =====
+$email = $_POST['email'] ?? '';
+$password = $_POST['password'] ?? '';
+
+// VALIDASI PASSWORD
 if (!preg_match('/[A-Z]/', $password)) {
     die("<script>alert('Password harus mengandung huruf BESAR!');history.back();</script>");
 }
@@ -14,7 +20,7 @@ if (!preg_match('/[a-z]/', $password)) {
 if (!preg_match('/[0-9]/', $password)) {
     die("<script>alert('Password harus mengandung angka!');history.back();</script>");
 }
-if (!preg_match('/[\W_]/', $password)) { // \W artinya non-alphanumeric (karakter spesial)
+if (!preg_match('/[\W_]/', $password)) {
     die("<script>alert('Password harus mengandung karakter spesial!');history.back();</script>");
 }
 if (strlen($password) < 8) {
@@ -35,7 +41,7 @@ if ($update) {
 
     echo "<script>
             alert('Password berhasil diperbarui! Silakan login.');
-            window.location='login.php';
+            window.location='login_user.php';
           </script>";
 } else {
     echo "<script>alert('Gagal memperbarui password!');history.back();</script>";

@@ -9,7 +9,20 @@ require '../phpmailer/src/Exception.php';
 require '../phpmailer/src/PHPMailer.php';
 require '../phpmailer/src/SMTP.php';
 
-$email = $_POST['email'];
+// CEK POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    // Bisa redirect ke halaman lain atau tampilkan error
+    header("Location: login_user.php");
+    exit;
+}
+
+$email = $_POST['email'] ?? '';
+
+// Validasi sederhana
+if (empty($email)) {
+    echo "<script>alert('Email tidak boleh kosong!');history.back();</script>";
+    exit;
+}
 
 // Cari email
 $q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE email='$email'");
@@ -34,19 +47,14 @@ $link_reset = "https://urbanhype.neoverse.my.id/user/reset_password.php?token=$t
 $mail = new PHPMailer(true);
 
 try {
-
-    // DEBUG (jika mau aktifkan, ubah 0 → 2)
     $mail->SMTPDebug = 0;
-
     $mail->isSMTP();
-    $mail->Host       = "urbanhype.neoverse.my.id";   // HOST SMTP YANG BENAR
+    $mail->Host       = "urbanhype.neoverse.my.id"; 
     $mail->SMTPAuth   = true;
     $mail->Username   = "mailreset@urbanhype.neoverse.my.id";
     $mail->Password   = "administrator-online-store";
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // SSL
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port       = 465;
-
-    // FIX SSL error (wajib pada beberapa hosting)
     $mail->SMTPOptions = [
         'ssl' => [
             'verify_peer' => false,

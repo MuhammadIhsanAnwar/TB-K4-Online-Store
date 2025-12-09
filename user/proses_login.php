@@ -2,8 +2,19 @@
 session_start();
 include "../admin/koneksi.php";
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+// CEK POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: ../login_user.php"); // redirect jika bukan POST
+    exit;
+}
+
+$username = $_POST['username'] ?? '';
+$password = $_POST['password'] ?? '';
+
+if (empty($username) || empty($password)) {
+    echo "<script>alert('Username dan Password wajib diisi!');history.back();</script>";
+    exit;
+}
 
 $q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE username='$username' OR email='$username'");
 $data = mysqli_fetch_assoc($q);
