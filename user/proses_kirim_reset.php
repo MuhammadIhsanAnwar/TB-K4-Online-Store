@@ -24,9 +24,9 @@ mysqli_query($koneksi, "INSERT INTO reset_password (email, token, expired) VALUE
 $link_reset = "https://urbanhype.neoverse.my.id/user/reset_password.php?token=$token";
 
 // PENGIRIMAN EMAIL VIA SMTP HOSTING
-require '../phpmailer/PHPMailer.php';
-require '../phpmailer/SMTP.php';
-require '../phpmailer/Exception.php';
+require '../phpmailer/src/PHPMailer.php';
+require '../phpmailer/src/SMTP.php';
+require '../phpmailer/src/Exception.php';
 
 $mail = new PHPMailer\PHPMailer\PHPMailer();
 $mail->isSMTP();

@@ -24,7 +24,7 @@
             </form>
 
             <div class="text-center small mt-3">
-                <a href="login.php" class="text-decoration-none">Kembali ke Login</a>
+                <a href="login_user.php" class="text-decoration-none">Kembali ke Login</a>
             </div>
         </div>
     </div>
