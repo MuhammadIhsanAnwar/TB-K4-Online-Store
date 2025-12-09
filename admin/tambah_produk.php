@@ -59,15 +59,8 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-    <div class="sidebar">
-        <h5 class="text-white ps-3">Menu Admin</h5>
-        <a href="dashboard.php">Dashboard</a>
-        <a href="data_user.php">Data User</a>
-        <a href="tambah_produk.php">Tambah Produk</a>
-        <a href="hapus_produk.php">Hapus Produk</a>
-        <a href="data_penjualan.php">Data Penjualan</a>
-        <a href="logout.php" class="mt-3 text-danger">Logout</a>
-    </div>
+    <?php include 'sidebar.php'; ?>
+
     <nav class="navbar navbar-dark bg-dark fixed-top" style="margin-left:220px;">
         <div class="container-fluid"><span class="navbar-brand fw-bold">Admin Panel</span></div>
     </nav>

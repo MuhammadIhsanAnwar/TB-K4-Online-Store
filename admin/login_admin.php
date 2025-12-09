@@ -10,7 +10,7 @@ if (isset($_POST['login'])) {
 
     if (mysqli_num_rows($query) > 0) {
         $_SESSION['login'] = true;
-        header("Location: index.php");
+        header("Location: dashboard.php");
         exit;
     } else {
         $error = "Username atau password salah!";
