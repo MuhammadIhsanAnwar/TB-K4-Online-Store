@@ -37,6 +37,10 @@
                     Register Akun
                 </a>
 
+                <a href="lupa_password.php" class="d-block text-decoration-none mt-2">
+                    Lupa Password?
+                </a>
+
                 <a href="../index.php" class="d-block text-decoration-none mt-2">
                     Kembali ke Beranda
                 </a>
