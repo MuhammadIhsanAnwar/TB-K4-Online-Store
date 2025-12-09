@@ -12,7 +12,7 @@
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
         <span class="navbar-brand fw-bold">Admin Panel</span>
-        <a href="../logout.php" class="btn btn-danger btn-sm">Logout</a>
+        <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
     </div>
 </nav>
 
