@@ -3,7 +3,7 @@ include "../admin/koneksi.php";
 
 // CEK POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: register_user.php"); // redirect jika bukan POST
+    header("Location: ../index.php"); // redirect jika bukan POST
     exit;
 }
 

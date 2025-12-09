@@ -12,7 +12,7 @@ require '../phpmailer/src/SMTP.php';
 // CEK POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     // Bisa redirect ke halaman lain atau tampilkan error
-    header("Location: login_user.php");
+    header("Location: ../index.php");
     exit;
 }
 
