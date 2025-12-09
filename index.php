@@ -38,7 +38,7 @@ if (isset($_SESSION['user_id'])) {
     <div class="container">
         <a class="navbar-brand fw-bold fs-3" href="#">UrbanHype</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -56,10 +56,10 @@ if (isset($_SESSION['user_id'])) {
                 <li><i class="bi bi-bag fs-5"></i></li>
 
                 <?php if ($user): ?>
-                    <!-- User sudah login -->
+                    <!-- User sudah login, tampilkan nama dan foto -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="upload/<?php echo $user['foto']; ?>" alt="Profile" class="rounded-circle">
+                            <img src="foto_profil/<?php echo $user['foto']; ?>" alt="Foto Profil" class="rounded-circle" width="40">
                             <?php echo $user['nama']; ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -69,11 +69,8 @@ if (isset($_SESSION['user_id'])) {
                     </li>
                 <?php else: ?>
                     <!-- User belum login -->
-                    <li><i class="bi bi-person fs-5"></i></li>
                     <li>
-                        <a href="user/login_user.php" class="btn btn-dark px-3 py-1 rounded-3">
-                            Login
-                        </a>
+                        <a href="user/login_user.php" class="btn btn-dark px-3 py-1 rounded-3">Login</a>
                     </li>
                 <?php endif; ?>
             </ul>

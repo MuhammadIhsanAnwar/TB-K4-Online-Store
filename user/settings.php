@@ -24,20 +24,20 @@ if (isset($_POST['update'])) {
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
         $foto_name = time() . "_" . $_FILES['foto']['name'];
         $foto_tmp = $_FILES['foto']['tmp_name'];
-        move_uploaded_file($foto_tmp, "../upload/$foto_name");
+        move_uploaded_file($foto_tmp, "../foto_profil/$foto_name");
 
         // Hapus foto lama jika ada
-        if (!empty($user['foto']) && file_exists("../upload/".$user['foto'])) {
-            unlink("../upload/".$user['foto']);
+        if (!empty($user['foto_profil']) && file_exists("../foto_profil/".$user['foto_profil'])) {
+            unlink("../foto_profil/".$user['foto_profil']);
         }
 
-        $update_foto_sql = ", foto='$foto_name'";
+        $update_foto_sql = ", foto_profil='$foto_name'";
     } else {
         $update_foto_sql = "";
     }
 
     // Update database
-    $update_sql = "UPDATE users SET username='$username', nama='$nama', tanggal_lahir='$tanggal_lahir', alamat='$alamat', jenis_kelamin='$jenis_kelamin' $update_foto_sql WHERE id='$user_id'";
+    $update_sql = "UPDATE akun_user SET username='$username', nama='$nama', tanggal_lahir='$tanggal_lahir', alamat='$alamat', jenis_kelamin='$jenis_kelamin' $update_foto_sql WHERE id='$user_id'";
     if (mysqli_query($koneksi, $update_sql)) {
         echo "<script>alert('Data berhasil diperbarui');window.location='settings.php';</script>";
     } else {
@@ -84,8 +84,8 @@ if (isset($_POST['update'])) {
         </div>
         <div class="mb-3">
             <label>Foto Profil</label><br>
-            <?php if(!empty($user['foto'])): ?>
-                <img src="../upload/<?php echo $user['foto']; ?>" alt="Foto Profil" width="100" class="mb-2 rounded-circle"><br>
+            <?php if(!empty($user['foto_profil'])): ?>
+                <img src="../foto_profil/<?php echo $user['foto_profil']; ?>" alt="Foto Profil" width="100" class="mb-2 rounded-circle"><br>
             <?php endif; ?>
             <input type="file" name="foto" class="form-control">
             <small class="text-muted">Kosongkan jika tidak ingin mengganti foto</small>
