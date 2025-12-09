@@ -1,9 +1,17 @@
 <?php
 include "../admin/koneksi.php";
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require '../phpmailer/src/Exception.php';
+require '../phpmailer/src/PHPMailer.php';
+require '../phpmailer/src/SMTP.php';
+
 $email = $_POST['email'];
 
-// Cari user berdasarkan email
+// Cari email
 $q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE email='$email'");
 $data = mysqli_fetch_assoc($q);
 
@@ -12,44 +20,41 @@ if (!$data) {
     exit;
 }
 
-// Buat token random
+// Token reset
 $token = bin2hex(random_bytes(32));
-$expired = date("Y-m-d H:i:s", time() + 3600); // Berlaku 1 jam
+$expired = date("Y-m-d H:i:s", time() + 3600);
 
-// Simpan token ke database (buat tabel jika belum ada)
-// Tabel: reset_password(email, token, expired)
-mysqli_query($koneksi, "INSERT INTO reset_password (email, token, expired) VALUES ('$email', '$token', '$expired')");
+// Simpan token
+mysqli_query($koneksi, "INSERT INTO reset_password (email, token, expired) 
+                        VALUES ('$email', '$token', '$expired')");
 
-// Link reset
 $link_reset = "https://urbanhype.neoverse.my.id/user/reset_password.php?token=$token";
 
-// PENGIRIMAN EMAIL VIA SMTP HOSTING
-require '../phpmailer/src/PHPMailer.php';
-require '../phpmailer/src/SMTP.php';
-require '../phpmailer/src/Exception.php';
+// SEND EMAIL
+$mail = new PHPMailer(true);
 
-$mail = new PHPMailer\PHPMailer\PHPMailer();
-$mail->isSMTP();
-$mail->Host = "mail.urbanhype.neoverse.my.id"; // server email hosting
-$mail->SMTPAuth = true;
-$mail->Username = "mailreset@urbanhype.neoverse.my.id"; // email pengirim hosting
-$mail->Password = "administrator-online-store"; // password email pengirim
-$mail->SMTPSecure = "ssl";
-$mail->Port = 465;
+try {
+    $mail->isSMTP();
+    $mail->Host       = "mail.urbanhype.neoverse.my.id";
+    $mail->SMTPAuth   = true;
+    $mail->Username   = "mailreset@urbanhype.neoverse.my.id";
+    $mail->Password   = "administrator-online-store";
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // SSL
+    $mail->Port       = 465;
 
-$mail->setFrom("mailreset@urbanhype.neoverse.my.id", "Reset Password");
-$mail->addAddress($email);
+    $mail->setFrom("mailreset@urbanhype.neoverse.my.id", "Reset Password");
+    $mail->addAddress($email);
 
-$mail->isHTML(true);
-$mail->Subject = "Reset Password Akun Anda";
-$mail->Body = "
-    Halo, klik link berikut untuk mereset password:<br><br>
-    <a href='$link_reset'>Reset Password</a><br><br>
-    Link berlaku selama 1 jam.
-";
+    $mail->isHTML(true);
+    $mail->Subject = "Reset Password Akun Anda";
+    $mail->Body = "
+        Halo, klik link berikut untuk reset password:<br><br>
+        <a href='$link_reset'>$link_reset</a><br><br>
+        Link berlaku selama 1 jam.
+    ";
 
-if ($mail->send()) {
+    $mail->send();
     echo "<script>alert('Link reset berhasil dikirim ke email Anda');window.location='login.php';</script>";
-} else {
-    echo "<script>alert('Gagal mengirim email!');history.back();</script>";
+} catch (Exception $e) {
+    echo "<script>alert('Gagal mengirim email: {$mail->ErrorInfo}');history.back();</script>";
 }
