@@ -15,7 +15,7 @@ if ($data) {
         $_SESSION['username'] = $data['username'];
         $_SESSION['nama_lengkap'] = $data['nama_lengkap'];
 
-        header("Location: user_dashboard.php");
+        header("Location: ../index.php");
         exit;
 
     } else {
