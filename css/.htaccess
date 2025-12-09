@@ -4,4 +4,4 @@ Options -Indexes
 # Redirect semua akses folder ke halaman utama
 RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/user/?$ [NC]
-RewriteRule ^.*$ ../index.php [R=302,L]
+RewriteRule ^.*$ /index.php [R=302,L]

@@ -80,6 +80,16 @@ if (isset($_POST['update'])) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings Akun</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+<style>
+#preview {
+    border-radius: 50%;
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+}
+</style>
 </head>
 <body class="bg-light">
 
@@ -119,9 +129,11 @@ if (isset($_POST['update'])) {
         <div class="mb-3">
             <label>Foto Profil</label><br>
             <?php if(!empty($user['foto_profil'])): ?>
-                <img src="../foto_profil/<?php echo $user['foto_profil']; ?>" alt="Foto Profil" width="100" class="mb-2 rounded-circle"><br>
+                <img id="preview" src="../foto_profil/<?php echo $user['foto_profil']; ?>" alt="Foto Profil"><br>
+            <?php else: ?>
+                <img id="preview" src="" alt="Preview" style="display:none;"><br>
             <?php endif; ?>
-            <input type="file" name="foto" class="form-control">
+            <input type="file" id="foto" name="foto" class="form-control">
             <small class="text-muted">Kosongkan jika tidak ingin mengganti foto (maks 2MB, jpg/jpeg/png)</small>
         </div>
 
@@ -130,5 +142,52 @@ if (isset($_POST['update'])) {
 </div>
 
 <script src="../js/bootstrap.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
+let cropper;
+const fotoInput = document.getElementById('foto');
+const preview = document.getElementById('preview');
+
+fotoInput.addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event){
+        preview.src = event.target.result;
+        preview.style.display = "block";
+
+        if(cropper) cropper.destroy();
+
+        cropper = new Cropper(preview, {
+            aspectRatio: 1,
+            viewMode: 1,
+            background: false,
+            zoomable: false,
+            movable: false,
+            scalable: false
+        });
+    }
+    reader.readAsDataURL(file);
+});
+
+const form = document.querySelector('form');
+form.addEventListener('submit', function(e){
+    if(cropper){
+        e.preventDefault();
+        cropper.getCroppedCanvas({
+            width: 300,
+            height: 300,
+            imageSmoothingQuality: 'high'
+        }).toBlob((blob) => {
+            const fileInput = new File([blob], fotoInput.files[0].name, {type: blob.type});
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(fileInput);
+            fotoInput.files = dataTransfer.files;
+            form.submit();
+        }, 'image/png');
+    }
+});
+</script>
 </body>
 </html>
