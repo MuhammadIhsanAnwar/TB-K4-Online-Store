@@ -51,9 +51,12 @@ if (isset($_POST['login'])) {
                 <button class="btn btn-dark w-100" name="login">Login</button>
             </form>
             <div class="text-center small">
-            <a href="../user/login_user.php" class="d-block text-decoration-none text-secondary mb-1">
-                Login User
-            </a>
+                <a href="../user/login_user.php" class="d-block text-decoration-none text-secondary mb-1">
+                    Login User
+                </a>
+                <a href="../index.php" class="d-block text-decoration-none mt-2">
+                    Kembali ke Beranda
+                </a>
             </div>
         </div>
     </div>
