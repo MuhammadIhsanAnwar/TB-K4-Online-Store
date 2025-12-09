@@ -1,5 +1,16 @@
 ---
 deployment:
-tasks:
-- export DEPLOYPATH=/home/neoz6813/public_html/urbanhype.neoverse.my.id
-- /bin/cp -r * $DEPLOYPATH
+  tasks:
+    # Tentukan path tujuan deploy di server
+    - export DEPLOYPATH=/home/neoz6813/public_html/urbanhype.neoverse.my.id
+
+    # Pastikan folder tujuan sudah ada
+    - mkdir -p $DEPLOYPATH
+
+    # Gunakan git pull untuk update file, tanpa menyalin folder .git
+    - /usr/bin/git --work-tree=$DEPLOYPATH --git-dir=$DEPLOYPATH/.git fetch --all
+    - /usr/bin/git --work-tree=$DEPLOYPATH --git-dir=$DEPLOYPATH/.git reset --hard origin/main
+
+    # Set permission aman untuk folder dan file (optional)
+    - find $DEPLOYPATH -type d -exec chmod 755 {} \;
+    - find $DEPLOYPATH -type f -exec chmod 644 {} \;
