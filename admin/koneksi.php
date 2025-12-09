@@ -6,12 +6,14 @@ $password = "administrator-online-store";
 $database = "neoz6813_TB-K4-Online-Store";
 
 // Membuat koneksi
-$conn = new mysqli($host, $username, $password, $database);
+$koneksi = new mysqli($host, $username, $password, $database);
 
 // Cek koneksi
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
+if ($koneksi->connect_error) {
+    die("Koneksi gagal: " . $koneksi->connect_error);
+} else {
+    echo "Koneksi berhasil ke database!";
 }
 
 // Tutup koneksi
-$conn->close();
+$koneksi->close();
