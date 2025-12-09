@@ -24,7 +24,7 @@ if (isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <title>Login Admin</title>
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
 </head>
 
 <body class="bg-light">
@@ -53,7 +53,7 @@ if (isset($_POST['login'])) {
         </div>
     </div>
 
-    <script src="js/bootstrap.bundle.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
 </body>
 
 </html>
