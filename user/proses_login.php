@@ -5,7 +5,7 @@ include "../admin/koneksi.php";
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-$q = mysqli_query($conn, "SELECT * FROM users WHERE username='$username' OR email='$username'");
+$q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE username='$username' OR email='$username'");
 $data = mysqli_fetch_assoc($q);
 
 if ($data) {
