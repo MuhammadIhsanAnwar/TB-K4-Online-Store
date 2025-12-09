@@ -34,13 +34,26 @@ $link_reset = "https://urbanhype.neoverse.my.id/user/reset_password.php?token=$t
 $mail = new PHPMailer(true);
 
 try {
+
+    // DEBUG (jika mau aktifkan, ubah 0 → 2)
+    $mail->SMTPDebug = 0;
+
     $mail->isSMTP();
-    $mail->Host       = "mail.urbanhype.neoverse.my.id";
+    $mail->Host       = "urbanhype.neoverse.my.id";   // HOST SMTP YANG BENAR
     $mail->SMTPAuth   = true;
     $mail->Username   = "mailreset@urbanhype.neoverse.my.id";
     $mail->Password   = "administrator-online-store";
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // SSL
     $mail->Port       = 465;
+
+    // FIX SSL error (wajib pada beberapa hosting)
+    $mail->SMTPOptions = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ];
 
     $mail->setFrom("mailreset@urbanhype.neoverse.my.id", "Reset Password");
     $mail->addAddress($email);
@@ -55,6 +68,7 @@ try {
 
     $mail->send();
     echo "<script>alert('Link reset berhasil dikirim ke email Anda');window.location='login.php';</script>";
+
 } catch (Exception $e) {
     echo "<script>alert('Gagal mengirim email: {$mail->ErrorInfo}');history.back();</script>";
 }
