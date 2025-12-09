@@ -11,6 +11,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         /* Biar card turun sedikit dari atas */
         .center-box {
             margin-top: 40px;
@@ -87,8 +88,7 @@
         function cekPassword() {
             let pw = document.getElementById("password").value;
 
-            let pola =
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
+            let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
             if (!pola.test(pw)) {
                 alert("Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial.");

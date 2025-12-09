@@ -36,7 +36,11 @@ $email = $data['email'];
 
                 <div class="mb-3">
                     <label>Password Baru</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <input type="password" name="password" class="form-control"
+                        required
+                        minlength="8"
+                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+                        title="Password harus ada huruf kecil, huruf besar, dan angka (min 8 karakter)">
                 </div>
 
                 <button class="btn btn-success w-100">Update Password</button>
@@ -44,5 +48,7 @@ $email = $data['email'];
 
         </div>
     </div>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

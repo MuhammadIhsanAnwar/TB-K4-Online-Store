@@ -2,12 +2,41 @@
 include "../admin/koneksi.php";
 
 $email = $_POST['email'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+$password = $_POST['password'];
 
-// Update password user
-mysqli_query($koneksi, "UPDATE akun_user SET password='$password' WHERE email='$email'");
+// ===== VALIDASI PASSWORD =====
+if (!preg_match('/[A-Z]/', $password)) {
+    die("<script>alert('Password harus mengandung huruf BESAR!');history.back();</script>");
+}
+if (!preg_match('/[a-z]/', $password)) {
+    die("<script>alert('Password harus mengandung huruf kecil!');history.back();</script>");
+}
+if (!preg_match('/[0-9]/', $password)) {
+    die("<script>alert('Password harus mengandung angka!');history.back();</script>");
+}
+if (!preg_match('/[\W_]/', $password)) { // \W artinya non-alphanumeric (karakter spesial)
+    die("<script>alert('Password harus mengandung karakter spesial!');history.back();</script>");
+}
+if (strlen($password) < 8) {
+    die("<script>alert('Password minimal 8 karakter!');history.back();</script>");
+}
 
-// Hapus token
-mysqli_query($koneksi, "DELETE FROM reset_password WHERE email='$email'");
+// Hash password baru
+$pass_hash = password_hash($password, PASSWORD_DEFAULT);
 
-echo "<script>alert('Password berhasil diperbarui!');window.location='login.php';</script>";
+// Update password akun
+$update = mysqli_query($koneksi, 
+    "UPDATE akun_user SET password='$pass_hash' WHERE email='$email'"
+);
+
+if ($update) {
+    // Hapus token agar tidak bisa digunakan lagi
+    mysqli_query($koneksi, "DELETE FROM reset_password WHERE email='$email'");
+
+    echo "<script>
+            alert('Password berhasil diperbarui! Silakan login.');
+            window.location='login.php';
+          </script>";
+} else {
+    echo "<script>alert('Gagal memperbarui password!');history.back();</script>";
+}
