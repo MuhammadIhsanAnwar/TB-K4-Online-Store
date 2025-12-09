@@ -67,7 +67,7 @@ try {
     ";
 
     $mail->send();
-    echo "<script>alert('Link reset berhasil dikirim ke email Anda');window.location='login.php';</script>";
+    echo "<script>alert('Link reset berhasil dikirim ke email Anda');window.location='login_user.php';</script>";
 
 } catch (Exception $e) {
     echo "<script>alert('Gagal mengirim email: {$mail->ErrorInfo}');history.back();</script>";
