@@ -18,7 +18,7 @@ $error_msg = "";
 // Proses update
 if (isset($_POST['update'])) {
     $username = mysqli_real_escape_string($koneksi, $_POST['username']);
-    $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
+    $nama_lengkap = mysqli_real_escape_string($koneksi, $_POST['nama_lengkap']);
     $tanggal_lahir = $_POST['tanggal_lahir'];
     $alamat = mysqli_real_escape_string($koneksi, $_POST['alamat']);
     $jenis_kelamin = $_POST['jenis_kelamin'];
