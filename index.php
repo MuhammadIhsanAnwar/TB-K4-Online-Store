@@ -59,8 +59,8 @@ if (isset($_SESSION['user_id'])) {
                     <!-- User sudah login, tampilkan nama dan foto -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="foto_profil/<?php echo $user['foto']; ?>" alt="Foto Profil" class="rounded-circle" width="40">
-                            <?php echo $user['nama']; ?>
+                            <img src="foto_profil/<?php echo $user['foto_profil']; ?>" alt="Foto Profil" class="rounded-circle" width="40">
+                            <?php echo $user['nama_lengkap']; ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="user/settings.php">Setting Akun</a></li>
