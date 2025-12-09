@@ -60,7 +60,7 @@ if (isset($_POST['update'])) {
 
     // Update database jika tidak ada error
     if (empty($error_msg)) {
-        $update_sql = "UPDATE akun_user SET username='$username', nama='$nama', tanggal_lahir='$tanggal_lahir', alamat='$alamat', jenis_kelamin='$jenis_kelamin' $update_foto_sql WHERE id='$user_id'";
+        $update_sql = "UPDATE akun_user SET username='$username', nama_lengkap='$nama_lengkap', tanggal_lahir='$tanggal_lahir', alamat='$alamat', jenis_kelamin='$jenis_kelamin' $update_foto_sql WHERE id='$user_id'";
         if (mysqli_query($koneksi, $update_sql)) {
             $success = true;
             // Refresh data user
@@ -99,7 +99,7 @@ if (isset($_POST['update'])) {
         </div>
         <div class="mb-3">
             <label>Nama Lengkap</label>
-            <input type="text" name="nama" class="form-control" value="<?php echo $user['nama']; ?>" required>
+            <input type="text" name="nama_lengkap" class="form-control" value="<?php echo $user['nama_lengkap']; ?>" required>
         </div>
         <div class="mb-3">
             <label>Tanggal Lahir</label>
