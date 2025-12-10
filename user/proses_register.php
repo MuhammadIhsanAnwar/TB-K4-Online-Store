@@ -64,7 +64,7 @@ try {
     $mail->Host       = 'urbanhype.neoverse.my.id';
     $mail->SMTPAuth   = true;
     $mail->Username   = 'admin@urbanhype.neoverse.my.id';
-    $mail->Password   = 'PASSWORD_EMAIL_KAMU'; // ← Ganti password email
+    $mail->Password   = 'administrator-online-store'; // ← Ganti password email
     $mail->SMTPSecure = 'ssl';
     $mail->Port       = 465;
     $mail->CharSet    = "UTF-8";
