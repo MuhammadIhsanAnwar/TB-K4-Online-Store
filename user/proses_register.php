@@ -55,7 +55,7 @@ require "../phpmailer/src/PHPMailer.php";
 require "../phpmailer/src/SMTP.php";
 require "../phpmailer/src/Exception.php";
 
-$link = "https://urbanhype.neoverse.my.id/verifikasi.php?email=$email&token=$token";
+$link = "https://urbanhype.neoverse.my.id/user/verifikasi.php?email=$email&token=$token";
 
 $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
