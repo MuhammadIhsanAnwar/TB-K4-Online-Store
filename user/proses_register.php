@@ -30,10 +30,12 @@ $confirm        = $_POST['confirm_password'];
 $foto_nama = "";
 
 if (!empty($_FILES['foto']['name'])) {
+
     $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
     $foto_nama = "foto-" . time() . "-" . rand(1000, 9999) . "." . $ext;
 
-    $folder = "../foto_profil" . $foto_nama;
+    // Pastikan folder tujuan
+    $folder = "../foto_profil/" . $foto_nama;
 
     // Validasi ekstensi
     $allowed = ['jpg', 'jpeg', 'png', 'webp'];
@@ -42,7 +44,7 @@ if (!empty($_FILES['foto']['name'])) {
         exit;
     }
 
-    // Pindahkan ke folder
+    // Pindahkan ke folder foto_profil
     if (!move_uploaded_file($_FILES['foto']['tmp_name'], $folder)) {
         echo "<script>alert('Gagal mengupload foto profil!');history.back();</script>";
         exit;
