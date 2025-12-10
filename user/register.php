@@ -25,11 +25,12 @@
         <div class="card shadow-sm p-4" style="max-width: 420px; width: 100%;">
             <h4 class="text-center mb-3">Register Akun Baru</h4>
 
-            <form action="proses_register.php" method="POST" onsubmit="return cekPassword()">
+            <form action="proses_register.php" method="POST" onsubmit="return cekForm()">
 
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
+                    <input type="text" name="username" id="username" class="form-control" required minlength="8">
+                    <small class="text-muted">Minimal 8 karakter.</small>
                 </div>
 
                 <div class="mb-3">
@@ -52,6 +53,31 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">Provinsi</label>
+                    <input type="text" name="provinsi" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Kabupaten/Kota</label>
+                    <input type="text" name="kabupaten" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Kecamatan</label>
+                    <input type="text" name="kecamatan" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Kelurahan/Desa</label>
+                    <input type="text" name="kelurahan" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Kode Pos</label>
+                    <input type="number" name="kode_pos" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Alamat</label>
                     <textarea name="alamat" class="form-control" rows="2" required></textarea>
                 </div>
@@ -64,40 +90,52 @@
                 <div class="mb-3">
                     <label class="form-label">Password</label>
                     <input type="password" name="password" id="password" class="form-control" required>
-                    <small class="text-muted">
-                        Minimal 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol.
-                    </small>
                 </div>
 
-                <button class="btn btn-primary w-100">Buat Akun</button>
+                <div class="mb-3">
+                    <label class="form-label">Konfirmasi Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                </div>
+
+                <small class="text-muted">
+                    Minimal 1 huruf besar, 1 huruf kecil, 1 angka, 1 simbol, min. 8 karakter.
+                </small>
+
+                <div class="mb-3">
+                    <label class="form-label">Foto Profil</label>
+                    <input type="file" name="foto" id="foto" class="form-control" accept="image/*" required>
+                    <small class="text-muted">Upload foto 1:1 (square). Akan dicrop otomatis.</small>
+                </div>
+
+                <button class="btn btn-primary w-100 mt-3">Buat Akun</button>
             </form>
 
-            <div class="text-center mt-3 small">
-                Sudah punya akun? <a href="login_user.php">Login</a>
+            <script>
+                function cekForm() {
+                    let user = document.getElementById("username").value;
+                    if (user.length < 8) {
+                        alert("Username harus minimal 8 karakter!");
+                        return false;
+                    }
 
-                <a href="../admin/login_admin.php"
-                    class="d-block text-decoration-none text-secondary mt-2">Administrator</a>
+                    let pw = document.getElementById("password").value;
+                    let cpw = document.getElementById("confirm_password").value;
 
-                <a href="../index.php" class="d-block text-decoration-none mt-2">Kembali ke Beranda</a>
-            </div>
+                    let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-        </div>
-    </div>
+                    if (!pola.test(pw)) {
+                        alert("Password tidak sesuai ketentuan!");
+                        return false;
+                    }
 
-    <script>
-        function cekPassword() {
-            let pw = document.getElementById("password").value;
+                    if (pw !== cpw) {
+                        alert("Konfirmasi password tidak sama!");
+                        return false;
+                    }
 
-            let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-
-            if (!pola.test(pw)) {
-                alert("Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial.");
-                return false;
-            }
-            return true;
-        }
-    </script>
-
+                    return true;
+                }
+            </script>
 </body>
 
 </html>
