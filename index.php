@@ -62,6 +62,13 @@ if (isset($_SESSION['user_id'])) {
             object-fit: cover;
             border-radius: 50%;
         }
+
+        .badge-cart {
+            position: absolute;
+            top: 0;
+            start: 100%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 
@@ -87,9 +94,23 @@ if (isset($_SESSION['user_id'])) {
 
                 <ul class="navbar-nav ms-3 d-flex align-items-center gap-3">
                     <li><i class="bi bi-search fs-5"></i></li>
-                    <li><i class="bi bi-bag fs-5"></i></li>
 
                     <?php if ($user): ?>
+                        <!-- Keranjang user -->
+                        <li class="nav-item position-relative">
+                            <a href="user/produk_pembayaran/cart.php" class="nav-link position-relative">
+                                <i class="bi bi-bag fs-5"></i>
+                                <?php
+                                $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+                                if ($cart_count > 0):
+                                ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        <?php echo $cart_count; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
+
                         <!-- User sudah login, tampilkan nama dan foto -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -136,17 +157,19 @@ if (isset($_SESSION['user_id'])) {
         <div class="row g-4 mt-4">
             <?php
             $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC LIMIT 8");
-            while ($row = mysqli_fetch_assoc($query)) {
+            while ($row = mysqli_fetch_assoc($query)):
             ?>
                 <div class="col-6 col-md-3">
-                    <div class="product-card">
-                        <img src="foto_produk/<?php echo $row['gambar']; ?>" class="img-fluid rounded">
-                        <p class="mt-2 text-secondary small"><?php echo strtoupper($row['kategori']); ?></p>
-                        <h6><?php echo $row['nama']; ?></h6>
-                        <p>$<?php echo number_format($row['harga'], 2); ?></p>
-                    </div>
+                    <a href="user/produk_pembayaran/product_detail.php?id=<?php echo $row['id']; ?>" class="text-decoration-none text-dark">
+                        <div class="product-card">
+                            <img src="foto_produk/<?php echo $row['gambar']; ?>" class="img-fluid rounded">
+                            <p class="mt-2 text-secondary small"><?php echo strtoupper($row['kategori']); ?></p>
+                            <h6><?php echo $row['nama']; ?></h6>
+                            <p>$<?php echo number_format($row['harga'], 2); ?></p>
+                        </div>
+                    </a>
                 </div>
-            <?php } ?>
+            <?php endwhile; ?>
         </div>
     </div>
 
