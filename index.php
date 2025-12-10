@@ -66,7 +66,7 @@ if (isset($_SESSION['user_id'])) {
         .badge-cart {
             position: absolute;
             top: 0;
-            start: 100%;
+            left: 100%;
             transform: translate(-50%, -50%);
         }
     </style>
@@ -98,7 +98,7 @@ if (isset($_SESSION['user_id'])) {
                     <?php if ($user): ?>
                         <!-- Keranjang user -->
                         <li class="nav-item position-relative">
-                            <a href="user/produk_pembayaran/cart.php" class="nav-link position-relative">
+                            <a href="user/produk_pembayaran/cart.php" class="nav-link">
                                 <i class="bi bi-bag fs-5"></i>
                                 <?php
                                 $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
@@ -111,7 +111,7 @@ if (isset($_SESSION['user_id'])) {
                             </a>
                         </li>
 
-                        <!-- User sudah login, tampilkan nama dan foto -->
+                        <!-- User dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="foto_profil/<?php echo $user['foto_profil']; ?>" alt="Foto Profil" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">
@@ -123,7 +123,6 @@ if (isset($_SESSION['user_id'])) {
                             </ul>
                         </li>
                     <?php else: ?>
-                        <!-- User belum login -->
                         <li>
                             <a href="/user/login_user.php" class="btn btn-dark px-3 py-1 rounded-3">Login</a>
                         </li>
