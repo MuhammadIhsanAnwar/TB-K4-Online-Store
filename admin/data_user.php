@@ -32,6 +32,13 @@
             margin-left: 230px;
             padding: 20px;
         }
+
+        table img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -45,34 +52,57 @@
     <div class="content">
         <h2 class="fw-bold">Data User</h2>
         <hr>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Jenis Kelamin</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
-                while ($row = mysqli_fetch_assoc($res)) {
-                    echo "<tr>
-    <td>{$row['id']}</td>
-    <td>{$row['username']}</td>
-    <td>{$row['nama_lengkap']}</td>
-    <td>{$row['email']}</td>
-    <td>{$row['tanggal_lahir']}</td>
-    <td>{$row['jenis_kelamin']}</td>
-    </tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Provinsi</th>
+                        <th>Kabupaten/Kota</th>
+                        <th>Kecamatan</th>
+                        <th>Kelurahan/Desa</th>
+                        <th>Kode Pos</th>
+                        <th>Alamat</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Foto Profil</th>
+                        <th>Status</th>
+                        <th>Token</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
+                    while ($row = mysqli_fetch_assoc($res)) {
+                        echo "<tr>
+                            <td class='text-center'>{$row['id']}</td>
+                            <td>{$row['username']}</td>
+                            <td>{$row['nama_lengkap']}</td>
+                            <td class='text-center'>{$row['jenis_kelamin']}</td>
+                            <td class='text-center'>{$row['tanggal_lahir']}</td>
+                            <td>{$row['provinsi']}</td>
+                            <td>{$row['kabupaten_kota']}</td>
+                            <td>{$row['kecamatan']}</td>
+                            <td>{$row['kelurahan_desa']}</td>
+                            <td class='text-center'>{$row['kode_pos']}</td>
+                            <td>{$row['alamat']}</td>
+                            <td>{$row['email']}</td>
+                            <td>{$row['password']}</td>
+                            <td class='text-center'><img src='../foto_profil/{$row['foto_profil']}' alt='Foto Profil'></td>
+                            <td class='text-center'>{$row['status']}</td>
+                            <td>{$row['token']}</td>
+                        </tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <script src="../js/bootstrap.bundle.js"></script>
 </body>
 
