@@ -104,7 +104,7 @@ if (isset($_SESSION['user_id'])) {
                     <?php else: ?>
                         <!-- User belum login -->
                         <li>
-                            <a href="user/login_user.php" class="btn btn-dark px-3 py-1 rounded-3">Login</a>
+                            <a href="../login_user.php" class="btn btn-dark px-3 py-1 rounded-3">Login</a>
                         </li>
                     <?php endif; ?>
                 </ul>
