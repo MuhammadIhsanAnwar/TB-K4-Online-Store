@@ -2,6 +2,24 @@
 require 'auth_check.php';
 include "../admin/koneksi.php";
 
+// Hapus produk jika request AJAX
+if (isset($_POST['delete_id'])) {
+    $delete_id = intval($_POST['delete_id']);
+
+    // Ambil nama gambar agar bisa dihapus dari folder
+    $res = mysqli_query($koneksi, "SELECT gambar FROM products WHERE id='$delete_id'");
+    if ($res && mysqli_num_rows($res) > 0) {
+        $row = mysqli_fetch_assoc($res);
+        if (!empty($row['gambar']) && file_exists("../foto_produk/" . $row['gambar'])) {
+            unlink("../foto_produk/" . $row['gambar']);
+        }
+    }
+
+    mysqli_query($koneksi, "DELETE FROM products WHERE id='$delete_id'");
+    echo 'success';
+    exit;
+}
+
 // Ambil semua produk
 $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
 ?>
@@ -36,13 +54,11 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
 
         .content {
             margin-left: 230px;
-            /* beri ruang sidebar */
             padding: 20px;
         }
 
         nav.navbar {
             margin-left: 220px;
-            /* beri ruang navbar agar tidak menutupi sidebar */
         }
     </style>
 </head>
@@ -63,7 +79,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
 
         <a href="tambah_produk.php" class="btn btn-primary mb-3">Tambah Produk</a>
 
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" id="produkTable">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -76,7 +92,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
             </thead>
             <tbody>
                 <?php while ($row = mysqli_fetch_assoc($query)): ?>
-                    <tr>
+                    <tr id="row-<?php echo $row['id']; ?>">
                         <td><?php echo $row['id']; ?></td>
                         <td><?php echo $row['nama']; ?></td>
                         <td><?php echo $row['kategori']; ?></td>
@@ -88,7 +104,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
                         </td>
                         <td>
                             <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="hapus_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProduk(<?php echo $row['id']; ?>)">Hapus</button>
                         </td>
                     </tr>
                 <?php endwhile; ?>
@@ -96,7 +112,28 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
         </table>
     </div>
 
-    <script src="../js/bootstrap.bundle.js"></script>
+    <script>
+        function deleteProduk(id) {
+            if (confirm("Yakin ingin menghapus produk ini?")) {
+                // AJAX request
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "", true); // kirim ke halaman yang sama
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onload = function() {
+                    if (xhr.responseText.trim() === "success") {
+                        // Hapus baris tabel
+                        const row = document.getElementById('row-' + id);
+                        if (row) row.remove();
+                        alert("Produk berhasil dihapus.");
+                    } else {
+                        alert("Gagal menghapus produk.");
+                    }
+                };
+                xhr.send("delete_id=" + id);
+            }
+        }
+    </script>
+
 </body>
 
 </html>
