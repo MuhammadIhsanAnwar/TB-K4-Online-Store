@@ -4,9 +4,9 @@ session_start();
 
 // Jika user sudah login, ambil data user
 $user = null;
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $result = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE id='$user_id'");
+if (isset($_SESSION['user_email'])) {
+    $user_email = $_SESSION['user_email'];
+    $result = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE email='$user_email'");
     $user = mysqli_fetch_assoc($result);
 }
 ?>
@@ -104,7 +104,7 @@ if (isset($_SESSION['user_id'])) {
                     <?php else: ?>
                         <!-- User belum login -->
                         <li>
-                            <a href="../login_user.php" class="btn btn-dark px-3 py-1 rounded-3">Login</a>
+                            <a href="/user/login_user.php" class="btn btn-dark px-3 py-1 rounded-3">Login</a>
                         </li>
                     <?php endif; ?>
                 </ul>
