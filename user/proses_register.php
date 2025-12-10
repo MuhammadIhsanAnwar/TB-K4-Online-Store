@@ -1,20 +1,20 @@
 <?php
 include "../admin/koneksi.php";
 
-// Ambil data
-$username        = $_POST['username'];
-$nama_lengkap    = ucwords(strtolower($_POST['nama_lengkap']));
-$jenis_kelamin   = $_POST['jenis_kelamin'];
-$tanggal_lahir   = $_POST['tanggal_lahir'];
+// Ambil data (pakai mysqli_real_escape_string untuk mencegah error SQL jika ada tanda kutip)
+$username        = mysqli_real_escape_string($koneksi, $_POST['username']);
+$nama_lengkap    = ucwords(strtolower(mysqli_real_escape_string($koneksi, $_POST['nama_lengkap'])));
+$jenis_kelamin   = mysqli_real_escape_string($koneksi, $_POST['jenis_kelamin']);
+$tanggal_lahir   = mysqli_real_escape_string($koneksi, $_POST['tanggal_lahir']);
 
-$provinsi        = ucwords(strtolower($_POST['provinsi']));
-$kabupaten_kota  = ucwords(strtolower($_POST['kabupaten_kota']));
-$kecamatan       = ucwords(strtolower($_POST['kecamatan']));
-$kelurahan_desa  = ucwords(strtolower($_POST['kelurahan_desa']));
-$kode_pos        = $_POST['kode_pos']; // kode pos jangan diubah, tetap angka
+$provinsi        = ucwords(strtolower(mysqli_real_escape_string($koneksi, $_POST['provinsi'])));
+$kabupaten_kota  = ucwords(strtolower(mysqli_real_escape_string($koneksi, $_POST['kabupaten_kota'])));
+$kecamatan       = ucwords(strtolower(mysqli_real_escape_string($koneksi, $_POST['kecamatan'])));
+$kelurahan_desa  = ucwords(strtolower(mysqli_real_escape_string($koneksi, $_POST['kelurahan_desa'])));
+$kode_pos        = mysqli_real_escape_string($koneksi, $_POST['kode_pos']);
 
-$alamat          = ucwords(strtolower($_POST['alamat']));
-$email           = strtolower($_POST['email']); // email selalu lowercase
+$alamat          = ucwords(strtolower(mysqli_real_escape_string($koneksi, $_POST['alamat'])));
+$email           = strtolower(mysqli_real_escape_string($koneksi, $_POST['email']));
 
 $password        = $_POST['password'];
 $confirm         = $_POST['confirm_password'];
@@ -66,14 +66,11 @@ if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
         die("<script>alert('File bukan gambar!');history.back();</script>");
     }
 
-    $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-    $ext = strtolower($ext);
+    $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
 
     if (!in_array($ext, ['jpg', 'jpeg', 'png'])) {
         die("<script>alert('Format foto harus JPG atau PNG!');history.back();</script>");
     }
-
-    $image = null;
 
     if ($ext == 'jpg' || $ext == 'jpeg') {
         $image = imagecreatefromjpeg($tmp);
@@ -84,12 +81,20 @@ if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
     $w = imagesx($image);
     $h = imagesy($image);
 
-    // crop ke bentuk square
     $size = min($w, $h);
     $x = ($w - $size) / 2;
     $y = ($h - $size) / 2;
 
-    $crop = imagecreatetruecolor(500, 500); // output 500x500
+    $crop = imagecreatetruecolor(500, 500);
+
+    // if PNG preserve transparency (optional)
+    if ($ext === 'png') {
+        imagealphablending($crop, false);
+        imagesavealpha($crop, true);
+        $transparent = imagecolorallocatealpha($crop, 255, 255, 255, 127);
+        imagefilledrectangle($crop, 0, 0, 500, 500, $transparent);
+    }
+
     imagecopyresampled($crop, $image, 0, 0, $x, $y, 500, 500, $size, $size);
 
     $foto_name = time() . "_" . preg_replace("/[^a-zA-Z0-9._-]/", "", $_FILES['foto']['name']);
@@ -99,7 +104,12 @@ if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
         mkdir("../foto_profil", 0777, true);
     }
 
-    imagejpeg($crop, $save_path, 90);
+    // Simpan sesuai ekstensi asli
+    if ($ext == 'png') {
+        imagepng($crop, $save_path);
+    } else {
+        imagejpeg($crop, $save_path, 90);
+    }
 
     imagedestroy($image);
     imagedestroy($crop);
@@ -115,19 +125,50 @@ VALUES
 
 if (mysqli_query($koneksi, $sql)) {
 
-    // Kirim email verifikasi
-    $link = "https://urbanhype.neoverse.my.id/verifikasi.php?email=$email&token=$token";
+    // ============================================
+    //      PHPMailer untuk kirim verifikasi (tanpa "use")
+    // ============================================
+    $link = "https://urbanhype.neoverse.my.id/verifikasi.php?email=" . urlencode($email) . "&token=" . urlencode($token);
 
-    $subject = "Verifikasi Akun Anda";
-    $message = "Klik link berikut untuk mengaktifkan akun:\n\n$link";
-    $headers = "From: admin@urbanhype.neoverse.my.id";
+    // require PHPMailer (pastikan path benar)
+    require '../phpmailer/src/PHPMailer.php';
+    require '../phpmailer/src/SMTP.php';
+    require '../phpmailer/src/Exception.php';
 
-    mail($email, $subject, $message, $headers);
+    // buat instance dengan namespace lengkap
+    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 
-    echo "<script>
-        alert('Registrasi berhasil! Silakan cek email untuk verifikasi.');
-        window.location.href='login_user.php';
-    </script>";
+    try {
+        $mail->isSMTP();
+        // gunakan host mail.* biasanya "mail.domain.com"
+        $mail->Host       = 'urbanhype.neoverse.my.id';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'admin@urbanhype.neoverse.my.id';
+        $mail->Password   = 'administrator-online-store'; // ganti jika perlu
+        $mail->SMTPSecure = 'tls'; // atau 'ssl'
+        $mail->Port       = 465;   // 587 untuk TLS, 465 untuk SSL
+
+        $mail->setFrom('admin@urbanhype.neoverse.my.id', 'UrbanHype');
+        $mail->addAddress($email);
+
+        $mail->isHTML(true);
+        $mail->Subject = "Verifikasi Akun Anda";
+        $mail->Body = "
+            <h3>Verifikasi Akun UrbanHype</h3>
+            Klik link berikut untuk aktivasi akun:<br><br>
+            <a href='$link' target='_blank'>$link</a>
+        ";
+
+        $mail->send();
+
+        echo "<script>
+            alert('Registrasi berhasil! Silakan cek email untuk verifikasi.');
+            window.location.href='login_user.php';
+        </script>";
+    } catch (\PHPMailer\PHPMailer\Exception $e) {
+        // tampilkan error PHPMailer (berguna saat debug)
+        die('<script>alert(\"Gagal mengirim email verifikasi: ' . mysqli_real_escape_string($koneksi, $mail->ErrorInfo) . '\");history.back();</script>');
+    }
 } else {
     echo "Error: " . mysqli_error($koneksi);
 }
