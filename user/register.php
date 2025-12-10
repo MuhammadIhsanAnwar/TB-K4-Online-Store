@@ -12,7 +12,6 @@
             background-color: #f8f9fa;
         }
 
-        /* Biar card turun sedikit dari atas */
         .center-box {
             margin-top: 40px;
         }
@@ -29,7 +28,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" id="username" class="form-control" required minlength="8">
+                    <input type="text" name="username" id="username" class="form-control" minlength="8" required>
                     <small class="text-muted">Minimal 8 karakter.</small>
                 </div>
 
@@ -101,13 +100,14 @@
                     Minimal 1 huruf besar, 1 huruf kecil, 1 angka, 1 simbol, min. 8 karakter.
                 </small>
 
-                <div class="mb-3">
+                <div class="mb-3 mt-2">
                     <label class="form-label">Foto Profil</label>
                     <input type="file" name="foto" id="foto" class="form-control" accept="image/*" required>
                     <small class="text-muted">Upload foto 1:1 (square). Akan dicrop otomatis.</small>
                 </div>
 
                 <button class="btn btn-primary w-100 mt-3">Buat Akun</button>
+
             </form>
 
             <script>
@@ -136,6 +136,9 @@
                     return true;
                 }
             </script>
+        </div>
+    </div>
+
 </body>
 
 </html>
