@@ -59,7 +59,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Kabupaten/Kota</label>
-                    <input type="text" name="kabupaten" class="form-control" required>
+                    <input type="text" name="kabupaten_kota" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
@@ -69,7 +69,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Kelurahan/Desa</label>
-                    <input type="text" name="kelurahan" class="form-control" required>
+                    <input type="text" name="kelurahan_desa" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
