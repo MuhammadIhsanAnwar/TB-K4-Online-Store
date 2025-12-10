@@ -140,7 +140,7 @@ if (isset($_SESSION['user_id'])) {
             ?>
                 <div class="col-6 col-md-3">
                     <div class="product-card">
-                        <img src="upload/<?php echo $row['gambar']; ?>" class="img-fluid rounded">
+                        <img src="foto_produk/<?php echo $row['gambar']; ?>" class="img-fluid rounded">
                         <p class="mt-2 text-secondary small"><?php echo strtoupper($row['kategori']); ?></p>
                         <h6><?php echo $row['nama']; ?></h6>
                         <p>$<?php echo number_format($row['harga'], 2); ?></p>
