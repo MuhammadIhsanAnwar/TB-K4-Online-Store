@@ -200,8 +200,6 @@ if (isset($_POST['update'])) {
         </form>
     </div>
 
-    <script src="../js/bootstrap.bundle.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script>
         let cropper;
         const fotoInput = document.getElementById('foto');
@@ -227,24 +225,33 @@ if (isset($_POST['update'])) {
         });
 
         const form = document.querySelector('form');
+
         form.addEventListener('submit', function(e) {
             if (cropper) {
                 e.preventDefault();
+
                 cropper.getCroppedCanvas({
                     width: 300,
                     height: 300
                 }).toBlob((blob) => {
-                    const fileInput = new File([blob], fotoInput.files[0].name, {
-                        type: blob.type
+
+                    // Buat file hasil crop → nama file diganti agar valid
+                    let croppedFile = new File([blob], "cropped.png", {
+                        type: "image/png"
                     });
+
+                    // Kirim ke input file
                     const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(fileInput);
+                    dataTransfer.items.add(croppedFile);
                     fotoInput.files = dataTransfer.files;
+
                     form.submit();
-                }, 'image/png');
+
+                }, "image/png");
             }
         });
     </script>
+
 </body>
 
 </html>
