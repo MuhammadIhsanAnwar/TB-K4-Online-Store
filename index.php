@@ -98,8 +98,9 @@ if (isset($_SESSION['user_id'])) {
                     <?php if ($user): ?>
                         <!-- Keranjang user -->
                         <li class="nav-item position-relative">
-                            <a href="user/produk_pembayaran/cart.php" class="nav-link">
-                                <i class="bi bi-bag fs-5"></i>
+                            <a href="user/produk_pembayaran/cart.php" class="nav-link position-relative">
+                                <!-- Ikon keranjang berwarna biru -->
+                                <i class="bi bi-bag-fill fs-5 text-primary"></i>
                                 <?php
                                 $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
                                 if ($cart_count > 0):
