@@ -91,151 +91,165 @@ if (isset($_POST['update'])) {
     <div class="alert alert-danger"><?= $error_msg ?></div>
 <?php endif; ?>
 
-<form method="POST" enctype="multipart/form-data">
+<!DOCTYPE html>
+<html lang="id">
 
-    <div class="mb-3">
-        <label>Username</label>
-        <input type="text" name="username" class="form-control"
-               value="<?= $user['username']; ?>" required>
-    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profil</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-    <div class="mb-3">
-        <label>Nama Lengkap</label>
-        <input type="text" name="nama_lengkap" class="form-control"
-               value="<?= $user['nama_lengkap']; ?>" required>
-    </div>
+<body>
+    <form method="POST" enctype="multipart/form-data">
 
-    <div class="mb-3">
-        <label>Tanggal Lahir</label>
-        <input type="date" name="tanggal_lahir" class="form-control"
-               value="<?= $user['tanggal_lahir']; ?>" required>
-    </div>
+        <div class="mb-3">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control"
+                value="<?= $user['username']; ?>" required>
+        </div>
 
-    <div class="mb-3">
-        <label>Jenis Kelamin</label>
-        <select name="jenis_kelamin" class="form-select">
-            <option value="Laki-laki"   <?= $user['jenis_kelamin'] == 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
-            <option value="Perempuan"   <?= $user['jenis_kelamin'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
-        </select>
-    </div>
+        <div class="mb-3">
+            <label>Nama Lengkap</label>
+            <input type="text" name="nama_lengkap" class="form-control"
+                value="<?= $user['nama_lengkap']; ?>" required>
+        </div>
 
-    <hr>
+        <div class="mb-3">
+            <label>Tanggal Lahir</label>
+            <input type="date" name="tanggal_lahir" class="form-control"
+                value="<?= $user['tanggal_lahir']; ?>" required>
+        </div>
 
-    <h5>Alamat Lengkap</h5>
+        <div class="mb-3">
+            <label>Jenis Kelamin</label>
+            <select name="jenis_kelamin" class="form-select">
+                <option value="Laki-laki" <?= $user['jenis_kelamin'] == 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
+                <option value="Perempuan" <?= $user['jenis_kelamin'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
+            </select>
+        </div>
 
-    <div class="mb-3"><label>Provinsi</label>
-        <input type="text" name="provinsi" class="form-control" value="<?= $user['provinsi']; ?>">
-    </div>
+        <hr>
 
-    <div class="mb-3"><label>Kabupaten/Kota</label>
-        <input type="text" name="kabupaten_kota" class="form-control" value="<?= $user['kabupaten_kota']; ?>">
-    </div>
+        <h5>Alamat Lengkap</h5>
 
-    <div class="mb-3"><label>Kecamatan</label>
-        <input type="text" name="kecamatan" class="form-control" value="<?= $user['kecamatan']; ?>">
-    </div>
+        <div class="mb-3"><label>Provinsi</label>
+            <input type="text" name="provinsi" class="form-control" value="<?= $user['provinsi']; ?>">
+        </div>
 
-    <div class="mb-3"><label>Kelurahan/Desa</label>
-        <input type="text" name="kelurahan_desa" class="form-control" value="<?= $user['kelurahan_desa']; ?>">
-    </div>
+        <div class="mb-3"><label>Kabupaten/Kota</label>
+            <input type="text" name="kabupaten_kota" class="form-control" value="<?= $user['kabupaten_kota']; ?>">
+        </div>
 
-    <div class="mb-3"><label>Kode Pos</label>
-        <input type="number" name="kode_pos" class="form-control" value="<?= $user['kode_pos']; ?>">
-    </div>
+        <div class="mb-3"><label>Kecamatan</label>
+            <input type="text" name="kecamatan" class="form-control" value="<?= $user['kecamatan']; ?>">
+        </div>
 
-    <div class="mb-3"><label>Alamat Detail</label>
-        <textarea name="alamat" rows="3" class="form-control"><?= $user['alamat']; ?></textarea>
-    </div>
+        <div class="mb-3"><label>Kelurahan/Desa</label>
+            <input type="text" name="kelurahan_desa" class="form-control" value="<?= $user['kelurahan_desa']; ?>">
+        </div>
 
-    <hr>
+        <div class="mb-3"><label>Kode Pos</label>
+            <input type="number" name="kode_pos" class="form-control" value="<?= $user['kode_pos']; ?>">
+        </div>
 
-    <div class="mb-3">
-        <label>Foto Profil</label><br>
+        <div class="mb-3"><label>Alamat Detail</label>
+            <textarea name="alamat" rows="3" class="form-control"><?= $user['alamat']; ?></textarea>
+        </div>
 
-        <img id="preview"
-             src="../foto_profil/<?= $user['foto_profil'] ?: 'default.png' ?>"
-             style="width:100px;height:100px;border-radius:50%;object-fit:cover;">
+        <hr>
 
-        <input type="file" id="foto" name="foto"
-               class="form-control mt-3" accept="image/*">
-    </div>
+        <div class="mb-3">
+            <label>Foto Profil</label><br>
 
-    <button type="submit" name="update" class="btn btn-primary">
-        Simpan Perubahan
-    </button>
-</form>
+            <img id="preview"
+                src="../foto_profil/<?= $user['foto_profil'] ?: 'default.png' ?>"
+                style="width:100px;height:100px;border-radius:50%;object-fit:cover;">
+
+            <input type="file" id="foto" name="foto"
+                class="form-control mt-3" accept="image/*">
+        </div>
+
+        <button type="submit" name="update" class="btn btn-primary">
+            Simpan Perubahan
+        </button>
+    </form>
 
 
-<!-- ===================== MODAL CROP ===================== -->
-<div class="modal fade" id="cropModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Crop Foto Profil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="cropImage" style="max-width:100%;">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button id="btnCrop" class="btn btn-primary">Simpan Crop</button>
+    <!-- ===================== MODAL CROP ===================== -->
+    <div class="modal fade" id="cropModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Crop Foto Profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="cropImage" style="max-width:100%;">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button id="btnCrop" class="btn btn-primary">Simpan Crop</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="../js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
-<script>
-    let cropper;
-    let fotoInput = document.getElementById("foto");
-    let preview = document.getElementById("preview");
-    let cropImage = document.getElementById("cropImage");
-    let originalExt = "";
+    <script>
+        let cropper;
+        let fotoInput = document.getElementById("foto");
+        let preview = document.getElementById("preview");
+        let cropImage = document.getElementById("cropImage");
+        let originalExt = "";
 
-    fotoInput.addEventListener("change", function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+        fotoInput.addEventListener("change", function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
 
-        originalExt = file.name.split('.').pop().toLowerCase();
+            originalExt = file.name.split('.').pop().toLowerCase();
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
 
-            cropImage.src = event.target.result;
+                cropImage.src = event.target.result;
 
-            if (cropper) cropper.destroy();
+                if (cropper) cropper.destroy();
 
-            new bootstrap.Modal(document.getElementById("cropModal")).show();
+                new bootstrap.Modal(document.getElementById("cropModal")).show();
 
-            cropper = new Cropper(cropImage, {
-                aspectRatio: 1,
-                dragMode: "move",
-                viewMode: 1
-            });
-        }
-        reader.readAsDataURL(file);
-    });
-
-    document.getElementById("btnCrop").addEventListener("click", function() {
-        cropper.getCroppedCanvas({
-            width: 500,
-            height: 500
-        }).toBlob((blob) => {
-
-            let newFile = new File([blob], "foto_crop." + originalExt, {
-                type: "image/" + originalExt
-            });
-
-            const dt = new DataTransfer();
-            dt.items.add(newFile);
-            fotoInput.files = dt.files;
-
-            preview.src = URL.createObjectURL(newFile);
-
-            bootstrap.Modal.getInstance(document.getElementById("cropModal")).hide();
+                cropper = new Cropper(cropImage, {
+                    aspectRatio: 1,
+                    dragMode: "move",
+                    viewMode: 1
+                });
+            }
+            reader.readAsDataURL(file);
         });
-    });
-</script>
+
+        document.getElementById("btnCrop").addEventListener("click", function() {
+            cropper.getCroppedCanvas({
+                width: 500,
+                height: 500
+            }).toBlob((blob) => {
+
+                let newFile = new File([blob], "foto_crop." + originalExt, {
+                    type: "image/" + originalExt
+                });
+
+                const dt = new DataTransfer();
+                dt.items.add(newFile);
+                fotoInput.files = dt.files;
+
+                preview.src = URL.createObjectURL(newFile);
+
+                bootstrap.Modal.getInstance(document.getElementById("cropModal")).hide();
+            });
+        });
+    </script>
+</body>
+
+</html>

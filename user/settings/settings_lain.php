@@ -1,24 +1,38 @@
-<h3>Pengaturan Lainnya</h3>
-<hr>
+<!DOCTYPE html>
+<html lang="en">
 
-<form action="update_others.php" method="POST">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Lainnya</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox"
-            name="darkmode"
-            <?php echo ($user['darkmode'] ?? 0) ? "checked" : ""; ?>>
-        <label class="form-check-label">Aktifkan Mode Gelap</label>
-    </div>
+<body>
+    <h3>Pengaturan Lainnya</h3>
+    <hr>
 
-    <button class="btn btn-secondary">Simpan</button>
-</form>
+    <form action="update_others.php" method="POST">
 
-<hr>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox"
+                name="darkmode"
+                <?php echo ($user['darkmode'] ?? 0) ? "checked" : ""; ?>>
+            <label class="form-check-label">Aktifkan Mode Gelap</label>
+        </div>
 
-<form action="hapus_akun.php" method="POST"
-    onsubmit="return confirm('Yakin hapus akun permanen?')">
+        <button class="btn btn-secondary">Simpan</button>
+    </form>
 
-    <button class="btn btn-outline-danger">
-        Hapus Akun Permanen
-    </button>
-</form>
+    <hr>
+
+    <form action="hapus_akun.php" method="POST"
+        onsubmit="return confirm('Yakin hapus akun permanen?')">
+
+        <button class="btn btn-outline-danger">
+            Hapus Akun Permanen
+        </button>
+    </form>
+</body>
+
+</html>
