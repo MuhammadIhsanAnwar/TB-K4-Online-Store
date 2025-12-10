@@ -97,7 +97,7 @@ if (isset($_SESSION['user_id'])) {
                                 <?php echo $user['nama_lengkap']; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="user/settings.php">Setting Akun</a></li>
+                                <li><a class="dropdown-item" href="user/settings/settings.php">Setting Akun</a></li>
                                 <li><a class="dropdown-item" href="user/logout_user.php">Logout</a></li>
                             </ul>
                         </li>
