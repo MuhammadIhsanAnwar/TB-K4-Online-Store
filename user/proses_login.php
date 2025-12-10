@@ -49,6 +49,7 @@ if (!password_verify($password, $data['password'])) {
 $_SESSION['user_id'] = $data['id'];
 $_SESSION['username'] = $data['username'];
 $_SESSION['nama_lengkap'] = $data['nama_lengkap'];
+$_SESSION['user_email'] = $user['email']; // session email
 
 header("Location: ../index.php");
 exit;
