@@ -25,7 +25,7 @@
         <div class="card shadow-sm p-4" style="max-width: 420px; width: 100%;">
             <h4 class="text-center mb-3">Register Akun Baru</h4>
 
-            <form action="proses_register.php" method="POST" onsubmit="return cekForm()">
+            <form action="proses_register.php" method="POST" onsubmit="return cekForm()" enctype="multipart/form-data">
 
                 <div class="mb-3">
                     <label class="form-label">Username</label>

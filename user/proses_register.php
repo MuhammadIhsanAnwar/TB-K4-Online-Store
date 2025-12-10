@@ -26,6 +26,29 @@ $email          = $_POST['email'];
 $password       = $_POST['password'];
 $confirm        = $_POST['confirm_password'];
 
+// === UPLOAD FOTO PROFIL ===
+$foto_nama = "";
+
+if (!empty($_FILES['foto']['name'])) {
+    $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+    $foto_nama = "foto-" . time() . "-" . rand(1000,9999) . "." . $ext;
+
+    $folder = "../user/foto/" . $foto_nama;
+
+    // Validasi ekstensi
+    $allowed = ['jpg','jpeg','png','webp'];
+    if (!in_array($ext, $allowed)) {
+        echo "<script>alert('Format foto tidak valid!');history.back();</script>";
+        exit;
+    }
+
+    // Pindahkan ke folder
+    if (!move_uploaded_file($_FILES['foto']['tmp_name'], $folder)) {
+        echo "<script>alert('Gagal mengupload foto profil!');history.back();</script>";
+        exit;
+    }
+}
+
 // VALIDASI PASSWORD
 if ($password !== $confirm) {
     echo "<script>alert('Konfirmasi password tidak cocok!');history.back();</script>";
@@ -42,7 +65,10 @@ $query = "
 INSERT INTO akun_user 
 (username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, status, token)
 VALUES 
-('$username', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$provinsi', '$kabupaten_kota', '$kecamatan', '$kelurahan_desa', '$kode_pos', '$alamat', '$email', '$hash', '0', '$token')
+INSERT INTO akun_user 
+(username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, foto, status, token)
+VALUES 
+('$username', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$provinsi', '$kabupaten_kota', '$kecamatan', '$kelurahan_desa', '$kode_pos', '$alamat', '$email', '$hash', '$foto_nama', '0', '$token')
 ";
 
 if (!mysqli_query($koneksi, $query)) {
