@@ -31,12 +31,12 @@ $foto_nama = "";
 
 if (!empty($_FILES['foto']['name'])) {
     $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
-    $foto_nama = "foto-" . time() . "-" . rand(1000,9999) . "." . $ext;
+    $foto_nama = "foto-" . time() . "-" . rand(1000, 9999) . "." . $ext;
 
-    $folder = "../user/foto/" . $foto_nama;
+    $folder = "../foto_profil" . $foto_nama;
 
     // Validasi ekstensi
-    $allowed = ['jpg','jpeg','png','webp'];
+    $allowed = ['jpg', 'jpeg', 'png', 'webp'];
     if (!in_array($ext, $allowed)) {
         echo "<script>alert('Format foto tidak valid!');history.back();</script>";
         exit;
@@ -63,10 +63,7 @@ $token = bin2hex(random_bytes(20));
 // INSERT DATA
 $query = "
 INSERT INTO akun_user 
-(username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, status, token)
-VALUES 
-INSERT INTO akun_user 
-(username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, foto, status, token)
+(username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, foto_profil, status, token)
 VALUES 
 ('$username', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$provinsi', '$kabupaten_kota', '$kecamatan', '$kelurahan_desa', '$kode_pos', '$alamat', '$email', '$hash', '$foto_nama', '0', '$token')
 ";
