@@ -5,7 +5,7 @@ if (isset($_GET['hapus'])) {
     $id = $_GET['hapus'];
     $res = mysqli_query($koneksi, "SELECT gambar FROM products WHERE id='$id'");
     $row = mysqli_fetch_assoc($res);
-    if (file_exists("../upload/" . $row['gambar'])) unlink("../upload/" . $row['gambar']);
+    if (file_exists("../foto_produk/" . $row['gambar'])) unlink("../foto_produk/" . $row['gambar']);
     mysqli_query($koneksi, "DELETE FROM products WHERE id='$id'");
     header("Location: hapus_produk.php");
 }

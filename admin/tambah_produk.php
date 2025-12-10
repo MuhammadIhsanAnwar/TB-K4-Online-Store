@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
         $allowed = ['jpg', 'jpeg', 'png'];
         if (in_array($ext, $allowed)) {
             $filename = time() . '_' . $file['name'];
-            move_uploaded_file($file['tmp_name'], "../upload/$filename");
+            move_uploaded_file($file['tmp_name'], "../foto_produk/$filename");
             $sql = "INSERT INTO products (nama,kategori,harga,gambar) VALUES ('$nama','$kategori','$harga','$filename')";
             mysqli_query($koneksi, $sql);
             $msg = "Produk berhasil ditambahkan!";

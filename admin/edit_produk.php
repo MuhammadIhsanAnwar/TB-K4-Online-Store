@@ -43,13 +43,13 @@ if (isset($_POST['update'])) {
         } else {
             $gambar_name = time() . "_" . preg_replace("/[^a-zA-Z0-9._-]/", "", $gambar_name_raw);
 
-            if (!is_dir("../upload")) {
-                mkdir("../upload", 0777, true);
+            if (!is_dir("../foto_produk")) {
+                mkdir("../foto_produk", 0777, true);
             }
 
-            if (move_uploaded_file($gambar_tmp, "../upload/$gambar_name")) {
-                if (!empty($product['gambar']) && file_exists("../upload/" . $product['gambar'])) {
-                    unlink("../upload/" . $product['gambar']);
+            if (move_uploaded_file($gambar_tmp, "../foto_produk/$gambar_name")) {
+                if (!empty($product['gambar']) && file_exists("../foto_produk/" . $product['gambar'])) {
+                    unlink("../foto_produk/" . $product['gambar']);
                 }
                 $update_gambar_sql = ", gambar='$gambar_name'";
             } else {
@@ -112,7 +112,7 @@ if (isset($_POST['update'])) {
             <div class="mb-3">
                 <label>Gambar</label><br>
                 <?php if (!empty($product['gambar'])): ?>
-                    <img src="../upload/<?php echo $product['gambar']; ?>" alt="Gambar" width="100" class="mb-2"><br>
+                    <img src="../foto_produk/<?php echo $product['gambar']; ?>" alt="Gambar" width="100" class="mb-2"><br>
                 <?php endif; ?>
                 <input type="file" name="gambar" class="form-control">
                 <small class="text-muted">Kosongkan jika tidak ingin mengganti gambar (jpg/jpeg/png, max 2MB)</small>

@@ -51,7 +51,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
                         <td>$<?php echo number_format($row['harga'], 2); ?></td>
                         <td>
                             <?php if (!empty($row['gambar'])): ?>
-                                <img src="../upload/<?php echo $row['gambar']; ?>" alt="Gambar" width="50">
+                                <img src="../foto_produk/<?php echo $row['gambar']; ?>" alt="Gambar" width="50">
                             <?php endif; ?>
                         </td>
                         <td>
