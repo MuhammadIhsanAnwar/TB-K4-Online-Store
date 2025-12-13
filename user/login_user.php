@@ -8,7 +8,7 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* ================= LOGIN USER STYLE ================= */
+        /* ================= BACKGROUND ================= */
 
         body.bg-light {
             background-image: url("background 2.jpg");
@@ -27,15 +27,19 @@
             z-index: -1;
         }
 
+        /* ================= LOGIN CARD ================= */
+
+        .login-wrapper {
+            position: sticky;
+            top: 80px; /* jarak dari atas saat sticky */
+        }
+
         .card {
             border-radius: 22px;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
-
-            /* animasi load */
             animation: fadeSlide 0.6s ease forwards;
         }
 
@@ -50,111 +54,82 @@
             }
         }
 
-        /* LOGO */
+        /* ================= FORM ================= */
+
         .login-logo {
             width: 160px;
-            max-width: 100%;
             filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
         }
 
+        .form-label,
         .card h4 {
             color: #fff;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .form-label {
-            color: #fff;
-            font-weight: 500;
         }
 
         .form-control {
             border-radius: 12px;
             padding: 12px 14px;
             border: none;
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .form-control:focus {
-            background: #fff;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
         .btn-primary {
-            background: linear-gradient(to right, #0a1a3f, #112d63);
-            border: none;
             border-radius: 12px;
             padding: 12px;
             font-weight: 600;
-            transition: 0.25s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(to right, #122752, #1b3b79);
         }
 
         .text-center.small a {
             color: #e5e5e5 !important;
-        }
-
-        .text-center.small a:hover {
-            color: #ffffff !important;
-            font-weight: 600;
         }
     </style>
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
 
-    <!-- LOGIN CONTAINER -->
-    <div class="container-fluid d-flex justify-content-center
-                align-items-start align-items-md-center
-                flex-grow-1 pt-5 pt-md-0">
+    <!-- CONTENT -->
+    <div class="container-fluid flex-grow-1 pt-5">
 
-        <div class="card shadow-sm p-4" style="max-width: 380px; width: 100%;">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4">
 
-            <!-- LOGO -->
-            <div class="text-center mb-3">
-                <img src="logo.png" alt="Urban Hype Logo" class="login-logo">
-            </div>
+                <!-- STICKY LOGIN -->
+                <div class="login-wrapper">
 
-            <h4 class="text-center mb-3">Login</h4>
+                    <div class="card p-4">
+                        <div class="text-center mb-3">
+                            <img src="logo.png" class="login-logo">
+                        </div>
 
-            <form action="proses_login.php" method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required autofocus>
+                        <h4 class="text-center mb-3">Login</h4>
+
+                        <form id="loginForm" action="proses_login.php" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Username</label>
+                                <input type="text" name="username" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control" required>
+                            </div>
+
+                            <!-- BUTTON WITH LOADING -->
+                            <button id="loginBtn" type="submit" class="btn btn-primary w-100">
+                                <span class="btn-text">Masuk</span>
+                                <span class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                            </button>
+                        </form>
+
+                        <div class="text-center small mt-3">
+                            <a href="../admin/login_admin.php" class="d-block">Administrator</a>
+                            <a href="register.php" class="d-block">Register Akun</a>
+                            <a href="lupa_password.php" class="d-block mt-2">Lupa Password?</a>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 mb-3">
-                    Masuk
-                </button>
-            </form>
-
-            <div class="text-center small">
-                <a href="../admin/login_admin.php" class="d-block text-decoration-none mb-1">
-                    Administrator
-                </a>
-
-                <a href="register.php" class="d-block text-decoration-none">
-                    Register Akun
-                </a>
-
-                <a href="lupa_password.php" class="d-block text-decoration-none mt-2">
-                    Lupa Password?
-                </a>
-
-                <a href="../index.php" class="d-block text-decoration-none mt-2">
-                    Kembali ke Beranda
-                </a>
             </div>
-
         </div>
     </div>
 
@@ -162,12 +137,26 @@
     <footer class="bg-dark bg-opacity-75 text-light py-3 mt-auto">
         <div class="container text-center small">
             © <?= date('Y') ?> <strong>Urban Hype</strong> •
-            <a href="../index.php" class="text-decoration-none text-light">Beranda</a> •
-            <a href="#" class="text-decoration-none text-light">Kebijakan Privasi</a>
+            <a href="../index.php" class="text-light text-decoration-none">Beranda</a> •
+            <a href="#" class="text-light text-decoration-none">Kebijakan Privasi</a>
         </div>
     </footer>
 
+    <!-- JS -->
     <script src="../js/bootstrap.bundle.min.js"></script>
-</body>
 
+    <script>
+        const form = document.getElementById('loginForm');
+        const btn = document.getElementById('loginBtn');
+        const spinner = btn.querySelector('.spinner-border');
+        const text = btn.querySelector('.btn-text');
+
+        form.addEventListener('submit', function () {
+            btn.disabled = true;
+            spinner.classList.remove('d-none');
+            text.textContent = 'Memproses...';
+        });
+    </script>
+
+</body>
 </html>

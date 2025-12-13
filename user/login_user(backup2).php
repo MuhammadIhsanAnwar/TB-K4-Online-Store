@@ -15,10 +15,9 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
-            background-attachment: fixed; 
+            background-attachment: fixed;
             font-family: 'Poppins', sans-serif;
         }
-
 
         body.bg-light::before {
             content: "";
@@ -35,6 +34,20 @@
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+
+            /* animasi load */
+            animation: fadeSlide 0.6s ease forwards;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* LOGO */
@@ -95,8 +108,8 @@
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- LOGIN CONTAINER -->
-    <div class="container-fluid d-flex justify-content-center 
-                align-items-start align-items-md-center 
+    <div class="container-fluid d-flex justify-content-center
+                align-items-start align-items-md-center
                 flex-grow-1 pt-5 pt-md-0">
 
         <div class="card shadow-sm p-4" style="max-width: 380px; width: 100%;">
@@ -145,18 +158,15 @@
         </div>
     </div>
 
-<<<<<<< HEAD
     <!-- FOOTER -->
-    <footer class="bg-white border-top py-3 mt-auto">
-        <div class="container text-center small text-muted">
-            © <?= date('Y') ?> Aplikasi Anda • 
-            <a href="../index.php" class="text-decoration-none">Beranda</a> •
-            <a href="#" class="text-decoration-none">Kebijakan Privasi</a>
+    <footer class="bg-dark bg-opacity-75 text-light py-3 mt-auto">
+        <div class="container text-center small">
+            © <?= date('Y') ?> <strong>Urban Hype</strong> •
+            <a href="../index.php" class="text-decoration-none text-light">Beranda</a> •
+            <a href="#" class="text-decoration-none text-light">Kebijakan Privasi</a>
         </div>
     </footer>
 
-=======
->>>>>>> af1f8eff4d48668dae2cb841c8af6719d261e1e0
     <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 
