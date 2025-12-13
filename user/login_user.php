@@ -87,7 +87,7 @@
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- CONTENT -->
-    <div class="container-fluid flex-grow-1 pt-5">
+    <div class="container-fluid pt-5 pb-5">
 
         <div class="row justify-content-center">
             <div class="col-12 col-md-4">
@@ -134,7 +134,7 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-dark bg-opacity-75 text-light py-3 mt-auto">
+     <footer class="bg-dark bg-opacity-75 text-light py-3">
         <div class="container text-center small">
             © <?= date('Y') ?> <strong>Urban Hype</strong> •
             <a href="../index.php" class="text-light text-decoration-none">Beranda</a> •
