@@ -8,13 +8,104 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
+        /* ================= REGISTER USER STYLE ================= */
 
-        /* Biar card turun sedikit dari atas */
+        body {
+             min-height: 100vh;
+             background-image: url("bg regis.jpg");
+             background-repeat: no-repeat;
+             background-position: center top;
+             background-size: 100% auto;
+             background-attachment: fixed;
+             font-family: 'Poppins', sans-serif;
+             position: relative;
+            }
+
+
+       body::before {
+             content: "";
+             position: fixed;
+             inset: 0;
+             background: rgba(0,0,0,0.25);
+             z-index: -1;
+}
+
+        /* posisi card */
         .center-box {
             margin-top: 40px;
+        }
+
+        /* Card */
+        .card {
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Judul */
+        .card h4 {
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Label */
+        .form-label {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Input & textarea & select */
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 12px 14px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: #fff;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        textarea.form-control {
+            resize: none;
+        }
+
+        /* Text bantuan password */
+        small.text-muted {
+            color: #ddd !important;
+        }
+
+        /* Tombol */
+        .btn-primary {
+            background: linear-gradient(to right, #0a1a3f, #112d63);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            transition: 0.25s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(to right, #122752, #1b3b79);
+        }
+
+        /* Link bawah */
+        .text-center a {
+            color: #e5e5e5;
+            text-decoration: none;
+        }
+
+        .text-center a:hover {
+            color: #fff;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -76,9 +167,11 @@
                 Sudah punya akun? <a href="login_user.php">Login</a>
 
                 <a href="../admin/login_admin.php"
-                    class="d-block text-decoration-none text-secondary mt-2">Administrator</a>
+                    class="d-block text-decoration-none mt-2">Administrator</a>
 
-                <a href="../index.php" class="d-block text-decoration-none mt-2">Kembali ke Beranda</a>
+                <a href="../index.php" class="d-block text-decoration-none mt-2">
+                    Kembali ke Beranda
+                </a>
             </div>
 
         </div>
@@ -87,8 +180,7 @@
     <script>
         function cekPassword() {
             let pw = document.getElementById("password").value;
-
-            let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+            let pola = /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[\W_]).{8,}$/;
 
             if (!pola.test(pw)) {
                 alert("Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial.");

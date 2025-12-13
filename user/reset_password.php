@@ -39,7 +39,7 @@ $email = $data['email'];
                     <input type="password" name="password" class="form-control"
                         required
                         minlength="8"
-                        pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+                        pattern="(?=.[a-z])(?=.[A-Z])(?=.*\d).{8,}"
                         title="Password harus ada huruf kecil, huruf besar, dan angka (min 8 karakter)">
                 </div>
 

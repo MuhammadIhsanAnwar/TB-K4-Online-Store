@@ -5,3 +5,13 @@ Options -Indexes
 RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/user/?$ [NC]
 RewriteRule ^.*$ /index.php [R=302,L]
+
+<Files "verifikasi.php">
+    RewriteEngine On
+
+    # Jika URL tidak punya parameter email dan token → blokir
+    RewriteCond %{QUERY_STRING} !(^|&)email= [NC]
+    RewriteCond %{QUERY_STRING} !(^|&)token= [NC]
+    RewriteRule ^ - [F]
+
+</Files>
