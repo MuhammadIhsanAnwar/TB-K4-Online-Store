@@ -12,7 +12,7 @@
 
         body {
              min-height: 100vh;
-             background-image: url("../assets/bg.jpg");
+             background-image: url("bg regis.jpg");
              background-repeat: no-repeat;
              background-position: center top;
              background-size: 100% auto;
