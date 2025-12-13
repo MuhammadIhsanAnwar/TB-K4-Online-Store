@@ -11,19 +11,24 @@
         /* ================= REGISTER USER STYLE ================= */
 
         body {
-            background: url("bg regis.jpg") no-repeat center center / cover;
-            font-family: 'Poppins', sans-serif;
-            position: relative;
-        }
+             min-height: 100vh;
+             background-image: url("../assets/bg.jpg");
+             background-repeat: no-repeat;
+             background-position: center top;
+             background-size: 100% auto;
+             background-attachment: fixed;
+             font-family: 'Poppins', sans-serif;
+             position: relative;
+            }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(4px);
-            z-index: -1;
-        }
+
+       body::before {
+             content: "";
+             position: fixed;
+             inset: 0;
+             background: rgba(0,0,0,0.25);
+             z-index: -1;
+}
 
         /* posisi card */
         .center-box {
