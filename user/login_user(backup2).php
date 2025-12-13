@@ -167,7 +167,24 @@
         </div>
     </footer>
 
-    <script src="../js/bootstrap.bundle.min.js"></script>
+     <script src="bootstrap.bundle.min.js">
+const form = document.getElementById('loginForm');
+const btn = document.getElementById('loginBtn');
+const spinner = btn.querySelector('.spinner-border');
+const text = btn.querySelector('.btn-text');
+
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    btn.disabled = true;
+    spinner.classList.remove('d-none');
+    text.textContent = 'Memproses...';
+
+    setTimeout(() => {
+        form.submit();
+    }, 300);
+});
+</script>
 </body>
 
 </html>
