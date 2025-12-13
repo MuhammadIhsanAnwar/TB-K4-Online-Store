@@ -8,13 +8,9 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-light d-flex flex-column min-vh-100">
+<body class="bg-light">
 
-    <!-- LOGIN CONTAINER -->
-    <div class="container-fluid d-flex justify-content-center 
-                align-items-start align-items-md-center 
-                flex-grow-1 pt-5 pt-md-0">
-
+    <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow-sm p-4" style="max-width: 380px; width: 100%;">
             <h4 class="text-center mb-3">Login</h4>
 
@@ -29,9 +25,7 @@
                     <input type="password" name="password" class="form-control" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 mb-3">
-                    Masuk
-                </button>
+                <button type="submit" class="btn btn-primary w-100 mb-3">Masuk</button>
             </form>
 
             <div class="text-center small">
@@ -54,16 +48,8 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-white border-top py-3 mt-auto">
-        <div class="container text-center small text-muted">
-            © <?= date('Y') ?> Aplikasi Anda • 
-            <a href="../index.php" class="text-decoration-none">Beranda</a> •
-            <a href="#" class="text-decoration-none">Kebijakan Privasi</a>
-        </div>
-    </footer>
-
     <script src="../js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
