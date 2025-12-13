@@ -26,13 +26,14 @@ if (isset($_POST['login'])) {
     <title>Login Admin</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
 
-    <!-- ====================== CSS LOGIN BARU ====================== -->
+    <!-- ====================== CSS LOGIN ====================== -->
     <style>
         /* Background preview fashion */
         body {
-            background: url("../assets/bg.jpg") no-repeat center center/cover;
+            position: relative; 
+            background: url("../assets/background.jpg") no-repeat center center / cover;
             font-family: 'Poppins', sans-serif;
-        }
+}
 
         /* Overlay gelap */
         body::before {
@@ -132,7 +133,7 @@ if (isset($_POST['login'])) {
 
             <!-- LOGO (penambahan tanpa ubah PHP) -->
             <div class="logo-box">
-                <img src="../assets/logo.png" alt="Urban Hype Logo">
+                <img src="logo.png" alt="Urban Hype Logo">
             </div>
 
             <h3 class="text-center fw-bold mb-3">Admin Login</h3>
