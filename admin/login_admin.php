@@ -72,7 +72,7 @@ if (isset($_POST['login'])) {
         }
 
         .logo-box img {
-            width: 180px;
+            width: 150px;
             filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.4));
         }
 
@@ -136,7 +136,7 @@ if (isset($_POST['login'])) {
 
             <!-- LOGO (penambahan tanpa ubah PHP) -->
             <div class="logo-box">
-                <img src="logo.png" alt="Urban Hype Logo">
+                <img src="/TB-K4-Online-Store/assets/logo.png" alt="Urban Hype Logo">
             </div>
 
             <h3 class="text-center fw-bold mb-3">Admin Login</h3>
