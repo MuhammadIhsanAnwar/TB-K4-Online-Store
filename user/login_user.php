@@ -129,7 +129,6 @@
         </div>
       </div>
     </div>
-    <<<<<<< HEAD
     <!-- FOOTER -->
     <footer class="bg-white border-top py-3 mt-auto">
       <div class="container text-center small text-muted">
@@ -140,7 +139,6 @@
         <a href="#" class="text-decoration-none">Kebijakan Privasi</a>
       </div>
     </footer>
-    ======= >>>>>>> af1f8eff4d48668dae2cb841c8af6719d261e1e0
     <script src="../js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
