@@ -30,10 +30,13 @@ if (isset($_POST['login'])) {
     <style>
         /* Background preview fashion */
         body {
-            position: relative; 
-            background: url("background.jpg") no-repeat center center / cover;
-            font-family: 'Poppins', sans-serif;
-}
+             background-image: url("/TB-K4-Online-Store/assets/background.jpg");
+             background-size: cover;
+             background-position: center;
+             background-repeat: no-repeat;
+             font-family: 'Poppins', sans-serif;
+            }
+
 
         /* Overlay gelap */
         body::before {
