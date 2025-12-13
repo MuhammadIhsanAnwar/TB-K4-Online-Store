@@ -6,22 +6,16 @@
     <title>Login Pengguna</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" />
     <style>
-/* ================= ROOT ================= */
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.14);
-    --glass-border: rgba(255, 255, 255, 0.28);
-    --accent: #ffffff;
-    --muted: rgba(255,255,255,0.7);
+    --glass: rgba(255,255,255,0.14);
+    --border: rgba(255,255,255,0.25);
+    --white-soft: rgba(255,255,255,0.85);
 }
 
-/* ================= BACKGROUND ================= */
+/* ===== BACKGROUND ===== */
 body.bg-light {
-    background-image: url("background 2.jpg");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background: url("background 2.jpg") center/cover fixed no-repeat;
     font-family: 'Poppins', system-ui, sans-serif;
-    letter-spacing: 0.2px;
 }
 
 body.bg-light::before {
@@ -30,122 +24,118 @@ body.bg-light::before {
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.35),
-        rgba(0,0,0,0.55)
+        rgba(0,0,0,0.3),
+        rgba(0,0,0,0.6)
     );
     z-index: -1;
 }
 
-/* ================= LAYOUT ================= */
+/* ===== LAYOUT ===== */
 .login-wrapper {
     position: sticky;
-    top: 96px;
+    top: 90px;
 }
 
 .card {
-    border-radius: 28px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
-    border: 1px solid var(--glass-border);
+    border-radius: 32px;
+    background: var(--glass);
+    backdrop-filter: blur(26px);
+    border: 1px solid var(--border);
     box-shadow:
-        0 40px 80px rgba(0,0,0,0.45),
+        0 60px 120px rgba(0,0,0,0.45),
         inset 0 1px 0 rgba(255,255,255,0.15);
-    padding: 2.2rem;
-    animation: fadeUp 0.7s ease both;
+    padding: 2.5rem;
+    animation: enter 0.8s cubic-bezier(.2,.8,.2,1);
 }
 
-/* ================= ANIMATION ================= */
-@keyframes fadeUp {
+/* ===== ANIMATION ===== */
+@keyframes enter {
     from {
         opacity: 0;
-        transform: translateY(24px);
+        transform: translateY(30px) scale(0.97);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
-/* ================= LOGO ================= */
+/* ===== LOGO ===== */
 .login-logo {
     width: 150px;
-    margin-bottom: 1rem;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+    margin-bottom: 1.2rem;
+    filter: drop-shadow(0 14px 24px rgba(0,0,0,0.6));
 }
 
-/* ================= TYPOGRAPHY ================= */
+/* ===== TEXT ===== */
 .card h4 {
-    color: var(--accent);
+    color: #fff;
     font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 1.6rem;
+    letter-spacing: 1.2px;
+    margin-bottom: 1.8rem;
 }
 
 .form-label {
-    color: var(--muted);
-    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
     margin-bottom: 6px;
 }
 
-/* ================= INPUT ================= */
+/* ===== INPUT ===== */
 .form-control {
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 14px 16px;
     border: none;
-    background: rgba(255,255,255,0.9);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    background: var(--white-soft);
+    transition: all .25s ease;
 }
 
 .form-control:focus {
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.35);
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,0.4),
+        0 12px 30px rgba(0,0,0,0.25);
     transform: translateY(-1px);
 }
 
-/* ================= BUTTON ================= */
+/* ===== BUTTON ===== */
 .btn-primary {
-    border-radius: 16px;
-    padding: 14px;
+    border-radius: 18px;
+    padding: 15px;
     font-weight: 600;
-    letter-spacing: 1px;
-    background: linear-gradient(
-        to right,
-        #ffffff,
-        #e6e6e6
-    );
+    letter-spacing: 1.5px;
+    background: linear-gradient(to right, #fff, #eaeaea);
     color: #000;
     border: none;
-    transition: all 0.25s ease;
+    transition: all .3s ease;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-    background: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 24px 50px rgba(0,0,0,0.45);
 }
 
 .btn-primary:disabled {
-    opacity: 0.85;
+    opacity: .9;
 }
 
-/* ================= LINKS ================= */
+/* ===== LINKS ===== */
 .text-center.small a {
-    color: var(--muted) !important;
-    font-size: 0.85rem;
-    transition: color 0.2s ease;
+    color: rgba(255,255,255,0.7) !important;
+    font-size: .85rem;
 }
 
 .text-center.small a:hover {
-    color: #ffffff !important;
+    color: #fff !important;
 }
 
-/* ================= FOOTER ================= */
+/* ===== FOOTER ===== */
 footer {
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255,255,255,0.15);
 }
 </style>
+
 
   </head>
   <body class="bg-light d-flex flex-column min-vh-100">
@@ -221,17 +211,42 @@ footer {
       </div>
     </footer>
     <!-- JS -->
-    <script src="../js/bootstrap.bundle.min.js"></script>
+     <script src="../js/bootstrap.bundle.min.js"></script>
     <script>
-      const form = document.getElementById("loginForm");
-      const btn = document.getElementById("loginBtn");
-      const spinner = btn.querySelector(".spinner-border");
-      const text = btn.querySelector(".btn-text");
-      form.addEventListener("submit", function () {
-        btn.disabled = true;
-        spinner.classList.remove("d-none");
-        text.textContent = "Memproses...";
-      });
-    </script>
+const form = document.getElementById('loginForm');
+const btn = document.getElementById('loginBtn');
+const spinner = btn.querySelector('.spinner-border');
+const text = btn.querySelector('.btn-text');
+const inputs = form.querySelectorAll('.form-control');
+
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    btn.disabled = true;
+    spinner.classList.remove('d-none');
+    text.textContent = 'Processing';
+
+    // soft lock inputs
+    inputs.forEach(i => i.blur());
+
+    btn.offsetHeight;
+
+    setTimeout(() => {
+        form.submit();
+    }, 350);
+});
+
+// subtle focus UX
+inputs.forEach(input => {
+    input.addEventListener('focus', () => {
+        input.parentElement.style.transform = 'translateY(-2px)';
+    });
+    input.addEventListener('blur', () => {
+        input.parentElement.style.transform = 'translateY(0)';
+    });
+});
+</script>
+    
+
   </body>
 </html>
