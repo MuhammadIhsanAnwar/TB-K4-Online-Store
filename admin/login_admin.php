@@ -30,7 +30,7 @@ if (isset($_POST['login'])) {
     <style>
         /* Background preview fashion */
         body {
-             background-image: url("/TB-K4-Online-Store/assets/background.jpg");
+             background-image: url("background.jpg");
              background-size: cover;
              background-position: center;
              background-repeat: no-repeat;
@@ -134,9 +134,9 @@ if (isset($_POST['login'])) {
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow" style="width: 380px;">
 
-            <!-- LOGO (penambahan tanpa ubah PHP) -->
+            <!-- LOGO  -->
             <div class="logo-box">
-                <img src="/TB-K4-Online-Store/assets/logo.png" alt="Urban Hype Logo">
+                <img src="logo.png" alt="Urban Hype Logo">
             </div>
 
             <h3 class="text-center fw-bold mb-3">Admin Login</h3>
