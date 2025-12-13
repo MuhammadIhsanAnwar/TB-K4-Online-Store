@@ -31,7 +31,7 @@ if (isset($_POST['login'])) {
         /* Background preview fashion */
         body {
             position: relative; 
-            background: url("../assets/background.jpg") no-repeat center center / cover;
+            background: url("background.jpg") no-repeat center center / cover;
             font-family: 'Poppins', sans-serif;
 }
 
@@ -69,7 +69,7 @@ if (isset($_POST['login'])) {
         }
 
         .logo-box img {
-            width: 130px;
+            width: 180px;
             filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.4));
         }
 
