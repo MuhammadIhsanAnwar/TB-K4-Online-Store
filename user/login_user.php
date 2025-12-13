@@ -21,7 +21,6 @@
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(1.5px);
             z-index: -1;
         }
 
