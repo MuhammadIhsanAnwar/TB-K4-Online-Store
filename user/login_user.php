@@ -11,10 +11,14 @@
         /* ================= LOGIN USER STYLE ================= */
 
         body.bg-light {
-            background: url("background 2.jpg") no-repeat center center / cover;
+            background-image: url("background 2.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed; 
             font-family: 'Poppins', sans-serif;
-            position: relative;
         }
+
 
         body.bg-light::before {
             content: "";
