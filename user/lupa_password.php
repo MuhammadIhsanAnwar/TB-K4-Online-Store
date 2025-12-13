@@ -12,18 +12,18 @@
     <!-- ===== CSS TAMBAHAN SAJA (LOGIKA TIDAK DIUBAH) ===== -->
     <style>
         body {
-            background: url("bg regis.jpg");
-            font-family: 'Poppins', sans-serif;
-            position: relative;
-            min-height: 100vh;
-        }
+             background: url("bg regis.jpg") no-repeat center center fixed;
+             background-size: cover;
+             font-family: 'Poppins', sans-serif;
+             position: relative;
+             min-height: 100vh;
+            }
 
         body::before {
             content: "";
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.22);
             z-index: -1;
         }
 
