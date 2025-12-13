@@ -167,7 +167,7 @@
         </div>
     </footer>
 
-     <script src="bootstrap.bundle.min.js">
+     <script>
 const form = document.getElementById('loginForm');
 const btn = document.getElementById('loginBtn');
 const spinner = btn.querySelector('.spinner-border');
