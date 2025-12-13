@@ -84,6 +84,60 @@
     </style>
 </head>
 
+<script>
+(function () {
+    'use strict';
+
+    // ===== ELEMENTS =====
+    const form = document.getElementById('loginForm');
+    const btn = document.getElementById('loginBtn');
+
+    if (!form || !btn) return;
+
+    const spinner = btn.querySelector('.spinner-border');
+    const text = btn.querySelector('.btn-text');
+    const inputs = form.querySelectorAll('input');
+
+    let isSubmitting = false;
+
+    // ===== SUBMIT HANDLER =====
+    form.addEventListener('submit', function (e) {
+        if (isSubmitting) return;
+
+        e.preventDefault();
+        isSubmitting = true;
+
+        // Disable UI
+        btn.disabled = true;
+        inputs.forEach(input => input.disabled = true);
+
+        // Update UI
+        if (spinner) spinner.classList.remove('d-none');
+        if (text) text.textContent = 'Memproses...';
+
+        // Force repaint
+        btn.offsetHeight;
+
+        // UX delay
+        setTimeout(() => {
+            form.submit();
+        }, 300);
+    });
+
+    // ===== SAFETY: HANDLE BACK/FORWARD CACHE =====
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            isSubmitting = false;
+            btn.disabled = false;
+            inputs.forEach(input => input.disabled = false);
+
+            if (spinner) spinner.classList.add('d-none');
+            if (text) text.textContent = 'Masuk';
+        }
+    });
+})();
+</script>
+
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- CONTENT -->
@@ -143,9 +197,7 @@
     </footer>
 
     <!-- JS -->
-   <script>
-alert('JS KELOAD');
-</script>
+  
 
 
 
