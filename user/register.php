@@ -11,7 +11,7 @@
         /* ================= REGISTER USER STYLE ================= */
 
         body {
-            background: url("../assets/bg.jpg") no-repeat center center / cover;
+            background: url("bg regis.jpg") no-repeat center center / cover;
             font-family: 'Poppins', sans-serif;
             position: relative;
         }
