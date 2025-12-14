@@ -230,13 +230,13 @@ if (isset($_SESSION['user_id'])) {
             66% { transform: translate(-20px, 20px) rotate(-5deg); }
         } */
 
-        .hero-content {
+        /* .hero-content {
             position: relative;
             z-index: 2;
             color: white;
             max-width: 600px;
             animation: slideInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        } */
 
         /* @keyframes slideInLeft {
             from {
