@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register Akun</title>
+
+    <!-- Bootstrap -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -13,36 +15,29 @@
             height: 100%;
         }
 
-        body {
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
+        body.bg-light {
+            background-image: url("bg regis.jpeg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            font-family: "Poppins", sans-serif;
             position: relative;
-            overflow-x: hidden;
-            background: 
-                linear-gradient(
-                    120deg,
-                    rgba(47, 95, 164, 0.85) 0%,
-                    rgba(79, 121, 184, 0.85) 40%,
-                    rgba(155, 179, 214, 0.85) 100%
-                ),
-                url("bg regis.jpeg") center/cover no-repeat fixed;
         }
 
-        /* overlay tambahan biar soft */
-        body::before {
+        /* overlay biru soft (BUKAN BLUR) */
+        body.bg-light::before {
             content: "";
             position: fixed;
             inset: 0;
-            background: rgba(20, 40, 80, 0.35);
-            z-index: 0;
+            background: rgba(47, 95, 164, 0.28);
+            z-index: -1;
         }
 
-        /* container */
+        /* Container posisi */
         .center-box {
-            margin-top: 50px;
+            padding-top: 50px;
             padding-bottom: 70px;
-            position: relative;
-            z-index: 1;
         }
 
         /* Card glass */
@@ -52,7 +47,7 @@
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
         }
 
         /* Judul */
@@ -79,8 +74,8 @@
 
         .form-control:focus,
         .form-select:focus {
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(47, 95, 164, 0.35);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(47, 95, 164, 0.25);
         }
 
         textarea.form-control {
@@ -91,7 +86,7 @@
             color: #e6ecff !important;
         }
 
-        /* Button */
+        /* Button utama */
         .btn-primary {
             background: linear-gradient(to right, #1f3f73, #2f5fa4);
             border: none;
@@ -108,7 +103,7 @@
             box-shadow: 0 8px 20px rgba(47, 95, 164, 0.45);
         }
 
-        /* Link */
+        /* Link bawah */
         .text-center a {
             color: #eef3ff;
             text-decoration: none;
@@ -122,79 +117,89 @@
     </style>
 </head>
 
-<body>
+<body class="bg-light">
 
-<div class="container d-flex justify-content-center align-items-start center-box">
-    <div class="card p-4" style="max-width: 420px; width: 100%;">
-        <h4 class="text-center mb-3">Register Akun Baru</h4>
+    <div class="container d-flex justify-content-center align-items-start center-box">
+        <div class="card p-4" style="max-width: 420px; width: 100%;">
 
-        <form action="proses_register.php" method="POST" onsubmit="return cekPassword()">
+            <h4 class="text-center mb-3">Register Akun Baru</h4>
 
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" required>
+            <form action="proses_register.php" method="POST" onsubmit="return cekPassword()">
+
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" name="nama_lengkap" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Jenis Kelamin</label>
+                    <select name="jenis_kelamin" class="form-select" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="L">Laki-laki</option>
+                        <option value="P">Perempuan</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <textarea name="alamat" class="form-control" rows="2" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                    <small class="text-muted">
+                        Minimal 8 karakter, huruf besar, huruf kecil, angka, dan simbol.
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Buat Akun
+                </button>
+            </form>
+
+            <div class="text-center mt-3 small">
+                Sudah punya akun? <a href="login_user.php">Login</a>
+
+                <a href="../admin/login_admin.php" class="d-block mt-2">
+                    Administrator
+                </a>
+
+                <a href="../index.php" class="d-block mt-2">
+                    Kembali ke Beranda
+                </a>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Nama Lengkap</label>
-                <input type="text" name="nama_lengkap" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Jenis Kelamin</label>
-                <select name="jenis_kelamin" class="form-select" required>
-                    <option value="">-- Pilih --</option>
-                    <option value="L">Laki-laki</option>
-                    <option value="P">Perempuan</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Tanggal Lahir</label>
-                <input type="date" name="tanggal_lahir" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Alamat</label>
-                <textarea name="alamat" class="form-control" rows="2" required></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" name="password" id="password" class="form-control" required>
-                <small class="text-muted">
-                    Minimal 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 simbol.
-                </small>
-            </div>
-
-            <button class="btn btn-primary w-100">Buat Akun</button>
-        </form>
-
-        <div class="text-center mt-3 small">
-            Sudah punya akun? <a href="login_user.php">Login</a>
-            <a href="../admin/login_admin.php" class="d-block mt-2">Administrator</a>
-            <a href="../index.php" class="d-block mt-2">Kembali ke Beranda</a>
         </div>
     </div>
-</div>
 
-<script>
-    function cekPassword() {
-        let pw = document.getElementById("password").value;
-        let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$/;
+    <script>
+        function cekPassword() {
+            let pw = document.getElementById("password").value;
+            let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-        if (!pola.test(pw)) {
-            alert("Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial.");
-            return false;
+            if (!pola.test(pw)) {
+                alert("Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial.");
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
-</script>
+    </script>
 
 </body>
 </html>
