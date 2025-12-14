@@ -25,7 +25,7 @@
             height: 100%;
         }
 
-        /* BACKGROUND FOTO TAJAM (TANPA BLUR) */
+        /* BACKGROUND FOTO TAJAM (NAMA FILE TETAP) */
         body.bg-light {
             background-image: url("bg reset.jpeg");
             background-repeat: no-repeat;
@@ -36,7 +36,7 @@
             position: relative;
         }
 
-        /* OVERLAY WARNA SAJA */
+        /* OVERLAY WARNA (SAMA SEMUA PAGE) */
         body.bg-light::before {
             content: "";
             position: fixed;
@@ -49,10 +49,16 @@
             z-index: -1;
         }
 
+        /* POSISI KONSISTEN */
+        .center-box {
+            padding-top: 60px;
+            padding-bottom: 80px;
+        }
+
         /* CARD GLASS */
         .card {
             border-radius: 22px;
-            background: rgba(234, 226, 228, 0.35); /* Misty */
+            background: rgba(234, 226, 228, 0.35);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.45);
@@ -124,10 +130,10 @@
     </style>
 </head>
 
-<body class="bg-light d-flex flex-column min-vh-100">
+<body class="bg-light">
 
-    <div class="container-fluid d-flex justify-content-center align-items-start align-items-md-center flex-grow-1 pt-5 pt-md-0">
-        <div class="card p-4" style="max-width: 380px; width:100%;">
+    <div class="container d-flex justify-content-center align-items-start center-box">
+        <div class="card p-4" style="max-width: 420px; width: 100%;">
 
             <h4 class="text-center mb-3">Reset Password</h4>
 

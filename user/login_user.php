@@ -8,7 +8,7 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet" />
 
     <style>
-        /* ================= URBANHYPE LOGIN ================= */
+        /* ================= URBANHYPE LOGIN (MATCH REGISTER) ================= */
 
         :root {
             --primary: #1E5DAC;   /* Mediterranean Blue */
@@ -22,6 +22,7 @@
             height: 100%;
         }
 
+        /* BACKGROUND FOTO TAJAM (NAMA FILE TETAP) */
         body.bg-light {
             background-image: url("background 2.jpg");
             background-repeat: no-repeat;
@@ -32,7 +33,7 @@
             position: relative;
         }
 
-        /* Overlay TANPA blur */
+        /* OVERLAY WARNA SAMA DENGAN REGISTER */
         body.bg-light::before {
             content: "";
             position: fixed;
@@ -45,10 +46,16 @@
             z-index: -1;
         }
 
-        /* CARD GLASS SAJA */
+        /* POSISI */
+        .center-box {
+            padding-top: 60px;
+            padding-bottom: 80px;
+        }
+
+        /* CARD GLASS */
         .card {
             border-radius: 22px;
-            background: rgba(234, 226, 228, 0.35);
+            background: rgba(234, 226, 228, 0.35); /* Misty */
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.45);
@@ -115,22 +122,22 @@
 
         /* LINK */
         .text-center.small a {
-            color: var(--accent) !important;
+            color: var(--accent);
             text-decoration: none;
             transition: 0.2s;
         }
 
         .text-center.small a:hover {
-            color: var(--white) !important;
+            color: var(--white);
             font-weight: 600;
         }
     </style>
 </head>
 
-<body class="bg-light d-flex flex-column min-vh-100">
+<body class="bg-light">
 
-    <div class="container-fluid d-flex justify-content-center align-items-start align-items-md-center flex-grow-1 pt-5 pt-md-0">
-        <div class="card p-4" style="max-width: 380px; width: 100%">
+    <div class="container d-flex justify-content-center align-items-start center-box">
+        <div class="card p-4" style="max-width: 420px; width: 100%;">
 
             <div class="text-center mb-3">
                 <img src="logo.png" alt="Urban Hype Logo" class="login-logo" />
