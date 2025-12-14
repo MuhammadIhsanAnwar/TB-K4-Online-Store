@@ -224,11 +224,11 @@ if (isset($_SESSION['user_id'])) {
             animation: float 15s ease-in-out infinite reverse;
         }
 
-        @keyframes float {
+        /* @keyframes float {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             33% { transform: translate(30px, -50px) rotate(5deg); }
             66% { transform: translate(-20px, 20px) rotate(-5deg); }
-        }
+        } */
 
         .hero-content {
             position: relative;
@@ -238,7 +238,7 @@ if (isset($_SESSION['user_id'])) {
             animation: slideInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes slideInLeft {
+        /* @keyframes slideInLeft {
             from {
                 opacity: 0;
                 transform: translateX(-100px);
@@ -247,7 +247,7 @@ if (isset($_SESSION['user_id'])) {
                 opacity: 1;
                 transform: translateX(0);
             }
-        }
+        } */
 
         .hero-content .subtitle {
             letter-spacing: 6px;
@@ -336,7 +336,7 @@ if (isset($_SESSION['user_id'])) {
             animation: fadeInRight 1.4s ease;
         }
 
-        /* @keyframes fadeInRight {
+        @keyframes fadeInRight {
             from {
                 opacity: 0;
                 transform: translate(100px, -50%);
@@ -345,7 +345,7 @@ if (isset($_SESSION['user_id'])) {
                 opacity: 1;
                 transform: translate(0, -50%);
             }
-        } */
+        }
 
         .hero-image img {
             width: 100%;
