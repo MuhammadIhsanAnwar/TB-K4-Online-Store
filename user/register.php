@@ -16,7 +16,7 @@
              background-repeat: no-repeat;
              background-position: center;
              background-size: cover;
-             background-attachment: fixed;
+             background-attachment: scroll; 
              font-family: 'Poppins', sans-serif;
              position: relative;
             }
@@ -27,7 +27,7 @@
              inset: 0;
              background: rgba(0,0,0,0.25);
              z-index: -1;
-}
+            }
 
         /* posisi card */
         .center-box {
