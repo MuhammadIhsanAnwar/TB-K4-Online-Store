@@ -8,102 +8,107 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* ================= REGISTER USER STYLE ================= */
+        /* ================= URBANHYPE REGISTER ================= */
 
-       body {
-             min-height: 100vh;
-             background-image: url("bg regis.jpg");
-             background-repeat: no-repeat;
-             background-position: center;
-             background-size: cover;
-             background-attachment: scroll; 
-             font-family: 'Poppins', sans-serif;
-             position: relative;
-            }
-
-       body::before {
-             content: "";
-             position: fixed;
-             inset: 0;
-             background: rgba(0,0,0,0.25);
-             z-index: -1;
-            }
-
-        /* posisi card */
-        .center-box {
-            margin-top: 40px;
+        body {
+            min-height: 100%;
+            background: linear-gradient(
+                120deg,
+                #2f5fa4 0%,
+                #4f79b8 40%,
+                #9bb3d6 100%
+            );
+            font-family: 'Poppins', sans-serif;
+            position: relative;
         }
 
-        /* Card */
+        /* overlay biru soft */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(47, 95, 164, 0.25);
+            z-index: -1;
+        }
+
+        /* container */
+        .center-box {
+            margin-top: 50px;
+            padding-bottom: 70px;
+        }
+
+        /* Card glass */
         .card {
             border-radius: 22px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
         }
 
         /* Judul */
         .card h4 {
-            color: #fff;
+            color: #ffffff;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
         }
 
         /* Label */
         .form-label {
-            color: #fff;
+            color: #f2f6ff;
             font-weight: 500;
         }
 
-        /* Input & textarea & select */
+        /* Input */
         .form-control,
         .form-select {
             border-radius: 12px;
             padding: 12px 14px;
             border: none;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .form-control:focus,
         .form-select:focus {
             background: #fff;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(47, 95, 164, 0.25);
         }
 
         textarea.form-control {
             resize: none;
         }
 
-        /* Text bantuan password */
         small.text-muted {
-            color: #ddd !important;
+            color: #e6ecff !important;
         }
 
-        /* Tombol */
+        /* Button utama */
         .btn-primary {
-            background: linear-gradient(to right, #0a1a3f, #112d63);
+            background: linear-gradient(to right, #1f3f73, #2f5fa4);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 12px;
             font-weight: 600;
-            transition: 0.25s ease;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
+            background: linear-gradient(to right, #2f5fa4, #1f3f73);
             transform: translateY(-2px);
-            background: linear-gradient(to right, #122752, #1b3b79);
+            box-shadow: 0 8px 20px rgba(47, 95, 164, 0.45);
         }
 
         /* Link bawah */
         .text-center a {
-            color: #e5e5e5;
+            color: #eef3ff;
             text-decoration: none;
+            transition: 0.2s;
         }
 
         .text-center a:hover {
-            color: #fff;
+            color: #ffffff;
             font-weight: 600;
         }
     </style>
@@ -111,8 +116,8 @@
 
 <body>
 
-    <div class="container d-flex justify-content-center align-items-start vh-100 center-box">
-        <div class="card shadow-sm p-4" style="max-width: 420px; width: 100%;">
+    <div class="container d-flex justify-content-center align-items-start center-box">
+        <div class="card p-4" style="max-width: 420px; width: 100%;">
             <h4 class="text-center mb-3">Register Akun Baru</h4>
 
             <form action="proses_register.php" method="POST" onsubmit="return cekPassword()">
@@ -165,10 +170,9 @@
             <div class="text-center mt-3 small">
                 Sudah punya akun? <a href="login_user.php">Login</a>
 
-                <a href="../admin/login_admin.php"
-                    class="d-block text-decoration-none mt-2">Administrator</a>
+                <a href="../admin/login_admin.php" class="d-block mt-2">Administrator</a>
 
-                <a href="../index.php" class="d-block text-decoration-none mt-2">
+                <a href="../index.php" class="d-block mt-2">
                     Kembali ke Beranda
                 </a>
             </div>
@@ -179,7 +183,7 @@
     <script>
         function cekPassword() {
             let pw = document.getElementById("password").value;
-            let pola = /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[\W_]).{8,}$/;
+            let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
             if (!pola.test(pw)) {
                 alert("Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial.");

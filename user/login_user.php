@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login Pengguna</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" />
+
     <style>
-      /* ================= LOGIN USER STYLE ================= */
+      /* ================= URBANHYPE LOGIN ================= */
+
       body.bg-light {
         background-image: url("background 2.jpg");
         background-repeat: no-repeat;
@@ -14,78 +16,105 @@
         background-size: cover;
         background-attachment: fixed;
         font-family: "Poppins", sans-serif;
+        position: relative;
       }
+
+      /* overlay biru soft */
       body.bg-light::before {
         content: "";
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.22);
+        background: rgba(47, 95, 164, 0.28);
         z-index: -1;
       }
+
+      /* Card glass */
       .card {
         border-radius: 22px;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
-      } /* LOGO */
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+      }
+
+      /* LOGO */
       .login-logo {
         width: 160px;
         max-width: 100%;
-        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+        filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
       }
+
+      /* Judul */
       .card h4 {
-        color: #fff;
+        color: #ffffff;
         font-weight: 700;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.6px;
       }
+
+      /* Label */
       .form-label {
-        color: #fff;
+        color: #f2f6ff;
         font-weight: 500;
       }
+
+      /* Input */
       .form-control {
         border-radius: 12px;
         padding: 12px 14px;
         border: none;
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.95);
       }
+
       .form-control:focus {
-        background: #fff;
-        box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(47, 95, 164, 0.25);
       }
+
+      /* Button utama */
       .btn-primary {
-        background: linear-gradient(to right, #0a1a3f, #112d63);
+        background: linear-gradient(to right, #1f3f73, #2f5fa4);
         border: none;
-        border-radius: 12px;
+        border-radius: 14px;
         padding: 12px;
         font-weight: 600;
-        transition: 0.25s ease;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
       }
+
       .btn-primary:hover {
+        background: linear-gradient(to right, #2f5fa4, #1f3f73);
         transform: translateY(-2px);
-        background: linear-gradient(to right, #122752, #1b3b79);
+        box-shadow: 0 8px 20px rgba(47, 95, 164, 0.45);
       }
+
+      /* Link bawah */
       .text-center.small a {
-        color: #e5e5e5 !important;
+        color: #eef3ff !important;
+        text-decoration: none;
+        transition: 0.2s;
       }
+
       .text-center.small a:hover {
         color: #ffffff !important;
         font-weight: 600;
       }
     </style>
   </head>
+
   <body class="bg-light d-flex flex-column min-vh-100">
     <!-- LOGIN CONTAINER -->
     <div
       class="container-fluid d-flex justify-content-center align-items-start align-items-md-center flex-grow-1 pt-5 pt-md-0"
     >
-      <div class="card shadow-sm p-4" style="max-width: 380px; width: 100%">
+      <div class="card p-4" style="max-width: 380px; width: 100%">
         <!-- LOGO -->
         <div class="text-center mb-3">
           <img src="logo.png" alt="Urban Hype Logo" class="login-logo" />
         </div>
+
         <h4 class="text-center mb-3">Login</h4>
+
         <form action="proses_login.php" method="POST">
           <div class="mb-3">
             <label class="form-label">Username</label>
@@ -97,6 +126,7 @@
               autofocus
             />
           </div>
+
           <div class="mb-3">
             <label class="form-label">Password</label>
             <input
@@ -106,10 +136,12 @@
               required
             />
           </div>
+
           <button type="submit" class="btn btn-primary w-100 mb-3">
             Masuk
           </button>
         </form>
+
         <div class="text-center small">
           <a
             href="../admin/login_admin.php"
@@ -129,17 +161,7 @@
         </div>
       </div>
     </div>
-    <!-- FOOTER -->
-    <footer class="bg-white border-top py-3 mt-auto">
-      <div class="container text-center small text-muted">
-        ©
-        <?= date('Y') ?>
-        Aplikasi Anda •
-        <a href="../index.php" class="text-decoration-none">Beranda</a> •
-        <a href="#" class="text-decoration-none">Kebijakan Privasi</a>
-      </div>
-    </footer>
+
     <script src="../js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
-
