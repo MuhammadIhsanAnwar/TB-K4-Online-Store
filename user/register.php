@@ -10,17 +10,16 @@
     <style>
         /* ================= REGISTER USER STYLE ================= */
 
-        body {
+       body {
              min-height: 100vh;
              background-image: url("bg regis.jpg");
              background-repeat: no-repeat;
-             background-position: center top;
-             background-size: 100% auto;
+             background-position: center;
+             background-size: cover;
              background-attachment: fixed;
              font-family: 'Poppins', sans-serif;
              position: relative;
             }
-
 
        body::before {
              content: "";

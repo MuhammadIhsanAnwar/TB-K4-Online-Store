@@ -132,7 +132,7 @@ if (isset($_POST['login'])) {
 <body class="bg-light">
 
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card p-4 shadow" style="width: 380px;">
+        <div class="card p-4 shadow" style="max-width: 380px; width: 100%;">
 
             <!-- LOGO  -->
             <div class="logo-box">
