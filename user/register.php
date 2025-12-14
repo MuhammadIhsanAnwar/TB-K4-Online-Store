@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register Akun</title>
 
-    <!-- Bootstrap -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -15,6 +14,7 @@
             height: 100%;
         }
 
+        /* BACKGROUND FOTO TAJAM */
         body.bg-light {
             background-image: url("bg regis.jpeg");
             background-repeat: no-repeat;
@@ -25,26 +25,26 @@
             position: relative;
         }
 
-        /* overlay TONE URBANHYPE (samain tema) */
+        /* OVERLAY WARNA SAJA (TIDAK BLUR) */
         body.bg-light::before {
             content: "";
             position: fixed;
             inset: 0;
             background: linear-gradient(
                 135deg,
-                rgba(30, 93, 172, 0.55),
-                rgba(183, 197, 218, 0.45)
+                rgba(30, 93, 172, 0.45),
+                rgba(183, 197, 218, 0.35)
             );
             z-index: -1;
         }
 
-        /* Container posisi */
+        /* POSISI RESPONSIVE (HP & LAPTOP SAMA) */
         .center-box {
             padding-top: 50px;
             padding-bottom: 70px;
         }
 
-        /* Card glass */
+        /* CARD GLASS */
         .card {
             border-radius: 22px;
             background: rgba(255, 255, 255, 0.18);
@@ -90,7 +90,7 @@
             color: #e6ecff !important;
         }
 
-        /* Button utama (SAMAIN HOME) */
+        /* BUTTON UTAMA (SAMA LOGIN & RESET) */
         .btn-primary {
             background: linear-gradient(
                 135deg,

@@ -20,68 +20,78 @@ if (isset($_POST['login'])) {
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Admin</title>
+
     <link rel="stylesheet" href="../css/bootstrap.css">
 
-    <!-- ====================== CSS LOGIN ====================== -->
     <style>
-        /* Background preview fashion */
-        body {
-             background-image: url("background.jpg");
-             background-size: cover;
-             background-position: center;
-             background-repeat: no-repeat;
-             font-family: 'Poppins', sans-serif;
-            }
+        /* ================= URBANHYPE ADMIN LOGIN ================= */
 
+        html, body {
+            height: 100%;
+        }
 
-        /* Overlay gelap */
-        body::before {
+        body.bg-light {
+            background-image: url("background.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            font-family: "Poppins", sans-serif;
+            position: relative;
+        }
+
+        /* overlay TONE SAMA DENGAN LOGIN & REGISTER */
+        body.bg-light::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.35);
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(30, 93, 172, 0.55),
+                rgba(183, 197, 218, 0.45)
+            );
             z-index: -1;
         }
 
-        /* Card login */
+        /* Card glass */
         .card {
             border-radius: 22px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            padding: 40px 30px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
-            transition: 0.25s ease-in-out;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 20px 45px rgba(30, 93, 172, 0.35);
+            padding: 35px 30px;
+            transition: 0.25s ease;
         }
 
         /* Logo */
         .logo-box {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .logo-box img {
             width: 150px;
-            filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.4));
+            max-width: 100%;
+            filter: drop-shadow(0 6px 10px rgba(30, 93, 172, 0.45));
         }
 
         /* Judul */
         .card h3 {
-            color: #fff;
-            font-size: 26px;
+            color: #ffffff;
             font-weight: 700;
-            text-align: center;
+            letter-spacing: 0.6px;
+        }
+
+        /* Label */
+        .form-label {
+            color: #eef3ff;
+            font-weight: 500;
         }
 
         /* Input */
@@ -89,57 +99,65 @@ if (isset($_POST['login'])) {
             border-radius: 12px;
             padding: 12px 14px;
             border: none;
-            background: rgba(255, 255, 255, 0.85);
-            transition: 0.2s ease;
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .form-control:focus {
-            background: #fff;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
         }
 
-        /* Tombol login */
+        /* Button login (tone sama) */
         .btn-dark {
-            margin-top: 5px;
-            background: linear-gradient(to right, #0a1a3f, #112d63);
+            background: linear-gradient(
+                135deg,
+                #1E5DAC,
+                #B7C5DA
+            );
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 12px;
             font-weight: 600;
-            letter-spacing: .5px;
-            transition: 0.25s ease;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            color: #fff;
         }
 
         .btn-dark:hover {
+            background: linear-gradient(
+                135deg,
+                #B7C5DA,
+                #1E5DAC
+            );
             transform: translateY(-2px);
-            background: linear-gradient(to right, #122752, #1b3b79);
+            box-shadow: 0 8px 20px rgba(30, 93, 172, 0.45);
         }
 
         /* Link bawah */
         .small a {
-            color: #eee !important;
+            color: #eef3ff !important;
+            text-decoration: none;
+            transition: 0.2s;
         }
 
         .small a:hover {
-            color: #fff !important;
+            color: #ffffff !important;
             font-weight: 600;
         }
     </style>
-    <!-- ====================== END CSS ====================== -->
-
 </head>
 
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
 
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card p-4 shadow" style="max-width: 380px; width: 100%;">
+    <div class="container-fluid d-flex justify-content-center align-items-start align-items-md-center flex-grow-1 pt-5 pt-md-0">
+        <div class="card shadow-sm" style="max-width: 380px; width: 100%;">
 
-            <!-- LOGO  -->
+            <!-- LOGO -->
             <div class="logo-box">
                 <img src="logo.png" alt="Urban Hype Logo">
             </div>
 
-            <h3 class="text-center fw-bold mb-3">Admin Login</h3>
+            <h3 class="text-center mb-3">Admin Login</h3>
 
             <?php if (!empty($error)) : ?>
                 <div class="alert alert-danger py-2"><?= $error ?></div>
@@ -147,26 +165,32 @@ if (isset($_POST['login'])) {
 
             <form method="POST">
                 <div class="mb-3">
-                    <label class="form-label text-white">Username</label>
+                    <label class="form-label">Username</label>
                     <input type="text" class="form-control" name="username" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label text-white">Password</label>
+                    <label class="form-label">Password</label>
                     <input type="password" class="form-control" name="password" required>
                 </div>
 
-                <button class="btn btn-dark w-100" name="login">Login</button>
+                <button class="btn btn-dark w-100" name="login">
+                    Login
+                </button>
             </form>
 
             <div class="text-center small mt-3">
-                <a href="../user/login_user.php" class="d-block text-decoration-none mb-1">Login User</a>
-                <a href="../index.php" class="d-block text-decoration-none mt-2">Kembali ke Beranda</a>
+                <a href="../user/login_user.php" class="d-block mb-1">
+                    Login User
+                </a>
+                <a href="../index.php" class="d-block mt-2">
+                    Kembali ke Beranda
+                </a>
             </div>
+
         </div>
     </div>
 
     <script src="../js/bootstrap.bundle.js"></script>
 </body>
-
 </html>

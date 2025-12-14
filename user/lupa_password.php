@@ -27,20 +27,18 @@
             position: relative;
         }
 
-        /* overlay tone sama persis */
         body.bg-light::before {
             content: "";
             position: fixed;
             inset: 0;
             background: linear-gradient(
                 135deg,
-                rgba(30, 93, 172, 0.55),
-                rgba(183, 197, 218, 0.45)
+                rgba(30, 93, 172, 0.45),
+                rgba(183, 197, 218, 0.35)
             );
             z-index: -1;
         }
 
-        /* Card glass */
         .card {
             border-radius: 22px;
             background: rgba(255, 255, 255, 0.18);
@@ -76,7 +74,7 @@
             box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
         }
 
-        /* Button utama */
+        /* Button */
         .btn-primary {
             background: linear-gradient(
                 135deg,
@@ -101,7 +99,7 @@
             box-shadow: 0 8px 20px rgba(30, 93, 172, 0.45);
         }
 
-        /* Link bawah */
+        /* Link */
         .text-center a {
             color: #eef3ff;
             text-decoration: none;
@@ -118,7 +116,7 @@
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <div class="container-fluid d-flex justify-content-center align-items-start align-items-md-center flex-grow-1 pt-5 pt-md-0">
-        <div class="card shadow-sm p-4" style="max-width: 380px; width:100%;">
+        <div class="card p-4" style="max-width: 380px; width:100%;">
 
             <h4 class="text-center mb-3">Reset Password</h4>
 
