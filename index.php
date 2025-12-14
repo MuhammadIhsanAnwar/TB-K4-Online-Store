@@ -655,7 +655,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         /* ========== LOADING SPINNER ========== */
-        .spinner-overlay {
+        /* .spinner-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -667,7 +667,7 @@ if (isset($_SESSION['user_id'])) {
             align-items: center;
             z-index: 9999;
             animation: fadeOut 0.8s ease 1.5s forwards;
-        }
+        } */
 
         @keyframes fadeOut {
             to {
@@ -676,14 +676,14 @@ if (isset($_SESSION['user_id'])) {
             }
         }
 
-        .spinner {
+        /* .spinner {
             width: 70px;
             height: 70px;
             border: 6px solid rgba(255, 255, 255, 0.3);
             border-top: 6px solid white;
             border-radius: 50%;
             animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
+        } */
 
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -777,7 +777,7 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
         <div class="hero-image">
-            <img src="/placeholder.svg?height=600&width=400" alt="Fashion Model">
+            <!-- <img src="/placeholder.svg?height=600&width=400" alt="Fashion Model"> -->
         </div>
     </section>
 
