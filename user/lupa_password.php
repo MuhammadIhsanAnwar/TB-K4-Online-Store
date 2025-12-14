@@ -13,10 +13,19 @@
     <style>
         /* ================= URBANHYPE RESET PASSWORD ================= */
 
+        :root {
+            --primary: #1E5DAC;   /* Mediterranean Blue */
+            --secondary: #B7C5DA; /* Alley */
+            --accent: #E8D3C1;    /* Blush Beige */
+            --soft: #EAE2E4;      /* Misty */
+            --white: #ffffff;
+        }
+
         html, body {
             height: 100%;
         }
 
+        /* BACKGROUND FOTO TAJAM (TANPA BLUR) */
         body.bg-light {
             background-image: url("bg reset.jpeg");
             background-repeat: no-repeat;
@@ -27,41 +36,43 @@
             position: relative;
         }
 
+        /* OVERLAY WARNA SAJA */
         body.bg-light::before {
             content: "";
             position: fixed;
             inset: 0;
             background: linear-gradient(
                 135deg,
-                rgba(30, 93, 172, 0.45),
-                rgba(183, 197, 218, 0.35)
+                rgba(30, 93, 172, 0.35),
+                rgba(183, 197, 218, 0.25)
             );
             z-index: -1;
         }
 
+        /* CARD GLASS */
         .card {
             border-radius: 22px;
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(234, 226, 228, 0.35); /* Misty */
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.45);
             box-shadow: 0 20px 45px rgba(30, 93, 172, 0.35);
         }
 
-        /* Judul */
+        /* JUDUL */
         .card h4 {
-            color: #ffffff;
+            color: var(--white);
             font-weight: 700;
             letter-spacing: 0.6px;
         }
 
-        /* Label */
+        /* LABEL */
         .form-label {
-            color: #eef3ff;
+            color: var(--soft);
             font-weight: 500;
         }
 
-        /* Input */
+        /* INPUT */
         .form-control {
             border-radius: 12px;
             padding: 12px 14px;
@@ -70,16 +81,16 @@
         }
 
         .form-control:focus {
-            background: #ffffff;
+            background: var(--white);
             box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
         }
 
-        /* Button */
+        /* BUTTON */
         .btn-primary {
             background: linear-gradient(
                 135deg,
-                #1E5DAC,
-                #B7C5DA
+                var(--primary),
+                var(--secondary)
             );
             border: none;
             border-radius: 14px;
@@ -92,22 +103,22 @@
         .btn-primary:hover {
             background: linear-gradient(
                 135deg,
-                #B7C5DA,
-                #1E5DAC
+                var(--secondary),
+                var(--primary)
             );
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(30, 93, 172, 0.45);
         }
 
-        /* Link */
+        /* LINK */
         .text-center a {
-            color: #eef3ff;
+            color: var(--accent);
             text-decoration: none;
             transition: 0.2s;
         }
 
         .text-center a:hover {
-            color: #ffffff;
+            color: var(--white);
             font-weight: 600;
         }
     </style>
