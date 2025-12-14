@@ -25,12 +25,16 @@
             position: relative;
         }
 
-        /* overlay biru soft (BUKAN BLUR) */
+        /* overlay TONE URBANHYPE (samain tema) */
         body.bg-light::before {
             content: "";
             position: fixed;
             inset: 0;
-            background: rgba(47, 95, 164, 0.28);
+            background: linear-gradient(
+                135deg,
+                rgba(30, 93, 172, 0.55),
+                rgba(183, 197, 218, 0.45)
+            );
             z-index: -1;
         }
 
@@ -47,7 +51,7 @@
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 45px rgba(30, 93, 172, 0.35);
         }
 
         /* Judul */
@@ -59,7 +63,7 @@
 
         /* Label */
         .form-label {
-            color: #f2f6ff;
+            color: #eef3ff;
             font-weight: 500;
         }
 
@@ -75,7 +79,7 @@
         .form-control:focus,
         .form-select:focus {
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(47, 95, 164, 0.25);
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
         }
 
         textarea.form-control {
@@ -86,9 +90,13 @@
             color: #e6ecff !important;
         }
 
-        /* Button utama */
+        /* Button utama (SAMAIN HOME) */
         .btn-primary {
-            background: linear-gradient(to right, #1f3f73, #2f5fa4);
+            background: linear-gradient(
+                135deg,
+                #1E5DAC,
+                #B7C5DA
+            );
             border: none;
             border-radius: 14px;
             padding: 12px;
@@ -98,9 +106,13 @@
         }
 
         .btn-primary:hover {
-            background: linear-gradient(to right, #2f5fa4, #1f3f73);
+            background: linear-gradient(
+                135deg,
+                #B7C5DA,
+                #1E5DAC
+            );
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(47, 95, 164, 0.45);
+            box-shadow: 0 8px 20px rgba(30, 93, 172, 0.45);
         }
 
         /* Link bawah */
