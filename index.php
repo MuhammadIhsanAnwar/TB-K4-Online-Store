@@ -210,7 +210,7 @@ if (isset($_SESSION['user_id'])) {
             width: 80%;
             height: 150%;
             background: radial-gradient(circle, rgba(232, 211, 193, 0.3) 0%, transparent 70%);
-            animation: float 20s ease-in-out infinite;
+           
         }
 
         .hero-section::after {
@@ -221,7 +221,7 @@ if (isset($_SESSION['user_id'])) {
             width: 60%;
             height: 100%;
             background: radial-gradient(circle, rgba(183, 197, 218, 0.3) 0%, transparent 70%);
-            animation: float 15s ease-in-out infinite reverse;
+            
         }
 
         /* @keyframes float {
@@ -230,13 +230,13 @@ if (isset($_SESSION['user_id'])) {
             66% { transform: translate(-20px, 20px) rotate(-5deg); }
         } */
 
-        /* .hero-content {
+        .hero-content {
             position: relative;
             z-index: 2;
             color: white;
             max-width: 600px;
             animation: slideInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        } */
+        }
 
         /* @keyframes slideInLeft {
             from {
