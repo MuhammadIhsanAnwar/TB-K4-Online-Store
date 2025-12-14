@@ -11,13 +11,11 @@
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* ================= URBANHYPE RESET PASSWORD ================= */
-
+        /* ================= PALETTE (SAMA LOGIN ADMIN) ================= */
         :root {
-            --primary: #1E5DAC;   /* Mediterranean Blue */
-            --secondary: #B7C5DA; /* Alley */
-            --accent: #E8D3C1;    /* Blush Beige */
-            --soft: #EAE2E4;      /* Misty */
+            --blue: #1E5DAC;      /* Mediterranean Blue */
+            --alley: #B7C5DA;     /* Alley */
+            --misty: #EAE2E4;     /* Misty */
             --white: #ffffff;
         }
 
@@ -36,45 +34,45 @@
             position: relative;
         }
 
-        /* OVERLAY WARNA (SAMA SEMUA PAGE) */
+        /* OVERLAY WARNA (SAMA LOGIN ADMIN) */
         body.bg-light::before {
             content: "";
             position: fixed;
             inset: 0;
             background: linear-gradient(
                 135deg,
-                rgba(30, 93, 172, 0.35),
-                rgba(183, 197, 218, 0.25)
+                rgba(30, 93, 172, 0.45),
+                rgba(183, 197, 218, 0.35)
             );
             z-index: -1;
         }
 
-        /* POSISI KONSISTEN */
+        /* POSISI */
         .center-box {
             padding-top: 60px;
             padding-bottom: 80px;
         }
 
-        /* CARD GLASS */
+        /* CARD */
         .card {
             border-radius: 22px;
-            background: rgba(234, 226, 228, 0.35);
+            background: rgba(234, 226, 228, 0.40);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.45);
-            box-shadow: 0 20px 45px rgba(30, 93, 172, 0.35);
+            border: 1px solid rgba(255,255,255,0.45);
+            box-shadow: 0 25px 50px rgba(30,93,172,0.35);
         }
 
         /* JUDUL */
         .card h4 {
-            color: var(--white);
+            color: var(--blue);
             font-weight: 700;
             letter-spacing: 0.6px;
         }
 
         /* LABEL */
         .form-label {
-            color: var(--soft);
+            color: #2d3a4a;
             font-weight: 500;
         }
 
@@ -83,48 +81,47 @@
             border-radius: 12px;
             padding: 12px 14px;
             border: none;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--white);
         }
 
         .form-control:focus {
-            background: var(--white);
-            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
+            box-shadow: 0 0 0 3px rgba(30,93,172,0.25);
         }
 
         /* BUTTON */
-        .btn-primary {
+        .btn-reset {
             background: linear-gradient(
                 135deg,
-                var(--primary),
-                var(--secondary)
+                var(--blue),
+                var(--alley)
             );
             border: none;
             border-radius: 14px;
             padding: 12px;
             font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
+            color: #fff;
+            transition: 0.3s ease;
         }
 
-        .btn-primary:hover {
+        .btn-reset:hover {
             background: linear-gradient(
                 135deg,
-                var(--secondary),
-                var(--primary)
+                var(--alley),
+                var(--blue)
             );
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(30, 93, 172, 0.45);
+            box-shadow: 0 10px 25px rgba(30,93,172,0.45);
         }
 
-        /* LINK */
-        .text-center a {
-            color: var(--accent);
+        /* LINK — SAMA LOGIN ADMIN */
+        .small a {
+            color: var(--blue);
             text-decoration: none;
             transition: 0.2s;
         }
 
-        .text-center a:hover {
-            color: var(--white);
+        .small a:hover {
+            color: #000;
             font-weight: 600;
         }
     </style>
@@ -132,29 +129,29 @@
 
 <body class="bg-light">
 
-    <div class="container d-flex justify-content-center align-items-start center-box">
-        <div class="card p-4" style="max-width: 420px; width: 100%;">
+<div class="container d-flex justify-content-center align-items-start center-box">
+    <div class="card p-4" style="max-width: 420px; width: 100%;">
 
-            <h4 class="text-center mb-3">Reset Password</h4>
+        <h4 class="text-center mb-3">Reset Password</h4>
 
-            <form action="proses_kirim_reset.php" method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Masukkan Email Anda</label>
-                    <input type="email" name="email" class="form-control" required autofocus>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">
-                    Kirim Link Reset
-                </button>
-            </form>
-
-            <div class="text-center small mt-3">
-                <a href="login_user.php">Kembali ke Login</a>
+        <form action="proses_kirim_reset.php" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Masukkan Email Anda</label>
+                <input type="email" name="email" class="form-control" required autofocus>
             </div>
 
-        </div>
-    </div>
+            <button type="submit" class="btn btn-reset w-100">
+                Kirim Link Reset
+            </button>
+        </form>
 
-    <script src="../js/bootstrap.bundle.min.js"></script>
+        <div class="text-center small mt-3">
+            <a href="login_user.php">Kembali ke Login</a>
+        </div>
+
+    </div>
+</div>
+
+<script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
