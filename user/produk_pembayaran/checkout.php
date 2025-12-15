@@ -428,7 +428,7 @@ if (isset($_POST['checkout'])) {
                         </div>
                         <div class="item-price">
                             $<?php echo number_format($item['harga'] * $item['qty'], 2); ?>
-                        </div>
+                        </div>  
                     </div>
                     <?php endforeach; ?>
                 </div>
