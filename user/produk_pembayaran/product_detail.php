@@ -6,9 +6,9 @@ $id = $_GET['id'] ?? 0;
 $query = mysqli_query($koneksi, "SELECT * FROM products WHERE id='$id'");
 $product = mysqli_fetch_assoc($query);
 
-// if (!$product) {
-//     die("Produk tidak ditemukan!");
-// }
+if (!$product) {
+    die("Produk tidak ditemukan!");
+}
 
 // Tambah ke keranjang
 if (isset($_POST['add_to_cart'])) {
