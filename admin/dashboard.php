@@ -9,156 +9,130 @@
 
     <style>
         :root{
-            --primary:#1E5DAC;
-            --soft:#f4f6f9;
+            --primary:#1e5dac;
+            --bg:#f3eded;
             --white:#ffffff;
-            --border:#dde3ec;
-            --text:#1f2937;
         }
 
         body{
             margin:0;
-            background:var(--soft);
-            font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-            color:var(--text);
+            background:var(--bg);
+            font-family:Poppins,system-ui,sans-serif;
         }
 
         /* ================= SIDEBAR ================= */
         .sidebar{
             position:fixed;
-            top:0; left:0;
+            left:0;top:0;
             width:220px;
             height:100vh;
-            background:linear-gradient(180deg,var(--primary),#143d73);
+            background:linear-gradient(180deg,#1e63b6,#0f3f82);
             padding:18px 0;
             display:flex;
             flex-direction:column;
         }
 
-        .sidebar-logo{
-            display:flex;
-            justify-content:center;
-            margin-bottom:14px;
+        .logo-box{
+            text-align:center;
+            margin-bottom:20px;
         }
 
-        .sidebar-logo img{
-            width:120px;
-            height:auto;
+        .logo-box img{
+            width:48px;
+            margin-bottom:6px;
         }
 
-        .sidebar h5{
-            color:#fff;
-            font-size:13px;
-            font-weight:600;
-            text-transform:uppercase;
-            opacity:.85;
-            padding:0 20px 12px;
-        }
-
-        .menu-item{
+        .logo-box span{
             display:block;
-            padding:11px 20px;
-            color:#fff;
-            text-decoration:none;
-            font-size:14px;
-            opacity:.85;
-            border-left:4px solid transparent;
-            transition:.25s ease;
-        }
-
-        .menu-item:hover{
-            background:rgba(255,255,255,.14);
-            opacity:1;
-        }
-
-        /* MENU AKTIF */
-        .menu-item[href*="dashboard"]{
-            background:rgba(255,255,255,.22);
-            border-left:4px solid #fff;
+            color:white;
             font-weight:700;
-            opacity:1;
+            letter-spacing:1px;
+            font-size:14px;
+        }
+
+        .menu-title{
+            color:#dbe6ff;
+            font-size:13px;
+            padding:0 20px;
+            margin:12px 0;
+        }
+
+        .sidebar a{
+            color:white;
+            text-decoration:none;
+            padding:12px 20px;
+            display:block;
+            border-radius:10px;
+            margin:4px 12px;
+            transition:.25s;
+        }
+
+        .sidebar a:hover{
+            background:rgba(255,255,255,.18);
+        }
+
+        .sidebar a.active{
+            background:rgba(255,255,255,.3);
+            font-weight:600;
         }
 
         .logout{
             margin-top:auto;
-            color:#ffd2d2!important;
-        }
-
-        /* ================= NAVBAR ================= */
-        .navbar{
-            position:fixed;
-            top:0;
-            left:220px;
-            right:0;
-            height:56px;
-            background:linear-gradient(90deg,#ffffff,#f3f6fb)!important;
-            border-bottom:1px solid var(--border);
-            box-shadow:0 6px 18px rgba(30,93,172,.12);
-        }
-
-        .navbar::after{
-            content:"";
-            position:absolute;
-            bottom:0;
-            left:0;
-            width:100%;
-            height:2px;
-            background:linear-gradient(90deg,var(--primary),transparent);
+            color:#ffb3b3!important;
         }
 
         /* ================= CONTENT ================= */
         .content{
             margin-left:220px;
-            padding:80px 32px 32px;
+            padding:30px;
         }
 
-        .content h2{
-            font-size:22px;
-            font-weight:600;
-            color:var(--primary);
+        h2{
+            color:#1e5dac;
+            font-weight:700;
+            margin-bottom:10px;
         }
 
         hr{
-            border-top:2px solid var(--border);
+            border-top:2px solid #cfd6e6;
+            margin-bottom:30px;
         }
 
         /* ================= CARD ================= */
         .card{
             border:none;
-            border-radius:18px;
-            padding:24px;
+            border-radius:20px;
+            padding:26px;
             background:var(--white);
-            box-shadow:0 10px 28px rgba(0,0,0,.12);
-            transition:.25s ease;
+            box-shadow:0 14px 35px rgba(0,0,0,.15);
+            transition:.3s;
         }
 
         .card:hover{
-            transform:translateY(-6px);
-            box-shadow:0 18px 38px rgba(0,0,0,.18);
+            transform:translateY(-8px);
+            box-shadow:0 25px 55px rgba(30,93,172,.35);
         }
 
         .card h5{
-            font-size:14px;
-            font-weight:600;
             color:#6b7280;
+            font-weight:600;
         }
 
         .card p{
-            font-size:2.4rem;
-            font-weight:800;
             margin:0;
+            font-size:2.8rem;
+            font-weight:800;
         }
+
+        .text-primary{color:#2563eb!important;}
+        .text-success{color:#16a34a!important;}
+        .text-warning{color:#d97706!important;}
     </style>
 </head>
 
 <body>
 
 <?php include 'sidebar.php'; ?>
-
-<!-- NAVBAR TANPA ADMIN PANEL -->
-<nav class="navbar navbar-expand fixed-top">
-    <div class="container-fluid"></div>
-</nav>
 
 <div class="content">
     <h2>Dashboard</h2>
@@ -170,7 +144,7 @@
                 <h5>Total Produk</h5>
                 <p class="text-primary">
                     <?php
-                    $res = mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM products");
+                    $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM products");
                     echo mysqli_fetch_assoc($res)['total'];
                     ?>
                 </p>
@@ -182,7 +156,7 @@
                 <h5>Total User</h5>
                 <p class="text-success">
                     <?php
-                    $res = mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM akun_user");
+                    $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM akun_user");
                     echo mysqli_fetch_assoc($res)['total'];
                     ?>
                 </p>
@@ -194,7 +168,7 @@
                 <h5>Total Penjualan</h5>
                 <p class="text-warning">
                     <?php
-                    $res = mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM penjualan");
+                    $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM penjualan");
                     echo mysqli_fetch_assoc($res)['total'];
                     ?>
                 </p>
