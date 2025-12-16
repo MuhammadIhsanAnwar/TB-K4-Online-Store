@@ -40,7 +40,7 @@ body{
     font-family:Poppins,system-ui,sans-serif;
 }
 
-/* ================= SIDEBAR (pakai dashboard CSS) ================= */
+/* ================= SIDEBAR ================= */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -49,7 +49,7 @@ body{
     background:linear-gradient(180deg,#1e63b6,#0f3f82);
     display:flex;
     flex-direction:column;
-    padding:18px 0;
+    padding-top:20px;
 }
 
 .logo-box{
@@ -65,12 +65,6 @@ body{
 
 .logo-box img:hover{
     transform:scale(1.05);
-}
-
-.menu-title{
-    color:#dbe6ff;
-    font-size:13px;
-    padding:8px 20px;
 }
 
 .sidebar a{
@@ -91,7 +85,6 @@ body{
     font-weight:600;
 }
 
-/* LOGOUT PALING BAWAH + MERAH */
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -110,9 +103,26 @@ body{
 }
 
 /* ================= CONTENT ================= */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .content{
     margin-left:220px;
     padding:30px 40px;
+    animation: fadeInUp 0.5s ease;
+}
+
+.content h2{
+    color: var(--primary);
+    font-weight:700;
+    font-size:2rem;
+}
+
+hr{
+    border-top:2px solid #cfd6e6;
+    margin-bottom:30px;
 }
 
 /* ================= TABEL PRODUK ================= */
@@ -137,6 +147,9 @@ body{
 .table tbody tr{
     background: #fff;
     transition: .3s;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.5s forwards;
 }
 
 .table tbody tr:hover{
@@ -153,13 +166,38 @@ body{
     object-fit:cover;
 }
 
-.btn-primary, .btn-warning, .btn-danger{
+/* Tombol Edit & Hapus */
+.btn-warning, .btn-danger{
     border-radius:8px;
     transition:.3s;
 }
-.btn-primary:hover{background:#144a8a;}
+
 .btn-warning:hover{background:#b38f00;}
-.btn-danger:hover{background:#cc0000;}
+.delete-btn{
+    font-size:1.3rem;
+    padding:6px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#ff4d4d;
+    border:none;
+    cursor:pointer;
+    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    border-radius:8px;
+}
+
+.delete-btn:hover{
+    background:#ff1a1a;
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(255,26,26,.5);
+}
+
+/* Animasi baris tabel muncul bergantian */
+<?php
+for($i=1; $i<=50; $i++){
+    echo ".table tbody tr:nth-child($i){ animation-delay: ".($i*0.05)."s; }";
+}
+?>
 </style>
 </head>
 <body>
@@ -169,8 +207,6 @@ body{
 <div class="content">
     <h2>Data Produk</h2>
     <hr>
-
-    <a href="tambah_produk.php" class="btn btn-primary mb-3">Tambah Produk</a>
 
     <div class="table-container">
         <table class="table table-bordered table-striped align-middle">
@@ -198,7 +234,9 @@ body{
                     </td>
                     <td>
                         <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                        <button class="btn btn-sm btn-danger" onclick="deleteProduk(<?php echo $row['id']; ?>)">Hapus</button>
+                        <button class="btn btn-sm delete-btn" onclick="deleteProduk(<?php echo $row['id']; ?>)">
+                            🗑️
+                        </button>
                     </td>
                 </tr>
                 <?php endwhile; ?>
