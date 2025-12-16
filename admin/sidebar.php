@@ -1,9 +1,4 @@
 <div class="sidebar">
-    <!-- LOGO -->
-    <div class="logo-box">
-        <img src="logo.png" alt="Logo">
-        <span>URBAN HYPE</span>
-    </div>
 
     <p class="menu-title">Menu Admin</p>
 

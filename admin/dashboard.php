@@ -3,131 +3,105 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
+<meta charset="UTF-8">
+<title>Dashboard Admin</title>
+<link rel="stylesheet" href="../css/bootstrap.css">
 
-    <style>
-        :root{
-            --primary:#1e5dac;
-            --bg:#f3eded;
-            --white:#ffffff;
-        }
+<style>
+:root{
+    --primary:#1e5dac;
+    --sidebar:#1c56a3;
+    --bg:#efe9ea;
+    --white:#fff;
+}
 
-        body{
-            margin:0;
-            background:var(--bg);
-            font-family:Poppins,system-ui,sans-serif;
-        }
+body{
+    margin:0;
+    background:var(--bg);
+    font-family:Poppins,system-ui,sans-serif;
+}
 
-        /* ================= SIDEBAR ================= */
-        .sidebar{
-            position:fixed;
-            left:0;top:0;
-            width:220px;
-            height:100vh;
-            background:linear-gradient(180deg,#1e63b6,#0f3f82);
-            padding:18px 0;
-            display:flex;
-            flex-direction:column;
-        }
+/* ================= SIDEBAR ================= */
+.sidebar{
+    position:fixed;
+    top:0; left:0;
+    width:220px;
+    height:100vh;
+    background:linear-gradient(180deg,#1e63b6,#123e7a);
+    padding:20px 0;
+    display:flex;
+    flex-direction:column;
+}
 
-        .logo-box{
-            text-align:center;
-            margin-bottom:20px;
-        }
+.menu-title{
+    color:#e5ecff;
+    font-size:14px;
+    padding:10px 20px;
+    margin-bottom:10px;
+}
 
-        .logo-box img{
-            width:48px;
-            margin-bottom:6px;
-        }
+.sidebar a{
+    color:white;
+    text-decoration:none;
+    padding:12px 20px;
+    margin:4px 14px;
+    border-radius:10px;
+    transition:.25s;
+}
 
-        .logo-box span{
-            display:block;
-            color:white;
-            font-weight:700;
-            letter-spacing:1px;
-            font-size:14px;
-        }
+.sidebar a:hover{
+    background:rgba(255,255,255,.18);
+}
 
-        .menu-title{
-            color:#dbe6ff;
-            font-size:13px;
-            padding:0 20px;
-            margin:12px 0;
-        }
+.sidebar a.active{
+    background:rgba(255,255,255,.32);
+    font-weight:600;
+}
 
-        .sidebar a{
-            color:white;
-            text-decoration:none;
-            padding:12px 20px;
-            display:block;
-            border-radius:10px;
-            margin:4px 12px;
-            transition:.25s;
-        }
+.logout{
+    margin-top:auto;
+    color:#ffb3b3!important;
+}
 
-        .sidebar a:hover{
-            background:rgba(255,255,255,.18);
-        }
+/* ================= CONTENT ================= */
+.content{
+    margin-left:220px;
+    padding:30px;
+}
 
-        .sidebar a.active{
-            background:rgba(255,255,255,.3);
-            font-weight:600;
-        }
+h2{
+    color:var(--primary);
+    font-weight:700;
+}
 
-        .logout{
-            margin-top:auto;
-            color:#ffb3b3!important;
-        }
+hr{
+    border-top:2px solid #cbd3e2;
+    margin-bottom:30px;
+}
 
-        /* ================= CONTENT ================= */
-        .content{
-            margin-left:220px;
-            padding:30px;
-        }
+/* ================= CARD MODEL GAMBAR ================= */
+.stat-card{
+    background:var(--white);
+    border-radius:20px;
+    padding:28px;
+    box-shadow:0 18px 40px rgba(0,0,0,.15);
+}
 
-        h2{
-            color:#1e5dac;
-            font-weight:700;
-            margin-bottom:10px;
-        }
+.stat-card h5{
+    color:#6b7280;
+    font-weight:600;
+    margin-bottom:12px;
+}
 
-        hr{
-            border-top:2px solid #cfd6e6;
-            margin-bottom:30px;
-        }
+.stat-card .number{
+    font-size:2.8rem;
+    font-weight:800;
+}
 
-        /* ================= CARD ================= */
-        .card{
-            border:none;
-            border-radius:20px;
-            padding:26px;
-            background:var(--white);
-            box-shadow:0 14px 35px rgba(0,0,0,.15);
-            transition:.3s;
-        }
-
-        .card:hover{
-            transform:translateY(-8px);
-            box-shadow:0 25px 55px rgba(30,93,172,.35);
-        }
-
-        .card h5{
-            color:#6b7280;
-            font-weight:600;
-        }
-
-        .card p{
-            margin:0;
-            font-size:2.8rem;
-            font-weight:800;
-        }
-
-        .text-primary{color:#2563eb!important;}
-        .text-success{color:#16a34a!important;}
-        .text-warning{color:#d97706!important;}
-    </style>
+.blue{ color:#2563eb; }
+.green{ color:#16a34a; }
+.orange{ color:#d97706; }
+</style>
 </head>
 
 <body>
@@ -140,38 +114,38 @@
 
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card">
+            <div class="stat-card">
                 <h5>Total Produk</h5>
-                <p class="text-primary">
+                <div class="number blue">
                     <?php
                     $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM products");
                     echo mysqli_fetch_assoc($res)['total'];
                     ?>
-                </p>
+                </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card">
+            <div class="stat-card">
                 <h5>Total User</h5>
-                <p class="text-success">
+                <div class="number green">
                     <?php
                     $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM akun_user");
                     echo mysqli_fetch_assoc($res)['total'];
                     ?>
-                </p>
+                </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card">
+            <div class="stat-card">
                 <h5>Total Penjualan</h5>
-                <p class="text-warning">
+                <div class="number orange">
                     <?php
                     $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM penjualan");
                     echo mysqli_fetch_assoc($res)['total'];
                     ?>
-                </p>
+                </div>
             </div>
         </div>
     </div>
