@@ -112,6 +112,12 @@
         transform: scale(1.15) rotate(5deg);
     }
 
+    .sidebar-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        margin: 15px 0;
+    }
+
     @media (max-width: 768px) {
         .sidebar {
             width: 240px;
@@ -122,7 +128,14 @@
 <div class="sidebar">
     <div class="title">Settings</div>
 
-    <a href="settings.php?menu=profil" class="<?php echo (!isset($_GET['menu']) || $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
+    <a href="settings.php" class="<?php echo (!isset($_GET['menu'])) ? 'active' : ''; ?>">
+        <span class="icon">📊</span>
+        Dashboard
+    </a>
+
+    <div class="sidebar-divider"></div>
+
+    <a href="settings.php?menu=profil" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
         <span class="icon">👤</span>
         Edit Profil
     </a>

@@ -22,7 +22,7 @@ $user = mysqli_fetch_assoc($q);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
     <style>
         * {
             margin: 0;
@@ -60,6 +60,7 @@ $user = mysqli_fetch_assoc($q);
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -280,7 +281,7 @@ $user = mysqli_fetch_assoc($q);
             <!-- WELCOME CARD -->
             <div class="welcome-card">
                 <div class="welcome-header">
-                    <img src="<?php echo !empty($user['foto_profil']) ? '../foto_profil/' . htmlspecialchars($user['foto_profil']) : 'https://via.placeholder.com/120?text=Profile'; ?>" alt="Foto Profil" class="welcome-avatar">
+                    <img src="<?php echo !empty($user['../../foto_profil']) ? '../foto_profil/' . htmlspecialchars($user['../../foto_profil']) : 'https://via.placeholder.com/120?text=Profile'; ?>" alt="Foto Profil" class="welcome-avatar">
                     <div class="welcome-info">
                         <h1>Selamat Datang! 👋</h1>
                         <p><strong><?php echo htmlspecialchars($user['nama_lengkap']); ?></strong></p>
@@ -345,7 +346,7 @@ $user = mysqli_fetch_assoc($q);
             <!-- TIPS SECTION -->
             <div class="welcome-card">
                 <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #1E5DAC; margin-bottom: 1.5rem;">💡 Tips Keamanan</h2>
-                
+
                 <div style="color: #2d3a4a; line-height: 1.8;">
                     <p><strong>1. Jaga Kerahasiaan Password</strong></p>
                     <p style="margin-bottom: 1rem; color: #5a6b80;">Jangan bagikan password Anda kepada siapapun. Urban Hype tidak akan pernah meminta password Anda melalui email atau pesan.</p>
