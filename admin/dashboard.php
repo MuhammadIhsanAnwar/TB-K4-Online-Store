@@ -1,22 +1,23 @@
-<?php require 'auth_check.php'; ?>
-<?php include '../admin/koneksi.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <title>Dashboard Admin</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <style>
 :root{
     --primary:#1e5dac;
+    --success:#16a34a;
+    --warning:#d97706;
     --bg:#f3eded;
-    --white:#ffffff;
+    --card-bg: rgba(255,255,255,0.15);
 }
 
 body{
     margin:0;
-    background:var(--bg);
+    background: linear-gradient(135deg, #e0f7ff, #ffffff);
     font-family:Poppins,system-ui,sans-serif;
 }
 
@@ -71,7 +72,6 @@ body{
     font-weight:600;
 }
 
-/* LOGOUT PALING BAWAH + MERAH */
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -93,12 +93,7 @@ body{
 .content{
     margin-left:220px;
     padding:30px;
-    animation:fade .5s ease;
-}
-
-@keyframes fade{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
+    min-height:100vh;
 }
 
 h2{
@@ -112,53 +107,64 @@ hr{
 }
 
 /* ================= CARD ================= */
+.row.g-4{
+    gap: 1.5rem;
+}
+
 .card{
     position:relative;
     overflow:hidden;
     border:none;
     border-radius:22px;
     padding:26px;
-    background:var(--white);
-    box-shadow:0 18px 45px rgba(0,0,0,.15);
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    box-shadow:0 18px 45px rgba(0,0,0,.1);
     transition:.3s;
 }
 
 .card:hover{
-    transform:translateY(-8px);
+    transform:translateY(-10px) scale(1.02);
     box-shadow:0 30px 65px rgba(30,93,172,.35);
 }
 
-/* BULATAN POJOK */
+/* Bulatan dekoratif */
 .card::after{
     content:"";
     position:absolute;
-    width:150px;
-    height:150px;
+    width:120px; height:120px;
     border-radius:50%;
-    top:-55px;
-    right:-55px;
-    background:#f3eadd;
+    top:-40px; right:-40px;
+    background: linear-gradient(135deg,#f3eadd,#a3c4f3);
     opacity:.7;
+    animation: rotate 6s linear infinite;
 }
 
-.card h5,
-.card p{
-    position:relative;
-    z-index:1;
+@keyframes rotate{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
 }
 
+/* Typography */
 .card h5{
-    color:#6b7280;
+    color:#fff;
     font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
 .card p{
     margin:0;
     font-size:2.8rem;
     font-weight:800;
+    background: linear-gradient(90deg,#1e5dac,#2563eb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.text-primary{color:#2563eb!important;}
+/* Color variations */
+.text-primary{color:#1e5dac!important;}
 .text-success{color:#16a34a!important;}
 .text-warning{color:#d97706!important;}
 </style>
@@ -175,37 +181,22 @@ hr{
     <div class="row g-4">
         <div class="col-md-4">
             <div class="card">
-                <h5>Total Produk</h5>
-                <p class="text-primary">
-                    <?php
-                    $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM products");
-                    echo mysqli_fetch_assoc($res)['total'];
-                    ?>
-                </p>
+                <h5><i class="bi bi-box-seam"></i> Total Produk</h5>
+                <p class="text-primary">123</p>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="card">
-                <h5>Total User</h5>
-                <p class="text-success">
-                    <?php
-                    $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM akun_user");
-                    echo mysqli_fetch_assoc($res)['total'];
-                    ?>
-                </p>
+                <h5><i class="bi bi-people"></i> Total User</h5>
+                <p class="text-success">56</p>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="card">
-                <h5>Total Penjualan</h5>
-                <p class="text-warning">
-                    <?php
-                    $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM penjualan");
-                    echo mysqli_fetch_assoc($res)['total'];
-                    ?>
-                </p>
+                <h5><i class="bi bi-cart-check"></i> Total Penjualan</h5>
+                <p class="text-warning">78</p>
             </div>
         </div>
     </div>
