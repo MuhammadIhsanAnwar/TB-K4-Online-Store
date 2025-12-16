@@ -111,4 +111,140 @@ h2{
 
 hr{
     border-top:2px solid #cfd6e6;
-    margin-bo
+    margin-bottom:20px;
+}
+
+/* ================= TABLE CONTAINER ================= */
+.table-responsive{
+    background:var(--white);
+    padding:18px;
+    border-radius:20px;
+    box-shadow:0 20px 45px rgba(30,93,172,.2);
+    overflow-x:auto;
+    animation: fade .5s ease; /* ANIMASI HALUS */
+}
+
+/* ================= TABLE ================= */
+.table{
+    border-collapse:separate;
+    border-spacing:0;
+    font-size:14px;
+    color:var(--text);
+}
+
+/* HEADER */
+.table thead{
+    background:linear-gradient(180deg,#1e63b6,#0f3f82);
+    color:#fff;
+}
+
+.table thead th{
+    border:none;
+    padding:14px 10px;
+    text-align:center;
+    white-space:nowrap;
+    font-weight:600;
+}
+
+/* BODY */
+.table tbody tr{
+    transition:.25s;
+}
+
+.table tbody tr:hover{
+    background:#eef3ff;
+}
+
+.table td{
+    padding:12px 10px;
+    vertical-align:middle;
+    border-top:1px solid #e5e7eb;
+    white-space:nowrap;
+}
+
+/* FOTO PROFIL */
+.table img{
+    width:46px;
+    height:46px;
+    object-fit:cover;
+    border-radius:50%;
+    box-shadow:0 6px 14px rgba(0,0,0,.25);
+}
+
+/* ALIGN */
+.table td,
+.table th{
+    text-align:center;
+}
+
+.table td:nth-child(2),
+.table td:nth-child(3),
+.table td:nth-child(11),
+.table td:nth-child(12){
+    text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<?php include 'sidebar.php'; ?>
+
+<div class="content">
+    <h2>Data User</h2>
+    <hr>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Nama Lengkap</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Provinsi</th>
+                    <th>Kabupaten/Kota</th>
+                    <th>Kecamatan</th>
+                    <th>Kelurahan/Desa</th>
+                    <th>Kode Pos</th>
+                    <th>Alamat</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Foto Profil</th>
+                    <th>Status</th>
+                    <th>Token</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
+                while ($row = mysqli_fetch_assoc($res)) {
+                    echo "<tr>
+                        <td>{$row['id']}</td>
+                        <td>{$row['username']}</td>
+                        <td>{$row['nama_lengkap']}</td>
+                        <td>{$row['jenis_kelamin']}</td>
+                        <td>{$row['tanggal_lahir']}</td>
+                        <td>{$row['provinsi']}</td>
+                        <td>{$row['kabupaten_kota']}</td>
+                        <td>{$row['kecamatan']}</td>
+                        <td>{$row['kelurahan_desa']}</td>
+                        <td>{$row['kode_pos']}</td>
+                        <td>{$row['alamat']}</td>
+                        <td>{$row['email']}</td>
+                        <td>{$row['password']}</td>
+                        <td><img src='../foto_profil/{$row['foto_profil']}'></td>
+                        <td>{$row['status']}</td>
+                        <td>{$row['token']}</td>
+                    </tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="../js/bootstrap.bundle.js"></script>
+</body>
+</html>
