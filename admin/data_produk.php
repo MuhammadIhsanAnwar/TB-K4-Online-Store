@@ -2,10 +2,8 @@
 require 'auth_check.php';
 include "../admin/koneksi.php";
 
-// Hapus produk jika request AJAX
 if (isset($_POST['delete_id'])) {
     $delete_id = intval($_POST['delete_id']);
-
     $res = mysqli_query($koneksi, "SELECT gambar FROM products WHERE id='$delete_id'");
     if ($res && mysqli_num_rows($res) > 0) {
         $row = mysqli_fetch_assoc($res);
@@ -13,7 +11,6 @@ if (isset($_POST['delete_id'])) {
             unlink("../foto_produk/" . $row['gambar']);
         }
     }
-
     mysqli_query($koneksi, "DELETE FROM products WHERE id='$delete_id'");
     echo 'success';
     exit;
@@ -34,6 +31,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
     --primary:#1e5dac;
     --bg:#f3eded;
     --white:#ffffff;
+    --hover-blue: rgba(30,93,172,.1);
 }
 
 body{
@@ -49,9 +47,9 @@ body{
     width:220px;
     height:100vh;
     background:linear-gradient(180deg,#1e63b6,#0f3f82);
-    padding-top:20px;
     display:flex;
     flex-direction:column;
+    padding-top:20px;
 }
 .sidebar a{
     color:#fff;
@@ -84,6 +82,11 @@ body{
     transform:translateY(-2px);
 }
 
+/* ================= NAVBAR ================= */
+.navbar{
+    margin-left:220px;
+}
+
 /* ================= CONTENT ================= */
 .content{
     margin-left:220px;
@@ -95,20 +98,41 @@ h2{
 }
 hr{
     border-top:2px solid #cfd6e6;
-    margin-bottom:30px;
+    margin-bottom:25px;
 }
 
 /* ================= TABEL PRODUK ================= */
-.table thead{
-    background:var(--primary);
-    color:#fff;
+.table-container{
+    background: var(--white);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,.1);
+}
+
+.table{
+    border-collapse: separate !important;
+    border-spacing: 0 8px;
+}
+.table thead tr{
+    background: var(--primary);
+    color: #fff;
+    border-radius: 12px;
+}
+.table tbody tr{
+    background: #fff;
+    transition: .3s;
 }
 .table tbody tr:hover{
-    background:rgba(30,93,172,.1);
+    background: var(--hover-blue);
+}
+.table td, .table th{
+    vertical-align: middle;
 }
 .table img{
     border-radius:6px;
 }
+
+/* ================= TOMBOL ================= */
 .btn-primary, .btn-warning, .btn-danger{
     border-radius:8px;
     transition:.3s;
@@ -118,12 +142,11 @@ hr{
 .btn-danger:hover{background:#cc0000;}
 </style>
 </head>
-
 <body>
 
 <?php include 'sidebar.php'; ?>
 
-<nav class="navbar navbar-dark bg-dark fixed-top" style="margin-left:220px;">
+<nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <span class="navbar-brand fw-bold">Admin Panel</span>
         <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
@@ -136,7 +159,8 @@ hr{
 
     <a href="tambah_produk.php" class="btn btn-primary mb-3">Tambah Produk</a>
 
-    <table class="table table-bordered table-striped">
+    <div class="table-container">
+    <table class="table table-bordered table-striped align-middle">
         <thead>
             <tr>
                 <th>ID</th>
@@ -167,6 +191,7 @@ hr{
             <?php endwhile; ?>
         </tbody>
     </table>
+    </div>
 </div>
 
 <script>
