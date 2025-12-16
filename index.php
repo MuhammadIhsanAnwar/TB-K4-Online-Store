@@ -18,17 +18,15 @@ if (isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UrbanHype - Unisex Fashion Store</title>
 
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="icons/bootstrap-icons.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Custom CSS -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         :root {
             --primary: #1E5DAC;
             --secondary: #B7C5DA;
@@ -36,6 +34,14 @@ if (isset($_SESSION['user_id'])) {
             --light: #EAE2E4;
             --dark: #2d3748;
             --white: #ffffff;
+            --shadow: 0 4px 20px rgba(30, 93, 172, 0.1);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
@@ -43,15 +49,70 @@ if (isset($_SESSION['user_id'])) {
             overflow-x: hidden;
             background: var(--white);
             color: var(--dark);
+            position: relative;
         }
 
-        /* ========== NAVBAR STYLING ========== */
+        /* ===== ANIMATED BACKGROUND ===== */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            filter: blur(80px);
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .bg-animation .shape:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            right: -150px;
+            opacity: 0.7;
+        }
+
+        .bg-animation .shape:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            bottom: -100px;
+            left: -100px;
+            opacity: 0.5;
+            animation-delay: -5s;
+        }
+
+        .bg-animation .shape:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+            animation-duration: 20s;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(15px, -15px) rotate(180deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+
+        /* ===== NAVBAR STYLING (GLASSMORPHISM) ===== */
         .navbar {
             backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.98) !important;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 30px rgba(30, 93, 172, 0.08);
+            background: rgba(255, 255, 255, 0.95) !important;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
             border-bottom: 1px solid rgba(30, 93, 172, 0.1);
+            padding: 1rem 0;
         }
 
         .navbar.scrolled {
@@ -66,7 +127,7 @@ if (isset($_SESSION['user_id'])) {
             letter-spacing: 2px;
             position: relative;
             color: var(--primary) !important;
-            transition: all 0.4s ease;
+            transition: var(--transition);
         }
 
         .navbar-brand::before {
@@ -77,7 +138,7 @@ if (isset($_SESSION['user_id'])) {
             width: 0;
             height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 0.4s ease;
+            transition: var(--transition);
         }
 
         .navbar-brand:hover::before {
@@ -93,7 +154,7 @@ if (isset($_SESSION['user_id'])) {
             position: relative;
             font-weight: 500;
             color: var(--dark) !important;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             padding: 8px 16px !important;
             margin: 0 4px;
             text-transform: uppercase;
@@ -112,7 +173,7 @@ if (isset($_SESSION['user_id'])) {
             background: var(--primary);
             border-radius: 50%;
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .nav-link::after {
@@ -123,7 +184,7 @@ if (isset($_SESSION['user_id'])) {
             bottom: 0;
             left: 50%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             transform: translateX(-50%);
         }
 
@@ -142,7 +203,7 @@ if (isset($_SESSION['user_id'])) {
 
         .bi-search {
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: var(--transition);
             padding: 8px;
             border-radius: 50%;
         }
@@ -154,7 +215,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .bi-bag-fill {
-            transition: all 0.3s ease;
+            transition: var(--transition);
             color: var(--primary) !important;
         }
 
@@ -164,7 +225,7 @@ if (isset($_SESSION['user_id'])) {
 
         .user-dropdown img {
             border: 2px solid var(--primary);
-            transition: all 0.4s ease;
+            transition: var(--transition);
             box-shadow: 0 4px 15px rgba(30, 93, 172, 0.2);
         }
 
@@ -177,7 +238,7 @@ if (isset($_SESSION['user_id'])) {
         .btn-dark {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border: none;
-            transition: all 0.4s ease;
+            transition: var(--transition);
             box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -191,7 +252,7 @@ if (isset($_SESSION['user_id'])) {
             background: linear-gradient(135deg, #1a4d8f 0%, #9badc2 100%);
         }
 
-        /* ========== HERO SECTION ========== */
+        /* ===== HERO SECTION (MODERN & DYNAMIC) ===== */
         .hero-section {
             height: 90vh;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
@@ -202,43 +263,16 @@ if (isset($_SESSION['user_id'])) {
             align-items: center;
         }
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 80%;
-            height: 150%;
-            background: radial-gradient(circle, rgba(232, 211, 193, 0.3) 0%, transparent 70%);
-           
-        }
-
-        .hero-section::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 60%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(183, 197, 218, 0.3) 0%, transparent 70%);
-            
-        }
-
-        /* @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -50px) rotate(5deg); }
-            66% { transform: translate(-20px, 20px) rotate(-5deg); }
-        } */
-
         .hero-content {
             position: relative;
             z-index: 2;
             color: white;
             max-width: 600px;
-            animation: slideInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 2rem;
+            animation: fadeInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* @keyframes slideInLeft {
+        @keyframes fadeInLeft {
             from {
                 opacity: 0;
                 transform: translateX(-100px);
@@ -247,7 +281,7 @@ if (isset($_SESSION['user_id'])) {
                 opacity: 1;
                 transform: translateX(0);
             }
-        } */
+        }
 
         .hero-content .subtitle {
             letter-spacing: 6px;
@@ -299,7 +333,7 @@ if (isset($_SESSION['user_id'])) {
             padding: 16px 50px;
             font-weight: 600;
             border: 2px solid white;
-            transition: all 0.4s ease;
+            transition: var(--transition);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -353,23 +387,23 @@ if (isset($_SESSION['user_id'])) {
             filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.3));
         }
 
-        /* ========== NEW ARRIVALS SECTION ========== */
-        .section-header {
-            margin-bottom: 50px;
-            animation: fadeInDown 1s ease;
-        }
-
-        .section-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 20px;
+        /* ===== CATEGORY FILTERS (MODERN TABS) ===== */
+        .category-filters {
+            padding: 3rem 5%;
+            background: var(--white);
+            text-align: center;
             position: relative;
-            display: inline-block;
+            z-index: 1;
         }
 
-        .section-header h2::after {
+        .category-filters h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .category-filters h2::after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -381,80 +415,75 @@ if (isset($_SESSION['user_id'])) {
             border-radius: 2px;
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .category-nav {
+        .filter-tabs {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 1rem;
             flex-wrap: wrap;
-            margin-top: 30px;
+            margin-bottom: 3rem;
         }
 
-        .category-nav a {
-            position: relative;
-            text-decoration: none;
-            padding: 12px 28px;
+        .filter-tab {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid var(--primary);
             border-radius: 30px;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-            color: var(--dark);
-            border: 2px solid transparent;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
 
-        .category-nav a::before {
+        .filter-tab::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 30px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
             z-index: -1;
+            transition: var(--transition);
         }
 
-        .category-nav a:hover {
+        .filter-tab:hover::before {
+            left: 0;
+        }
+
+        .filter-tab:hover {
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(30, 93, 172, 0.3);
+            transform: translateY(-2px);
         }
 
-        .category-nav a:hover::before {
-            opacity: 1;
-        }
-
-        .category-nav a.active {
+        .filter-tab.active {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: 0 5px 20px rgba(30, 93, 172, 0.3);
         }
 
-        /* ========== PRODUCT CARDS ========== */
+        .filter-tab.active::before {
+            left: 0;
+        }
+
+        /* ===== PRODUCT GRID (MODERN CARD WITH HOVER EFFECT) ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem 5%;
+            background: var(--white);
+        }
+
         .product-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             background: white;
-            box-shadow: 0 5px 25px rgba(30, 93, 172, 0.08);
-            animation: fadeInScale 0.8s ease forwards;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            transform: scale(0.95);
             opacity: 0;
-            transform: scale(0.9);
+            animation: fadeInScale 0.8s ease forwards;
         }
 
         @keyframes fadeInScale {
@@ -473,6 +502,11 @@ if (isset($_SESSION['user_id'])) {
         .product-card:nth-child(7) { animation-delay: 0.4s; }
         .product-card:nth-child(8) { animation-delay: 0.45s; }
 
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(30, 93, 172, 0.25);
+        }
+
         .product-image-wrapper {
             position: relative;
             overflow: hidden;
@@ -483,13 +517,8 @@ if (isset($_SESSION['user_id'])) {
         .product-card img {
             width: 100%;
             border-radius: 20px;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             transform: scale(1);
-        }
-
-        .product-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 60px rgba(30, 93, 172, 0.25);
         }
 
         .product-card:hover img {
@@ -504,7 +533,7 @@ if (isset($_SESSION['user_id'])) {
             height: 100%;
             background: linear-gradient(135deg, rgba(30, 93, 172, 0.85) 0%, rgba(183, 197, 218, 0.85) 100%);
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: var(--transition);
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -522,7 +551,7 @@ if (isset($_SESSION['user_id'])) {
             letter-spacing: 2px;
             transform: translateY(20px);
             opacity: 0;
-            transition: all 0.5s ease 0.1s;
+            transition: var(--transition) 0.1s;
         }
 
         .product-card:hover .overlay-text {
@@ -531,7 +560,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .product-info {
-            padding: 20px;
+            padding: 1.5rem;
         }
 
         .product-card .category {
@@ -546,7 +575,7 @@ if (isset($_SESSION['user_id'])) {
         .product-card h6 {
             font-weight: 600;
             color: var(--dark);
-            transition: all 0.3s ease;
+            transition: var(--transition);
             font-size: 1rem;
             margin-bottom: 12px;
             line-height: 1.4;
@@ -563,25 +592,7 @@ if (isset($_SESSION['user_id'])) {
             font-family: 'Playfair Display', serif;
         }
 
-        /* ========== BADGE CART ========== */
-        .badge-cart {
-            animation: bounceIn 0.6s ease;
-            background: var(--primary) !important;
-        }
-
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.3);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* ========== FOOTER PROMO ========== */
+        /* ===== FOOTER PROMO ===== */
         .promo-section {
             background: linear-gradient(135deg, var(--accent) 0%, var(--light) 100%);
             padding: 80px 0;
@@ -620,7 +631,7 @@ if (isset($_SESSION['user_id'])) {
             opacity: 0.8;
         }
 
-        /* ========== RESPONSIVE ========== */
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 992px) {
             .hero-image {
                 display: none;
@@ -644,17 +655,21 @@ if (isset($_SESSION['user_id'])) {
                 font-size: 2.2rem;
             }
 
-            .category-nav {
-                gap: 15px;
+            .filter-tabs {
+                gap: 0.5rem;
             }
 
-            .category-nav a {
-                padding: 10px 20px;
+            .filter-tab {
+                padding: 0.6rem 1rem;
                 font-size: 0.75rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
         }
 
-        /* ========== LOADING SPINNER ========== */
+        /* ===== LOADING SPINNER ===== */
         .spinner-overlay {
             position: fixed;
             top: 0;
@@ -698,6 +713,37 @@ if (isset($_SESSION['user_id'])) {
             letter-spacing: 3px;
             animation: pulse 2s ease infinite;
         }
+
+        /* ===== SCROLL REVEAL ANIMATION ===== */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== BADGE CART ===== */
+        .badge-cart {
+            animation: bounceIn 0.6s ease;
+            background: var(--primary) !important;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
     </style>
 </head>
 
@@ -706,6 +752,13 @@ if (isset($_SESSION['user_id'])) {
     <!-- LOADING SPINNER -->
     <div class="spinner-overlay">
         <div class="spinner"></div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
 
     <!-- NAVBAR -->
@@ -781,45 +834,40 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- NEW ARRIVALS -->
-    <div class="container py-5">
-        <div class="section-header text-center">
-            <h2>New Arrivals</h2>
-            <div class="category-nav">
-                <a href="#" class="active">All</a>
-                <a href="#">Women</a>
-                <a href="#">Men</a>
-                <a href="#">Shoes</a>
-                <a href="#">Bags</a>
-                <a href="#">Accessories</a>
-            </div>
+    <!-- CATEGORY FILTERS -->
+    <section class="category-filters scroll-reveal">
+        <h2>Explore Collections</h2>
+        <div class="filter-tabs">
+            <button class="filter-tab active">All</button>
+            <button class="filter-tab">Women</button>
+            <button class="filter-tab">Men</button>
+            <button class="filter-tab">Accessories</button>
         </div>
+    </section>
 
-        <div class="row g-4 mt-4">
-            <?php
-            $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC LIMIT 8");
-            while ($row = mysqli_fetch_assoc($query)):
-            ?>
-                <div class="col-6 col-md-3">
-                    <a href="user/produk_pembayaran/product_detail.php?id=<?php echo $row['id']; ?>" class="text-decoration-none">
-                        <div class="product-card">
-                            <div class="product-image-wrapper">
-                                <img src="foto_produk/<?php echo $row['gambar']; ?>" class="img-fluid">
-                                <div class="product-overlay">
-                                    <span class="overlay-text">View Details</span>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <p class="category mb-1"><?php echo strtoupper($row['kategori']); ?></p>
-                                <h6><?php echo $row['nama']; ?></h6>
-                                <p class="price mb-0">$<?php echo number_format($row['harga'], 2); ?></p>
-                            </div>
+    <!-- PRODUCT GRID -->
+    <section class="products-grid">
+        <?php
+        $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC LIMIT 8");
+        while ($row = mysqli_fetch_assoc($query)):
+        ?>
+            <div class="product-card scroll-reveal">
+                <a href="user/produk_pembayaran/product_detail.php?id=<?php echo $row['id']; ?>" class="text-decoration-none">
+                    <div class="product-image-wrapper">
+                        <img src="foto_produk/<?php echo $row['gambar']; ?>" class="img-fluid">
+                        <div class="product-overlay">
+                            <span class="overlay-text">View Details</span>
                         </div>
-                    </a>
-                </div>
-            <?php endwhile; ?>
-        </div>
-    </div>
+                    </div>
+                    <div class="product-info">
+                        <p class="category mb-1"><?php echo strtoupper($row['kategori']); ?></p>
+                        <h6><?php echo $row['nama']; ?></h6>
+                        <p class="price mb-0">$<?php echo number_format($row['harga'], 2); ?></p>
+                    </div>
+                </a>
+            </div>
+        <?php endwhile; ?>
+    </section>
 
     <!-- PROMO SECTION -->
     <section class="promo-section">
@@ -831,6 +879,57 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white pt-5 pb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-4">URBANHYPE</h5>
+                    <p>Where streetwear meets sophistication. Discover the latest unisex trends that defy gender norms and redefine urban style.</p>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Home</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Shop</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">About Us</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h6>Categories</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Women</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Men</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Accessories</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Shoes</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Subscribe to Our Newsletter</h6>
+                    <p>Get the latest updates on new arrivals and exclusive offers.</p>
+                    <form>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your Email" aria-label="Your Email">
+                            <button class="btn btn-primary" type="button">Subscribe</button>
+                        </div>
+                    </form>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2025 UrbanHype. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
     <script src="js/bootstrap.bundle.js"></script>
     <script>
         // Navbar scroll effect
@@ -844,10 +943,10 @@ if (isset($_SESSION['user_id'])) {
         });
 
         // Category filter active state
-        document.querySelectorAll('.category-nav a').forEach(link => {
-            link.addEventListener('click', function(e) {
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.querySelectorAll('.category-nav a').forEach(a => a.classList.remove('active'));
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
             });
         });
@@ -864,6 +963,32 @@ if (isset($_SESSION['user_id'])) {
                     });
                 }
             });
+        });
+
+        // Scroll Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Loading Spinner
+        window.addEventListener('load', function() {
+            const spinner = document.querySelector('.spinner-overlay');
+            setTimeout(() => {
+                spinner.style.opacity = '0';
+                setTimeout(() => {
+                    spinner.style.display = 'none';
+                }, 500);
+            }, 1500);
         });
     </script>
 </body>
