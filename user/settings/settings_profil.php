@@ -385,7 +385,7 @@ if (isset($_POST['update'])) {
                 <h3 class="section-title">Foto Profil</h3>
 
                 <div class="photo-section">
-                    <img id="preview" src="<?php echo !empty($user['foto_profil']) ? '../foto_profil/' . htmlspecialchars($user['foto_profil']) : 'https://via.placeholder.com/150?text=Foto+Profil'; ?>" alt="Foto Profil">
+                    <img id="preview" src="<?php echo !empty($user['foto_profil']) ? '../../foto_profil/' . htmlspecialchars($user['foto_profil']) : 'https://via.placeholder.com/150?text=Foto+Profil'; ?>" alt="Foto Profil">
                     <div class="form-group">
                         <label>Pilih Foto Baru</label>
                         <input type="file" id="foto" name="foto" accept="image/jpeg,image/png">
