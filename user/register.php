@@ -197,7 +197,7 @@
 
             <div class="text-center mt-3 small">
                 Sudah punya akun? <a href="login_user.php">Login</a>
-                <a href="../admin/login_admin.php" class="d-block mt-2">Administrator</a>
+                <a href="../admin/login_admin.php" class="d-block mt-2">Login Administrator</a>
                 <a href="../index.php" class="d-block mt-2">Kembali ke Beranda</a>
             </div>
 

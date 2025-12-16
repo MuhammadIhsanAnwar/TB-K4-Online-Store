@@ -158,9 +158,9 @@
             </form>
 
             <div class="text-center mt-3 small">
-                <a href="register.php">Register</a>
+                Belum punya akun? <a href="register.php">Register</a>
                 <a href="lupa_password.php" class="d-block mt-2">Lupa Password?</a>
-                <a href="../admin/login_admin.php" class="d-block mt-2"> Login Administrator</a>
+                <a href="../admin/login_admin.php" class="d-block mt-2">Login Administrator</a>
                 <a href="../index.php" class="d-block mt-2">Kembali ke Beranda</a>
             </div>
 
