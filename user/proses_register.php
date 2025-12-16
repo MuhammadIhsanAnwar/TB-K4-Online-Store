@@ -30,57 +30,43 @@ $confirm        = $_POST['password_confirm'];
 $foto_nama = "";
 
 if (!empty($_FILES['foto']['name'])) {
-
     $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
     $foto_nama = "foto-" . time() . "-" . rand(1000, 9999) . "." . $ext;
-
-    // Pastikan folder tujuan
     $folder = "../foto_profil/" . $foto_nama;
 
-    // Validasi ekstensi
     $allowed = ['jpg', 'jpeg', 'png', 'webp'];
     if (!in_array($ext, $allowed)) {
-        echo "<script>alert('Format foto tidak valid!');history.back();</script>";
-        exit;
+        showAlert('error', 'Format foto tidak valid!', 'register_user.php');
     }
 
-    // Pindahkan ke folder foto_profil
     if (!move_uploaded_file($_FILES['foto']['tmp_name'], $folder)) {
-        echo "<script>alert('Gagal mengupload foto profil!');history.back();</script>";
-        exit;
+        showAlert('error', 'Gagal mengupload foto profil!', 'register_user.php');
     }
 }
 
 // VALIDASI PASSWORD
 if ($password !== $confirm) {
-    echo "<script>alert('Konfirmasi password tidak cocok!');history.back();</script>";
-    exit;
+    showAlert('error', 'Konfirmasi password tidak cocok!', 'register_user.php');
 }
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
-
-// Generate token verifikasi
 $token = bin2hex(random_bytes(20));
 
-// INSERT DATA
-$query = "
-INSERT INTO akun_user 
+// INSERT DATA - gunakan prepared statement
+$query = "INSERT INTO akun_user 
 (username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, foto_profil, status, token)
 VALUES 
-('$username', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$provinsi', '$kabupaten_kota', '$kecamatan', '$kelurahan_desa', '$kode_pos', '$alamat', '$email', '$hash', '$foto_nama', '0', '$token')
-";
+('$username', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$provinsi', '$kabupaten_kota', '$kecamatan', '$kelurahan_desa', '$kode_pos', '$alamat', '$email', '$hash', '$foto_nama', '0', '$token')";
 
 if (!mysqli_query($koneksi, $query)) {
-    echo "Error: " . mysqli_error($koneksi);
-    exit;
+    showAlert('error', 'Error: ' . mysqli_error($koneksi), 'register_user.php');
 }
 
-// === PHPMailer === //
 require "../phpmailer/src/PHPMailer.php";
 require "../phpmailer/src/SMTP.php";
 require "../phpmailer/src/Exception.php";
 
-$link = "https://urbanhype.neoverse.my.id/user/verifikasi.php?email=$email&token=$token";
+$link = "https://urbanhype.neoverse.my.id/user/verifikasi.php?email={$email}&token={$token}";
 
 $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
@@ -89,12 +75,11 @@ try {
     $mail->Host       = 'urbanhype.neoverse.my.id';
     $mail->SMTPAuth   = true;
     $mail->Username   = 'admin@urbanhype.neoverse.my.id';
-    $mail->Password   = 'administrator-online-store'; // ← Ganti password email
+    $mail->Password   = 'administrator-online-store';
     $mail->SMTPSecure = 'ssl';
     $mail->Port       = 465;
     $mail->CharSet    = "UTF-8";
 
-    // Wajib untuk hosting shared
     $mail->SMTPOptions = [
         'ssl' => [
             'verify_peer'       => false,
@@ -110,27 +95,46 @@ try {
     $mail->Subject = "Verifikasi Akun UrbanHype";
     $mail->Body = "
         <h3>Verifikasi Akun Anda</h3>
-        Halo <b>$nama_lengkap</b>,<br><br>
+        Halo <b>{$nama_lengkap}</b>,<br><br>
         Klik link berikut untuk mengaktifkan akun kamu:<br><br>
-        <a href='$link'>$link</a><br><br>
+        <a href='{$link}'>{$link}</a><br><br>
         Jika kamu tidak merasa mendaftar, abaikan email ini.
     ";
 
     $mail->send();
-
-    echo "<script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Registrasi Berhasil!',
-            text: 'Silakan cek email untuk verifikasi akun Anda.',
-            confirmButtonColor: '#FF6B35',
-            confirmButtonText: 'Lanjut ke Login'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location = 'login_user.php';
-            }
-        });
-    </script>";
+    showAlert('success', 'Registrasi berhasil! Silakan cek email untuk verifikasi.', 'login_user.php');
 } catch (Exception $e) {
-    echo "Gagal mengirim email: {$mail->ErrorInfo}";
+    showAlert('error', "Gagal mengirim email: " . $mail->ErrorInfo, 'register_user.php');
 }
+
+function showAlert($type, $message, $redirect)
+{
+?>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+
+    <body>
+        <script>
+            Swal.fire({
+                icon: '<?php echo $type; ?>',
+                title: '<?php echo ($type === 'success') ? 'Berhasil!' : 'Terjadi Kesalahan'; ?>',
+                text: '<?php echo $message; ?>',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = '<?php echo $redirect; ?>';
+                }
+            });
+        </script>
+    </body>
+
+    </html>
+<?php
+    exit;
+}
+?>
