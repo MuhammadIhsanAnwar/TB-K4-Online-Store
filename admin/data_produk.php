@@ -25,6 +25,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
 <meta charset="UTF-8">
 <title>Data Produk - Admin</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <style>
 :root{
@@ -38,9 +39,10 @@ body{
     margin:0;
     background:var(--bg);
     font-family:Poppins,system-ui,sans-serif;
+    animation:fadeIn 0.5s ease;
 }
 
-/* ================= SIDEBAR ================= */
+/* ================= SIDEBAR (dashboard style) ================= */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -49,7 +51,7 @@ body{
     background:linear-gradient(180deg,#1e63b6,#0f3f82);
     display:flex;
     flex-direction:column;
-    padding-top:20px;
+    padding:18px 0;
 }
 
 .logo-box{
@@ -65,6 +67,12 @@ body{
 
 .logo-box img:hover{
     transform:scale(1.05);
+}
+
+.menu-title{
+    color:#dbe6ff;
+    font-size:13px;
+    padding:8px 20px;
 }
 
 .sidebar a{
@@ -103,26 +111,20 @@ body{
 }
 
 /* ================= CONTENT ================= */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 .content{
     margin-left:220px;
     padding:30px 40px;
-    animation: fadeInUp 0.5s ease;
+    animation:fadeIn 0.5s ease;
 }
 
-.content h2{
-    color: var(--primary);
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+h2{
+    color:var(--primary);
     font-weight:700;
-    font-size:2rem;
-}
-
-hr{
-    border-top:2px solid #cfd6e6;
-    margin-bottom:30px;
 }
 
 /* ================= TABEL PRODUK ================= */
@@ -147,9 +149,7 @@ hr{
 .table tbody tr{
     background: #fff;
     transition: .3s;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeInUp 0.5s forwards;
+    animation:fadeIn 0.5s ease;
 }
 
 .table tbody tr:hover{
@@ -166,38 +166,13 @@ hr{
     object-fit:cover;
 }
 
-/* Tombol Edit & Hapus */
 .btn-warning, .btn-danger{
     border-radius:8px;
     transition:.3s;
 }
 
 .btn-warning:hover{background:#b38f00;}
-.delete-btn{
-    font-size:1.3rem;
-    padding:6px 10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#ff4d4d;
-    border:none;
-    cursor:pointer;
-    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
-    border-radius:8px;
-}
-
-.delete-btn:hover{
-    background:#ff1a1a;
-    transform: scale(1.2);
-    box-shadow: 0 4px 12px rgba(255,26,26,.5);
-}
-
-/* Animasi baris tabel muncul bergantian */
-<?php
-for($i=1; $i<=50; $i++){
-    echo ".table tbody tr:nth-child($i){ animation-delay: ".($i*0.05)."s; }";
-}
-?>
+.btn-danger:hover{background:#cc0000;}
 </style>
 </head>
 <body>
@@ -233,9 +208,11 @@ for($i=1; $i<=50; $i++){
                         <?php endif; ?>
                     </td>
                     <td>
-                        <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                        <button class="btn btn-sm delete-btn" onclick="deleteProduk(<?php echo $row['id']; ?>)">
-                            🗑️
+                        <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduk(<?php echo $row['id']; ?>)">
+                            <i class="bi bi-trash"></i>
                         </button>
                     </td>
                 </tr>
