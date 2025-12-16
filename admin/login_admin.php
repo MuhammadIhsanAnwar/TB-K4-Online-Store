@@ -165,8 +165,8 @@ if (isset($_POST['login'])) {
 
                 <div class="card">
 
-                    <div class="logo-box">
-                        <img src="../images/Background dan Logo/logo.png" alt="Logo">
+                    <div class="text-center mb-3">
+                        <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo" class="login-logo" style="max-width: 160px; height: auto;" />
                     </div>
 
                     <h3 class="text-center mb-3">Admin Login</h3>
