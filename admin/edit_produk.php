@@ -72,7 +72,6 @@ if (isset($_POST['update'])) {
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
 <meta charset="UTF-8">
 <title>Edit Produk</title>
@@ -92,7 +91,6 @@ body{
     margin:0;
     font-family:Poppins,system-ui,sans-serif;
     background:var(--bg);
-    animation:fadePage 0.5s ease;
 }
 
 /* ===== SIDEBAR ===== */
@@ -117,17 +115,8 @@ body{
     filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
     transition:.3s ease;
 }
-
-.logo-box img:hover{
-    transform:scale(1.05);
-}
-
-.menu-title{
-    color:#dbe6ff;
-    font-size:13px;
-    padding:8px 20px;
-}
-
+.logo-box img:hover{transform:scale(1.05);}
+.menu-title{color:#dbe6ff;font-size:13px;padding:8px 20px;}
 .sidebar a{
     color:white;
     text-decoration:none;
@@ -136,16 +125,8 @@ body{
     border-radius:10px;
     transition:.25s;
 }
-
-.sidebar a:hover{
-    background:rgba(255,255,255,.18);
-}
-
-.sidebar a.active{
-    background:rgba(255,255,255,.32);
-    font-weight:600;
-}
-
+.sidebar a:hover{background:rgba(255,255,255,.18);}
+.sidebar a.active{background:rgba(255,255,255,.32);font-weight:600;}
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -155,7 +136,6 @@ body{
     border-radius:14px;
     transition:.3s ease;
 }
-
 .sidebar .logout:hover{
     background:#ff4d4d;
     color:#fff!important;
@@ -167,49 +147,25 @@ body{
 .content{
     margin-left:220px;
     padding:40px;
-    animation:fadePage 0.5s ease;
+    animation:fadeContent 0.5s ease;
 }
 
-@keyframes fadePage{
+@keyframes fadeContent{
     from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
 
-h2{
-    color:var(--primary);
-    font-weight:700;
-    margin-bottom:20px;
-}
-
-hr{
-    border-top:2px solid #cfd6e6;
-    margin-bottom:20px;
-    opacity:.6;
-}
+h2{color:var(--primary); font-weight:700; margin-bottom:10px;}
+hr{border-top:2px solid #cfd6e6; margin-bottom:20px; opacity:.6;}
 
 /* ===== FORM CARD ===== */
 .form-container{
-    position:relative;
-    overflow:hidden;
-    background:var(--white);
-    padding:25px;
-    border-radius:22px;
+    background: var(--white);
+    padding: 25px;
+    border-radius: 20px;
     box-shadow:0 18px 45px rgba(0,0,0,.15);
     max-width:600px;
     animation:fadeCard 0.5s ease;
-}
-
-.form-container::after{
-    content:"";
-    position:absolute;
-    width:150px;
-    height:150px;
-    border-radius:50%;
-    top:-55px;
-    right:-55px;
-    background:#f3eadd;
-    opacity:.7;
-    z-index:0;
 }
 
 @keyframes fadeCard{
@@ -217,22 +173,12 @@ hr{
     to{opacity:1; transform:translateY(0);}
 }
 
-.form-container *{
-    position:relative;
-    z-index:1;
-}
-
-.btn-primary{
-    border-radius:8px;
-    transition:.3s;
-}
-
-.btn-primary:hover{
-    background:#144a8a;
-}
+.btn-primary{border-radius:8px; transition:.3s;}
+.btn-primary:hover{background:#144a8a;}
+.btn-secondary{border-radius:8px; transition:.3s;}
+.btn-secondary:hover{background:#6c757d;}
 </style>
 </head>
-
 <body>
 <?php include 'sidebar.php'; ?>
 
