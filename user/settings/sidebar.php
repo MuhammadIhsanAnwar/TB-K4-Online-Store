@@ -19,6 +19,7 @@
         padding: 30px 0;
         box-shadow: 4px 0 20px rgba(30, 93, 172, 0.15);
         z-index: 1000;
+        overflow-y: auto;
     }
 
     .sidebar .title {
@@ -111,20 +112,9 @@
         transform: scale(1.15) rotate(5deg);
     }
 
-    .content {
-        margin-left: 280px;
-        padding: 30px;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #EAE2E4 0%, #f5f5f5 100%);
-    }
-
     @media (max-width: 768px) {
         .sidebar {
             width: 240px;
-        }
-        
-        .content {
-            margin-left: 240px;
         }
     }
 </style>
@@ -132,15 +122,19 @@
 <div class="sidebar">
     <div class="title">Settings</div>
 
-    <a href="settings.php?menu=profil" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
+    <a href="settings_profil.php" class="<?php echo (!isset($_GET['menu']) || $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
         <span class="icon">👤</span>
         Edit Profil
     </a>
-    <a href="settings.php?menu=payment" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'payment') ? 'active' : ''; ?>">
+    <a href="settings_password.php" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'password') ? 'active' : ''; ?>">
+        <span class="icon">🔐</span>
+        Ubah Password
+    </a>
+    <a href="settings_payment.php" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'payment') ? 'active' : ''; ?>">
         <span class="icon">💳</span>
         Metode Pembayaran
     </a>
-    <a href="settings.php?menu=lain" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'lain') ? 'active' : ''; ?>">
+    <a href="settings_lain.php" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'lain') ? 'active' : ''; ?>">
         <span class="icon">⚙️</span>
         Pengaturan Lainnya
     </a>

@@ -299,8 +299,7 @@
                 Tindakan ini bersifat permanen dan tidak dapat dibatalkan. Semua data Anda termasuk pesanan, alamat, dan informasi pribadi akan dihapus secara permanen dari sistem kami.
             </p>
             
-            <form action="hapus_akun.php" method="POST"
-                onsubmit="return confirm('Yakin hapus akun permanen? Semua data akan hilang dan tidak dapat dikembalikan!')">
+            <form action="hapus_akun.php" method="POST">
                 <button type="submit" class="btn btn-danger">
                     Hapus Akun Permanen
                 </button>
