@@ -9,8 +9,6 @@ include '../admin/koneksi.php';
 <meta charset="UTF-8">
 <title>Data Penjualan - Admin</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
 <style>
 :root{
     --primary:#1e5dac;
@@ -20,15 +18,14 @@ include '../admin/koneksi.php';
     --text:#1f2937;
 }
 
-/* ====== BODY ====== */
+/* ===== BODY ===== */
 body{
     margin:0;
     font-family:Poppins,system-ui,sans-serif;
     background:var(--bg);
-    animation:fadePage 0.5s ease;
 }
 
-/* ====== SIDEBAR (Dashboard Style) ====== */
+/* ===== SIDEBAR ===== */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -39,28 +36,14 @@ body{
     display:flex;
     flex-direction:column;
 }
-
-.logo-box{
-    text-align:center;
-    padding:10px 0 18px;
-}
-
+.logo-box{text-align:center;padding:10px 0 18px;}
 .logo-box img{
     width:72px;
     filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
     transition:.3s ease;
 }
-
-.logo-box img:hover{
-    transform:scale(1.05);
-}
-
-.menu-title{
-    color:#dbe6ff;
-    font-size:13px;
-    padding:8px 20px;
-}
-
+.logo-box img:hover{transform:scale(1.05);}
+.menu-title{color:#dbe6ff;font-size:13px;padding:8px 20px;}
 .sidebar a{
     color:white;
     text-decoration:none;
@@ -69,16 +52,8 @@ body{
     border-radius:10px;
     transition:.25s;
 }
-
-.sidebar a:hover{
-    background:rgba(255,255,255,.18);
-}
-
-.sidebar a.active{
-    background:rgba(255,255,255,.32);
-    font-weight:600;
-}
-
+.sidebar a:hover{background:rgba(255,255,255,.18);}
+.sidebar a.active{background:rgba(255,255,255,.32);font-weight:600;}
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -88,7 +63,6 @@ body{
     border-radius:14px;
     transition:.3s ease;
 }
-
 .sidebar .logout:hover{
     background:#ff4d4d;
     color:#fff!important;
@@ -96,14 +70,13 @@ body{
     transform:translateY(-2px);
 }
 
-/* ====== CONTENT ====== */
+/* ===== CONTENT ===== */
 .content{
     margin-left:220px;
     padding:40px;
-    animation:fadePage 0.5s ease;
+    animation:fadeContent 0.5s ease;
 }
-
-@keyframes fadePage{
+@keyframes fadeContent{
     from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
@@ -111,31 +84,42 @@ body{
 h2{
     color:var(--primary);
     font-weight:700;
-    margin-bottom:8px;
+    margin-bottom:20px;
 }
-
 hr{
     border-top:2px solid #cfd6e6;
     margin-bottom:20px;
     opacity:.6;
 }
 
-/* ====== TABLE CONTAINER ====== */
-.table-container{
-    background: var(--white);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 18px 45px rgba(0,0,0,.15);
-    overflow-x:auto;
-    animation:fadeTable 0.5s ease;
+/* ===== CARD TABLE ===== */
+.card-table{
+    position:relative;
+    overflow:hidden;
+    border:none;
+    border-radius:22px;
+    padding:20px;
+    background:var(--white);
+    box-shadow:0 18px 45px rgba(0,0,0,.15);
+    animation:fadeCard 0.5s ease;
 }
-
-@keyframes fadeTable{
-    from{opacity:0; transform:translateY(5px);}
+.card-table::after{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    top:-55px;
+    right:-55px;
+    background:#f3eadd;
+    opacity:.7;
+}
+@keyframes fadeCard{
+    from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
 
-/* ====== TABLE ====== */
+/* ===== TABLE ===== */
 .table{
     border-collapse: separate !important;
     border-spacing: 0 10px;
@@ -144,13 +128,14 @@ hr{
 
 .table thead tr{
     background: var(--primary);
-    color: #fff;
-    border-radius: 12px;
+    color:#fff;
+    border-radius:12px;
 }
 
 .table tbody tr{
     background: #fff;
     transition: .3s;
+    animation:fadeRow 0.5s ease;
 }
 
 .table tbody tr:hover{
@@ -159,7 +144,7 @@ hr{
 
 .table td, .table th{
     vertical-align: middle;
-    padding: 12px;
+    padding:12px;
     text-align:center;
 }
 
@@ -167,17 +152,20 @@ hr{
 .table td:nth-child(3){
     text-align:left;
 }
+
+@keyframes fadeRow{
+    from{opacity:0; transform:translateY(5px);}
+    to{opacity:1; transform:translateY(0);}
+}
 </style>
 </head>
-
 <body>
 <?php include 'sidebar.php'; ?>
 
 <div class="content">
     <h2>Data Penjualan</h2>
     <hr>
-
-    <div class="table-container">
+    <div class="card-table">
         <table class="table table-bordered table-striped table-sm">
             <thead>
                 <tr>
@@ -191,8 +179,8 @@ hr{
             </thead>
             <tbody>
                 <?php
-                $res = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
-                while ($row = mysqli_fetch_assoc($res)) {
+                $res = mysqli_query($koneksi,"SELECT * FROM penjualan ORDER BY id DESC");
+                while($row=mysqli_fetch_assoc($res)){
                     echo "<tr>
                         <td>{$row['id']}</td>
                         <td>{$row['user_id']}</td>

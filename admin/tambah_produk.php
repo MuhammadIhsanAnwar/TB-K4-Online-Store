@@ -11,12 +11,12 @@ if (isset($_POST['submit'])) {
     if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] != 4) {
         $file = $_FILES['gambar'];
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowed = ['jpg', 'jpeg', 'png'];
-        if (in_array($ext, $allowed)) {
-            $filename = time() . '_' . $file['name'];
+        $allowed = ['jpg','jpeg','png'];
+        if (in_array($ext,$allowed)) {
+            $filename = time().'_'.$file['name'];
             move_uploaded_file($file['tmp_name'], "../foto_produk/$filename");
             $sql = "INSERT INTO products (nama,kategori,harga,gambar) VALUES ('$nama','$kategori','$harga','$filename')";
-            mysqli_query($koneksi, $sql);
+            mysqli_query($koneksi,$sql);
             $msg = "Produk berhasil ditambahkan!";
         } else {
             $msg = "Format file tidak diperbolehkan!";
@@ -31,25 +31,31 @@ if (isset($_POST['submit'])) {
 <meta charset="UTF-8">
 <title>Tambah Produk</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 :root{
     --primary:#1e5dac;
     --bg:#f3eded;
     --white:#ffffff;
-    --hover-blue: rgba(30,93,172,.1);
     --text:#1f2937;
 }
 
-/* ===== BODY ===== */
+/* BODY & HALAMAN */
 body{
     margin:0;
     font-family:Poppins,system-ui,sans-serif;
     background:var(--bg);
-    animation:fadePage 0.5s ease;
+}
+.content{
+    margin-left:220px;
+    padding:30px;
+    animation:fadeContent 0.5s ease;
+}
+@keyframes fadeContent{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
 }
 
-/* ===== SIDEBAR ===== */
+/* SIDEBAR (sama dashboard) */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -60,28 +66,14 @@ body{
     display:flex;
     flex-direction:column;
 }
-
-.logo-box{
-    text-align:center;
-    padding:10px 0 18px;
-}
-
+.logo-box{text-align:center;padding:10px 0 18px;}
 .logo-box img{
     width:72px;
     filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
     transition:.3s ease;
 }
-
-.logo-box img:hover{
-    transform:scale(1.05);
-}
-
-.menu-title{
-    color:#dbe6ff;
-    font-size:13px;
-    padding:8px 20px;
-}
-
+.logo-box img:hover{transform:scale(1.05);}
+.menu-title{color:#dbe6ff;font-size:13px;padding:8px 20px;}
 .sidebar a{
     color:white;
     text-decoration:none;
@@ -90,16 +82,8 @@ body{
     border-radius:10px;
     transition:.25s;
 }
-
-.sidebar a:hover{
-    background:rgba(255,255,255,.18);
-}
-
-.sidebar a.active{
-    background:rgba(255,255,255,.32);
-    font-weight:600;
-}
-
+.sidebar a:hover{background:rgba(255,255,255,.18);}
+.sidebar a.active{background:rgba(255,255,255,.32);font-weight:600;}
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -109,7 +93,6 @@ body{
     border-radius:14px;
     transition:.3s ease;
 }
-
 .sidebar .logout:hover{
     background:#ff4d4d;
     color:#fff!important;
@@ -117,82 +100,80 @@ body{
     transform:translateY(-2px);
 }
 
-/* ===== CONTENT ===== */
-.content{
-    margin-left:220px;
-    padding:40px;
-    animation:fadePage 0.5s ease;
-}
-
-@keyframes fadePage{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
-}
-
-h2{
-    color:var(--primary);
-    font-weight:700;
-    margin-bottom:8px;
-}
-
-hr{
-    border-top:2px solid #cfd6e6;
-    margin-bottom:20px;
-    opacity:.6;
-}
-
-/* ===== FORM CARD ===== */
-.form-container{
-    background: var(--white);
-    padding: 25px;
-    border-radius: 20px;
+/* FORM CARD (sama dashboard) */
+.card-form{
+    position:relative;
+    overflow:hidden;
+    border:none;
+    border-radius:22px;
+    padding:26px;
+    background:var(--white);
     box-shadow:0 18px 45px rgba(0,0,0,.15);
+    transition:.3s;
     max-width:600px;
     animation:fadeCard 0.5s ease;
 }
-
+.card-form:hover{
+    transform:translateY(-8px);
+    box-shadow:0 30px 65px rgba(30,93,172,.35);
+}
+.card-form::after{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    top:-55px;
+    right:-55px;
+    background:#f3eadd;
+    opacity:.7;
+}
 @keyframes fadeCard{
     from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
 
-.btn-primary{
-    border-radius:8px;
-    transition:.3s;
+.card-form h2{
+    color:var(--primary);
+    font-weight:700;
+    margin-bottom:20px;
 }
-.btn-primary:hover{
+
+.card-form form .form-control{
+    margin-bottom:15px;
+    border-radius:12px;
+    padding:10px;
+}
+
+.card-form button{
+    border-radius:12px;
+    transition:.3s;
+    width:100%;
+}
+.card-form button:hover{
     background:#144a8a;
+}
+
+/* ALERT */
+.alert{
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,.1);
+    margin-bottom:15px;
 }
 </style>
 </head>
-
 <body>
 <?php include 'sidebar.php'; ?>
 
 <div class="content">
-    <h2>Tambah Produk</h2>
-    <hr>
-
-    <?php if($msg) echo "<div class='alert alert-info'>$msg</div>"; ?>
-
-    <div class="form-container">
+    <div class="card-form">
+        <h2>Tambah Produk</h2>
+        <?php if($msg) echo "<div class='alert alert-info'>$msg</div>"; ?>
         <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label>Nama Produk</label>
-                <input type="text" name="nama" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label>Kategori</label>
-                <input type="text" name="kategori" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label>Harga</label>
-                <input type="number" name="harga" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label>Gambar</label>
-                <input type="file" name="gambar" class="form-control" required>
-            </div>
+            <input type="text" name="nama" class="form-control" placeholder="Nama Produk" required>
+            <input type="text" name="kategori" class="form-control" placeholder="Kategori" required>
+            <input type="number" name="harga" class="form-control" placeholder="Harga" required>
+            <input type="file" name="gambar" class="form-control" required>
             <button type="submit" name="submit" class="btn btn-primary">Tambah Produk</button>
         </form>
     </div>
