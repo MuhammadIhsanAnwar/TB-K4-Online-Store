@@ -114,7 +114,9 @@ hr{
 
 /* ================= CARD ================= */
 .row.g-4{
-    gap: 1.5rem;
+    display:flex;
+    flex-wrap: nowrap; /* tetap 1 baris */
+    gap:1.5rem;
 }
 
 .card{
@@ -126,6 +128,7 @@ hr{
     background:var(--white);
     box-shadow:0 12px 30px rgba(0,0,0,.12);
     transition: all .3s ease;
+    flex:1;
 }
 
 .card:hover{
@@ -133,23 +136,26 @@ hr{
     box-shadow:0 25px 55px rgba(30,93,172,.25);
 }
 
-/* BULATAN DEKORATIF */
+/* Bulatan dekoratif bergerak */
 .card::after{
     content:"";
     position:absolute;
-    width:140px;
-    height:140px;
+    width:120px;
+    height:120px;
     border-radius:50%;
-    top:-50px;
-    right:-50px;
+    top:-40px;
+    right:-40px;
     background:#f3eadd;
-    opacity:.6;
-    animation: rotate 8s linear infinite;
+    opacity:0.6;
+    animation: floatRotate 8s linear infinite;
 }
 
-@keyframes rotate{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
+@keyframes floatRotate {
+    0% { transform: translate(0,0) rotate(0deg); }
+    25% { transform: translate(-10px,10px) rotate(90deg); }
+    50% { transform: translate(0,20px) rotate(180deg); }
+    75% { transform: translate(10px,10px) rotate(270deg); }
+    100% { transform: translate(0,0) rotate(360deg); }
 }
 
 /* Typography */
@@ -165,10 +171,6 @@ hr{
     margin:0;
     font-size:2.8rem;
     font-weight:800;
-    /* gradient text modern effect */
-    background: linear-gradient(90deg, #2563eb, #1e5dac);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 /* Tetap gunakan warna asli */
