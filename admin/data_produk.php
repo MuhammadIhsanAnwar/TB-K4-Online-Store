@@ -33,6 +33,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
     --bg:#f3eded;
     --white:#ffffff;
     --hover-blue: rgba(30,93,172,.1);
+    --line:#cfd6e6;
 }
 
 body{
@@ -125,6 +126,14 @@ body{
 h2{
     color:var(--primary);
     font-weight:700;
+    margin-bottom:8px;
+}
+
+hr{
+    border:none;
+    border-top:2px solid var(--line);
+    margin-bottom:20px;
+    opacity:0.6;
 }
 
 /* ================= TABEL PRODUK ================= */
@@ -133,6 +142,7 @@ h2{
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 15px 30px rgba(0,0,0,.1);
+    animation:fadeIn 0.5s ease;
 }
 
 .table{
