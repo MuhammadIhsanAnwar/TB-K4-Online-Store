@@ -301,7 +301,7 @@ $menu = isset($_GET['menu']) ? $_GET['menu'] : 'dashboard';
                     <!-- WELCOME CARD -->
                     <div class="welcome-card">
                         <div class="welcome-header">
-                            <img src="<?php echo !empty($user['foto_profil']) ? '../foto_profil/' . htmlspecialchars($user['foto_profil']) : 'https://via.placeholder.com/120?text=Profile'; ?>" alt="Foto Profil" class="welcome-avatar">
+                            <img src="<?php echo !empty($user['foto_profil']) ? '../../foto_profil/' . htmlspecialchars($user['foto_profil']) : 'https://via.placeholder.com/120?text=Profile'; ?>" alt="Foto Profil" class="welcome-avatar">
                             <div class="welcome-info">
                                 <h1>Selamat Datang! 👋</h1>
                                 <p><strong><?php echo htmlspecialchars($user['nama_lengkap']); ?></strong></p>

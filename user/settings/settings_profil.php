@@ -53,14 +53,14 @@ if (isset($_POST['update'])) {
 
             $new_name = time() . "_profil." . $foto_ext;
 
-            if (!is_dir("../foto_profil")) {
-                mkdir("../foto_profil", 0777, true);
+            if (!is_dir("../../foto_profil")) {
+                mkdir("../../foto_profil", 0777, true);
             }
 
-            if (move_uploaded_file($foto_tmp, "../foto_profil/$new_name")) {
+            if (move_uploaded_file($foto_tmp, "../../foto_profil/$new_name")) {
 
-                if (!empty($user['foto_profil']) && file_exists("../foto_profil/" . $user['foto_profil'])) {
-                    unlink("../foto_profil/" . $user['foto_profil']);
+                if (!empty($user['foto_profil']) && file_exists("../../foto_profil/" . $user['foto_profil'])) {
+                    unlink("../../foto_profil/" . $user['foto_profil']);
                 }
 
                 $update_foto_sql = ", foto_profil='$new_name'";
