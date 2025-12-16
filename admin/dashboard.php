@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="../css/bootstrap.css">
     <style>
         :root {
-            --primary: #1E5DAC;   /* Mediterranean Blue */
-            --secondary: #B7C5DA; /* Alley */
-            --accent: #E8D3C1;    /* Blush Beige */
-            --soft: #EAE2E4;      /* Misty */
+            --primary: #1E5DAC;
+            --secondary: #B7C5DA;
+            --accent: #E8D3C1;
+            --soft: #EAE2E4;
             --dark: #0f1e33;
             --white: #ffffff;
         }
@@ -22,14 +22,18 @@
             font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         }
 
-        /* SIDEBAR */
+        /* ================= SIDEBAR ================= */
         .sidebar {
             height: 100vh;
             position: fixed;
+            top: 0;
+            left: 0;
             width: 220px;
             background: linear-gradient(180deg, var(--primary), #143d73);
-            padding-top: 90px;
+            padding: 20px 0; /* DIUBAH: menu naik ke atas */
             box-shadow: 4px 0 20px rgba(30, 93, 172, 0.25);
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar a {
@@ -41,7 +45,7 @@
             border-radius: 14px;
             font-weight: 500;
             transition: .3s ease;
-            opacity: .85;
+            opacity: .9;
         }
 
         .sidebar a:hover {
@@ -50,11 +54,12 @@
             opacity: 1;
         }
 
-        /* NAVBAR */
+        /* ================= NAVBAR ================= */
         .navbar {
             background: var(--white) !important;
             margin-left: 220px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            height: 60px;
         }
 
         .navbar-brand {
@@ -63,7 +68,7 @@
             letter-spacing: .4px;
         }
 
-        /* CONTENT */
+        /* ================= CONTENT ================= */
         .content {
             margin-left: 230px;
             padding: 90px 30px 30px;
@@ -78,7 +83,7 @@
             opacity: .6;
         }
 
-        /* STAT CARD */
+        /* ================= STAT CARD ================= */
         .card {
             border: none;
             border-radius: 22px;
@@ -126,6 +131,7 @@
 </head>
 
 <body>
+
     <?php include 'sidebar.php'; ?>
 
     <nav class="navbar navbar-expand fixed-top">
@@ -137,34 +143,43 @@
     <div class="content">
         <h2 class="fw-bold">Dashboard</h2>
         <hr>
+
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="card">
                     <h5>Total Produk</h5>
                     <p class="text-primary">
-                        <?php $res = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM products");
+                        <?php
+                        $res = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM products");
                         $row = mysqli_fetch_assoc($res);
-                        echo $row['total']; ?>
+                        echo $row['total'];
+                        ?>
                     </p>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="card">
                     <h5>Total User</h5>
                     <p class="text-success">
-                        <?php $res = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM akun_user");
+                        <?php
+                        $res = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM akun_user");
                         $row = mysqli_fetch_assoc($res);
-                        echo $row['total']; ?>
+                        echo $row['total'];
+                        ?>
                     </p>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="card">
                     <h5>Total Penjualan</h5>
                     <p class="text-warning">
-                        <?php $res = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM penjualan");
+                        <?php
+                        $res = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM penjualan");
                         $row = mysqli_fetch_assoc($res);
-                        echo $row['total']; ?>
+                        echo $row['total'];
+                        ?>
                     </p>
                 </div>
             </div>
@@ -173,5 +188,4 @@
 
     <script src="../js/bootstrap.bundle.js"></script>
 </body>
-
 </html>
