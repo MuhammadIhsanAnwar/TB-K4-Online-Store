@@ -12,11 +12,12 @@
             --primary:#1E5DAC;
             --soft:#f4f6f9;
             --white:#ffffff;
-            --border:#e5e7eb;
+            --border:#dde3ec;
             --text:#1f2937;
         }
 
         body{
+            margin:0;
             background:var(--soft);
             font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
             color:var(--text);
@@ -37,7 +38,7 @@
         .sidebar-logo{
             display:flex;
             justify-content:center;
-            margin-bottom:12px;
+            margin-bottom:14px;
         }
 
         .sidebar-logo img{
@@ -50,14 +51,13 @@
             font-size:13px;
             font-weight:600;
             text-transform:uppercase;
-            opacity:.8;
-            padding:0 20px 10px;
+            opacity:.85;
+            padding:0 20px 12px;
         }
 
         .menu-item{
             display:block;
             padding:11px 20px;
-            margin:3px 0;
             color:#fff;
             text-decoration:none;
             font-size:14px;
@@ -67,13 +67,13 @@
         }
 
         .menu-item:hover{
-            background:rgba(255,255,255,.12);
+            background:rgba(255,255,255,.14);
             opacity:1;
         }
 
-        /* MENU AKTIF (dashboard) */
+        /* MENU AKTIF */
         .menu-item[href*="dashboard"]{
-            background:rgba(255,255,255,.18);
+            background:rgba(255,255,255,.22);
             border-left:4px solid #fff;
             font-weight:700;
             opacity:1;
@@ -91,8 +91,19 @@
             left:220px;
             right:0;
             height:56px;
-            background:var(--white)!important;
+            background:linear-gradient(90deg,#ffffff,#f3f6fb)!important;
             border-bottom:1px solid var(--border);
+            box-shadow:0 6px 18px rgba(30,93,172,.12);
+        }
+
+        .navbar::after{
+            content:"";
+            position:absolute;
+            bottom:0;
+            left:0;
+            width:100%;
+            height:2px;
+            background:linear-gradient(90deg,var(--primary),transparent);
         }
 
         /* ================= CONTENT ================= */
