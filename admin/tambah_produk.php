@@ -2,6 +2,7 @@
 require 'auth_check.php';
 include "../admin/koneksi.php";
 $msg = '';
+
 if (isset($_POST['submit'])) {
     $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
     $kategori = $_POST['kategori'];
@@ -28,30 +29,22 @@ if (isset($_POST['submit'])) {
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Tambah Produk - Admin</title>
+<title>Tambah Produk</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
-
 <style>
 :root{
     --primary:#1e5dac;
     --bg:#f3eded;
     --white:#ffffff;
     --hover-blue: rgba(30,93,172,.1);
-    --input-border:#ced4da;
-    --btn-hover:#144a8a;
+    --text:#1f2937;
 }
 
-/* BODY & ANIMASI */
 body{
     margin:0;
     font-family:Poppins,system-ui,sans-serif;
     background:var(--bg);
-    animation:fade 0.5s ease;
-}
-
-@keyframes fade{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
+    animation:fadeIn 0.5s ease;
 }
 
 /* ================= SIDEBAR (Dashboard Style) ================= */
@@ -126,10 +119,14 @@ body{
 .content{
     margin-left:220px;
     padding:40px;
-    animation:fade 0.5s ease;
+    animation:fadeIn 0.5s ease;
 }
 
-/* JUDUL & GARIS HALUS */
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
 h2{
     color:var(--primary);
     font-weight:700;
@@ -142,74 +139,47 @@ hr{
     opacity:.6;
 }
 
-/* FORM MODERN */
-form{
+/* ================= FORM ================= */
+.form-container{
     background: var(--white);
     padding: 25px;
     border-radius: 20px;
-    box-shadow: 0 18px 45px rgba(0,0,0,.15);
+    box-shadow:0 18px 45px rgba(0,0,0,.15);
     max-width:600px;
-    animation:fade 0.5s ease;
+    animation:fadeIn 0.5s ease;
 }
 
-form label{
-    font-weight:600;
-}
-
-form .form-control{
-    border-radius:12px;
-    border:1px solid var(--input-border);
+.btn-primary{
+    border-radius:8px;
     transition:.3s;
 }
-
-form .form-control:focus{
-    border-color:var(--primary);
-    box-shadow:0 0 6px rgba(30,93,172,.3);
-}
-
-form button{
-    border-radius:12px;
-    padding:10px 25px;
-    font-weight:600;
-    transition:.3s;
-}
-
-form button:hover{
-    background: var(--btn-hover);
-    color:#fff;
+.btn-primary:hover{
+    background:#144a8a;
 }
 </style>
 </head>
 
 <body>
-
 <?php include 'sidebar.php'; ?>
 
 <div class="content">
     <h2>Tambah Produk</h2>
     <hr>
+    <?php if($msg) echo "<div class='alert alert-info'>$msg</div>"; ?>
 
-    <?php if ($msg) echo "<div class='alert alert-info'>$msg</div>"; ?>
-
-    <form method="POST" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label>Nama Produk</label>
-            <input type="text" name="nama" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label>Kategori</label>
-            <input type="text" name="kategori" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label>Harga</label>
-            <input type="number" name="harga" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label>Gambar</label>
-            <input type="file" name="gambar" class="form-control" required>
-        </div>
-        <button type="submit" name="submit" class="btn btn-primary">Tambah Produk</button>
-    </form>
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3"><label>Nama Produk</label>
+                <input type="text" name="nama" class="form-control" required></div>
+            <div class="mb-3"><label>Kategori</label>
+                <input type="text" name="kategori" class="form-control" required></div>
+            <div class="mb-3"><label>Harga</label>
+                <input type="number" name="harga" class="form-control" required></div>
+            <div class="mb-3"><label>Gambar</label>
+                <input type="file" name="gambar" class="form-control" required></div>
+            <button type="submit" name="submit" class="btn btn-primary">Tambah Produk</button>
+        </form>
+    </div>
 </div>
 
 <script src="../js/bootstrap.bundle.js"></script>

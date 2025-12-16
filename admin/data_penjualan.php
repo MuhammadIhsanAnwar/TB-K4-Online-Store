@@ -9,7 +9,6 @@ include '../admin/koneksi.php';
 <meta charset="UTF-8">
 <title>Data Penjualan - Admin</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
-
 <style>
 :root{
     --primary:#1e5dac;
@@ -118,7 +117,7 @@ hr{
     opacity:.6;
 }
 
-/* ================= TABEL ================= */
+/* ================= TABLE ================= */
 .table-container{
     background: var(--white);
     border-radius: 20px;
@@ -141,7 +140,8 @@ hr{
 
 .table tbody tr{
     background: #fff;
-    transition: .3s;
+    transition: .5s;
+    animation:fadeInRow 0.5s ease;
 }
 
 .table tbody tr:hover{
@@ -158,11 +158,15 @@ hr{
 .table td:nth-child(3){
     text-align:left;
 }
+
+@keyframes fadeInRow{
+    from{opacity:0; transform:translateY(5px);}
+    to{opacity:1; transform:translateY(0);}
+}
 </style>
 </head>
 
 <body>
-
 <?php include 'sidebar.php'; ?>
 
 <div class="content">
