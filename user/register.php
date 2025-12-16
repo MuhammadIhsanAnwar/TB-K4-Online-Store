@@ -8,18 +8,15 @@
     <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 
     <style>
         /* ================= PALETTE ================= */
         :root {
             --blue: #1E5DAC;
-            /* Mediterranean Blue */
             --beige: #E8D3C1;
-            /* Blush Beige */
             --alley: #B7C5DA;
-            /* Alley */
             --misty: #EAE2E4;
-            /* Misty */
             --white: #ffffff;
         }
 
@@ -29,7 +26,6 @@
             height: 100%;
         }
 
-        /* BACKGROUND FOTO TAJAM (NO BLUR) */
         body {
             background-image: url("../images/Background dan Logo/bg regis.jpg");
             background-size: cover;
@@ -40,7 +36,6 @@
             position: relative;
         }
 
-        /* OVERLAY PALETTE (TIDAK BLUR) */
         body::before {
             content: "";
             position: fixed;
@@ -51,7 +46,6 @@
             z-index: -1;
         }
 
-        /* POSISI */
         .center-box {
             padding-top: 50px;
             padding-bottom: 70px;
@@ -61,27 +55,23 @@
         .card {
             border-radius: 22px;
             background: rgba(234, 226, 228, 0.45);
-            /* Misty */
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.45);
             box-shadow: 0 25px 50px rgba(30, 93, 172, 0.35);
         }
 
-        /* JUDUL */
         .card h4 {
             color: var(--blue);
             font-weight: 700;
             letter-spacing: 0.6px;
         }
 
-        /* LABEL */
         .form-label {
             color: #2d3a4a;
             font-weight: 500;
         }
 
-        /* INPUT */
         .form-control,
         .form-select {
             border-radius: 12px;
@@ -93,18 +83,16 @@
         .form-control:focus,
         .form-select:focus {
             box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
+            border: none;
         }
 
-        /* TEXT INFO */
         small.text-muted {
             color: #5a6b80 !important;
         }
 
         /* ================= BUTTON ================= */
         .btn-primary {
-            background: linear-gradient(135deg,
-                    var(--blue),
-                    var(--alley));
+            background: linear-gradient(135deg, var(--blue), var(--alley));
             border: none;
             border-radius: 14px;
             padding: 12px;
@@ -114,14 +102,11 @@
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg,
-                    var(--alley),
-                    var(--blue));
+            background: linear-gradient(135deg, var(--alley), var(--blue));
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(30, 93, 172, 0.45);
         }
 
-        /* LINK */
         .text-center a {
             color: var(--blue);
             text-decoration: none;
@@ -132,32 +117,140 @@
             color: #000;
             font-weight: 600;
         }
+
+        /* ================= FOTO PROFIL ================= */
+        .foto-profil-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .foto-profil-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--blue);
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: none;
+        }
+
+        .foto-profil-preview.show {
+            display: block;
+        }
+
+        .upload-btn {
+            background: var(--blue);
+            color: white;
+            border-radius: 12px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .upload-btn:hover {
+            background: var(--alley);
+        }
+
+        #fotoInput {
+            display: none;
+        }
+
+        /* ================= MODAL CROPPER ================= */
+        .modal-content {
+            border-radius: 15px;
+            background: rgba(234, 226, 228, 0.95);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(30, 93, 172, 0.2);
+        }
+
+        .modal-title {
+            color: var(--blue);
+            font-weight: 700;
+        }
+
+        #imageToCrop {
+            max-width: 100%;
+            max-height: 400px;
+        }
+
+        /* ================= PASSWORD STRENGTH ================= */
+        .password-strength {
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 8px;
+            background: #e0e0e0;
+            transition: 0.3s;
+        }
+
+        .password-strength.weak {
+            background: #f44336;
+            width: 33%;
+        }
+
+        .password-strength.medium {
+            background: #ff9800;
+            width: 66%;
+        }
+
+        .password-strength.strong {
+            background: #4caf50;
+            width: 100%;
+        }
+
+        .form-two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 576px) {
+            .form-two-column {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container d-flex justify-content-center align-items-start center-box">
-        <div class="card p-4" style="max-width:420px;width:100%;">
+        <div class="card p-4" style="max-width:520px;width:100%;">
 
             <div class="text-center mb-3">
                 <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo" class="login-logo" style="max-width: 160px; height: auto;" />
             </div>
 
-            <h4 class="text-center mb-3">Register Akun</h4>
+            <h4 class="text-center mb-4">Register Akun</h4>
 
-            <form action="proses_register.php" method="POST" onsubmit="return cekPassword()">
+            <form action="proses_register.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
 
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
+                <!-- FOTO PROFIL -->
+                <div class="foto-profil-container">
+                    <img id="fotoProfil" class="foto-profil-preview" alt="Preview Foto">
+                    <label class="upload-btn">
+                        📷 Pilih Foto Profil
+                        <input type="file" id="fotoInput" name="foto_profil" accept=".jpg,.jpeg,.png" hidden>
+                    </label>
+                    <small class="text-muted d-block mt-2">JPG/PNG max 5MB</small>
+                    <input type="hidden" id="fotoCropped" name="foto_cropped">
                 </div>
 
+                <!-- USERNAME -->
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" required pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 karakter, hanya huruf, angka, underscore">
+                </div>
+
+                <!-- NAMA LENGKAP -->
                 <div class="mb-3">
                     <label class="form-label">Nama Lengkap</label>
                     <input type="text" name="nama_lengkap" class="form-control" required>
                 </div>
 
+                <!-- JENIS KELAMIN -->
                 <div class="mb-3">
                     <label class="form-label">Jenis Kelamin</label>
                     <select name="jenis_kelamin" class="form-select" required>
@@ -167,27 +260,69 @@
                     </select>
                 </div>
 
+                <!-- TANGGAL LAHIR -->
                 <div class="mb-3">
                     <label class="form-label">Tanggal Lahir</label>
                     <input type="date" name="tanggal_lahir" class="form-control" required>
                 </div>
 
+                <!-- PROVINSI, KABUPATEN, KECAMATAN (2 KOLOM) -->
+                <div class="form-two-column mb-3">
+                    <div>
+                        <label class="form-label">Provinsi</label>
+                        <input type="text" name="provinsi" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Kabupaten/Kota</label>
+                        <input type="text" name="kabupaten_kota" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- KECAMATAN, KELURAHAN (2 KOLOM) -->
+                <div class="form-two-column mb-3">
+                    <div>
+                        <label class="form-label">Kecamatan</label>
+                        <input type="text" name="kecamatan" class="form-control" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Kelurahan/Desa</label>
+                        <input type="text" name="kelurahan_desa" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- KODE POS -->
                 <div class="mb-3">
-                    <label class="form-label">Alamat</label>
+                    <label class="form-label">Kode Pos</label>
+                    <input type="text" name="kode_pos" class="form-control" required pattern="[0-9]{5}" title="5 digit angka">
+                </div>
+
+                <!-- ALAMAT -->
+                <div class="mb-3">
+                    <label class="form-label">Alamat Lengkap</label>
                     <textarea name="alamat" class="form-control" rows="2" required></textarea>
                 </div>
 
+                <!-- EMAIL -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>
                     <input type="email" name="email" class="form-control" required>
                 </div>
 
+                <!-- PASSWORD -->
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
+                    <input type="password" name="password" id="password" class="form-control" required onkeyup="checkPasswordStrength()">
+                    <div id="passwordStrength" class="password-strength"></div>
                     <small class="text-muted">
-                        Minimal 8 karakter, huruf besar, huruf kecil, angka, dan simbol.
+                        Min 8 karakter, 1 huruf besar, 1 huruf kecil, 1 angka, 1 simbol.
                     </small>
+                </div>
+
+                <!-- KONFIRMASI PASSWORD -->
+                <div class="mb-3">
+                    <label class="form-label">Konfirmasi Password</label>
+                    <input type="password" name="password_confirm" id="password_confirm" class="form-control" required>
+                    <small id="passwordMatch" class="text-muted"></small>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">
@@ -204,14 +339,166 @@
         </div>
     </div>
 
+    <!-- MODAL CROPPER -->
+    <div class="modal fade" id="cropperModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crop Foto Profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="imageToCrop" src="" alt="Image">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="cropImage()">Crop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+
     <script>
-        function cekPassword() {
-            let pw = document.getElementById("password").value;
-            let pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        let cropper = null;
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+        // Handle foto profil upload
+        document.getElementById('fotoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+
+            if (!file) return;
+
+            // Validasi tipe file
+            if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                alert('Hanya JPG atau PNG yang diizinkan!');
+                this.value = '';
+                return;
+            }
+
+            // Validasi ukuran file
+            if (file.size > MAX_FILE_SIZE) {
+                alert('Ukuran file maksimal 5MB!');
+                this.value = '';
+                return;
+            }
+
+            // Tampilkan modal cropper
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = document.getElementById('imageToCrop');
+                img.src = event.target.result;
+
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(img, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 0.8,
+                    responsive: true,
+                    guides: false,
+                    highlight: true,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: true
+                });
+
+                new bootstrap.Modal(document.getElementById('cropperModal')).show();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Crop image dan konversi ke circular
+        function cropImage() {
+            if (!cropper) return;
+
+            const canvas = cropper.getCroppedCanvas({
+                maxWidth: 400,
+                maxHeight: 400,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
+            });
+
+            // Convert ke circular image
+            const circleCanvas = document.createElement('canvas');
+            const size = 400;
+            circleCanvas.width = size;
+            circleCanvas.height = size;
+
+            const ctx = circleCanvas.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(canvas, 0, 0, size, size);
+
+            // Display preview
+            const previewImg = document.getElementById('fotoProfil');
+            previewImg.src = circleCanvas.toDataURL('image/png');
+            previewImg.classList.add('show');
+
+            // Store data
+            document.getElementById('fotoCropped').value = circleCanvas.toDataURL('image/png');
+
+            bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
+        }
+
+        // Check password strength
+        function checkPasswordStrength() {
+            const pw = document.getElementById('password').value;
+            const strength = document.getElementById('passwordStrength');
+
+            if (pw.length < 8) {
+                strength.className = 'password-strength';
+                return;
+            }
+
+            const hasUpper = /[A-Z]/.test(pw);
+            const hasLower = /[a-z]/.test(pw);
+            const hasNumber = /\d/.test(pw);
+            const hasSymbol = /[\W_]/.test(pw);
+
+            const score = [hasUpper, hasLower, hasNumber, hasSymbol].filter(Boolean).length;
+
+            if (score <= 2) strength.className = 'password-strength weak';
+            else if (score === 3) strength.className = 'password-strength medium';
+            else strength.className = 'password-strength strong';
+        }
+
+        // Monitor password confirmation
+        document.getElementById('password_confirm').addEventListener('keyup', function() {
+            const pw = document.getElementById('password').value;
+            const confirm = this.value;
+            const match = document.getElementById('passwordMatch');
+
+            if (confirm === '') {
+                match.textContent = '';
+                match.style.color = '#5a6b80';
+            } else if (pw === confirm) {
+                match.textContent = '✓ Password cocok';
+                match.style.color = '#4caf50';
+            } else {
+                match.textContent = '✗ Password tidak cocok';
+                match.style.color = '#f44336';
+            }
+        });
+
+        // Validasi form
+        function validateForm() {
+            const pw = document.getElementById('password').value;
+            const confirm = document.getElementById('password_confirm').value;
+            const pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
             if (!pola.test(pw)) {
-                alert("Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial.");
+                alert('Password harus: min 8 karakter, 1 huruf besar, 1 huruf kecil, 1 angka, 1 simbol!');
                 return false;
             }
+
+            if (pw !== confirm) {
+                alert('Password tidak cocok!');
+                return false;
+            }
+
             return true;
         }
     </script>
