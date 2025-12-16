@@ -263,8 +263,33 @@
                 <!-- TANGGAL LAHIR -->
                 <div class="mb-3">
                     <label class="form-label">Tanggal Lahir</label>
-                    <input type="date" name="tanggal_lahir" class="form-control" required>
+                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" required>
+                    <small id="ageWarning" class="text-muted" style="display: none; color: #f44336 !important;">⚠️ Usia minimal harus 13 tahun</small>
                 </div>
+
+                <script>
+                    // Set max date to 13 years ago
+                    const today = new Date();
+                    const maxDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+                    document.getElementById('tanggal_lahir').max = maxDate.toISOString().split('T')[0];
+
+                    // Validasi usia saat user mengubah tanggal
+                    document.getElementById('tanggal_lahir').addEventListener('change', function() {
+                        const birthDate = new Date(this.value);
+                        const age = today.getFullYear() - birthDate.getFullYear();
+                        const monthDiff = today.getMonth() - birthDate.getMonth();
+                        const dayDiff = today.getDate() - birthDate.getDate();
+
+                        const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+                        const warning = document.getElementById('ageWarning');
+
+                        if (actualAge < 13) {
+                            warning.style.display = 'block';
+                        } else {
+                            warning.style.display = 'none';
+                        }
+                    });
+                </script>
 
                 <!-- PROVINSI, KABUPATEN, KECAMATAN (2 KOLOM) -->
                 <div class="form-two-column mb-3">
