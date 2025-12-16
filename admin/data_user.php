@@ -2,7 +2,6 @@
 <?php include '../admin/koneksi.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
 <meta charset="UTF-8">
 <title>Data User</title>
@@ -13,7 +12,6 @@
     --primary:#1e5dac;
     --bg:#f3eded;
     --white:#ffffff;
-    --text:#1f2937;
 }
 
 body{
@@ -22,7 +20,7 @@ body{
     font-family:Poppins,system-ui,sans-serif;
 }
 
-/* ================= SIDEBAR ================= */
+/* ===== SIDEBAR (PASTI SAMA DASHBOARD) ===== */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -34,28 +32,12 @@ body{
     flex-direction:column;
 }
 
-.logo-box{
-    text-align:center;
-    margin-bottom:14px;
-}
-
-.logo-box img{
-    width:56px;
-}
-
-.menu-title{
-    color:#dbe6ff;
-    font-size:13px;
-    padding:8px 20px;
-}
-
 .sidebar a{
-    color:white;
+    color:#fff;
     text-decoration:none;
     padding:12px 20px;
     margin:4px 12px;
     border-radius:10px;
-    transition:.25s;
 }
 
 .sidebar a:hover{
@@ -67,7 +49,6 @@ body{
     font-weight:600;
 }
 
-/* LOGOUT */
 .logout{
     margin-top:auto;
     color:#ffb3b3!important;
@@ -75,10 +56,9 @@ body{
 
 .logout:hover{
     background:rgba(255,80,80,.18);
-    color:#ffe1e1!important;
 }
 
-/* ================= CONTENT ================= */
+/* ===== CONTENT ===== */
 .content{
     margin-left:220px;
     padding:30px;
@@ -91,95 +71,43 @@ h2{
 
 hr{
     border-top:2px solid #cfd6e6;
-    margin-bottom:20px;
+    margin-bottom:25px;
 }
 
-/* ================= TABLE CONTAINER ================= */
-.table-responsive{
-    background:var(--white);
-    padding:18px;
+/* ===== TABLE CARD ===== */
+.table-card{
+    background:#fff;
     border-radius:20px;
-    box-shadow:0 20px 45px rgba(30,93,172,.2);
-    overflow-x:auto;
+    padding:20px;
+    box-shadow:0 18px 40px rgba(0,0,0,.15);
 }
 
-/* ================= TABLE ================= */
+/* ===== TABLE STYLE ===== */
 .table{
-    border-collapse:separate;
-    border-spacing:0;
-    font-size:14px;
-    color:var(--text);
+    margin:0;
 }
 
-/* HEADER */
 .table thead{
-    background:linear-gradient(180deg,#1e63b6,#0f3f82);
+    background:#1e5dac;
     color:#fff;
 }
 
-.table thead th{
-    border:none;
-    padding:14px 10px;
-    text-align:center;
-    white-space:nowrap;
-    font-weight:600;
-}
-
-/* BODY */
-.table tbody tr{
-    transition:.25s;
+.table th,
+.table td{
+    vertical-align:middle;
+    font-size:14px;
 }
 
 .table tbody tr:hover{
-    background:#eef3ff;
+    background:#f3f6fb;
 }
 
-.table td{
-    padding:12px 10px;
-    vertical-align:middle;
-    border-top:1px solid #e5e7eb;
-    white-space:nowrap;
-}
-
-/* FOTO PROFIL */
-.table img{
+table img{
     width:46px;
     height:46px;
     object-fit:cover;
     border-radius:50%;
-    box-shadow:0 6px 14px rgba(0,0,0,.25);
-}
-
-/* ALIGN */
-.table td,
-.table th{
-    text-align:center;
-}
-
-.table td:nth-child(2),
-.table td:nth-child(3),
-.table td:nth-child(11),
-.table td:nth-child(12){
-    text-align:left;
-}
-
-/* SCROLLBAR */
-.table-responsive::-webkit-scrollbar{
-    height:8px;
-}
-
-.table-responsive::-webkit-scrollbar-track{
-    background:#e5e7eb;
-    border-radius:10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb{
-    background:#94a3b8;
-    border-radius:10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb:hover{
-    background:#64748b;
+    border:2px solid #e5e7eb;
 }
 </style>
 </head>
@@ -192,55 +120,46 @@ hr{
     <h2>Data User</h2>
     <hr>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Nama Lengkap</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Provinsi</th>
-                    <th>Kabupaten/Kota</th>
-                    <th>Kecamatan</th>
-                    <th>Kelurahan/Desa</th>
-                    <th>Kode Pos</th>
-                    <th>Alamat</th>
-                    <th>Email</th>
-                    <th>Password</th>
-                    <th>Foto Profil</th>
-                    <th>Status</th>
-                    <th>Token</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>JK</th>
+                        <th>Tgl Lahir</th>
+                        <th>Alamat</th>
+                        <th>Email</th>
+                        <th>Foto</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
                 <?php
-                $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
-                while ($row = mysqli_fetch_assoc($res)) {
-                    echo "<tr>
-                        <td>{$row['id']}</td>
-                        <td>{$row['username']}</td>
-                        <td>{$row['nama_lengkap']}</td>
-                        <td>{$row['jenis_kelamin']}</td>
-                        <td>{$row['tanggal_lahir']}</td>
-                        <td>{$row['provinsi']}</td>
-                        <td>{$row['kabupaten_kota']}</td>
-                        <td>{$row['kecamatan']}</td>
-                        <td>{$row['kelurahan_desa']}</td>
-                        <td>{$row['kode_pos']}</td>
-                        <td>{$row['alamat']}</td>
-                        <td>{$row['email']}</td>
-                        <td>{$row['password']}</td>
-                        <td><img src='../foto_profil/{$row['foto_profil']}'></td>
-                        <td>{$row['status']}</td>
-                        <td>{$row['token']}</td>
-                    </tr>";
-                }
+                $res = mysqli_query($koneksi,"SELECT * FROM akun_user ORDER BY id DESC");
+                while($row = mysqli_fetch_assoc($res)){
                 ?>
-            </tbody>
-        </table>
+                    <tr>
+                        <td class="text-center"><?= $row['id'] ?></td>
+                        <td><?= $row['username'] ?></td>
+                        <td><?= $row['nama_lengkap'] ?></td>
+                        <td class="text-center"><?= $row['jenis_kelamin'] ?></td>
+                        <td class="text-center"><?= $row['tanggal_lahir'] ?></td>
+                        <td><?= $row['alamat'] ?></td>
+                        <td><?= $row['email'] ?></td>
+                        <td class="text-center">
+                            <img src="../foto_profil/<?= $row['foto_profil'] ?>">
+                        </td>
+                        <td class="text-center"><?= $row['status'] ?></td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>
 
 <script src="../js/bootstrap.bundle.js"></script>
