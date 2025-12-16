@@ -2,7 +2,7 @@
 
     <!-- LOGO -->
     <div class="logo-box">
-        <img src="logo.png" alt="Logo">
+        <img src="../images/Background dan Logo/logo.png" alt="Logo">
     </div>
 
     <p class="menu-title">Menu Admin</p>

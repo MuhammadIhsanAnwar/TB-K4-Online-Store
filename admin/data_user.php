@@ -4,223 +4,234 @@
 <html lang="id">
 
 <head>
-<meta charset="UTF-8">
-<title>Data User</title>
-<link rel="stylesheet" href="../css/bootstrap.css">
+    <meta charset="UTF-8">
+    <title>Data User</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
-<style>
-:root{
-    --primary:#1e5dac;
-    --bg:#f3eded;
-    --white:#ffffff;
-    --text:#1f2937;
-}
+    <style>
+        :root {
+            --primary: #1e5dac;
+            --bg: #f3eded;
+            --white: #ffffff;
+            --text: #1f2937;
+        }
 
-body{
-    margin:0;
-    background:var(--bg);
-    font-family:Poppins,system-ui,sans-serif;
-}
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: Poppins, system-ui, sans-serif;
+        }
 
-/* ================= SIDEBAR (SAMA DENGAN DASHBOARD) ================= */
-.sidebar{
-    position:fixed;
-    top:0; left:0;
-    width:220px;
-    height:100vh;
-    background:linear-gradient(180deg,#1e63b6,#0f3f82);
-    padding:18px 0;
-    display:flex;
-    flex-direction:column;
-}
+        /* ================= SIDEBAR (SAMA DENGAN DASHBOARD) ================= */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e63b6, #0f3f82);
+            padding: 18px 0;
+            display: flex;
+            flex-direction: column;
+        }
 
-.logo-box{
-    text-align:center;
-    padding:10px 0 18px;
-}
+        .logo-box {
+            text-align: center;
+            padding: 10px 0 18px;
+        }
 
-.logo-box img{
-    width:72px;
-    filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
-    transition:.3s ease;
-}
+        .logo-box img {
+            width: 72px;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
+            transition: .3s ease;
+        }
 
-.logo-box img:hover{
-    transform:scale(1.05);
-}
+        .logo-box img:hover {
+            transform: scale(1.05);
+        }
 
-.menu-title{
-    color:#dbe6ff;
-    font-size:13px;
-    padding:8px 20px;
-}
+        .menu-title {
+            color: #dbe6ff;
+            font-size: 13px;
+            padding: 8px 20px;
+        }
 
-.sidebar a{
-    color:white;
-    text-decoration:none;
-    padding:12px 20px;
-    margin:4px 12px;
-    border-radius:10px;
-    transition:.25s;
-}
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 10px;
+            transition: .25s;
+        }
 
-.sidebar a:hover{
-    background:rgba(255,255,255,.18);
-}
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, .18);
+        }
 
-.sidebar a.active{
-    background:rgba(255,255,255,.32);
-    font-weight:600;
-}
+        .sidebar a.active {
+            background: rgba(255, 255, 255, .32);
+            font-weight: 600;
+        }
 
-/* LOGOUT PALING BAWAH + MERAH */
-.sidebar .logout{
-    margin-top:auto;
-    background:rgba(255,80,80,.15);
-    color:#ffd6d6!important;
-    font-weight:600;
-    text-align:center;
-    border-radius:14px;
-    transition:.3s ease;
-}
+        /* LOGOUT PALING BAWAH + MERAH */
+        .sidebar .logout {
+            margin-top: auto;
+            background: rgba(255, 80, 80, .15);
+            color: #ffd6d6 !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 14px;
+            transition: .3s ease;
+        }
 
-.sidebar .logout:hover{
-    background:#ff4d4d;
-    color:#fff!important;
-    box-shadow:0 10px 25px rgba(255,77,77,.6);
-    transform:translateY(-2px);
-}
+        .sidebar .logout:hover {
+            background: #ff4d4d;
+            color: #fff !important;
+            box-shadow: 0 10px 25px rgba(255, 77, 77, .6);
+            transform: translateY(-2px);
+        }
 
-/* ================= CONTENT ================= */
-.content{
-    margin-left:220px;
-    padding:30px;
-    animation: fade .5s ease; /* ANIMASI HALUS */
-}
+        /* ================= CONTENT ================= */
+        .content {
+            margin-left: 220px;
+            padding: 30px;
+            animation: fade .5s ease;
+            /* ANIMASI HALUS */
+        }
 
-/* ================= ANIMASI HALUS ================= */
-@keyframes fade{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
-}
+        /* ================= ANIMASI HALUS ================= */
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
 
-h2{
-    color:var(--primary);
-    font-weight:700;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-hr{
-    border-top:2px solid #cfd6e6;
-    margin-bottom:20px;
-}
+        h2 {
+            color: var(--primary);
+            font-weight: 700;
+        }
 
-/* ================= TABLE CONTAINER ================= */
-.table-responsive{
-    background:var(--white);
-    padding:18px;
-    border-radius:20px;
-    box-shadow:0 20px 45px rgba(30,93,172,.2);
-    overflow-x:auto;
-    animation: fade .5s ease; /* ANIMASI HALUS */
-}
+        hr {
+            border-top: 2px solid #cfd6e6;
+            margin-bottom: 20px;
+        }
 
-/* ================= TABLE ================= */
-.table{
-    border-collapse:separate;
-    border-spacing:0;
-    font-size:14px;
-    color:var(--text);
-}
+        /* ================= TABLE CONTAINER ================= */
+        .table-responsive {
+            background: var(--white);
+            padding: 18px;
+            border-radius: 20px;
+            box-shadow: 0 20px 45px rgba(30, 93, 172, .2);
+            overflow-x: auto;
+            animation: fade .5s ease;
+            /* ANIMASI HALUS */
+        }
 
-/* HEADER */
-.table thead{
-    background:linear-gradient(180deg,#1e63b6,#0f3f82);
-    color:#fff;
-}
+        /* ================= TABLE ================= */
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+            color: var(--text);
+        }
 
-.table thead th{
-    border:none;
-    padding:14px 10px;
-    text-align:center;
-    white-space:nowrap;
-    font-weight:600;
-}
+        /* HEADER */
+        .table thead {
+            background: linear-gradient(180deg, #1e63b6, #0f3f82);
+            color: #fff;
+        }
 
-/* BODY */
-.table tbody tr{
-    transition:.25s;
-}
+        .table thead th {
+            border: none;
+            padding: 14px 10px;
+            text-align: center;
+            white-space: nowrap;
+            font-weight: 600;
+        }
 
-.table tbody tr:hover{
-    background:#eef3ff;
-}
+        /* BODY */
+        .table tbody tr {
+            transition: .25s;
+        }
 
-.table td{
-    padding:12px 10px;
-    vertical-align:middle;
-    border-top:1px solid #e5e7eb;
-    white-space:nowrap;
-}
+        .table tbody tr:hover {
+            background: #eef3ff;
+        }
 
-/* FOTO PROFIL */
-.table img{
-    width:46px;
-    height:46px;
-    object-fit:cover;
-    border-radius:50%;
-    box-shadow:0 6px 14px rgba(0,0,0,.25);
-}
+        .table td {
+            padding: 12px 10px;
+            vertical-align: middle;
+            border-top: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
 
-/* ALIGN */
-.table td,
-.table th{
-    text-align:center;
-}
+        /* FOTO PROFIL */
+        .table img {
+            width: 46px;
+            height: 46px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, .25);
+        }
 
-.table td:nth-child(2),
-.table td:nth-child(3),
-.table td:nth-child(11),
-.table td:nth-child(12){
-    text-align:left;
-}
-</style>
+        /* ALIGN */
+        .table td,
+        .table th {
+            text-align: center;
+        }
+
+        .table td:nth-child(2),
+        .table td:nth-child(3),
+        .table td:nth-child(11),
+        .table td:nth-child(12) {
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body>
 
-<?php include 'sidebar.php'; ?>
+    <?php include 'sidebar.php'; ?>
 
-<div class="content">
-    <h2>Data User</h2>
-    <hr>
+    <div class="content">
+        <h2>Data User</h2>
+        <hr>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Nama Lengkap</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Provinsi</th>
-                    <th>Kabupaten/Kota</th>
-                    <th>Kecamatan</th>
-                    <th>Kelurahan/Desa</th>
-                    <th>Kode Pos</th>
-                    <th>Alamat</th>
-                    <th>Email</th>
-                    <th>Password</th>
-                    <th>Foto Profil</th>
-                    <th>Status</th>
-                    <th>Token</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
-                while ($row = mysqli_fetch_assoc($res)) {
-                    echo "<tr>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Provinsi</th>
+                        <th>Kabupaten/Kota</th>
+                        <th>Kecamatan</th>
+                        <th>Kelurahan/Desa</th>
+                        <th>Kode Pos</th>
+                        <th>Alamat</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Foto Profil</th>
+                        <th>Status</th>
+                        <th>Token</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
+                    while ($row = mysqli_fetch_assoc($res)) {
+                        echo "<tr>
                         <td>{$row['id']}</td>
                         <td>{$row['username']}</td>
                         <td>{$row['nama_lengkap']}</td>
@@ -238,13 +249,14 @@ hr{
                         <td>{$row['status']}</td>
                         <td>{$row['token']}</td>
                     </tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-<script src="../js/bootstrap.bundle.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
 </body>
+
 </html>

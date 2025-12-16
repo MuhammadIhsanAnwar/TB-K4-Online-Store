@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login Pengguna</title>
+    <title>Login User</title>
+    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
     <link href="../css/bootstrap.min.css" rel="stylesheet" />
 

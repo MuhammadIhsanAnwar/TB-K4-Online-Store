@@ -25,6 +25,7 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Admin</title>
+    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
     <link rel="stylesheet" href="../css/bootstrap.css">
 
