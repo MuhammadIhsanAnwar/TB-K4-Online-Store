@@ -232,17 +232,50 @@
                     <img id="fotoProfil" class="foto-profil-preview" alt="Preview Foto">
                     <label class="upload-btn">
                         📷 Pilih Foto Profil
-                        <input type="file" id="fotoInput" name="foto_profil" accept=".jpg,.jpeg,.png" hidden>
+                        <input type="file" id="fotoInput" name="foto_profil" accept=".jpg,.jpeg,.png" required>
                     </label>
                     <small class="text-muted d-block mt-2">JPG/PNG max 5MB</small>
-                    <input type="hidden" id="fotoCropped" name="foto_cropped">
+                    <input type="hidden" id="fotoCropped" name="foto_cropped" required>
                 </div>
 
                 <!-- USERNAME -->
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 karakter, hanya huruf, angka, underscore">
+                    <input type="text" name="username" id="username" class="form-control" required pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 karakter, hanya huruf, angka, underscore">
+                    <small id="usernameStatus" class="text-muted"></small>
                 </div>
+
+                <script>
+                    // Check username availability
+                    document.getElementById('username').addEventListener('blur', function() {
+                        const username = this.value.trim();
+                        const statusMsg = document.getElementById('usernameStatus');
+
+                        if (username.length < 3) {
+                            statusMsg.textContent = '';
+                            return;
+                        }
+
+                        fetch('check_username.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: 'username=' + encodeURIComponent(username)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.exists) {
+                                    statusMsg.textContent = '✗ Username sudah digunakan';
+                                    statusMsg.style.color = '#f44336';
+                                } else {
+                                    statusMsg.textContent = '✓ Username tersedia';
+                                    statusMsg.style.color = '#4caf50';
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    });
+                </script>
 
                 <!-- NAMA LENGKAP -->
                 <div class="mb-3">
@@ -330,8 +363,41 @@
                 <!-- EMAIL -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" required>
+                    <input type="email" name="email" id="email" class="form-control" required>
+                    <small id="emailStatus" class="text-muted"></small>
                 </div>
+
+                <script>
+                    // Check email availability
+                    document.getElementById('email').addEventListener('blur', function() {
+                        const email = this.value.trim();
+                        const statusMsg = document.getElementById('emailStatus');
+
+                        if (!email) {
+                            statusMsg.textContent = '';
+                            return;
+                        }
+
+                        fetch('check_email.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: 'email=' + encodeURIComponent(email)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.exists) {
+                                    statusMsg.textContent = '✗ Email sudah terdaftar';
+                                    statusMsg.style.color = '#f44336';
+                                } else {
+                                    statusMsg.textContent = '✓ Email tersedia';
+                                    statusMsg.style.color = '#4caf50';
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    });
+                </script>
 
                 <!-- PASSWORD -->
                 <div class="mb-3">
