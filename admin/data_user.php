@@ -2,6 +2,7 @@
 <?php include '../admin/koneksi.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 <meta charset="UTF-8">
 <title>Data User</title>
@@ -12,6 +13,7 @@
     --primary:#1e5dac;
     --bg:#f3eded;
     --white:#ffffff;
+    --text:#1f2937;
 }
 
 body{
@@ -34,12 +36,11 @@ body{
 
 .logo-box{
     text-align:center;
-    padding:10px 0 18px;
+    margin-bottom:14px;
 }
 
 .logo-box img{
-    width:72px;
-    filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
+    width:56px;
 }
 
 .menu-title{
@@ -67,33 +68,20 @@ body{
 }
 
 /* LOGOUT */
-.sidebar .logout{
+.logout{
     margin-top:auto;
-    background:rgba(255,80,80,.15);
-    color:#ffd6d6!important;
-    font-weight:600;
-    text-align:center;
-    border-radius:14px;
-    transition:.3s ease;
+    color:#ffb3b3!important;
 }
 
-.sidebar .logout:hover{
-    background:#ff4d4d;
-    color:#fff!important;
-    box-shadow:0 10px 25px rgba(255,77,77,.6);
-    transform:translateY(-2px);
+.logout:hover{
+    background:rgba(255,80,80,.18);
+    color:#ffe1e1!important;
 }
 
 /* ================= CONTENT ================= */
 .content{
     margin-left:220px;
     padding:30px;
-    animation:fade .5s ease;
-}
-
-@keyframes fade{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:translateY(0);}
 }
 
 h2{
@@ -106,42 +94,92 @@ hr{
     margin-bottom:20px;
 }
 
-/* ================= TABLE ================= */
-.table-wrapper{
+/* ================= TABLE CONTAINER ================= */
+.table-responsive{
     background:var(--white);
-    border-radius:18px;
-    padding:20px;
-    box-shadow:0 18px 45px rgba(0,0,0,.15);
+    padding:18px;
+    border-radius:20px;
+    box-shadow:0 20px 45px rgba(30,93,172,.2);
+    overflow-x:auto;
 }
 
-table{
+/* ================= TABLE ================= */
+.table{
+    border-collapse:separate;
+    border-spacing:0;
     font-size:14px;
+    color:var(--text);
 }
 
-thead{
-    background:#1e5dac;
-    color:white;
+/* HEADER */
+.table thead{
+    background:linear-gradient(180deg,#1e63b6,#0f3f82);
+    color:#fff;
 }
 
-thead th{
+.table thead th{
+    border:none;
+    padding:14px 10px;
     text-align:center;
-    vertical-align:middle;
+    white-space:nowrap;
+    font-weight:600;
 }
 
-tbody tr{
+/* BODY */
+.table tbody tr{
     transition:.25s;
 }
 
-tbody tr:hover{
+.table tbody tr:hover{
     background:#eef3ff;
 }
 
-table img{
+.table td{
+    padding:12px 10px;
+    vertical-align:middle;
+    border-top:1px solid #e5e7eb;
+    white-space:nowrap;
+}
+
+/* FOTO PROFIL */
+.table img{
     width:46px;
     height:46px;
     object-fit:cover;
     border-radius:50%;
-    box-shadow:0 4px 10px rgba(0,0,0,.25);
+    box-shadow:0 6px 14px rgba(0,0,0,.25);
+}
+
+/* ALIGN */
+.table td,
+.table th{
+    text-align:center;
+}
+
+.table td:nth-child(2),
+.table td:nth-child(3),
+.table td:nth-child(11),
+.table td:nth-child(12){
+    text-align:left;
+}
+
+/* SCROLLBAR */
+.table-responsive::-webkit-scrollbar{
+    height:8px;
+}
+
+.table-responsive::-webkit-scrollbar-track{
+    background:#e5e7eb;
+    border-radius:10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb{
+    background:#94a3b8;
+    border-radius:10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover{
+    background:#64748b;
 }
 </style>
 </head>
@@ -154,8 +192,8 @@ table img{
     <h2>Data User</h2>
     <hr>
 
-    <div class="table-wrapper table-responsive">
-        <table class="table table-bordered table-striped table-sm align-middle">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -164,44 +202,42 @@ table img{
                     <th>Jenis Kelamin</th>
                     <th>Tanggal Lahir</th>
                     <th>Provinsi</th>
-                    <th>Kab/Kota</th>
+                    <th>Kabupaten/Kota</th>
                     <th>Kecamatan</th>
-                    <th>Kel/Desa</th>
+                    <th>Kelurahan/Desa</th>
                     <th>Kode Pos</th>
                     <th>Alamat</th>
                     <th>Email</th>
                     <th>Password</th>
-                    <th>Foto</th>
+                    <th>Foto Profil</th>
                     <th>Status</th>
                     <th>Token</th>
                 </tr>
             </thead>
             <tbody>
-            <?php
-            $res = mysqli_query($koneksi,"SELECT * FROM akun_user ORDER BY id DESC");
-            while($row = mysqli_fetch_assoc($res)){
-                echo "<tr>
-                    <td class='text-center'>{$row['id']}</td>
-                    <td>{$row['username']}</td>
-                    <td>{$row['nama_lengkap']}</td>
-                    <td class='text-center'>{$row['jenis_kelamin']}</td>
-                    <td class='text-center'>{$row['tanggal_lahir']}</td>
-                    <td>{$row['provinsi']}</td>
-                    <td>{$row['kabupaten_kota']}</td>
-                    <td>{$row['kecamatan']}</td>
-                    <td>{$row['kelurahan_desa']}</td>
-                    <td class='text-center'>{$row['kode_pos']}</td>
-                    <td>{$row['alamat']}</td>
-                    <td>{$row['email']}</td>
-                    <td>{$row['password']}</td>
-                    <td class='text-center'>
-                        <img src='../foto_profil/{$row['foto_profil']}' alt='Foto'>
-                    </td>
-                    <td class='text-center'>{$row['status']}</td>
-                    <td>{$row['token']}</td>
-                </tr>";
-            }
-            ?>
+                <?php
+                $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
+                while ($row = mysqli_fetch_assoc($res)) {
+                    echo "<tr>
+                        <td>{$row['id']}</td>
+                        <td>{$row['username']}</td>
+                        <td>{$row['nama_lengkap']}</td>
+                        <td>{$row['jenis_kelamin']}</td>
+                        <td>{$row['tanggal_lahir']}</td>
+                        <td>{$row['provinsi']}</td>
+                        <td>{$row['kabupaten_kota']}</td>
+                        <td>{$row['kecamatan']}</td>
+                        <td>{$row['kelurahan_desa']}</td>
+                        <td>{$row['kode_pos']}</td>
+                        <td>{$row['alamat']}</td>
+                        <td>{$row['email']}</td>
+                        <td>{$row['password']}</td>
+                        <td><img src='../foto_profil/{$row['foto_profil']}'></td>
+                        <td>{$row['status']}</td>
+                        <td>{$row['token']}</td>
+                    </tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
