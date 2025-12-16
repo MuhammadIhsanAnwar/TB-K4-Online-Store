@@ -22,7 +22,7 @@ body{
     font-family:Poppins,system-ui,sans-serif;
 }
 
-/* ================= SIDEBAR ================= */
+/* ================= SIDEBAR (SAMA DENGAN DASHBOARD) ================= */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -36,11 +36,17 @@ body{
 
 .logo-box{
     text-align:center;
-    margin-bottom:14px;
+    padding:10px 0 18px;
 }
 
 .logo-box img{
-    width:56px;
+    width:72px;
+    filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
+    transition:.3s ease;
+}
+
+.logo-box img:hover{
+    transform:scale(1.05);
 }
 
 .menu-title{
@@ -67,15 +73,22 @@ body{
     font-weight:600;
 }
 
-/* LOGOUT */
-.logout{
+/* LOGOUT PALING BAWAH + MERAH */
+.sidebar .logout{
     margin-top:auto;
-    color:#ffb3b3!important;
+    background:rgba(255,80,80,.15);
+    color:#ffd6d6!important;
+    font-weight:600;
+    text-align:center;
+    border-radius:14px;
+    transition:.3s ease;
 }
 
-.logout:hover{
-    background:rgba(255,80,80,.18);
-    color:#ffe1e1!important;
+.sidebar .logout:hover{
+    background:#ff4d4d;
+    color:#fff!important;
+    box-shadow:0 10px 25px rgba(255,77,77,.6);
+    transform:translateY(-2px);
 }
 
 /* ================= CONTENT ================= */
@@ -161,25 +174,6 @@ hr{
 .table td:nth-child(11),
 .table td:nth-child(12){
     text-align:left;
-}
-
-/* SCROLLBAR */
-.table-responsive::-webkit-scrollbar{
-    height:8px;
-}
-
-.table-responsive::-webkit-scrollbar-track{
-    background:#e5e7eb;
-    border-radius:10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb{
-    background:#94a3b8;
-    border-radius:10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb:hover{
-    background:#64748b;
 }
 </style>
 </head>
