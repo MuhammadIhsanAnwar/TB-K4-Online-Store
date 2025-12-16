@@ -26,6 +26,21 @@ $email          = $_POST['email'];
 $password       = $_POST['password'];
 $confirm        = $_POST['password_confirm'];
 
+// Simpan data form ke session untuk jaga-jaga ada error
+$_SESSION['form_data'] = [
+    'username'       => $username,
+    'nama_lengkap'   => $_POST['nama_lengkap'],
+    'jenis_kelamin'  => $jenis_kelamin,
+    'tanggal_lahir'  => $tanggal_lahir,
+    'provinsi'       => $_POST['provinsi'],
+    'kabupaten_kota' => $_POST['kabupaten_kota'],
+    'kecamatan'      => $_POST['kecamatan'],
+    'kelurahan_desa' => $_POST['kelurahan_desa'],
+    'kode_pos'       => $kode_pos,
+    'alamat'         => $_POST['alamat'],
+    'email'          => $email
+];
+
 // === VALIDASI USERNAME DAN EMAIL BELUM TERDAFTAR ===
 $cekUsername = mysqli_query($koneksi, "SELECT username FROM akun_user WHERE username = '$username'");
 if (mysqli_num_rows($cekUsername) > 0) {
@@ -76,7 +91,7 @@ if ($password !== $confirm) {
 $hash = password_hash($password, PASSWORD_DEFAULT);
 $token = bin2hex(random_bytes(20));
 
-// INSERT DATA - gunakan prepared statement
+// INSERT DATA
 $query = "INSERT INTO akun_user 
 (username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, foto_profil, status, token)
 VALUES 
@@ -85,6 +100,9 @@ VALUES
 if (!mysqli_query($koneksi, $query)) {
     showAlert('error', 'Error: ' . mysqli_error($koneksi), 'register.php');
 }
+
+// Jika berhasil, hapus session form_data
+unset($_SESSION['form_data']);
 
 require "../phpmailer/src/PHPMailer.php";
 require "../phpmailer/src/SMTP.php";

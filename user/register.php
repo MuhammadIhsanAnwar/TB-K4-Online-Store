@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -232,16 +235,17 @@
                     <img id="fotoProfil" class="foto-profil-preview" alt="Preview Foto">
                     <label class="upload-btn">
                         📷 Pilih Foto Profil
-                        <input type="file" id="fotoInput" name="foto_profil" accept=".jpg,.jpeg,.png" required>
+                        <input type="file" id="fotoInput" name="foto_profil" accept=".jpg,.jpeg,.png">
                     </label>
                     <small class="text-muted d-block mt-2">JPG/PNG max 5MB</small>
-                    <input type="hidden" id="fotoCropped" name="foto_cropped" required>
+                    <small id="fotoStatus" class="text-muted d-block" style="color: #f44336 !important;">⚠️ Foto profil harus dipilih</small>
+                    <input type="hidden" id="fotoCropped" name="foto_cropped">
                 </div>
 
                 <!-- USERNAME -->
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" id="username" class="form-control" required pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 karakter, hanya huruf, angka, underscore">
+                    <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($_SESSION['form_data']['username']) ? htmlspecialchars($_SESSION['form_data']['username']) : ''; ?>" required pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 karakter, hanya huruf, angka, underscore">
                     <small id="usernameStatus" class="text-muted"></small>
                 </div>
 
@@ -280,7 +284,7 @@
                 <!-- NAMA LENGKAP -->
                 <div class="mb-3">
                     <label class="form-label">Nama Lengkap</label>
-                    <input type="text" name="nama_lengkap" class="form-control" required>
+                    <input type="text" name="nama_lengkap" class="form-control" value="<?php echo isset($_SESSION['form_data']['nama_lengkap']) ? htmlspecialchars($_SESSION['form_data']['nama_lengkap']) : ''; ?>" required>
                 </div>
 
                 <!-- JENIS KELAMIN -->
@@ -288,15 +292,15 @@
                     <label class="form-label">Jenis Kelamin</label>
                     <select name="jenis_kelamin" class="form-select" required>
                         <option value="">-- Pilih --</option>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
+                        <option value="L" <?php echo (isset($_SESSION['form_data']['jenis_kelamin']) && $_SESSION['form_data']['jenis_kelamin'] === 'L') ? 'selected' : ''; ?>>Laki-laki</option>
+                        <option value="P" <?php echo (isset($_SESSION['form_data']['jenis_kelamin']) && $_SESSION['form_data']['jenis_kelamin'] === 'P') ? 'selected' : ''; ?>>Perempuan</option>
                     </select>
                 </div>
 
                 <!-- TANGGAL LAHIR -->
                 <div class="mb-3">
                     <label class="form-label">Tanggal Lahir</label>
-                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" required>
+                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" value="<?php echo isset($_SESSION['form_data']['tanggal_lahir']) ? htmlspecialchars($_SESSION['form_data']['tanggal_lahir']) : ''; ?>" required>
                     <small id="ageWarning" class="text-muted" style="display: none; color: #f44336 !important;">⚠️ Usia minimal harus 13 tahun</small>
                 </div>
 
@@ -328,11 +332,11 @@
                 <div class="form-two-column mb-3">
                     <div>
                         <label class="form-label">Provinsi</label>
-                        <input type="text" name="provinsi" class="form-control" required>
+                        <input type="text" name="provinsi" class="form-control" value="<?php echo isset($_SESSION['form_data']['provinsi']) ? htmlspecialchars($_SESSION['form_data']['provinsi']) : ''; ?>" required>
                     </div>
                     <div>
                         <label class="form-label">Kabupaten/Kota</label>
-                        <input type="text" name="kabupaten_kota" class="form-control" required>
+                        <input type="text" name="kabupaten_kota" class="form-control" value="<?php echo isset($_SESSION['form_data']['kabupaten_kota']) ? htmlspecialchars($_SESSION['form_data']['kabupaten_kota']) : ''; ?>" required>
                     </div>
                 </div>
 
@@ -340,30 +344,30 @@
                 <div class="form-two-column mb-3">
                     <div>
                         <label class="form-label">Kecamatan</label>
-                        <input type="text" name="kecamatan" class="form-control" required>
+                        <input type="text" name="kecamatan" class="form-control" value="<?php echo isset($_SESSION['form_data']['kecamatan']) ? htmlspecialchars($_SESSION['form_data']['kecamatan']) : ''; ?>" required>
                     </div>
                     <div>
                         <label class="form-label">Kelurahan/Desa</label>
-                        <input type="text" name="kelurahan_desa" class="form-control" required>
+                        <input type="text" name="kelurahan_desa" class="form-control" value="<?php echo isset($_SESSION['form_data']['kelurahan_desa']) ? htmlspecialchars($_SESSION['form_data']['kelurahan_desa']) : ''; ?>" required>
                     </div>
                 </div>
 
                 <!-- KODE POS -->
                 <div class="mb-3">
                     <label class="form-label">Kode Pos</label>
-                    <input type="text" name="kode_pos" class="form-control" required pattern="[0-9]{5}" title="5 digit angka">
+                    <input type="text" name="kode_pos" class="form-control" value="<?php echo isset($_SESSION['form_data']['kode_pos']) ? htmlspecialchars($_SESSION['form_data']['kode_pos']) : ''; ?>" required pattern="[0-9]{5}" title="5 digit angka">
                 </div>
 
                 <!-- ALAMAT -->
                 <div class="mb-3">
                     <label class="form-label">Alamat Lengkap</label>
-                    <textarea name="alamat" class="form-control" rows="2" required></textarea>
+                    <textarea name="alamat" class="form-control" rows="2" required><?php echo isset($_SESSION['form_data']['alamat']) ? htmlspecialchars($_SESSION['form_data']['alamat']) : ''; ?></textarea>
                 </div>
 
                 <!-- EMAIL -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" name="email" id="email" class="form-control" required>
+                    <input type="email" name="email" id="email" class="form-control" value="<?php echo isset($_SESSION['form_data']['email']) ? htmlspecialchars($_SESSION['form_data']['email']) : ''; ?>" required>
                     <small id="emailStatus" class="text-muted"></small>
                 </div>
 
@@ -499,40 +503,6 @@
             };
             reader.readAsDataURL(file);
         });
-
-        // Crop image dan konversi ke circular
-        function cropImage() {
-            if (!cropper) return;
-
-            const canvas = cropper.getCroppedCanvas({
-                maxWidth: 400,
-                maxHeight: 400,
-                imageSmoothingEnabled: true,
-                imageSmoothingQuality: 'high'
-            });
-
-            // Convert ke circular image
-            const circleCanvas = document.createElement('canvas');
-            const size = 400;
-            circleCanvas.width = size;
-            circleCanvas.height = size;
-
-            const ctx = circleCanvas.getContext('2d');
-            ctx.beginPath();
-            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(canvas, 0, 0, size, size);
-
-            // Display preview
-            const previewImg = document.getElementById('fotoProfil');
-            previewImg.src = circleCanvas.toDataURL('image/png');
-            previewImg.classList.add('show');
-
-            // Store data
-            document.getElementById('fotoCropped').value = circleCanvas.toDataURL('image/png');
-
-            bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
-        }
 
         // Check password strength
         function checkPasswordStrength() {
