@@ -6,7 +6,6 @@ include "../admin/koneksi.php";
 if (isset($_POST['delete_id'])) {
     $delete_id = intval($_POST['delete_id']);
 
-    // Ambil nama gambar agar bisa dihapus dari folder
     $res = mysqli_query($koneksi, "SELECT gambar FROM products WHERE id='$delete_id'");
     if ($res && mysqli_num_rows($res) > 0) {
         $row = mysqli_fetch_assoc($res);
@@ -20,120 +19,175 @@ if (isset($_POST['delete_id'])) {
     exit;
 }
 
-// Ambil semua produk
 $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Data Produk - Admin</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <style>
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            width: 220px;
-            background-color: #343a40;
-            padding-top: 70px;
-        }
+<meta charset="UTF-8">
+<title>Data Produk - Admin</title>
+<link rel="stylesheet" href="../css/bootstrap.css">
 
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            color: #fff;
-            text-decoration: none;
-        }
+<style>
+:root{
+    --primary:#1e5dac;
+    --bg:#f3eded;
+    --white:#ffffff;
+}
 
-        .sidebar a:hover {
-            background-color: #495057;
-            border-radius: 5px;
-        }
+body{
+    margin:0;
+    background:var(--bg);
+    font-family:Poppins,system-ui,sans-serif;
+}
 
-        .content {
-            margin-left: 230px;
-            padding: 20px;
-        }
+/* ================= SIDEBAR ================= */
+.sidebar{
+    position:fixed;
+    top:0; left:0;
+    width:220px;
+    height:100vh;
+    background:linear-gradient(180deg,#1e63b6,#0f3f82);
+    padding-top:20px;
+    display:flex;
+    flex-direction:column;
+}
+.sidebar a{
+    color:#fff;
+    text-decoration:none;
+    padding:12px 20px;
+    margin:4px 12px;
+    border-radius:10px;
+    transition:.25s;
+}
+.sidebar a:hover{
+    background:rgba(255,255,255,.18);
+}
+.sidebar a.active{
+    background:rgba(255,255,255,.32);
+    font-weight:600;
+}
+.sidebar .logout{
+    margin-top:auto;
+    background:rgba(255,80,80,.15);
+    color:#ffd6d6!important;
+    font-weight:600;
+    text-align:center;
+    border-radius:14px;
+    transition:.3s ease;
+}
+.sidebar .logout:hover{
+    background:#ff4d4d;
+    color:#fff!important;
+    box-shadow:0 10px 25px rgba(255,77,77,.6);
+    transform:translateY(-2px);
+}
 
-        nav.navbar {
-            margin-left: 220px;
-        }
-    </style>
+/* ================= CONTENT ================= */
+.content{
+    margin-left:220px;
+    padding:30px;
+}
+h2{
+    color:var(--primary);
+    font-weight:700;
+}
+hr{
+    border-top:2px solid #cfd6e6;
+    margin-bottom:30px;
+}
+
+/* ================= TABEL PRODUK ================= */
+.table thead{
+    background:var(--primary);
+    color:#fff;
+}
+.table tbody tr:hover{
+    background:rgba(30,93,172,.1);
+}
+.table img{
+    border-radius:6px;
+}
+.btn-primary, .btn-warning, .btn-danger{
+    border-radius:8px;
+    transition:.3s;
+}
+.btn-primary:hover{background:#144a8a;}
+.btn-warning:hover{background:#b38f00;}
+.btn-danger:hover{background:#cc0000;}
+</style>
 </head>
 
 <body>
-    <?php include 'sidebar.php'; ?>
 
-    <nav class="navbar navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-            <span class="navbar-brand fw-bold">Admin Panel</span>
-            <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
-        </div>
-    </nav>
+<?php include 'sidebar.php'; ?>
 
-    <div class="content">
-        <h2 class="fw-bold">Data Produk</h2>
-        <hr>
-
-        <a href="tambah_produk.php" class="btn btn-primary mb-3">Tambah Produk</a>
-
-        <table class="table table-bordered table-striped" id="produkTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama Produk</th>
-                    <th>Kategori</th>
-                    <th>Harga</th>
-                    <th>Gambar</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = mysqli_fetch_assoc($query)): ?>
-                    <tr id="row-<?php echo $row['id']; ?>">
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['nama']; ?></td>
-                        <td><?php echo $row['kategori']; ?></td>
-                        <td>$<?php echo number_format($row['harga'], 2); ?></td>
-                        <td>
-                            <?php if (!empty($row['gambar'])): ?>
-                                <img src="../foto_produk/<?php echo $row['gambar']; ?>" alt="Gambar" width="50">
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                            <button class="btn btn-sm btn-danger" onclick="deleteProduk(<?php echo $row['id']; ?>)">Hapus</button>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+<nav class="navbar navbar-dark bg-dark fixed-top" style="margin-left:220px;">
+    <div class="container-fluid">
+        <span class="navbar-brand fw-bold">Admin Panel</span>
+        <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
     </div>
+</nav>
 
-    <script>
-        function deleteProduk(id) {
-            if (confirm("Yakin ingin menghapus produk ini?")) {
-                // AJAX request
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "", true); // kirim ke halaman yang sama
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.onload = function() {
-                    if (xhr.responseText.trim() === "success") {
-                        // Hapus baris tabel
-                        const row = document.getElementById('row-' + id);
-                        if (row) row.remove();
-                        alert("Produk berhasil dihapus.");
-                    } else {
-                        alert("Gagal menghapus produk.");
-                    }
-                };
-                xhr.send("delete_id=" + id);
+<div class="content">
+    <h2>Data Produk</h2>
+    <hr>
+
+    <a href="tambah_produk.php" class="btn btn-primary mb-3">Tambah Produk</a>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama Produk</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Gambar</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = mysqli_fetch_assoc($query)): ?>
+            <tr id="row-<?php echo $row['id']; ?>">
+                <td><?php echo $row['id']; ?></td>
+                <td><?php echo $row['nama']; ?></td>
+                <td><?php echo $row['kategori']; ?></td>
+                <td>$<?php echo number_format($row['harga'], 2); ?></td>
+                <td>
+                    <?php if (!empty($row['gambar'])): ?>
+                        <img src="../foto_produk/<?php echo $row['gambar']; ?>" width="50" alt="Gambar">
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                    <button class="btn btn-sm btn-danger" onclick="deleteProduk(<?php echo $row['id']; ?>)">Hapus</button>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function deleteProduk(id) {
+    if (confirm("Yakin ingin menghapus produk ini?")) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onload = function() {
+            if (xhr.responseText.trim() === "success") {
+                const row = document.getElementById('row-' + id);
+                if (row) row.remove();
+                alert("Produk berhasil dihapus.");
+            } else {
+                alert("Gagal menghapus produk.");
             }
-        }
-    </script>
+        };
+        xhr.send("delete_id=" + id);
+    }
+}
+</script>
 
 </body>
-
 </html>
