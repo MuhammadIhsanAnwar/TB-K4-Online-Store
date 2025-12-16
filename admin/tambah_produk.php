@@ -100,7 +100,7 @@ body{
     transform:translateY(-2px);
 }
 
-/* FORM CARD (sama dashboard) */
+/* FORM CARD (sama dashboard tapi lebih hidup) */
 .card-form{
     position:relative;
     overflow:hidden;
@@ -114,22 +114,31 @@ body{
     animation:fadeCard 0.5s ease;
 }
 .card-form:hover{
-    transform:translateY(-8px);
+    transform:translateY(-8px) scale(1.02);
     box-shadow:0 30px 65px rgba(30,93,172,.35);
 }
+/* Bulatan dekoratif bergerak */
 .card-form::after{
     content:"";
     position:absolute;
-    width:150px;
-    height:150px;
+    width:120px;
+    height:120px;
     border-radius:50%;
-    top:-55px;
-    right:-55px;
+    top:-30px;
+    right:-30px;
     background:#f3eadd;
-    opacity:.7;
+    opacity:0.6;
+    animation: floatRotate 8s linear infinite;
+}
+@keyframes floatRotate {
+    0% { transform: translate(0,0) rotate(0deg); }
+    25% { transform: translate(-5px,5px) rotate(90deg); }
+    50% { transform: translate(0,10px) rotate(180deg); }
+    75% { transform: translate(5px,5px) rotate(270deg); }
+    100% { transform: translate(0,0) rotate(360deg); }
 }
 @keyframes fadeCard{
-    from{opacity:0; transform:translateY(10px);}
+    from{opacity:0; transform:translateY(20px);}
     to{opacity:1; transform:translateY(0);}
 }
 
@@ -139,12 +148,20 @@ body{
     margin-bottom:20px;
 }
 
+/* FORM CONTROL */
 .card-form form .form-control{
     margin-bottom:15px;
     border-radius:12px;
-    padding:10px;
+    padding:12px;
+    border:1px solid #ccc;
+    transition: all .3s ease;
+}
+.card-form form .form-control:focus{
+    border-color: var(--primary);
+    box-shadow:0 0 8px rgba(30,93,172,.25);
 }
 
+/* BUTTON */
 .card-form button{
     border-radius:12px;
     transition:.3s;
@@ -152,6 +169,7 @@ body{
 }
 .card-form button:hover{
     background:#144a8a;
+    transform:scale(1.02);
 }
 
 /* ALERT */
@@ -159,6 +177,12 @@ body{
     border-radius:12px;
     box-shadow:0 10px 25px rgba(0,0,0,.1);
     margin-bottom:15px;
+    background: linear-gradient(90deg,#ffffff,#f3f3f3);
+    animation: fadeAlert 0.5s ease;
+}
+@keyframes fadeAlert{
+    from{opacity:0; transform:translateY(-10px);}
+    to{opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
