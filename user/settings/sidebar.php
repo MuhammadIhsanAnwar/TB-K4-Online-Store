@@ -122,19 +122,19 @@
 <div class="sidebar">
     <div class="title">Settings</div>
 
-    <a href="settings_profil.php" class="<?php echo (!isset($_GET['menu']) || $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
+    <a href="settings.php?menu=profil" class="<?php echo (!isset($_GET['menu']) || $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
         <span class="icon">👤</span>
         Edit Profil
     </a>
-    <a href="settings_password.php" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'password') ? 'active' : ''; ?>">
+    <a href="settings.php?menu=password" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'password') ? 'active' : ''; ?>">
         <span class="icon">🔐</span>
         Ubah Password
     </a>
-    <a href="settings_payment.php" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'payment') ? 'active' : ''; ?>">
+    <a href="settings.php?menu=payment" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'payment') ? 'active' : ''; ?>">
         <span class="icon">💳</span>
         Metode Pembayaran
     </a>
-    <a href="settings_lain.php" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'lain') ? 'active' : ''; ?>">
+    <a href="settings.php?menu=lain" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'lain') ? 'active' : ''; ?>">
         <span class="icon">⚙️</span>
         Pengaturan Lainnya
     </a>
