@@ -239,7 +239,7 @@
 
     <!-- FOOTER DENGAN TOMBOL KEMBALI -->
     <div class="sidebar-footer">
-        <a href="../index.php" class="btn-home">
+        <a href="../../index.php" class="btn-home">
             <span>🏠</span>
             Kembali ke Beranda
         </a>
