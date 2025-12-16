@@ -24,7 +24,7 @@ $alamat         = ucwords(strtolower($_POST['alamat']));
 $email          = $_POST['email'];
 
 $password       = $_POST['password'];
-$confirm        = $_POST['confirm_password'];
+$confirm        = $_POST['password_confirm'];
 
 // === UPLOAD FOTO PROFIL ===
 $foto_nama = "";
@@ -119,9 +119,18 @@ try {
     $mail->send();
 
     echo "<script>
-        alert('Registrasi berhasil! Silakan cek email untuk verifikasi.');
-        window.location='login_user.php';
+        Swal.fire({
+            icon: 'success',
+            title: 'Registrasi Berhasil!',
+            text: 'Silakan cek email untuk verifikasi akun Anda.',
+            confirmButtonColor: '#FF6B35',
+            confirmButtonText: 'Lanjut ke Login'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = 'login_user.php';
+            }
+        });
     </script>";
 } catch (Exception $e) {
-    echo "Gagal mengirim email: " . $mail->ErrorInfo;
+    echo "Gagal mengirim email: {$mail->ErrorInfo}";
 }
