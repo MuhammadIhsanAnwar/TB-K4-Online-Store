@@ -40,7 +40,7 @@ body{
     font-family:Poppins,system-ui,sans-serif;
 }
 
-/* ================= SIDEBAR ================= */
+/* ================= SIDEBAR (pakai dashboard CSS) ================= */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -49,7 +49,7 @@ body{
     background:linear-gradient(180deg,#1e63b6,#0f3f82);
     display:flex;
     flex-direction:column;
-    padding-top:20px;
+    padding:18px 0;
 }
 
 .logo-box{
@@ -65,6 +65,12 @@ body{
 
 .logo-box img:hover{
     transform:scale(1.05);
+}
+
+.menu-title{
+    color:#dbe6ff;
+    font-size:13px;
+    padding:8px 20px;
 }
 
 .sidebar a{
@@ -85,6 +91,7 @@ body{
     font-weight:600;
 }
 
+/* LOGOUT PALING BAWAH + MERAH */
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -100,27 +107,6 @@ body{
     color:#fff!important;
     box-shadow:0 10px 25px rgba(255,77,77,.6);
     transform:translateY(-2px);
-}
-
-/* ================= NAVBAR ================= */
-.navbar{
-    margin-left:220px;
-    height:60px;
-    padding:0 30px;
-    display:flex;
-    align-items:center;
-    background:#fff;
-    box-shadow:0 4px 12px rgba(0,0,0,.1);
-}
-
-.navbar .title{
-    font-weight:700;
-    color:var(--primary);
-    font-size:1.3rem;
-}
-
-.navbar .btn-logout{
-    margin-left:auto;
 }
 
 /* ================= CONTENT ================= */
@@ -180,12 +166,10 @@ body{
 
 <?php include 'sidebar.php'; ?>
 
-<nav class="navbar">
-    <span class="title">Data Produk</span>
-    <a href="logout.php" class="btn btn-danger btn-sm btn-logout">Logout</a>
-</nav>
-
 <div class="content">
+    <h2>Data Produk</h2>
+    <hr>
+
     <a href="tambah_produk.php" class="btn btn-primary mb-3">Tambah Produk</a>
 
     <div class="table-container">
