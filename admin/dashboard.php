@@ -228,7 +228,6 @@ hr{
     </div>
 </div>
 
-<script src="../js/bootstrap.bundle.js"></scr
-ipt>
+<script src="../js/bootstrap.bundle.js"></script>
 </body>
 </html>
