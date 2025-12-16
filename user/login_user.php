@@ -157,18 +157,17 @@
                 </button>
             </form>
 
-            <div class="text-center small">
-                <a href="../admin/login_admin.php" class="d-block mb-1"> Login Administrator</a>
-                <div class="text-center mt-3 small">
-                    Belum punya akun? <a href="register.php">Register</a>
-                    <a href="lupa_password.php" class="d-block mt-2">Lupa Password?</a>
-                    <a href="../index.php" class="d-block mt-2">Kembali ke Beranda</a>
-                </div>
-
+            <div class="text-center mt-3 small">
+                <a href="register.php">Register</a>
+                <a href="lupa_password.php" class="d-block mt-2">Lupa Password?</a>
+                <a href="../admin/login_admin.php" class="d-block mt-2"> Login Administrator</a>
+                <a href="../index.php" class="d-block mt-2">Kembali ke Beranda</a>
             </div>
-        </div>
 
-        <script src="../js/bootstrap.bundle.min.js"></script>
+        </div>
+    </div>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
