@@ -20,8 +20,7 @@ $email = $_POST['email'] ?? '';
 
 // Validasi sederhana
 if (empty($email)) {
-    echo "<script>alert('Email tidak boleh kosong!');history.back();</script>";
-    exit;
+    showAlert('error', 'Input Tidak Valid', 'Email tidak boleh kosong!', 'forgot.php');
 }
 
 // Cari email
@@ -29,8 +28,7 @@ $q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE email='$email'");
 $data = mysqli_fetch_assoc($q);
 
 if (!$data) {
-    echo "<script>alert('Email tidak terdaftar!');history.back();</script>";
-    exit;
+    showAlert('error', 'Email Tidak Terdaftar', 'Email yang Anda masukkan tidak terdaftar dalam sistem kami.', 'forgot.php');
 }
 
 // Token reset
@@ -49,7 +47,7 @@ $mail = new PHPMailer(true);
 try {
     $mail->SMTPDebug = 0;
     $mail->isSMTP();
-    $mail->Host       = "urbanhype.neoverse.my.id"; 
+    $mail->Host       = "urbanhype.neoverse.my.id";
     $mail->SMTPAuth   = true;
     $mail->Username   = "mailreset@urbanhype.neoverse.my.id";
     $mail->Password   = "administrator-online-store";
@@ -69,14 +67,64 @@ try {
     $mail->isHTML(true);
     $mail->Subject = "Reset Password Akun Anda";
     $mail->Body = "
+        <h3>Reset Password</h3>
         Halo, klik link berikut untuk reset password:<br><br>
-        <a href='$link_reset'>$link_reset</a><br><br>
-        Link berlaku selama 1 jam.
+        <a href='$link_reset' style='background-color: #1E5DAC; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>Reset Password</a><br><br>
+        <p style='color: #666;'>Atau copy link berikut: $link_reset</p>
+        <p style='color: #999; font-size: 12px;'>Link berlaku selama 1 jam.</p>
     ";
 
     $mail->send();
-    echo "<script>alert('Link reset berhasil dikirim ke email Anda');window.location='login_user.php';</script>";
-
+    showAlert('success', 'Berhasil!', 'Link reset password telah dikirim ke email Anda. Silakan cek email dan ikuti instruksi untuk mereset password.', 'login_user.php');
 } catch (Exception $e) {
-    echo "<script>alert('Gagal mengirim email: {$mail->ErrorInfo}');history.back();</script>";
+    showAlert('error', 'Gagal Mengirim Email', 'Terjadi kesalahan saat mengirim email: ' . $mail->ErrorInfo, 'forgot.php');
 }
+
+function showAlert($type, $title, $message, $redirect)
+{
+?>
+    <!DOCTYPE html>
+    <html lang="id">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><?php echo $title; ?></title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background: linear-gradient(135deg, #1E5DAC 0%, #B7C5DA 100%);
+                font-family: 'Poppins', sans-serif;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script>
+            Swal.fire({
+                icon: '<?php echo $type; ?>',
+                title: '<?php echo $title; ?>',
+                text: '<?php echo $message; ?>',
+                confirmButtonColor: '#1E5DAC',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = '<?php echo $redirect; ?>';
+                }
+            });
+        </script>
+    </body>
+
+    </html>
+<?php
+    exit;
+}
+?>

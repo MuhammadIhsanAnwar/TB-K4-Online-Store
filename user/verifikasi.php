@@ -22,10 +22,56 @@ if (mysqli_num_rows($cek) === 1) {
         WHERE email='$email'
     ");
 
-    echo "<script>
-            alert('Akun berhasil diverifikasi!');
-            window.location='../user/login_user.php';
-          </script>";
+    showAlert('success', 'Verifikasi Berhasil!', 'Akun Anda telah berhasil diverifikasi. Silakan login dengan akun Anda.', 'login_user.php');
 } else {
-    echo "Link verifikasi tidak valid atau sudah digunakan.";
+    showAlert('error', 'Verifikasi Gagal!', 'Link verifikasi tidak valid atau sudah digunakan. Silakan coba daftar ulang.', 'register.php');
 }
+
+function showAlert($type, $title, $message, $redirect)
+{
+?>
+    <!DOCTYPE html>
+    <html lang="id">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><?php echo $title; ?></title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background: linear-gradient(135deg, #1E5DAC 0%, #B7C5DA 100%);
+                font-family: 'Poppins', sans-serif;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script>
+            Swal.fire({
+                icon: '<?php echo $type; ?>',
+                title: '<?php echo $title; ?>',
+                text: '<?php echo $message; ?>',
+                confirmButtonColor: '#1E5DAC',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = '<?php echo $redirect; ?>';
+                }
+            });
+        </script>
+    </body>
+
+    </html>
+<?php
+    exit;
+}
+?>
