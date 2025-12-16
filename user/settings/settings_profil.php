@@ -1,7 +1,23 @@
 <?php
-// $user sudah diambil dari settings.php
+// Koneksi database
+include "../../admin/koneksi.php";
+
+// Pastikan user sudah login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login_user.php");
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
 $success = false;
 $error_msg = "";
+
+// Ambil data user dari database
+$q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE id='$user_id'");
+if (!$q || mysqli_num_rows($q) == 0) {
+    die("User tidak ditemukan!");
+}
+$user = mysqli_fetch_assoc($q);
 
 // PROSES UPDATE
 if (isset($_POST['update'])) {
@@ -82,6 +98,17 @@ if (isset($_POST['update'])) {
     }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profil</title>
+    <link rel="icon" type="image/png" href="../../images/Background dan Logo/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
 
 <style>
     * {
@@ -335,144 +362,153 @@ if (isset($_POST['update'])) {
         color: #5a6b80;
         margin-top: 4px;
     }
+
+    input:disabled {
+        background-color: #f0f0f0;
+        cursor: not-allowed;
+    }
 </style>
 
-<div class="profile-container">
-    <h2>Edit Profil</h2>
+<body>
+    <div class="profile-container">
+        <h2>Edit Profil</h2>
 
-    <?php if ($success): ?>
-        <div class="alert alert-success">✓ Data berhasil diperbarui!</div>
-    <?php elseif (!empty($error_msg)): ?>
-        <div class="alert alert-danger">✗ <?= $error_msg ?></div>
-    <?php endif; ?>
+        <?php if ($success): ?>
+            <div class="alert alert-success">✓ Data berhasil diperbarui!</div>
+        <?php elseif (!empty($error_msg)): ?>
+            <div class="alert alert-danger">✗ <?= $error_msg ?></div>
+        <?php endif; ?>
 
-    <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
 
-        <div class="form-section">
-            <h3 class="section-title">Foto Profil</h3>
+            <div class="form-section">
+                <h3 class="section-title">Foto Profil</h3>
 
-            <div class="photo-section">
-                <img id="preview" src="<?php echo !empty($user['foto_profil']) ? '../foto_profil/' . htmlspecialchars($user['foto_profil']) : 'https://via.placeholder.com/150?text=Foto+Profil'; ?>" alt="Foto Profil">
-                <div class="form-group">
-                    <label>Pilih Foto Baru</label>
-                    <input type="file" id="foto" name="foto" accept="image/jpeg,image/png">
-                    <div class="info-text">Format: JPG, JPEG, PNG. Ukuran maksimal: 2MB</div>
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="form-section">
-            <h3 class="section-title">Informasi Dasar</h3>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" name="nama_lengkap" value="<?php echo htmlspecialchars($user['nama_lengkap'] ?? ''); ?>" required>
+                <div class="photo-section">
+                    <img id="preview" src="<?php echo !empty($user['foto_profil']) ? '../foto_profil/' . htmlspecialchars($user['foto_profil']) : 'https://via.placeholder.com/150?text=Foto+Profil'; ?>" alt="Foto Profil">
+                    <div class="form-group">
+                        <label>Pilih Foto Baru</label>
+                        <input type="file" id="foto" name="foto" accept="image/jpeg,image/png">
+                        <div class="info-text">Format: JPG, JPEG, PNG. Ukuran maksimal: 2MB</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Tanggal Lahir</label>
-                    <input type="date" name="tanggal_lahir" value="<?php echo htmlspecialchars($user['tanggal_lahir'] ?? ''); ?>" required>
+            <hr>
+
+            <div class="form-section">
+                <h3 class="section-title">Informasi Dasar</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" name="nama_lengkap" value="<?php echo htmlspecialchars($user['nama_lengkap'] ?? ''); ?>" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tanggal Lahir</label>
+                        <input type="date" name="tanggal_lahir" value="<?php echo htmlspecialchars($user['tanggal_lahir'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jenis Kelamin</label>
+                        <select name="jenis_kelamin" required>
+                            <option value="">-- Pilih --</option>
+                            <option value="L" <?php echo (isset($user['jenis_kelamin']) && $user['jenis_kelamin'] === 'L') ? 'selected' : ''; ?>>Laki-laki</option>
+                            <option value="P" <?php echo (isset($user['jenis_kelamin']) && $user['jenis_kelamin'] === 'P') ? 'selected' : ''; ?>>Perempuan</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Jenis Kelamin</label>
-                    <select name="jenis_kelamin" required>
-                        <option value="">-- Pilih --</option>
-                        <option value="L" <?php echo (isset($user['jenis_kelamin']) && $user['jenis_kelamin'] === 'L') ? 'selected' : ''; ?>>Laki-laki</option>
-                        <option value="P" <?php echo (isset($user['jenis_kelamin']) && $user['jenis_kelamin'] === 'P') ? 'selected' : ''; ?>>Perempuan</option>
-                    </select>
+                    <label>Email</label>
+                    <input type="text" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" disabled>
+                    <div class="info-text">Email tidak dapat diubah</div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Email</label>
-                <input type="text" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" disabled style="background-color: #f0f0f0; cursor: not-allowed;">
-                <div class="info-text">Email tidak dapat diubah</div>
-            </div>
-        </div>
+            <hr>
 
-        <hr>
+            <div class="form-section">
+                <h3 class="section-title">Alamat Lengkap</h3>
 
-        <div class="form-section">
-            <h3 class="section-title">Alamat Lengkap</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Provinsi</label>
+                        <input type="text" name="provinsi" value="<?php echo htmlspecialchars($user['provinsi'] ?? ''); ?>" required>
+                    </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Provinsi</label>
-                    <input type="text" name="provinsi" value="<?php echo htmlspecialchars($user['provinsi'] ?? ''); ?>" required>
+                    <div class="form-group">
+                        <label>Kabupaten/Kota</label>
+                        <input type="text" name="kabupaten_kota" value="<?php echo htmlspecialchars($user['kabupaten_kota'] ?? ''); ?>" required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Kabupaten/Kota</label>
-                    <input type="text" name="kabupaten_kota" value="<?php echo htmlspecialchars($user['kabupaten_kota'] ?? ''); ?>" required>
-                </div>
-            </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kecamatan</label>
+                        <input type="text" name="kecamatan" value="<?php echo htmlspecialchars($user['kecamatan'] ?? ''); ?>" required>
+                    </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Kecamatan</label>
-                    <input type="text" name="kecamatan" value="<?php echo htmlspecialchars($user['kecamatan'] ?? ''); ?>" required>
+                    <div class="form-group">
+                        <label>Kelurahan/Desa</label>
+                        <input type="text" name="kelurahan_desa" value="<?php echo htmlspecialchars($user['kelurahan_desa'] ?? ''); ?>" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Kelurahan/Desa</label>
-                    <input type="text" name="kelurahan_desa" value="<?php echo htmlspecialchars($user['kelurahan_desa'] ?? ''); ?>" required>
+                    <label>Kode Pos</label>
+                    <input type="text" name="kode_pos" value="<?php echo htmlspecialchars($user['kode_pos'] ?? ''); ?>" required pattern="[0-9]{5}">
+                </div>
+
+                <div class="form-group">
+                    <label>Alamat Detail</label>
+                    <textarea name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat'] ?? ''); ?></textarea>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Kode Pos</label>
-                <input type="text" name="kode_pos" value="<?php echo htmlspecialchars($user['kode_pos'] ?? ''); ?>" required pattern="[0-9]{5}">
-            </div>
+            <button type="submit" name="update" class="btn-submit">
+                💾 Simpan Perubahan
+            </button>
+        </form>
+    </div>
 
-            <div class="form-group">
-                <label>Alamat Detail</label>
-                <textarea name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat'] ?? ''); ?></textarea>
-            </div>
-        </div>
+    <script>
+        const fotoInput = document.getElementById('foto');
+        const preview = document.getElementById('preview');
 
-        <button type="submit" name="update" class="btn-submit">
-            💾 Simpan Perubahan
-        </button>
-    </form>
-</div>
+        fotoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validasi tipe file
+                if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    alert('Hanya JPG dan PNG yang diizinkan!');
+                    this.value = '';
+                    return;
+                }
 
-<script>
-    const fotoInput = document.getElementById('foto');
-    const preview = document.getElementById('preview');
+                // Validasi ukuran file
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Ukuran file maksimal 2MB!');
+                    this.value = '';
+                    return;
+                }
 
-    fotoInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            // Validasi tipe file
-            if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                alert('Hanya JPG dan PNG yang diizinkan!');
-                this.value = '';
-                return;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
             }
+        });
+    </script>
+</body>
 
-            // Validasi ukuran file
-            if (file.size > 2 * 1024 * 1024) {
-                alert('Ukuran file maksimal 2MB!');
-                this.value = '';
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                preview.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-</script>
+</html>

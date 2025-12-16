@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaturan Lainnya - Urban Hype</title>
+    <title>Pengaturan Lainnya</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../../images/Background dan Logo/logo.png">
     <style>
         * {
             margin: 0;
@@ -103,6 +103,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -114,6 +115,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -151,7 +153,7 @@
             <p class="danger-description">
                 Tindakan ini bersifat permanen dan tidak dapat dibatalkan. Semua data Anda termasuk pesanan, alamat, dan informasi pribadi akan dihapus secara permanen dari sistem kami.
             </p>
-            
+
             <form action="hapus_akun.php" method="POST">
                 <button type="submit" class="btn btn-danger">
                     Hapus Akun Permanen
