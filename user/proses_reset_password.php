@@ -31,7 +31,8 @@ if (strlen($password) < 8) {
 $pass_hash = password_hash($password, PASSWORD_DEFAULT);
 
 // Update password akun
-$update = mysqli_query($koneksi, 
+$update = mysqli_query(
+    $koneksi,
     "UPDATE akun_user SET password='$pass_hash' WHERE email='$email'"
 );
 
@@ -39,10 +40,39 @@ if ($update) {
     // Hapus token agar tidak bisa digunakan lagi
     mysqli_query($koneksi, "DELETE FROM reset_password WHERE email='$email'");
 
-    echo "<script>
-            alert('Password berhasil diperbarui! Silakan login.');
-            window.location='login_user.php';
-          </script>";
+    showAlert('success', 'Password berhasil diperbarui!', 'login_user.php');
 } else {
-    echo "<script>alert('Gagal memperbarui password!');history.back();</script>";
+    showAlert('error', 'Gagal memperbarui password!', 'reset.php');
 }
+
+function showAlert($type, $message, $redirect)
+{
+?>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+
+    <body>
+        <script>
+            Swal.fire({
+                icon: '<?php echo $type; ?>',
+                title: '<?php echo ($type === 'success') ? 'Berhasil!' : 'Terjadi Kesalahan'; ?>',
+                text: '<?php echo $message; ?>',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = '<?php echo $redirect; ?>';
+                }
+            });
+        </script>
+    </body>
+
+    </html>
+<?php
+    exit;
+}
+?>

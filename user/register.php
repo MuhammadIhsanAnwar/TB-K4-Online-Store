@@ -578,7 +578,14 @@
         function validateForm() {
             const pw = document.getElementById('password').value;
             const confirm = document.getElementById('password_confirm').value;
+            const fotoCropped = document.getElementById('fotoCropped').value;
             const pola = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+            // Validasi foto profil
+            if (!fotoCropped) {
+                alert('Foto profil harus dipilih dan di-crop terlebih dahulu!');
+                return false;
+            }
 
             if (!pola.test(pw)) {
                 alert('Password harus: min 8 karakter, 1 huruf besar, 1 huruf kecil, 1 angka, 1 simbol!');
@@ -591,6 +598,45 @@
             }
 
             return true;
+        }
+
+        // Update status foto profil ketika crop selesai
+        function cropImage() {
+            if (!cropper) return;
+
+            const canvas = cropper.getCroppedCanvas({
+                maxWidth: 400,
+                maxHeight: 400,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
+            });
+
+            // Convert ke circular image
+            const circleCanvas = document.createElement('canvas');
+            const size = 400;
+            circleCanvas.width = size;
+            circleCanvas.height = size;
+
+            const ctx = circleCanvas.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(canvas, 0, 0, size, size);
+
+            // Display preview
+            const previewImg = document.getElementById('fotoProfil');
+            previewImg.src = circleCanvas.toDataURL('image/png');
+            previewImg.classList.add('show');
+
+            // Store data
+            document.getElementById('fotoCropped').value = circleCanvas.toDataURL('image/png');
+
+            // Update status menjadi berhasil
+            const fotoStatus = document.getElementById('fotoStatus');
+            fotoStatus.textContent = '✓ Foto profil berhasil dipilih';
+            fotoStatus.style.color = '#4caf50 !important';
+
+            bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
         }
     </script>
 
