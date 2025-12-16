@@ -33,17 +33,15 @@ $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC");
     --bg:#f3eded;
     --white:#ffffff;
     --hover-blue: rgba(30,93,172,.1);
-    --line:#cfd6e6;
 }
 
 body{
     margin:0;
     background:var(--bg);
     font-family:Poppins,system-ui,sans-serif;
-    animation:fadeIn 0.5s ease;
 }
 
-/* ================= SIDEBAR (dashboard style) ================= */
+/* ================= SIDEBAR ================= */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -115,10 +113,10 @@ body{
 .content{
     margin-left:220px;
     padding:30px 40px;
-    animation:fadeIn 0.5s ease;
+    animation:fade 0.5s ease;
 }
 
-@keyframes fadeIn{
+@keyframes fade{
     from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
@@ -130,10 +128,9 @@ h2{
 }
 
 hr{
-    border:none;
-    border-top:2px solid var(--line);
+    border-top:2px solid #cfd6e6;
     margin-bottom:20px;
-    opacity:0.6;
+    opacity:.6;
 }
 
 /* ================= TABEL PRODUK ================= */
@@ -142,7 +139,6 @@ hr{
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 15px 30px rgba(0,0,0,.1);
-    animation:fadeIn 0.5s ease;
 }
 
 .table{
@@ -159,7 +155,6 @@ hr{
 .table tbody tr{
     background: #fff;
     transition: .3s;
-    animation:fadeIn 0.5s ease;
 }
 
 .table tbody tr:hover{
