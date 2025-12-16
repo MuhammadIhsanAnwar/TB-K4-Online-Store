@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Dashboard Admin</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <style>
 :root{
@@ -71,7 +72,6 @@ body{
     font-weight:600;
 }
 
-/* LOGOUT PALING BAWAH + MERAH */
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -94,6 +94,7 @@ body{
     margin-left:220px;
     padding:30px;
     animation:fade .5s ease;
+    min-height:100vh;
 }
 
 @keyframes fade{
@@ -112,6 +113,10 @@ hr{
 }
 
 /* ================= CARD ================= */
+.row.g-4{
+    gap: 1.5rem;
+}
+
 .card{
     position:relative;
     overflow:hidden;
@@ -119,45 +124,54 @@ hr{
     border-radius:22px;
     padding:26px;
     background:var(--white);
-    box-shadow:0 18px 45px rgba(0,0,0,.15);
-    transition:.3s;
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+    transition: all .3s ease;
 }
 
 .card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 30px 65px rgba(30,93,172,.35);
+    transform:translateY(-10px) scale(1.03);
+    box-shadow:0 25px 55px rgba(30,93,172,.25);
 }
 
-/* BULATAN POJOK */
+/* BULATAN DEKORATIF */
 .card::after{
     content:"";
     position:absolute;
-    width:150px;
-    height:150px;
+    width:140px;
+    height:140px;
     border-radius:50%;
-    top:-55px;
-    right:-55px;
+    top:-50px;
+    right:-50px;
     background:#f3eadd;
-    opacity:.7;
+    opacity:.6;
+    animation: rotate 8s linear infinite;
 }
 
-.card h5,
-.card p{
-    position:relative;
-    z-index:1;
+@keyframes rotate{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
 }
 
+/* Typography */
 .card h5{
     color:#6b7280;
     font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
 .card p{
     margin:0;
     font-size:2.8rem;
     font-weight:800;
+    /* gradient text modern effect */
+    background: linear-gradient(90deg, #2563eb, #1e5dac);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
+/* Tetap gunakan warna asli */
 .text-primary{color:#2563eb!important;}
 .text-success{color:#16a34a!important;}
 .text-warning{color:#d97706!important;}
@@ -175,7 +189,7 @@ hr{
     <div class="row g-4">
         <div class="col-md-4">
             <div class="card">
-                <h5>Total Produk</h5>
+                <h5><i class="bi bi-box-seam"></i> Total Produk</h5>
                 <p class="text-primary">
                     <?php
                     $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM products");
@@ -187,7 +201,7 @@ hr{
 
         <div class="col-md-4">
             <div class="card">
-                <h5>Total User</h5>
+                <h5><i class="bi bi-people"></i> Total User</h5>
                 <p class="text-success">
                     <?php
                     $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM akun_user");
@@ -199,7 +213,7 @@ hr{
 
         <div class="col-md-4">
             <div class="card">
-                <h5>Total Penjualan</h5>
+                <h5><i class="bi bi-cart-check"></i> Total Penjualan</h5>
                 <p class="text-warning">
                     <?php
                     $res=mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM penjualan");
@@ -213,4 +227,4 @@ hr{
 
 <script src="../js/bootstrap.bundle.js"></script>
 </body>
-</html> 
+</html>
