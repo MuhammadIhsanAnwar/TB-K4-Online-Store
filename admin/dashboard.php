@@ -115,8 +115,8 @@ hr{
 /* ================= CARD ================= */
 .row.g-4{
     display:flex;
-    flex-wrap: nowrap; /* tetap 1 baris */
-    gap:1.5rem;
+    flex-wrap:nowrap; /* tetap 1 baris */
+    gap:1rem;
 }
 
 .card{
@@ -124,15 +124,16 @@ hr{
     overflow:hidden;
     border:none;
     border-radius:22px;
-    padding:26px;
+    padding:20px;
     background:var(--white);
     box-shadow:0 12px 30px rgba(0,0,0,.12);
     transition: all .3s ease;
     flex:1;
+    max-width:300px; /* supaya card tidak terlalu lebar */
 }
 
 .card:hover{
-    transform:translateY(-10px) scale(1.03);
+    transform:translateY(-8px) scale(1.02);
     box-shadow:0 25px 55px rgba(30,93,172,.25);
 }
 
@@ -140,11 +141,11 @@ hr{
 .card::after{
     content:"";
     position:absolute;
-    width:120px;
-    height:120px;
+    width:100px;
+    height:100px;
     border-radius:50%;
-    top:-40px;
-    right:-40px;
+    top:-30px;
+    right:-30px;
     background:#f3eadd;
     opacity:0.6;
     animation: floatRotate 8s linear infinite;
@@ -152,9 +153,9 @@ hr{
 
 @keyframes floatRotate {
     0% { transform: translate(0,0) rotate(0deg); }
-    25% { transform: translate(-10px,10px) rotate(90deg); }
-    50% { transform: translate(0,20px) rotate(180deg); }
-    75% { transform: translate(10px,10px) rotate(270deg); }
+    25% { transform: translate(-5px,5px) rotate(90deg); }
+    50% { transform: translate(0,10px) rotate(180deg); }
+    75% { transform: translate(5px,5px) rotate(270deg); }
     100% { transform: translate(0,0) rotate(360deg); }
 }
 
@@ -169,7 +170,7 @@ hr{
 
 .card p{
     margin:0;
-    font-size:2.8rem;
+    font-size:2.2rem;
     font-weight:800;
 }
 
@@ -189,7 +190,7 @@ hr{
     <hr>
 
     <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col">
             <div class="card">
                 <h5><i class="bi bi-box-seam"></i> Total Produk</h5>
                 <p class="text-primary">
@@ -201,7 +202,7 @@ hr{
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col">
             <div class="card">
                 <h5><i class="bi bi-people"></i> Total User</h5>
                 <p class="text-success">
@@ -213,7 +214,7 @@ hr{
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col">
             <div class="card">
                 <h5><i class="bi bi-cart-check"></i> Total Penjualan</h5>
                 <p class="text-warning">
