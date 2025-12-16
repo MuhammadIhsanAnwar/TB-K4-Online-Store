@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,19 +11,23 @@
     <style>
         /* ================= PALETTE ================= */
         :root {
-            --blue: #1E5DAC;      /* Mediterranean Blue */
-            --alley: #B7C5DA;     /* Alley */
-            --misty: #EAE2E4;     /* Misty */
+            --blue: #1E5DAC;
+            /* Mediterranean Blue */
+            --alley: #B7C5DA;
+            /* Alley */
+            --misty: #EAE2E4;
+            /* Misty */
             --white: #ffffff;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
         /* BACKGROUND FOTO TAJAM (NAMA FILE TETAP) */
         body.bg-light {
-            background-image: url("background 2.jpg");
+            background-image: url("../images/Background dan Logo/bg login.jpg");
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -36,11 +41,9 @@
             content: "";
             position: fixed;
             inset: 0;
-            background: linear-gradient(
-                135deg,
-                rgba(30, 93, 172, 0.45),
-                rgba(183, 197, 218, 0.35)
-            );
+            background: linear-gradient(135deg,
+                    rgba(30, 93, 172, 0.45),
+                    rgba(183, 197, 218, 0.35));
             z-index: -1;
         }
 
@@ -56,14 +59,14 @@
             background: rgba(234, 226, 228, 0.40);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255,255,255,0.45);
-            box-shadow: 0 25px 50px rgba(30,93,172,0.35);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: 0 25px 50px rgba(30, 93, 172, 0.35);
         }
 
         /* LOGO */
         .login-logo {
             width: 160px;
-            filter: drop-shadow(0 6px 12px rgba(30,93,172,0.5));
+            filter: drop-shadow(0 6px 12px rgba(30, 93, 172, 0.5));
         }
 
         /* JUDUL */
@@ -88,16 +91,14 @@
         }
 
         .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(30,93,172,0.25);
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
         }
 
         /* BUTTON */
         .btn-login {
-            background: linear-gradient(
-                135deg,
-                var(--blue),
-                var(--alley)
-            );
+            background: linear-gradient(135deg,
+                    var(--blue),
+                    var(--alley));
             border: none;
             border-radius: 14px;
             padding: 12px;
@@ -107,13 +108,11 @@
         }
 
         .btn-login:hover {
-            background: linear-gradient(
-                135deg,
-                var(--alley),
-                var(--blue)
-            );
+            background: linear-gradient(135deg,
+                    var(--alley),
+                    var(--blue));
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(30,93,172,0.45);
+            box-shadow: 0 10px 25px rgba(30, 93, 172, 0.45);
         }
 
         /* LINK — SAMA LOGIN ADMIN */
@@ -132,41 +131,42 @@
 
 <body class="bg-light">
 
-<div class="container d-flex justify-content-center align-items-start center-box">
-    <div class="card p-4" style="max-width: 420px; width: 100%;">
+    <div class="container d-flex justify-content-center align-items-start center-box">
+        <div class="card p-4" style="max-width: 420px; width: 100%;">
 
-        <div class="text-center mb-3">
-            <img src="logo.png" alt="Urban Hype Logo" class="login-logo" />
-        </div>
-
-        <h4 class="text-center mb-3">Login</h4>
-
-        <form action="proses_login.php" method="POST">
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" required autofocus />
+            <div class="text-center mb-3">
+                <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo" class="login-logo" />
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" required />
+            <h4 class="text-center mb-3">Login</h4>
+
+            <form action="proses_login.php" method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" required autofocus />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" required />
+                </div>
+
+                <button type="submit" class="btn btn-login w-100 mb-3">
+                    Masuk
+                </button>
+            </form>
+
+            <div class="text-center small">
+                <a href="../admin/login_admin.php" class="d-block mb-1">Administrator</a>
+                <a href="register.php" class="d-block">Register Akun</a>
+                <a href="lupa_password.php" class="d-block mt-2">Lupa Password?</a>
+                <a href="../index.php" class="d-block mt-2">Kembali ke Beranda</a>
             </div>
 
-            <button type="submit" class="btn btn-login w-100 mb-3">
-                Masuk
-            </button>
-        </form>
-
-        <div class="text-center small">
-            <a href="../admin/login_admin.php" class="d-block mb-1">Administrator</a>
-            <a href="register.php" class="d-block">Register Akun</a>
-            <a href="lupa_password.php" class="d-block mt-2">Lupa Password?</a>
-            <a href="../index.php" class="d-block mt-2">Kembali ke Beranda</a>
         </div>
-
     </div>
-</div>
 
-<script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
