@@ -9,6 +9,8 @@ include '../admin/koneksi.php';
 <meta charset="UTF-8">
 <title>Data Penjualan - Admin</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 <style>
 :root{
     --primary:#1e5dac;
@@ -18,14 +20,15 @@ include '../admin/koneksi.php';
     --text:#1f2937;
 }
 
+/* ====== BODY ====== */
 body{
     margin:0;
     font-family:Poppins,system-ui,sans-serif;
     background:var(--bg);
-    animation:fade 0.5s ease;
+    animation:fadePage 0.5s ease;
 }
 
-/* ================= SIDEBAR (Dashboard Style) ================= */
+/* ====== SIDEBAR (Dashboard Style) ====== */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -93,14 +96,14 @@ body{
     transform:translateY(-2px);
 }
 
-/* ================= CONTENT ================= */
+/* ====== CONTENT ====== */
 .content{
     margin-left:220px;
     padding:40px;
-    animation:fade 0.5s ease;
+    animation:fadePage 0.5s ease;
 }
 
-@keyframes fade{
+@keyframes fadePage{
     from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
@@ -117,15 +120,22 @@ hr{
     opacity:.6;
 }
 
-/* ================= TABLE ================= */
+/* ====== TABLE CONTAINER ====== */
 .table-container{
     background: var(--white);
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 18px 45px rgba(0,0,0,.15);
     overflow-x:auto;
+    animation:fadeTable 0.5s ease;
 }
 
+@keyframes fadeTable{
+    from{opacity:0; transform:translateY(5px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* ====== TABLE ====== */
 .table{
     border-collapse: separate !important;
     border-spacing: 0 10px;
@@ -140,8 +150,7 @@ hr{
 
 .table tbody tr{
     background: #fff;
-    transition: .5s;
-    animation:fadeInRow 0.5s ease;
+    transition: .3s;
 }
 
 .table tbody tr:hover{
@@ -157,11 +166,6 @@ hr{
 .table td:nth-child(2),
 .table td:nth-child(3){
     text-align:left;
-}
-
-@keyframes fadeInRow{
-    from{opacity:0; transform:translateY(5px);}
-    to{opacity:1; transform:translateY(0);}
 }
 </style>
 </head>

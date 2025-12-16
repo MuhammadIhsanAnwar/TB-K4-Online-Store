@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
 <meta charset="UTF-8">
 <title>Tambah Produk</title>
 <link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 :root{
     --primary:#1e5dac;
@@ -40,14 +41,15 @@ if (isset($_POST['submit'])) {
     --text:#1f2937;
 }
 
+/* ===== BODY ===== */
 body{
     margin:0;
     font-family:Poppins,system-ui,sans-serif;
     background:var(--bg);
-    animation:fadeIn 0.5s ease;
+    animation:fadePage 0.5s ease;
 }
 
-/* ================= SIDEBAR (Dashboard Style) ================= */
+/* ===== SIDEBAR ===== */
 .sidebar{
     position:fixed;
     top:0; left:0;
@@ -115,14 +117,14 @@ body{
     transform:translateY(-2px);
 }
 
-/* ================= CONTENT ================= */
+/* ===== CONTENT ===== */
 .content{
     margin-left:220px;
     padding:40px;
-    animation:fadeIn 0.5s ease;
+    animation:fadePage 0.5s ease;
 }
 
-@keyframes fadeIn{
+@keyframes fadePage{
     from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
 }
@@ -139,14 +141,19 @@ hr{
     opacity:.6;
 }
 
-/* ================= FORM ================= */
+/* ===== FORM CARD ===== */
 .form-container{
     background: var(--white);
     padding: 25px;
     border-radius: 20px;
     box-shadow:0 18px 45px rgba(0,0,0,.15);
     max-width:600px;
-    animation:fadeIn 0.5s ease;
+    animation:fadeCard 0.5s ease;
+}
+
+@keyframes fadeCard{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
 }
 
 .btn-primary{
@@ -165,18 +172,27 @@ hr{
 <div class="content">
     <h2>Tambah Produk</h2>
     <hr>
+
     <?php if($msg) echo "<div class='alert alert-info'>$msg</div>"; ?>
 
     <div class="form-container">
         <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3"><label>Nama Produk</label>
-                <input type="text" name="nama" class="form-control" required></div>
-            <div class="mb-3"><label>Kategori</label>
-                <input type="text" name="kategori" class="form-control" required></div>
-            <div class="mb-3"><label>Harga</label>
-                <input type="number" name="harga" class="form-control" required></div>
-            <div class="mb-3"><label>Gambar</label>
-                <input type="file" name="gambar" class="form-control" required></div>
+            <div class="mb-3">
+                <label>Nama Produk</label>
+                <input type="text" name="nama" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Kategori</label>
+                <input type="text" name="kategori" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Harga</label>
+                <input type="number" name="harga" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Gambar</label>
+                <input type="file" name="gambar" class="form-control" required>
+            </div>
             <button type="submit" name="submit" class="btn btn-primary">Tambah Produk</button>
         </form>
     </div>
