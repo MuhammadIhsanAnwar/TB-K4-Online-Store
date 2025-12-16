@@ -51,21 +51,40 @@ body{
     flex-direction:column;
     padding-top:20px;
 }
+
+.logo-box{
+    text-align:center;
+    padding:10px 0 18px;
+}
+
+.logo-box img{
+    width:72px;
+    filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
+    transition:.3s ease;
+}
+
+.logo-box img:hover{
+    transform:scale(1.05);
+}
+
 .sidebar a{
-    color:#fff;
+    color:white;
     text-decoration:none;
     padding:12px 20px;
     margin:4px 12px;
     border-radius:10px;
     transition:.25s;
 }
+
 .sidebar a:hover{
     background:rgba(255,255,255,.18);
 }
+
 .sidebar a.active{
     background:rgba(255,255,255,.32);
     font-weight:600;
 }
+
 .sidebar .logout{
     margin-top:auto;
     background:rgba(255,80,80,.15);
@@ -75,6 +94,7 @@ body{
     border-radius:14px;
     transition:.3s ease;
 }
+
 .sidebar .logout:hover{
     background:#ff4d4d;
     color:#fff!important;
@@ -85,54 +105,68 @@ body{
 /* ================= NAVBAR ================= */
 .navbar{
     margin-left:220px;
+    height:60px;
+    padding:0 30px;
+    display:flex;
+    align-items:center;
+    background:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+.navbar .title{
+    font-weight:700;
+    color:var(--primary);
+    font-size:1.3rem;
+}
+
+.navbar .btn-logout{
+    margin-left:auto;
 }
 
 /* ================= CONTENT ================= */
 .content{
     margin-left:220px;
-    padding:30px;
-}
-h2{
-    color:var(--primary);
-    font-weight:700;
-}
-hr{
-    border-top:2px solid #cfd6e6;
-    margin-bottom:25px;
+    padding:30px 40px;
 }
 
 /* ================= TABEL PRODUK ================= */
 .table-container{
     background: var(--white);
     border-radius: 12px;
-    padding: 15px;
+    padding: 20px;
     box-shadow: 0 15px 30px rgba(0,0,0,.1);
 }
 
 .table{
     border-collapse: separate !important;
-    border-spacing: 0 8px;
+    border-spacing: 0 10px;
 }
+
 .table thead tr{
     background: var(--primary);
     color: #fff;
     border-radius: 12px;
 }
+
 .table tbody tr{
     background: #fff;
     transition: .3s;
 }
+
 .table tbody tr:hover{
     background: var(--hover-blue);
 }
+
 .table td, .table th{
     vertical-align: middle;
-}
-.table img{
-    border-radius:6px;
+    padding: 12px;
 }
 
-/* ================= TOMBOL ================= */
+.table img{
+    border-radius:6px;
+    object-fit:cover;
+}
+
 .btn-primary, .btn-warning, .btn-danger{
     border-radius:8px;
     transition:.3s;
@@ -146,51 +180,46 @@ hr{
 
 <?php include 'sidebar.php'; ?>
 
-<nav class="navbar navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <span class="navbar-brand fw-bold">Admin Panel</span>
-        <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
-    </div>
+<nav class="navbar">
+    <span class="title">Data Produk</span>
+    <a href="logout.php" class="btn btn-danger btn-sm btn-logout">Logout</a>
 </nav>
 
 <div class="content">
-    <h2>Data Produk</h2>
-    <hr>
-
     <a href="tambah_produk.php" class="btn btn-primary mb-3">Tambah Produk</a>
 
     <div class="table-container">
-    <table class="table table-bordered table-striped align-middle">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nama Produk</th>
-                <th>Kategori</th>
-                <th>Harga</th>
-                <th>Gambar</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = mysqli_fetch_assoc($query)): ?>
-            <tr id="row-<?php echo $row['id']; ?>">
-                <td><?php echo $row['id']; ?></td>
-                <td><?php echo $row['nama']; ?></td>
-                <td><?php echo $row['kategori']; ?></td>
-                <td>$<?php echo number_format($row['harga'], 2); ?></td>
-                <td>
-                    <?php if (!empty($row['gambar'])): ?>
-                        <img src="../foto_produk/<?php echo $row['gambar']; ?>" width="50" alt="Gambar">
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                    <button class="btn btn-sm btn-danger" onclick="deleteProduk(<?php echo $row['id']; ?>)">Hapus</button>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama Produk</th>
+                    <th>Kategori</th>
+                    <th>Harga</th>
+                    <th>Gambar</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = mysqli_fetch_assoc($query)): ?>
+                <tr id="row-<?php echo $row['id']; ?>">
+                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['nama']; ?></td>
+                    <td><?php echo $row['kategori']; ?></td>
+                    <td>$<?php echo number_format($row['harga'], 2); ?></td>
+                    <td>
+                        <?php if (!empty($row['gambar'])): ?>
+                            <img src="../foto_produk/<?php echo $row['gambar']; ?>" width="50" alt="Gambar">
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <a href="edit_produk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduk(<?php echo $row['id']; ?>)">Hapus</button>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
     </div>
 </div>
 
