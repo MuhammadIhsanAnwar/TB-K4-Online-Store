@@ -34,11 +34,17 @@ body{
 
 .logo-box{
     text-align:center;
-    margin-bottom:14px;
+    padding:10px 0 18px;
 }
 
 .logo-box img{
-    width:46px;
+    width:72px;
+    filter:drop-shadow(0 6px 12px rgba(0,0,0,.25));
+    transition:.3s ease;
+}
+
+.logo-box img:hover{
+    transform:scale(1.05);
 }
 
 .menu-title{
@@ -65,21 +71,34 @@ body{
     font-weight:600;
 }
 
-/* LOGOUT */
-.logout{
+/* LOGOUT PALING BAWAH + MERAH */
+.sidebar .logout{
     margin-top:auto;
-    color:#ffb3b3!important;
+    background:rgba(255,80,80,.15);
+    color:#ffd6d6!important;
+    font-weight:600;
+    text-align:center;
+    border-radius:14px;
+    transition:.3s ease;
 }
 
-.logout:hover{
-    background:rgba(255,80,80,.18);
-    color:#ffe1e1!important;
+.sidebar .logout:hover{
+    background:#ff4d4d;
+    color:#fff!important;
+    box-shadow:0 10px 25px rgba(255,77,77,.6);
+    transform:translateY(-2px);
 }
 
 /* ================= CONTENT ================= */
 .content{
     margin-left:220px;
     padding:30px;
+    animation:fade .5s ease;
+}
+
+@keyframes fade{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
 }
 
 h2{
