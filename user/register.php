@@ -140,10 +140,10 @@
         <div class="card p-4" style="max-width:420px;width:100%;">
 
             <div class="text-center mb-3">
-                <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo" class="login-logo" />
+                <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo" class="login-logo" style="max-width: 80px; height: auto;" />
             </div>
 
-            <h4 class="text-center mb-3">Register Akun Baru</h4>
+            <h4 class="text-center mb-3">Register Akun</h4>
 
             <form action="proses_register.php" method="POST" onsubmit="return cekPassword()">
 
