@@ -20,18 +20,44 @@
         box-shadow: 4px 0 20px rgba(30, 93, 172, 0.15);
         z-index: 1000;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 0 20px;
+    }
+
+    .sidebar-logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
     }
 
     .sidebar .title {
         font-family: 'Playfair Display', serif;
-        font-size: 28px;
+        font-size: 24px;
         font-weight: 700;
         text-align: center;
-        margin-bottom: 40px;
         color: #fff;
         letter-spacing: 1px;
         position: relative;
-        padding-bottom: 15px;
+        padding-bottom: 10px;
     }
 
     .sidebar .title::after {
@@ -44,6 +70,12 @@
         height: 3px;
         background: linear-gradient(90deg, transparent, #E8D3C1, transparent);
         border-radius: 2px;
+    }
+
+    .sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 20px;
     }
 
     .sidebar a {
@@ -118,37 +150,98 @@
         margin: 15px 0;
     }
 
+    .sidebar-footer {
+        padding: 20px 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-home {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .btn-home:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-home:active {
+        transform: translateY(0);
+    }
+
     @media (max-width: 768px) {
         .sidebar {
             width: 240px;
+        }
+
+        .sidebar-logo {
+            width: 70px;
+            height: 70px;
+        }
+
+        .sidebar .title {
+            font-size: 20px;
         }
     }
 </style>
 
 <div class="sidebar">
-    <div class="title">Settings</div>
+    <!-- HEADER DENGAN LOGO -->
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <img src="../../images/Background dan Logo/logo.png" alt="Urban Hype Logo">
+        </div>
+        <div class="title">Settings</div>
+    </div>
 
-    <a href="settings.php" class="<?php echo (!isset($_GET['menu'])) ? 'active' : ''; ?>">
-        <span class="icon">📊</span>
-        Dashboard
-    </a>
+    <!-- MENU UTAMA -->
+    <div class="sidebar-content">
+        <a href="settings.php" class="<?php echo (!isset($_GET['menu'])) ? 'active' : ''; ?>">
+            <span class="icon">📊</span>
+            Dashboard
+        </a>
 
-    <div class="sidebar-divider"></div>
+        <div class="sidebar-divider"></div>
 
-    <a href="settings.php?menu=profil" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
-        <span class="icon">👤</span>
-        Edit Profil
-    </a>
-    <a href="settings.php?menu=password" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'password') ? 'active' : ''; ?>">
-        <span class="icon">🔐</span>
-        Ubah Password
-    </a>
-    <a href="settings.php?menu=payment" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'payment') ? 'active' : ''; ?>">
-        <span class="icon">💳</span>
-        Metode Pembayaran
-    </a>
-    <a href="settings.php?menu=lain" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'lain') ? 'active' : ''; ?>">
-        <span class="icon">⚙️</span>
-        Pengaturan Lainnya
-    </a>
+        <a href="settings.php?menu=profil" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'profil') ? 'active' : ''; ?>">
+            <span class="icon">👤</span>
+            Edit Profil
+        </a>
+        <a href="settings.php?menu=password" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'password') ? 'active' : ''; ?>">
+            <span class="icon">🔐</span>
+            Ubah Password
+        </a>
+        <a href="settings.php?menu=payment" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'payment') ? 'active' : ''; ?>">
+            <span class="icon">💳</span>
+            Metode Pembayaran
+        </a>
+        <a href="settings.php?menu=lain" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'lain') ? 'active' : ''; ?>">
+            <span class="icon">⚙️</span>
+            Pengaturan Lainnya
+        </a>
+    </div>
+
+    <!-- FOOTER DENGAN TOMBOL KEMBALI -->
+    <div class="sidebar-footer">
+        <a href="../index.php" class="btn-home">
+            <span>🏠</span>
+            Kembali ke Beranda
+        </a>
+    </div>
 </div>
