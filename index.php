@@ -240,7 +240,10 @@ if (isset($_SESSION['user_id'])) {
         .nav-icon .bi-search:hover {
             transform: rotate(90deg);
         }
-
+        :root {
+    /* ... */
+    --cart-icon-filter: brightness(0) saturate(100%) invert(28%) sepia(33%) saturate(2300%) hue-rotate(177deg); /* biru #1E5DAC */
+}
         .cart-link {
             position: relative;
             display: flex;
@@ -676,7 +679,7 @@ if (isset($_SESSION['user_id'])) {
 
                     <?php if ($user): ?>
                         <a href="user/produk_pembayaran/cart.php" class="cart-link">
-                            <i class="bi bi-bag-fill"></i>
+                            <img src="images/cart-icon.svg" alt="Cart" style="width:24px; height:24px; filter: var(--cart-icon-filter);">
                             <?php
                             $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
                             if ($cart_count > 0):
