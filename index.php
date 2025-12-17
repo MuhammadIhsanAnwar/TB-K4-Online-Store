@@ -657,12 +657,6 @@ if (isset($_SESSION['user_id'])) {
     height: 100%;
 }
 
-#contact {
-    background: #ffffff;
-    position: relative;
-    z-index: 1;
-}
-
 
     </style>
 </head>
