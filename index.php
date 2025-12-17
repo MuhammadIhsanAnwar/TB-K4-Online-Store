@@ -659,8 +659,8 @@ if (isset($_SESSION['user_id'])) {
 
 #contact {
     background: linear-gradient(
-        rgba(234, 226, 228, 0.9),
-        rgba(234, 226, 228, 0.9)
+        rgba(163, 235, 251, 0.9),
+        rgba(142, 189, 230, 0.9)
     );
     position: relative;
     z-index: 1;
