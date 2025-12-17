@@ -101,9 +101,17 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes float {
-            0% { transform: translate(0px, 0px) rotate(0deg); }
-            50% { transform: translate(15px, -15px) rotate(180deg); }
-            100% { transform: translate(0px, 0px) rotate(360deg); }
+            0% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(15px, -15px) rotate(180deg);
+            }
+
+            100% {
+                transform: translate(0px, 0px) rotate(360deg);
+            }
         }
 
         /* ===== NAVBAR STYLING (GLASSMORPHISM + IMPROVED) ===== */
@@ -241,10 +249,13 @@ if (isset($_SESSION['user_id'])) {
         .nav-icon .bi-search:hover {
             transform: rotate(90deg);
         }
+
         :root {
-    /* ... */
-    --cart-icon-filter: brightness(0) saturate(100%) invert(28%) sepia(33%) saturate(2300%) hue-rotate(177deg); /* biru #1E5DAC */
-}
+            /* ... */
+            --cart-icon-filter: brightness(0) saturate(100%) invert(28%) sepia(33%) saturate(2300%) hue-rotate(177deg);
+            /* biru #1E5DAC */
+        }
+
         .cart-link {
             position: relative;
             display: flex;
@@ -285,9 +296,17 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes bounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .user-dropdown .dropdown-toggle {
@@ -376,7 +395,10 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @media (max-width: 991px) {
-            .navbar-brand { font-size: 1.5rem; }
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
             .navbar-collapse {
                 margin-top: 1rem;
                 padding: 1.5rem;
@@ -384,12 +406,17 @@ if (isset($_SESSION['user_id'])) {
                 border-radius: 12px;
                 box-shadow: 0 4px 20px rgba(30, 93, 172, 0.1);
             }
+
             .nav-link {
                 margin: 4px 0;
                 text-align: center;
                 padding: 12px 18px !important;
             }
-            .navbar-nav.ms-auto { margin-left: 0 !important; }
+
+            .navbar-nav.ms-auto {
+                margin-left: 0 !important;
+            }
+
             .navbar-actions {
                 justify-content: center;
                 margin-top: 1rem;
@@ -397,15 +424,33 @@ if (isset($_SESSION['user_id'])) {
                 border-top: 1px solid rgba(30, 93, 172, 0.1);
                 gap: 1.5rem;
             }
-            .user-dropdown .dropdown-toggle { justify-content: center; }
-            .user-name { display: inline !important; }
+
+            .user-dropdown .dropdown-toggle {
+                justify-content: center;
+            }
+
+            .user-name {
+                display: inline !important;
+            }
         }
 
         @media (max-width: 576px) {
-            .navbar-brand { font-size: 1.3rem; letter-spacing: 1px; }
-            .user-name { max-width: 100px; }
-            .nav-link { font-size: 0.8rem; }
-            .navbar-actions { gap: 1rem; }
+            .navbar-brand {
+                font-size: 1.3rem;
+                letter-spacing: 1px;
+            }
+
+            .user-name {
+                max-width: 100px;
+            }
+
+            .nav-link {
+                font-size: 0.8rem;
+            }
+
+            .navbar-actions {
+                gap: 1rem;
+            }
         }
 
         /* ===== HERO SECTION (MODERN & DYNAMIC) ===== */
@@ -429,8 +474,15 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-100px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .hero-content .subtitle {
@@ -461,10 +513,26 @@ if (isset($_SESSION['user_id'])) {
             animation: fadeIn 1.6s ease;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-btn {
@@ -482,8 +550,17 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); }
-            50% { transform: scale(1.03); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); }
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            50% {
+                transform: scale(1.03);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            }
         }
 
         .hero-btn:hover {
@@ -505,8 +582,15 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes fadeInRight {
-            from { opacity: 0; transform: translate(100px, -50%); }
-            to { opacity: 1; transform: translate(0, -50%); }
+            from {
+                opacity: 0;
+                transform: translate(100px, -50%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, -50%);
+            }
         }
 
         .hero-image img {
@@ -626,7 +710,10 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes fadeOut {
-            to { opacity: 0; visibility: hidden; }
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
         }
 
         .spinner {
@@ -638,26 +725,28 @@ if (isset($_SESSION['user_id'])) {
             animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         .carousel-caption {
-    background: rgba(30, 93, 172, 0.75);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
+            background: rgba(30, 93, 172, 0.75);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
 
-.carousel-caption h5 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 600;
-}
+        .carousel-caption h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
 
-.carousel img {
-    object-fit: cover;
-    height: 100%;
-}
-
-
+        .carousel img {
+            object-fit: cover;
+            height: 100%;
+        }
     </style>
 </head>
 
@@ -675,60 +764,7 @@ if (isset($_SESSION['user_id'])) {
         <div class="shape"></div>
     </div>
 
-    <!-- NAVBAR (dari file baru, diperbaiki & diperkaya) -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">URBANHYPE</a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav ms-auto me-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="shop.php">Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
-
-                <div class="navbar-actions">
-                    <div class="nav-icon">
-                        <i class="bi bi-search fs-5"></i>
-                    </div>
-
-                    <?php if ($user): ?>
-                        <a href="user/produk_pembayaran/cart.php" class="cart-link">
-                            <img src="images/cart-icon.svg" alt="Cart" style="width:24px; height:24px; filter: var(--cart-icon-filter);">
-                            <?php
-                            $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
-                            if ($cart_count > 0):
-                            ?>
-                                <span class="cart-badge"><?php echo $cart_count; ?></span>
-                            <?php endif; ?>
-                        </a>
-
-                        <div class="dropdown user-dropdown">
-                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" 
-                                     alt="<?php echo htmlspecialchars($user['nama_lengkap']); ?>" 
-                                     class="rounded-circle" 
-                                     style="width:40px; height:40px; object-fit:cover;">
-                                <span class="user-name d-none d-lg-inline"><?php echo htmlspecialchars($user['nama_lengkap']); ?></span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="user/settings/settings.php"><i class="bi bi-gear me-2"></i>Setting Akun</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="user/logout_user.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                            </ul>
-                        </div>
-                    <?php else: ?>
-                        <a href="/user/login_user.php" class="btn btn-dark">Login</a>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <?php include "navbar.php"; ?>
 
     <!-- HERO (dari file lama) -->
     <section id="home" class="hero-section">
@@ -745,7 +781,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    
+
 
     <!-- ABOUT SECTION (dari file lama) -->
     <section id="about" class="py-5 bg-light scroll-reveal">
@@ -757,43 +793,43 @@ if (isset($_SESSION['user_id'])) {
                     <p>Our unisex collections are designed for the bold, the thoughtful, and the effortlessly cool. Every piece is crafted with sustainable materials and timeless aesthetics.</p>
                     <a href="#" class="btn btn-dark mt-3">Learn More</a>
                 </div>
-               <div class="col-lg-6">
-    <div id="aboutCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="4000">
+                <div class="col-lg-6">
+                    <div id="aboutCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="4000">
 
-        <!-- Indicators -->
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="2"></button>
-        </div>
+                        <!-- Indicators -->
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="2"></button>
+                        </div>
 
-        <!-- Slides -->
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="images/Background dan Logo/slide11.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
+                        <!-- Slides -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="images/Background dan Logo/slide11.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
+                            </div>
+
+                            <div class="carousel-item">
+                                <img src="images/Background dan Logo/slide12.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
+                            </div>
+
+                            <div class="carousel-item">
+                                <img src="images/Background dan Logo/slide13.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
+                            </div>
+
+                            <!-- Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
             </div>
-
-            <div class="carousel-item">
-                <img src="images/Background dan Logo/slide12.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
-            </div>
-
-            <div class="carousel-item">
-                <img src="images/Background dan Logo/slide13.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
-        </div>
-
-        <!-- Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-
-    </div>
-</div>
-
-            </div>
-        </div>
     </section>
 
     <!-- CONTACT SECTION (dari file lama) -->
@@ -918,7 +954,7 @@ if (isset($_SESSION['user_id'])) {
 
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
@@ -959,45 +995,45 @@ if (isset($_SESSION['user_id'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    const form = this;
-    const formData = new FormData(form);
+            const form = this;
+            const formData = new FormData(form);
 
 
-    fetch('simpan_pesan_ajax.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        Swal.fire({
-            icon: data.status,
-            title: data.status === 'success' ? 'Success' : 'Error',
-            text: data.message,
-            confirmButtonColor: '#1E5DAC'
+            fetch('simpan_pesan_ajax.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    Swal.fire({
+                        icon: data.status,
+                        title: data.status === 'success' ? 'Success' : 'Error',
+                        text: data.message,
+                        confirmButtonColor: '#1E5DAC'
+                    });
+
+                    if (data.status === 'success') {
+                        form.reset();
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Terjadi kesalahan server',
+                        confirmButtonColor: '#1E5DAC'
+                    });
+                })
+                .finally(() => {
+                    document.getElementById('btnText').classList.remove('d-none');
+                    document.getElementById('btnLoading').classList.add('d-none');
+                });
         });
-
-        if (data.status === 'success') {
-            form.reset();
-        }
-    })
-    .catch(() => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Terjadi kesalahan server',
-            confirmButtonColor: '#1E5DAC'
-        });
-    })
-    .finally(() => {
-        document.getElementById('btnText').classList.remove('d-none');
-        document.getElementById('btnLoading').classList.add('d-none');
-    });
-});
-</script>
+    </script>
 </body>
 
 </html>
