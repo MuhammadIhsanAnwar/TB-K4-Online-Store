@@ -642,6 +642,21 @@ if (isset($_SESSION['user_id'])) {
     </style>
 </head>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (isset($_SESSION['notif'])): ?>
+<script>
+Swal.fire({
+    icon: '<?= $_SESSION['notif']; ?>',
+    title: 'Informasi',
+    text: '<?= $_SESSION['msg']; ?>',
+    confirmButtonColor: '#1E5DAC'
+});
+</script>
+<?php 
+unset($_SESSION['notif'], $_SESSION['msg']); 
+endif; ?>
+
 <body>
 
     <!-- LOADING SPINNER -->
@@ -756,20 +771,20 @@ if (isset($_SESSION['user_id'])) {
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <form>
+                    <form action="simpan_pesan.php" method="POST">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <input type="text" class="form-control" placeholder="Your Name" required>
+                                <input type="text" name="nama" class="form-control" placeholder="Your Name" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <input type="email" class="form-control" placeholder="Your Email" required>
+                                <input type="email" name="email" class="form-control" placeholder="Your Email" required>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Subject">
+                            <input type="text" name="subjek" class="form-control" placeholder="Subject">
                         </div>
                         <div class="mb-3">
-                            <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                            <textarea class="form-control" name="pesan" rows="5" placeholder="Your Message" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-dark w-100">Send Message</button>
                     </form>
