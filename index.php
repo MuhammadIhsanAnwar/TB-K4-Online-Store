@@ -578,11 +578,7 @@ if (isset($_SESSION['user_id'])) {
                 transform: scale(1);
             }
         }
-        @media (max-width: 767.98px) {
-        .navbar-nav .nav-link {
-            padding: 0.5rem !important;
-        }
-    }
+        
 
     </style>
 </head>
