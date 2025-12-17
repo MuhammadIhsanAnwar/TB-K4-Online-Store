@@ -190,10 +190,29 @@ body {
 
 /* ===== CONTENT ===== */
 .content {
-    margin-left: 220px;
     padding: 30px;
-    min-height: 100vh;
+    transition: .3s;
 }
+
+/* Desktop saja */
+@media (min-width: 992px) {
+    .content {
+        margin-left: 220px;
+    }
+}
+
+/* SIDEBAR MOBILE */
+@media (max-width: 991px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .3s;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+}
+
 
     </style>
 </head>
@@ -203,10 +222,19 @@ body {
 <?php include 'sidebar.php'; ?>
 
 <div class="content">
-    <h2>Data Pesan</h2>
+    <div class="d-lg-none mb-3">
+    <button class="btn btn-primary" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
+</div>
+
+   <div class="d-flex justify-content-between align-items-center flex-wrap">
+    <h2 class="mb-2 mb-lg-0">Data Pesan</h2>
+</div>
+
     <hr>
 
-    <div class="table-container">
+    <div class="table-container table-responsive">
         <table class="table table-bordered table-striped align-middle">
             <thead>
                 <tr>
@@ -261,6 +289,9 @@ function tandaiDibaca(id) {
         }
     };
     xhr.send("read_id=" + id);
+}
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('show');
 }
 </script>
 
