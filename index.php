@@ -770,15 +770,15 @@ if (isset($_SESSION['user_id'])) {
         <!-- Slides -->
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="images/Background dan Logo/slide1.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
+                <img src="images/Background dan Logo/slide11.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
             </div>
 
             <div class="carousel-item">
-                <img src="images/Background dan Logo/slide2.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
+                <img src="images/Background dan Logo/slide12.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
             </div>
 
             <div class="carousel-item">
-                <img src="images/Background dan Logo/slide3.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
+                <img src="images/Background dan Logo/slide13.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
         </div>
 
         <!-- Controls -->
