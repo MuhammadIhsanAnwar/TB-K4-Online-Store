@@ -777,7 +777,7 @@ if (isset($_SESSION['user_id'])) {
             </div>
 
             <div class="carousel-item">
-                <img src="images/Background dan Logo/bg reset.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
+                <img src="images/Background dan Logo/bg login.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Limited Edition</h5>
                     <p>Bold style with premium quality</p>
@@ -785,7 +785,7 @@ if (isset($_SESSION['user_id'])) {
             </div>
 
             <div class="carousel-item">
-                <img src="images/Background dan Logo/bg reset.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
+                <img src="images/Background dan Logo/bg regis.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Urban Essentials</h5>
                     <p>Comfort meets timeless design</p>
