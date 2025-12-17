@@ -644,18 +644,49 @@ if (isset($_SESSION['user_id'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<?php if (isset($_SESSION['notif'])): ?>
 <script>
-Swal.fire({
-    icon: '<?= $_SESSION['notif']; ?>',
-    title: 'Informasi',
-    text: '<?= $_SESSION['msg']; ?>',
-    confirmButtonColor: '#1E5DAC'
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+
+    // Loading button
+    document.getElementById('btnText').classList.add('d-none');
+    document.getElementById('btnLoading').classList.remove('d-none');
+
+    fetch('simpan_pesan_ajax.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        Swal.fire({
+            icon: data.status,
+            title: data.status === 'success' ? 'Success' : 'Error',
+            text: data.message,
+            confirmButtonColor: '#1E5DAC'
+        });
+
+        if (data.status === 'success') {
+            form.reset();
+        }
+    })
+    .catch(() => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Terjadi kesalahan server',
+            confirmButtonColor: '#1E5DAC'
+        });
+    })
+    .finally(() => {
+        document.getElementById('btnText').classList.remove('d-none');
+        document.getElementById('btnLoading').classList.add('d-none');
+    });
 });
 </script>
-<?php 
-unset($_SESSION['notif'], $_SESSION['msg']); 
-endif; ?>
+
 
 <body>
 
@@ -771,7 +802,7 @@ endif; ?>
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <form action="simpan_pesan.php" method="POST">
+                    <form id="contactForm">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <input type="text" name="nama" class="form-control" placeholder="Your Name" required>
