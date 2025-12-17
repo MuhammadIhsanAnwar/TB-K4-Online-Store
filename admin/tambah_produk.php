@@ -451,7 +451,7 @@ if (isset($_POST['submit'])) {
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.92);
             animation: fadeIn 0.3s ease-out;
             padding: 20px;
             overflow-y: auto;
@@ -474,12 +474,12 @@ if (isset($_POST['submit'])) {
         }
 
         .cropper-container-wrapper {
-            background: white;
+            background: #ffffff;
             border-radius: 20px;
             padding: 2.5rem;
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
             animation: slideUp 0.4s ease-out;
         }
 
@@ -495,71 +495,70 @@ if (isset($_POST['submit'])) {
         .cropper-wrapper {
             width: 100%;
             margin-bottom: 2rem;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            background: white;
-            border: 2px solid var(--alley);
+            background: #ffffff;
+            border: 3px solid #e0e0e0;
             position: relative;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            min-height: 350px;
+            max-height: 500px;
         }
 
         .cropper-wrapper img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: contain;
-        }
-
-        /* Override Cropper.js styles */
-        .cropper-wrapper .cropper-container {
-            position: relative;
-            width: 100%;
-            height: auto;
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            object-fit: contain !important;
             background: white !important;
         }
 
-        .cropper-wrapper .cropper-canvas {
+        /* Pastikan Cropper.js tidak transparan */
+        .cropper-canvas {
+            background: white !important;
+            opacity: 1 !important;
+        }
+
+        .cropper-container {
             background: white !important;
         }
 
-        .cropper-wrapper .cropper-drag-box {
-            background: white !important;
+        .cropper-crop-box {
+            opacity: 1 !important;
         }
 
-        .cropper-wrapper .cropper-crop-box {
-            border: 2px solid var(--blue);
+        .cropper-crop-box .cropper-face {
+            background: rgba(30, 93, 172, 0.15) !important;
+            opacity: 1 !important;
         }
 
-        .cropper-wrapper .cropper-crop-box .cropper-face {
-            background: rgba(30, 93, 172, 0.1) !important;
+        .cropper-crop-box .cropper-line {
+            border-color: var(--blue) !important;
+            opacity: 1 !important;
         }
 
-        .cropper-wrapper .cropper-crop-box .cropper-line {
-            border-color: var(--blue);
+        .cropper-crop-box .cropper-point {
+            background: var(--blue) !important;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--blue) !important;
+            width: 12px !important;
+            height: 12px !important;
+            opacity: 1 !important;
         }
 
-        .cropper-wrapper .cropper-crop-box .cropper-point {
-            background: var(--blue);
-            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--blue);
-            width: 10px !important;
-            height: 10px !important;
+        .cropper-center {
+            background: var(--blue) !important;
+            opacity: 1 !important;
         }
 
-        .cropper-wrapper .cropper-center {
-            background: var(--blue);
-        }
-
-        .cropper-wrapper .cropper-grid {
-            border-color: rgba(30, 93, 172, 0.5);
+        .cropper-grid {
+            border-color: rgba(30, 93, 172, 0.6) !important;
+            opacity: 1 !important;
         }
 
         .cropper-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
+            width: 100%;
         }
 
         .btn {
@@ -571,6 +570,7 @@ if (isset($_POST['submit'])) {
             transition: all 0.3s ease;
             font-size: 0.95rem;
             font-family: 'Poppins', sans-serif;
+            width: 100%;
         }
 
         .btn-crop {
@@ -604,19 +604,45 @@ if (isset($_POST['submit'])) {
             transform: translateY(0);
         }
 
-        @media (max-width: 768px) {
+        /* RESPONSIVE CROPPER */
+        @media (max-width: 1024px) {
             .cropper-container-wrapper {
-                padding: 1.5rem;
-                max-width: 95%;
-            }
-
-            .cropper-title {
-                font-size: 1.5rem;
-                margin-bottom: 1.5rem;
+                padding: 2rem;
+                max-width: 90%;
             }
 
             .cropper-wrapper {
-                min-height: 250px;
+                min-height: 320px;
+                max-height: 450px;
+            }
+
+            .cropper-title {
+                font-size: 1.7rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cropper-modal {
+                padding: 15px;
+            }
+
+            .cropper-container-wrapper {
+                padding: 1.5rem;
+                max-width: 100%;
+                border-radius: 15px;
+            }
+
+            .cropper-title {
+                font-size: 1.4rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .cropper-wrapper {
+                min-height: 280px;
+                max-height: 400px;
+                border-radius: 10px;
+                margin-bottom: 1.5rem;
             }
 
             .cropper-buttons {
@@ -627,6 +653,39 @@ if (isset($_POST['submit'])) {
             .btn {
                 padding: 12px 20px;
                 font-size: 0.9rem;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cropper-modal {
+                padding: 10px;
+            }
+
+            .cropper-container-wrapper {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            .cropper-title {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .cropper-wrapper {
+                min-height: 250px;
+                max-height: 350px;
+                margin-bottom: 1rem;
+                border: 2px solid #e0e0e0;
+            }
+
+            .cropper-buttons {
+                gap: 0.75rem;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
             }
         }
 
