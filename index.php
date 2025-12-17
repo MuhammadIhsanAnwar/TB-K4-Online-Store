@@ -642,52 +642,6 @@ if (isset($_SESSION['user_id'])) {
     </style>
 </head>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const form = this;
-    const formData = new FormData(form);
-
-    // Loading button
-    document.getElementById('btnText').classList.add('d-none');
-    document.getElementById('btnLoading').classList.remove('d-none');
-
-    fetch('simpan_pesan_ajax.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        Swal.fire({
-            icon: data.status,
-            title: data.status === 'success' ? 'Success' : 'Error',
-            text: data.message,
-            confirmButtonColor: '#1E5DAC'
-        });
-
-        if (data.status === 'success') {
-            form.reset();
-        }
-    })
-    .catch(() => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Terjadi kesalahan server',
-            confirmButtonColor: '#1E5DAC'
-        });
-    })
-    .finally(() => {
-        document.getElementById('btnText').classList.remove('d-none');
-        document.getElementById('btnLoading').classList.add('d-none');
-    });
-});
-</script>
-
-
 <body>
 
     <!-- LOADING SPINNER -->
@@ -953,6 +907,51 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
             }, 1500);
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+
+    // Loading button
+    document.getElementById('btnText').classList.add('d-none');
+    document.getElementById('btnLoading').classList.remove('d-none');
+
+    fetch('simpan_pesan_ajax.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        Swal.fire({
+            icon: data.status,
+            title: data.status === 'success' ? 'Success' : 'Error',
+            text: data.message,
+            confirmButtonColor: '#1E5DAC'
+        });
+
+        if (data.status === 'success') {
+            form.reset();
+        }
+    })
+    .catch(() => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Terjadi kesalahan server',
+            confirmButtonColor: '#1E5DAC'
+        });
+    })
+    .finally(() => {
+        document.getElementById('btnText').classList.remove('d-none');
+        document.getElementById('btnLoading').classList.add('d-none');
+    });
+});
+</script>
 </body>
 
 </html>
