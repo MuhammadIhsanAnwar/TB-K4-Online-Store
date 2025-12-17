@@ -2,6 +2,17 @@
 require 'auth_check.php';
 include "../admin/koneksi.php";
 
+
+/* ================= DELETE PESAN ================= */
+if (isset($_POST['delete_id'])) {
+    $id = intval($_POST['delete_id']);
+
+    mysqli_query($koneksi, "DELETE FROM pesan_kontak WHERE id='$id'");
+    echo 'success';
+    exit;
+}
+
+
 /* Tandai pesan dibaca */
 if (isset($_POST['read_id'])) {
     $id = intval($_POST['read_id']);
@@ -268,7 +279,20 @@ body {
                                 <i class="bi bi-check2-circle"></i>
                             </button>
                         <?php else: ?>
-                            —
+                            <td>
+    <?php if ($row['status'] == 'baru'): ?>
+        <button class="btn btn-sm btn-info mb-1"
+            onclick="tandaiDibaca(<?= $row['id'] ?>)">
+            <i class="bi bi-check2-circle"></i>
+        </button>
+    <?php endif; ?>
+
+    <button class="btn btn-sm btn-danger"
+        onclick="hapusPesan(<?= $row['id'] ?>)">
+        <i class="bi bi-trash"></i>
+    </button>
+</td>
+
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -290,6 +314,21 @@ function tandaiDibaca(id) {
     };
     xhr.send("read_id=" + id);
 }
+function hapusPesan(id) {
+    if (!confirm("Yakin ingin menghapus pesan ini?")) return;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onload = function () {
+        if (xhr.responseText.trim() === "success") {
+            const row = document.getElementById("row-" + id);
+            if (row) row.remove();
+        }
+    };
+    xhr.send("delete_id=" + id);
+}
+
 function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('show');
 }
