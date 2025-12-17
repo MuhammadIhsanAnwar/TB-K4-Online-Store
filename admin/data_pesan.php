@@ -119,6 +119,82 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
         .btn-info {
             border-radius: 8px;
         }
+
+:root {
+    --primary: #1e5dac;
+    --bg: #f3eded;
+    --white: #ffffff;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    font-family: Poppins, system-ui, sans-serif;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1e63b6, #0f3f82);
+    padding: 18px 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.logo-box {
+    text-align: center;
+    padding: 10px 0 18px;
+}
+
+.logo-box img {
+    width: 72px;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+}
+
+.menu-title {
+    color: #dbe6ff;
+    font-size: 13px;
+    padding: 8px 20px;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 20px;
+    margin: 4px 12px;
+    border-radius: 10px;
+    transition: .25s;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,.18);
+}
+
+.sidebar a.active {
+    background: rgba(255,255,255,.32);
+    font-weight: 600;
+}
+
+.sidebar .logout {
+    margin-top: auto;
+    background: rgba(255,80,80,.15);
+    color: #ffd6d6 !important;
+    text-align: center;
+    border-radius: 14px;
+}
+
+/* ===== CONTENT ===== */
+.content {
+    margin-left: 220px;
+    padding: 30px;
+    min-height: 100vh;
+}
+
     </style>
 </head>
 
