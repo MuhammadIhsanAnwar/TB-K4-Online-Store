@@ -105,7 +105,7 @@ if (isset($_SESSION['user_id'])) {
             100% { transform: translate(0px, 0px) rotate(360deg); }
         }
 
-        /* ===== NAVBAR STYLING (GLASSMORPHISM) ===== */
+        /* ===== NAVBAR STYLING (GLASSMORPHISM + IMPROVED) ===== */
         .navbar {
             backdrop-filter: blur(20px);
             background: rgba(255, 255, 255, 0.95) !important;
@@ -150,7 +150,6 @@ if (isset($_SESSION['user_id'])) {
             color: var(--primary) !important;
         }
 
-        /* Improved navbar toggler styling for better mobile experience */
         .navbar-toggler {
             border: 2px solid var(--primary) !important;
             padding: 0.5rem 0.75rem;
@@ -171,7 +170,6 @@ if (isset($_SESSION['user_id'])) {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(30, 93, 172, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
-        /* Enhanced nav-link styling with better spacing and hover effects */
         .nav-link {
             position: relative;
             font-weight: 500;
@@ -223,7 +221,6 @@ if (isset($_SESSION['user_id'])) {
             width: 100%;
         }
 
-        /* Improved action icons styling for better visual hierarchy */
         .nav-icon {
             cursor: pointer;
             transition: var(--transition);
@@ -244,7 +241,6 @@ if (isset($_SESSION['user_id'])) {
             transform: rotate(90deg);
         }
 
-        /* Enhanced cart link styling */
         .cart-link {
             position: relative;
             display: flex;
@@ -285,18 +281,11 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes bounceIn {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.3);
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
         }
 
-        /* Improved user dropdown styling */
         .user-dropdown .dropdown-toggle {
             display: flex;
             align-items: center;
@@ -357,7 +346,6 @@ if (isset($_SESSION['user_id'])) {
             transform: translateX(4px);
         }
 
-        /* Login button enhancement */
         .btn-dark {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border: none;
@@ -377,19 +365,14 @@ if (isset($_SESSION['user_id'])) {
             background: linear-gradient(135deg, #1a4d8f 0%, #9badc2 100%);
         }
 
-        /* Improved navbar actions container */
         .navbar-actions {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        /* Enhanced responsive design for better mobile experience */
         @media (max-width: 991px) {
-            .navbar-brand {
-                font-size: 1.5rem;
-            }
-
+            .navbar-brand { font-size: 1.5rem; }
             .navbar-collapse {
                 margin-top: 1rem;
                 padding: 1.5rem;
@@ -397,18 +380,12 @@ if (isset($_SESSION['user_id'])) {
                 border-radius: 12px;
                 box-shadow: 0 4px 20px rgba(30, 93, 172, 0.1);
             }
-
             .nav-link {
                 margin: 4px 0;
                 text-align: center;
                 padding: 12px 18px !important;
             }
-
-            .navbar-nav.ms-auto {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-            }
-
+            .navbar-nav.ms-auto { margin-left: 0 !important; }
             .navbar-actions {
                 justify-content: center;
                 margin-top: 1rem;
@@ -416,34 +393,248 @@ if (isset($_SESSION['user_id'])) {
                 border-top: 1px solid rgba(30, 93, 172, 0.1);
                 gap: 1.5rem;
             }
-
-            .user-dropdown .dropdown-toggle {
-                justify-content: center;
-            }
-
-            .user-name {
-                display: inline !important;
-            }
+            .user-dropdown .dropdown-toggle { justify-content: center; }
+            .user-name { display: inline !important; }
         }
 
         @media (max-width: 576px) {
-            .navbar-brand {
-                font-size: 1.3rem;
-                letter-spacing: 1px;
-            }
-
-            .user-name {
-                max-width: 100px;
-            }
-
-            .nav-link {
-                font-size: 0.8rem;
-            }
-
-            .navbar-actions {
-                gap: 1rem;
-            }
+            .navbar-brand { font-size: 1.3rem; letter-spacing: 1px; }
+            .user-name { max-width: 100px; }
+            .nav-link { font-size: 0.8rem; }
+            .navbar-actions { gap: 1rem; }
         }
+
+        /* ===== HERO SECTION (MODERN & DYNAMIC) ===== */
+        .hero-section {
+            height: 90vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            position: relative;
+            margin-top: 70px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 600px;
+            padding: 2rem;
+            animation: fadeInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hero-content .subtitle {
+            letter-spacing: 6px;
+            font-weight: 300;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s ease;
+            opacity: 0.9;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .hero-content .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            animation: fadeIn 1.6s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-btn {
+            background: white;
+            color: var(--primary);
+            padding: 16px 50px;
+            font-weight: 600;
+            border: 2px solid white;
+            transition: var(--transition);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            animation: pulse 2.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); }
+            50% { transform: scale(1.03); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); }
+        }
+
+        .hero-btn:hover {
+            background: transparent;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            border-color: white;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            z-index: 2;
+            animation: fadeInRight 1.4s ease;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translate(100px, -50%); }
+            to { opacity: 1; transform: translate(0, -50%); }
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.3));
+        }
+
+        /* ===== CATEGORY FILTERS (MODERN TABS) ===== */
+        .category-filters {
+            padding: 3rem 5%;
+            background: var(--white);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-filters h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .category-filters h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .filter-tab {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .filter-tab:hover::before {
+            left: 0;
+        }
+
+        .filter-tab:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .filter-tab.active::before {
+            left: 0;
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== ABOUT & CONTACT SECTION STYLE ===== */
+        .section-bg-light {
+            background: var(--light);
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 0.8s ease 1.5s forwards;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 
@@ -461,7 +652,7 @@ if (isset($_SESSION['user_id'])) {
         <div class="shape"></div>
     </div>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (dari file baru, diperbaiki & diperkaya) -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">URBANHYPE</a>
@@ -471,7 +662,6 @@ if (isset($_SESSION['user_id'])) {
             </button>
 
             <div class="collapse navbar-collapse" id="navMenu">
-                <!-- Main Navigation Links -->
                 <ul class="navbar-nav ms-auto me-lg-4">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="shop.php">Shop</a></li>
@@ -479,15 +669,12 @@ if (isset($_SESSION['user_id'])) {
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 </ul>
 
-                <!-- Improved action items layout -->
                 <div class="navbar-actions">
-                    <!-- Search Icon -->
                     <div class="nav-icon">
                         <i class="bi bi-search fs-5"></i>
                     </div>
 
                     <?php if ($user): ?>
-                        <!-- Cart Icon with Badge -->
                         <a href="user/produk_pembayaran/cart.php" class="cart-link">
                             <i class="bi bi-bag-fill"></i>
                             <?php
@@ -498,10 +685,12 @@ if (isset($_SESSION['user_id'])) {
                             <?php endif; ?>
                         </a>
 
-                        <!-- User Dropdown -->
                         <div class="dropdown user-dropdown">
                             <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" alt="<?php echo htmlspecialchars($user['nama_lengkap']); ?>" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">
+                                <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" 
+                                     alt="<?php echo htmlspecialchars($user['nama_lengkap']); ?>" 
+                                     class="rounded-circle" 
+                                     style="width:40px; height:40px; object-fit:cover;">
                                 <span class="user-name d-none d-lg-inline"><?php echo htmlspecialchars($user['nama_lengkap']); ?></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -518,7 +707,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </nav>
 
-    <!-- HERO -->
+    <!-- HERO (dari file lama) -->
     <section id="home" class="hero-section">
         <div class="container">
             <div class="hero-content">
@@ -529,11 +718,23 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
         <div class="hero-image">
-            <!-- <img src="/placeholder.svg?height=600&width=400" alt="Fashion Model"> -->
+            <!-- <img src="img/hero-model.png" alt="Fashion Model"> -->
         </div>
     </section>
 
-    <!-- ABOUT SECTION -->
+    <!-- CATEGORY FILTERS (dari file lama — ditambahkan kembali) -->
+    <section class="category-filters scroll-reveal">
+        <h2>Explore Collections</h2>
+        <div class="filter-tabs">
+            <button class="filter-tab active">All</button>
+            <button class="filter-tab">Women</button>
+            <button class="filter-tab">Men</button>
+            <button class="filter-tab">Accessories</button>
+            <button class="filter-tab">Shoes</button>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION (dari file lama) -->
     <section id="about" class="py-5 bg-light scroll-reveal">
         <div class="container">
             <div class="row align-items-center">
@@ -552,7 +753,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- CONTACT SECTION -->
+    <!-- CONTACT SECTION (dari file lama) -->
     <section id="contact" class="py-5 scroll-reveal">
         <div class="container">
             <div class="text-center mb-5">
@@ -600,7 +801,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- FOOTER (dari file lama) -->
     <footer class="bg-dark text-white pt-5 pb-4">
         <div class="container">
             <div class="row">
@@ -611,8 +812,8 @@ if (isset($_SESSION['user_id'])) {
                 <div class="col-md-2 mb-4">
                     <h6>Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white text-decoration-none">Home</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Shop</a></li>
+                        <li><a href="index.php" class="text-white text-decoration-none">Home</a></li>
+                        <li><a href="shop.php" class="text-white text-decoration-none">Shop</a></li>
                         <li><a href="#about" class="text-white text-decoration-none">About Us</a></li>
                         <li><a href="#contact" class="text-white text-decoration-none">Contact</a></li>
                     </ul>
