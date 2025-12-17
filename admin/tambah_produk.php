@@ -451,7 +451,7 @@ if (isset($_POST['submit'])) {
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.85);
             animation: fadeIn 0.3s ease-out;
             padding: 20px;
             overflow-y: auto;
@@ -497,15 +497,19 @@ if (isset($_POST['submit'])) {
             margin-bottom: 2rem;
             border-radius: 15px;
             overflow: hidden;
-            background: #f5f5f5;
+            background: white;
+            border: 2px solid var(--alley);
             position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .cropper-wrapper img {
             width: 100%;
-            height: auto;
+            height: 100%;
             display: block;
-            max-height: 500px;
             object-fit: contain;
         }
 
@@ -514,11 +518,15 @@ if (isset($_POST['submit'])) {
             position: relative;
             width: 100%;
             height: auto;
+            background: white !important;
         }
 
-        .cropper-wrapper .cropper-canvas,
+        .cropper-wrapper .cropper-canvas {
+            background: white !important;
+        }
+
         .cropper-wrapper .cropper-drag-box {
-            background: #fff;
+            background: white !important;
         }
 
         .cropper-wrapper .cropper-crop-box {
@@ -526,7 +534,7 @@ if (isset($_POST['submit'])) {
         }
 
         .cropper-wrapper .cropper-crop-box .cropper-face {
-            background: rgba(30, 93, 172, 0.15);
+            background: rgba(30, 93, 172, 0.1) !important;
         }
 
         .cropper-wrapper .cropper-crop-box .cropper-line {
@@ -536,6 +544,8 @@ if (isset($_POST['submit'])) {
         .cropper-wrapper .cropper-crop-box .cropper-point {
             background: var(--blue);
             box-shadow: 0 0 0 2px white, 0 0 0 4px var(--blue);
+            width: 10px !important;
+            height: 10px !important;
         }
 
         .cropper-wrapper .cropper-center {
@@ -543,7 +553,7 @@ if (isset($_POST['submit'])) {
         }
 
         .cropper-wrapper .cropper-grid {
-            border-color: rgba(30, 93, 172, 0.3);
+            border-color: rgba(30, 93, 172, 0.5);
         }
 
         .cropper-buttons {
@@ -574,6 +584,10 @@ if (isset($_POST['submit'])) {
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
+        .btn-crop:active {
+            transform: translateY(0);
+        }
+
         .btn-cancel {
             background: white;
             color: var(--blue);
@@ -584,6 +598,10 @@ if (isset($_POST['submit'])) {
             background: var(--blue);
             color: white;
             transform: translateY(-2px);
+        }
+
+        .btn-cancel:active {
+            transform: translateY(0);
         }
 
         @media (max-width: 768px) {
@@ -597,8 +615,8 @@ if (isset($_POST['submit'])) {
                 margin-bottom: 1.5rem;
             }
 
-            .cropper-wrapper img {
-                max-height: 400px;
+            .cropper-wrapper {
+                min-height: 250px;
             }
 
             .cropper-buttons {
@@ -611,6 +629,7 @@ if (isset($_POST['submit'])) {
                 font-size: 0.9rem;
             }
         }
+
         .btn-cancel:hover {
             background: var(--alley);
             color: white;
