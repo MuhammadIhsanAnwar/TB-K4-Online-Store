@@ -1,26 +1,35 @@
 <?php
-include 'auth_check.php';
-include 'koneksi.php';
+require 'auth_check.php';
+include "../admin/koneksi.php";
 
-$query = mysqli_query($koneksi,
-    "SELECT * FROM pesan_kontak ORDER BY created_at DESC"
-);
+/* Tandai pesan dibaca */
+if (isset($_POST['read_id'])) {
+    $id = intval($_POST['read_id']);
+    mysqli_query($koneksi, "UPDATE pesan_kontak SET status='dibaca' WHERE id='$id'");
+    echo 'success';
+    exit;
+}
+
+$query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at DESC");
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Data Pesan - Admin</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
+    <!-- 🔥 CSS DISAMAKAN DENGAN DATA PRODUK -->
     <style>
         :root {
             --primary: #1e5dac;
             --bg: #f3eded;
             --white: #ffffff;
-            --hover: rgba(30,93,172,.08);
+            --hover-blue: rgba(30, 93, 172, .1);
         }
 
         body {
@@ -32,8 +41,7 @@ $query = mysqli_query($koneksi,
         /* ===== CONTENT ===== */
         .content {
             margin-left: 220px;
-            padding: 30px;
-            min-height: 100vh;
+            padding: 30px 40px;
             animation: fade .5s ease;
         }
 
@@ -45,85 +53,71 @@ $query = mysqli_query($koneksi,
         h2 {
             color: var(--primary);
             font-weight: 700;
+            margin-bottom: 8px;
         }
 
         hr {
             border-top: 2px solid #cfd6e6;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            opacity: .6;
         }
 
-        /* ===== CARD TABLE ===== */
-        .card-table {
+        /* ===== TABLE CONTAINER ===== */
+        .table-container {
             background: var(--white);
-            border-radius: 22px;
-            padding: 22px;
-            box-shadow: 0 15px 40px rgba(0,0,0,.12);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, .1);
         }
 
-        /* ===== TABLE ===== */
-        table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
+        .table {
+            border-collapse: separate !important;
+            border-spacing: 0 10px;
+        }
 
-
-        thead tr {
+        .table thead tr {
             background: var(--primary);
             color: #fff;
         }
 
-        thead th {
-            padding: 14px;
-            text-align: center;
-            border: none;
-        }
-
-        tbody tr {
+        .table tbody tr {
             background: #fff;
-            transition: .25s;
-        }
-
-        tbody tr:hover {
-            background: var(--hover);
-        }
-
-        tbody td {
-            padding: 14px;
-            vertical-align: middle;
-        }
-
-        tbody td:nth-child(4) {
-            max-width: 350px;
-        }
-
-        /* ===== STATUS ===== */
-        .status-baru {
-            color: #dc3545;
-            font-weight: 600;
-        }
-
-        .status-dibaca {
-            color: #16a34a;
-            font-weight: 600;
-        }
-
-        /* ===== BUTTON ===== */
-        .btn-read {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
             transition: .3s;
-            text-decoration: none;
         }
 
-        .btn-read:hover {
-            background: var(--primary);
+        .table tbody tr:hover {
+            background: var(--hover-blue);
+        }
+
+        .table td,
+        .table th {
+            padding: 12px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .table td:nth-child(4) {
+            text-align: left;
+        }
+
+        .badge-baru {
+            background: #dc3545;
+            padding: 6px 10px;
+            border-radius: 20px;
             color: #fff;
+            font-size: 12px;
+        }
+
+        .badge-dibaca {
+            background: #198754;
+            padding: 6px 10px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .btn-info {
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -133,11 +127,11 @@ $query = mysqli_query($koneksi,
 <?php include 'sidebar.php'; ?>
 
 <div class="content">
-    <h2>Pesan Masuk</h2>
+    <h2>Data Pesan</h2>
     <hr>
 
-    <div class="card-table">
-        <table>
+    <div class="table-container">
+        <table class="table table-bordered table-striped align-middle">
             <thead>
                 <tr>
                     <th>No</th>
@@ -150,25 +144,25 @@ $query = mysqli_query($koneksi,
             </thead>
 
             <tbody>
-            <?php $no=1; while($row=mysqli_fetch_assoc($query)): ?>
-                <tr>
-                    <td align="center"><?= $no++ ?></td>
+            <?php $no=1; while($row = mysqli_fetch_assoc($query)): ?>
+                <tr id="row-<?= $row['id'] ?>">
+                    <td><?= $no++ ?></td>
                     <td><?= htmlspecialchars($row['nama']) ?></td>
                     <td><?= htmlspecialchars($row['email']) ?></td>
                     <td><?= nl2br(htmlspecialchars($row['pesan'])) ?></td>
-                    <td align="center">
-                        <?php if($row['status']=='baru'): ?>
-                            <span class="status-baru">Baru</span>
+                    <td>
+                        <?php if ($row['status']=='baru'): ?>
+                            <span class="badge-baru">Baru</span>
                         <?php else: ?>
-                            <span class="status-dibaca">Dibaca</span>
+                            <span class="badge-dibaca">Dibaca</span>
                         <?php endif; ?>
                     </td>
-                    <td align="center">
-                        <?php if($row['status']=='baru'): ?>
-                            <a href="baca_pesan.php?id=<?= $row['id'] ?>"
-                               class="btn-read">
-                                Tandai Dibaca
-                            </a>
+                    <td>
+                        <?php if ($row['status']=='baru'): ?>
+                            <button class="btn btn-sm btn-info"
+                                onclick="tandaiDibaca(<?= $row['id'] ?>)">
+                                <i class="bi bi-check2-circle"></i>
+                            </button>
                         <?php else: ?>
                             —
                         <?php endif; ?>
@@ -180,6 +174,19 @@ $query = mysqli_query($koneksi,
     </div>
 </div>
 
-<script src="../js/bootstrap.bundle.js"></script>
+<script>
+function tandaiDibaca(id) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onload = function () {
+        if (xhr.responseText.trim() === "success") {
+            location.reload();
+        }
+    };
+    xhr.send("read_id=" + id);
+}
+</script>
+
 </body>
 </html>
