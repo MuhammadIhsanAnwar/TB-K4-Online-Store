@@ -917,9 +917,6 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     const form = this;
     const formData = new FormData(form);
 
-    // Loading button
-    document.getElementById('btnText').classList.add('d-none');
-    document.getElementById('btnLoading').classList.remove('d-none');
 
     fetch('simpan_pesan_ajax.php', {
         method: 'POST',

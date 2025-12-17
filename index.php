@@ -639,6 +639,24 @@ if (isset($_SESSION['user_id'])) {
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .carousel-caption {
+    background: rgba(30, 93, 172, 0.75);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.carousel-caption h5 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.carousel img {
+    object-fit: cover;
+    height: 100%;
+}
+
     </style>
 </head>
 
@@ -738,11 +756,54 @@ if (isset($_SESSION['user_id'])) {
                     <p>Our unisex collections are designed for the bold, the thoughtful, and the effortlessly cool. Every piece is crafted with sustainable materials and timeless aesthetics.</p>
                     <a href="#" class="btn btn-dark mt-3">Learn More</a>
                 </div>
-                <div class="col-lg-6">
-                    <div class="ratio ratio-16x9">
-                        <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div>
-                    </div>
+               <div class="col-lg-6">
+    <div id="aboutCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="4000">
+
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="2"></button>
+        </div>
+
+        <!-- Slides -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="images/ads/ad1.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>New Arrival</h5>
+                    <p>Fresh unisex collection for modern lifestyle</p>
                 </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="images/ads/ad2.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Limited Edition</h5>
+                    <p>Bold style with premium quality</p>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="images/ads/ad3.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Urban Essentials</h5>
+                    <p>Comfort meets timeless design</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+
+    </div>
+</div>
+
             </div>
         </div>
     </section>
