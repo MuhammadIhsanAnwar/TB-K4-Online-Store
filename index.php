@@ -150,16 +150,39 @@ if (isset($_SESSION['user_id'])) {
             color: var(--primary) !important;
         }
 
+        /* Improved navbar toggler styling */
+        .navbar-toggler {
+            border: 2px solid var(--primary) !important;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.25rem rgba(30, 93, 172, 0.25);
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(30, 93, 172, 0.1);
+            transform: scale(1.05);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(30, 93, 172, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Improved nav-link styling with better spacing */
         .nav-link {
             position: relative;
             font-weight: 500;
             color: var(--dark) !important;
             transition: var(--transition);
-            padding: 8px 16px !important;
-            margin: 0 4px;
+            padding: 10px 18px !important;
+            margin: 0 2px;
             text-transform: uppercase;
             font-size: 0.85rem;
             letter-spacing: 1px;
+            border-radius: 8px;
         }
 
         .nav-link::before {
@@ -181,7 +204,7 @@ if (isset($_SESSION['user_id'])) {
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: 0;
+            bottom: 5px;
             left: 50%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             transition: var(--transition);
@@ -190,6 +213,7 @@ if (isset($_SESSION['user_id'])) {
 
         .nav-link:hover {
             color: var(--primary) !important;
+            background: rgba(30, 93, 172, 0.05);
         }
 
         .nav-link:hover::before {
@@ -198,70 +222,93 @@ if (isset($_SESSION['user_id'])) {
         }
 
         .nav-link:hover::after {
-            width: 100%;
+            width: 80%;
         }
-        /* Mobile navbar tweaks */
-@media (max-width: 991.98px) {
-    .navbar-brand {
-        font-size: 1.5rem;
-    }
 
-    .navbar-nav .nav-link {
-        padding: 0.4rem 0.6rem !important;
-        font-size: 0.75rem;
-    }
-
-    /* Ensure dropdown has enough space */
-    .dropdown-menu {
-        width: 280px;
-        border-radius: 12px;
-        box-shadow: 0 8px 40px rgba(30, 93, 172, 0.2);
-        backdrop-filter: blur(10px);
-        background: rgba(255, 255, 255, 0.95);
-    }
-
-    .dropdown-menu .dropdown-item {
-        padding: 0.75rem 1.25rem;
-        font-weight: 500;
-    }
-
-    .dropdown-menu .dropdown-item:hover {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        color: white !important;
-    }
-
-    /* Style for mobile user profile in dropdown */
-    .dropdown-menu .px-3.py-2 {
-        background: linear-gradient(135deg, var(--light), var(--white));
-        border-bottom: 1px solid rgba(30, 93, 172, 0.1);
-    }
-}
-
-/* Prevent overflow on small screens */
-.navbar-collapse {
-    max-height: 80vh;
-    overflow-y: auto;
-}
-        .bi-search {
+        /* Enhanced icon styling */
+        .nav-icon {
             cursor: pointer;
             transition: var(--transition);
-            padding: 8px;
+            padding: 10px;
             border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
         }
 
-        .bi-search:hover {
+        .nav-icon:hover {
             color: var(--primary);
-            transform: rotate(90deg) scale(1.2);
+            transform: scale(1.15);
             background: rgba(30, 93, 172, 0.1);
         }
 
-        .bi-bag-fill {
-            transition: var(--transition);
-            color: var(--primary) !important;
+        .bi-search:hover {
+            transform: rotate(90deg) scale(1.15);
         }
 
-        .bi-bag-fill:hover {
+        /* Cart icon with better badge positioning */
+        .cart-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 50%;
+            transition: var(--transition);
+            width: 42px;
+            height: 42px;
+        }
+
+        .cart-link:hover {
+            background: rgba(30, 93, 172, 0.1);
             transform: scale(1.15) rotate(5deg);
+        }
+
+        .cart-link .bi-bag-fill {
+            color: var(--primary) !important;
+            font-size: 1.2rem;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: linear-gradient(135deg, #dc3545, #c82333) !important;
+            color: white;
+            font-size: 0.65rem;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 700;
+            border: 2px solid white;
+            animation: bounceIn 0.6s ease;
+        }
+
+        /* Improved user dropdown styling */
+        .user-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            border-radius: 25px;
+            transition: var(--transition);
+            background: rgba(30, 93, 172, 0.05);
+            border: 2px solid transparent;
+        }
+
+        .user-dropdown .dropdown-toggle:hover {
+            background: rgba(30, 93, 172, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .user-dropdown .dropdown-toggle::after {
+            margin-left: 0.5rem;
         }
 
         .user-dropdown img {
@@ -270,10 +317,123 @@ if (isset($_SESSION['user_id'])) {
             box-shadow: 0 4px 15px rgba(30, 93, 172, 0.2);
         }
 
-        .user-dropdown img:hover {
-            transform: scale(1.1);
+        .user-dropdown .dropdown-toggle:hover img {
+            transform: scale(1.05);
             box-shadow: 0 6px 25px rgba(30, 93, 172, 0.4);
             border-color: var(--secondary);
+        }
+
+        .user-dropdown .dropdown-menu {
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(30, 93, 172, 0.2);
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+        }
+
+        .user-dropdown .dropdown-item {
+            padding: 0.75rem 1.5rem;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .user-dropdown .dropdown-item:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding-left: 2rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Enhanced login button */
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 10px 28px;
+            border-radius: 25px;
+            color: white !important;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(30, 93, 172, 0.5);
+            background: linear-gradient(135deg, #1a4d8f 0%, #9badc2 100%);
+        }
+
+        /* Mobile responsive improvements */
+        @media (max-width: 991px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .navbar-collapse {
+                margin-top: 1rem;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(30, 93, 172, 0.1);
+            }
+
+            .nav-link {
+                margin: 4px 0;
+                text-align: center;
+            }
+
+            .navbar-nav.ms-auto {
+                margin-left: 0 !important;
+            }
+
+            .navbar-nav.gap-3,
+            .navbar-nav.gap-2 {
+                gap: 0.5rem !important;
+            }
+
+            .navbar-actions {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(30, 93, 172, 0.1);
+            }
+
+            .user-dropdown .dropdown-toggle {
+                justify-content: center;
+            }
+
+            .user-name {
+                display: inline !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.3rem;
+                letter-spacing: 1px;
+            }
+
+            .user-name {
+                max-width: 100px;
+            }
+
+            .btn-login {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+            }
         }
 
         .btn-dark {
@@ -291,315 +451,6 @@ if (isset($_SESSION['user_id'])) {
             transform: translateY(-3px);
             box-shadow: 0 8px 30px rgba(30, 93, 172, 0.5);
             background: linear-gradient(135deg, #1a4d8f 0%, #9badc2 100%);
-        }
-
-        /* ===== HERO SECTION (MODERN & DYNAMIC) ===== */
-        .hero-section {
-            height: 90vh;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            position: relative;
-            margin-top: 70px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            color: white;
-            max-width: 600px;
-            padding: 2rem;
-            animation: fadeInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .hero-content .subtitle {
-            letter-spacing: 6px;
-            font-weight: 300;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            animation: fadeIn 1.5s ease;
-            opacity: 0.9;
-        }
-
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 4rem;
-            line-height: 1.2;
-            margin-bottom: 30px;
-            text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.2);
-            animation: fadeInUp 1.4s ease;
-        }
-
-        .hero-content .description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 40px;
-            opacity: 0.95;
-            animation: fadeIn 1.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-btn {
-            background: white;
-            color: var(--primary);
-            padding: 16px 50px;
-            font-weight: 600;
-            border: 2px solid white;
-            transition: var(--transition);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-            animation: pulse 2.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            }
-            50% {
-                transform: scale(1.03);
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            }
-        }
-
-        .hero-btn:hover {
-            background: transparent;
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
-            border-color: white;
-        }
-
-        .hero-image {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 45%;
-            z-index: 2;
-            animation: fadeInRight 1.4s ease;
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translate(100px, -50%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(0, -50%);
-            }
-        }
-
-        .hero-image img {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.3));
-        }
-
-        /* ===== CATEGORY FILTERS (MODERN TABS) ===== */
-        .category-filters {
-            padding: 3rem 5%;
-            background: var(--white);
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .category-filters h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--primary);
-            position: relative;
-        }
-
-        .category-filters h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-
-        .filter-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-
-        .filter-tab {
-            padding: 0.8rem 1.5rem;
-            background: white;
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-tab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            z-index: -1;
-            transition: var(--transition);
-        }
-
-        .filter-tab:hover::before {
-            left: 0;
-        }
-
-        .filter-tab:hover {
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .filter-tab.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .filter-tab.active::before {
-            left: 0;
-        }
-
-
-        /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 992px) {
-            .hero-image {
-                display: none;
-            }
-
-            .hero-content {
-                max-width: 100%;
-            }
-
-            .hero-content h1 {
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .section-header h2 {
-                font-size: 2.2rem;
-            }
-
-            .filter-tabs {
-                gap: 0.5rem;
-            }
-
-            .filter-tab {
-                padding: 0.6rem 1rem;
-                font-size: 0.75rem;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-        }
-
-        /* ===== LOADING SPINNER ===== */
-        .spinner-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            animation: fadeOut 0.8s ease 1.5s forwards;
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-
-        .spinner {
-            width: 70px;
-            height: 70px;
-            border: 6px solid rgba(255, 255, 255, 0.3);
-            border-top: 6px solid white;
-            border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .logo-loader {
-            position: absolute;
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: white;
-            font-weight: 700;
-            letter-spacing: 3px;
-            animation: pulse 2s ease infinite;
-        }
-
-        /* ===== SCROLL REVEAL ANIMATION ===== */
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: var(--transition);
-        }
-
-        .scroll-reveal.active {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         /* ===== BADGE CART ===== */
@@ -640,98 +491,62 @@ if (isset($_SESSION['user_id'])) {
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">URBANHYPE</a>
+            <a class="navbar-brand" href="index.php">URBANHYPE</a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav ms-auto gap-2">
-                    <ul class="navbar-nav ms-auto gap-2">
+                <!-- Main Navigation Links -->
+                <ul class="navbar-nav ms-auto me-lg-4">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="shop.php">Shop</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-</ul>
                 </ul>
 
-                <!-- Right-aligned nav items (mobile-optimized) -->
-<ul class="navbar-nav ms-auto d-flex flex-row align-items-center gap-2">
-
-    <!-- Search Icon -->
-    <li class="nav-item">
-        <a href="#" class="nav-link p-2" aria-label="Search">
-            <i class="bi bi-search fs-5"></i>
-        </a>
-    </li>
-
-    <?php if ($user): ?>
-        <!-- Cart -->
-        <li class="nav-item">
-            <a href="user/produk_pembayaran/cart.php" class="nav-link position-relative p-2" aria-label="Cart">
-                <i class="bi bi-bag-fill fs-5"></i>
-                <?php
-                $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
-                if ($cart_count > 0): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
-                          style="font-size:0.65rem; min-width:18px; padding:2px 4px;">
-                        <?php echo $cart_count; ?>
-                    </span>
-                <?php endif; ?>
-            </a>
-        </li>
-
-        <!-- User Dropdown -->
-        <li class="nav-item dropdown">
-            <!-- Desktop: Foto + Nama -->
-            <a class="nav-link dropdown-toggle d-none d-lg-flex align-items-center gap-2 py-2"
-               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" 
-                     alt="Profil" class="rounded-circle"
-                     style="width:32px; height:32px; object-fit:cover;">
-                <span class="text-truncate" style="max-width:100px;">
-                    <?php echo htmlspecialchars(substr($user['nama_lengkap'], 0, 12)); ?>
-                    <?php if (strlen($user['nama_lengkap']) > 12) echo '…'; ?>
-                </span>
-            </a>
-
-            <!-- Mobile: Hanya ikon dropdown (tapi dropdown-nya tetap lengkap) -->
-            <a class="nav-link p-2 d-lg-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-circle fs-4"></i>
-            </a>
-
-            <!-- Dropdown Menu (sama untuk semua ukuran) -->
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li class="px-3 py-2 d-lg-none">
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" 
-                             alt="Profil" class="rounded-circle"
-                             style="width:40px; height:40px; object-fit:cover;">
-                        <div>
-                            <div class="fw-bold"><?php echo htmlspecialchars($user['nama_lengkap']); ?></div>
-                            <div class="small text-muted"><?php echo htmlspecialchars($user['email']); ?></div>
-                        </div>
+                <!-- Action Items (Search, Cart, User) -->
+                <div class="navbar-actions d-flex align-items-center justify-content-center">
+                    <!-- Search Icon -->
+                    <div class="nav-icon">
+                        <i class="bi bi-search fs-5"></i>
                     </div>
-                </li>
-                <li><hr class="dropdown-divider d-lg-none"></li>
-                <li><a class="dropdown-item" href="user/settings/settings.php"><i class="bi bi-gear me-2"></i> Setting Akun</a></li>
-                <li><a class="dropdown-item" href="user/logout_user.php"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
-            </ul>
-        </li>
 
-    <?php else: ?>
-        <!-- Login Button -->
-        <li class="nav-item d-none d-lg-block">
-            <a href="user/login_user.php" class="btn btn-dark btn-sm px-3 py-1 rounded-pill">Login</a>
-        </li>
-        <li class="nav-item d-lg-none">
-            <a href="user/login_user.php" class="nav-link p-2" aria-label="Login">
-                <i class="bi bi-box-arrow-in-right fs-4"></i>
-            </a>
-        </li>
-    <?php endif; ?>
-</ul>
+                    <?php if ($user): ?>
+                        <!-- Cart Icon with Badge -->
+                        <a href="user/produk_pembayaran/cart.php" class="cart-link">
+                            <i class="bi bi-bag-fill"></i>
+                            <?php
+                            $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+                            if ($cart_count > 0):
+                            ?>
+                                <span class="cart-badge">
+                                    <?php echo $cart_count; ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+
+                        <!-- User Dropdown -->
+                        <div class="dropdown user-dropdown">
+                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" 
+                                     alt="<?php echo htmlspecialchars($user['nama_lengkap']); ?>" 
+                                     class="rounded-circle" 
+                                     style="width:40px; height:40px; object-fit:cover;">
+                                <span class="user-name d-none d-lg-inline"><?php echo htmlspecialchars($user['nama_lengkap']); ?></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="user/settings/settings.php"><i class="bi bi-gear me-2"></i>Setting Akun</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="user/logout_user.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    <?php else: ?>
+                        <!-- Login Button -->
+                        <a href="user/login_user.php" class="btn btn-login">Login</a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </nav>
