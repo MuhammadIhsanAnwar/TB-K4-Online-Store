@@ -62,10 +62,11 @@ $query = mysqli_query($koneksi,
 
         /* ===== TABLE ===== */
         table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 10px;
-        }
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
 
         thead tr {
             background: var(--primary);
