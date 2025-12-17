@@ -8,7 +8,7 @@ $msg_type = '';
 
 // PROSES TAMBAH PRODUK
 if (isset($_POST['submit'])) {
-    
+
     $kategori = mysqli_real_escape_string($koneksi, $_POST['kategori']);
     $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
     $merk = mysqli_real_escape_string($koneksi, $_POST['merk']);
@@ -32,46 +32,46 @@ if (isset($_POST['submit'])) {
 
         // PROSES UPLOAD FOTO
         if (isset($_POST['foto_data']) && !empty($_POST['foto_data'])) {
-            
+
             $foto_data = $_POST['foto_data'];
-            
+
             // Decode base64
             if (preg_match('/^data:image\/(\w+);base64,/', $foto_data, $type)) {
                 $foto_data = substr($foto_data, strpos($foto_data, ',') + 1);
                 $tipo = strtolower($type[1]); // jpg, png, gif, etc.
-                
+
                 if (!in_array($tipo, ['jpeg', 'jpg', 'png', 'gif'])) {
                     $msg = "❌ Format file tidak diperbolehkan!";
                     $msg_type = 'danger';
                 } else {
                     $data = base64_decode($foto_data);
-                    
+
                     if ($data === false) {
                         $msg = "❌ Gagal mengubah format file!";
                         $msg_type = 'danger';
                     } else {
                         // Buat nama file
                         $foto_produk = time() . "_produk_" . uniqid() . '.' . ($tipo === 'jpeg' ? 'jpg' : $tipo);
-                        
+
                         // Buat folder jika belum ada
                         if (!is_dir("../foto_produk")) {
                             mkdir("../foto_produk", 0777, true);
                         }
-                        
+
                         // Simpan file
                         if (file_put_contents("../foto_produk/$foto_produk", $data)) {
-                            
+
                             // INSERT ke database
                             $tanggal_publish = date('Y-m-d H:i:s');
                             $insert_sql = "
                                 INSERT INTO products (kategori, nama, merk, deskripsi, harga, stok, created_at, foto_produk) 
                                 VALUES ('$kategori', '$nama', '$merk', '$deskripsi', '$harga', '$stok', '$tanggal_publish', '$foto_produk')
                             ";
-                            
+
                             if (mysqli_query($koneksi, $insert_sql)) {
                                 $msg = "✅ Produk berhasil ditambahkan!";
                                 $msg_type = 'success';
-                                
+
                                 // Reset form
                                 $_POST = [];
                             } else {
@@ -112,6 +112,7 @@ if (isset($_POST['submit'])) {
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
     <style>
         * {
             margin: 0;
@@ -712,8 +713,8 @@ if (isset($_POST['submit'])) {
 
                             <div class="form-group">
                                 <label for="nama">Nama Produk *</label>
-                                <input type="text" id="nama" name="nama" placeholder="Contoh: T-Shirt Premium Cotton" 
-                                       value="<?php echo isset($_POST['nama']) ? htmlspecialchars($_POST['nama']) : ''; ?>" required>
+                                <input type="text" id="nama" name="nama" placeholder="Contoh: T-Shirt Premium Cotton"
+                                    value="<?php echo isset($_POST['nama']) ? htmlspecialchars($_POST['nama']) : ''; ?>" required>
                                 <div class="info-text">Nama produk harus unik dan tidak boleh sama dengan yang lain</div>
                             </div>
                         </div>
@@ -721,15 +722,15 @@ if (isset($_POST['submit'])) {
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="merk">Merk Produk *</label>
-                                <input type="text" id="merk" name="merk" placeholder="Contoh: Urban Hype, Nike, Adidas" 
-                                       value="<?php echo isset($_POST['merk']) ? htmlspecialchars($_POST['merk']) : ''; ?>" required>
+                                <input type="text" id="merk" name="merk" placeholder="Contoh: Urban Hype, Nike, Adidas"
+                                    value="<?php echo isset($_POST['merk']) ? htmlspecialchars($_POST['merk']) : ''; ?>" required>
                                 <div class="info-text">Masukkan merk atau brand resmi produk</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="stok">Stok Produk *</label>
-                                <input type="number" id="stok" name="stok" placeholder="Contoh: 50" 
-                                       value="<?php echo isset($_POST['stok']) ? intval($_POST['stok']) : ''; ?>" min="0" required>
+                                <input type="number" id="stok" name="stok" placeholder="Contoh: 50"
+                                    value="<?php echo isset($_POST['stok']) ? intval($_POST['stok']) : ''; ?>" min="0" required>
                                 <div class="info-text">Jumlah stok barang yang tersedia</div>
                             </div>
                         </div>
@@ -750,8 +751,8 @@ if (isset($_POST['submit'])) {
                                 <label for="harga">Harga Produk (Rp) *</label>
                                 <div class="price-input-wrapper">
                                     <span class="currency-symbol">Rp</span>
-                                    <input type="number" id="harga" name="harga" placeholder="Contoh: 150000" 
-                                           value="<?php echo isset($_POST['harga']) ? intval($_POST['harga']) : ''; ?>" min="1" required>
+                                    <input type="number" id="harga" name="harga" placeholder="Contoh: 150000"
+                                        value="<?php echo isset($_POST['harga']) ? intval($_POST['harga']) : ''; ?>" min="1" required>
                                 </div>
                                 <div class="info-text">Harga produk dalam rupiah (tanpa titik/koma)</div>
                             </div>
