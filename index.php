@@ -894,7 +894,7 @@ if (isset($_SESSION['user_id'])) {
                         <li><a href="index.php" class="text-white text-decoration-none">Home</a></li>
                         <li><a href="shop.php" class="text-white text-decoration-none">Shop</a></li>
                         <li><a href="#about" class="text-white text-decoration-none">About Us</a></li>
-                        <li><a href="#contact" class="text-white text-decoration-none">Contact</a></li>
+                        <li><a href="#contact" class="text-white text-decoration-none">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 mb-4">
