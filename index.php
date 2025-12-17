@@ -68,7 +68,7 @@ if (isset($_SESSION['user_id'])) {
             position: absolute;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            filter: blur(80px);
+            filter: blur(120px);
             animation: float 15s ease-in-out infinite;
         }
 
@@ -77,7 +77,7 @@ if (isset($_SESSION['user_id'])) {
             height: 600px;
             top: -200px;
             right: -150px;
-            opacity: 0.7;
+            opacity: 0.25;
         }
 
         .bg-animation .shape:nth-child(2) {
@@ -85,7 +85,7 @@ if (isset($_SESSION['user_id'])) {
             height: 500px;
             bottom: -100px;
             left: -100px;
-            opacity: 0.5;
+            opacity: 0.25;
             animation-delay: -5s;
         }
 
@@ -95,7 +95,7 @@ if (isset($_SESSION['user_id'])) {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0.3;
+            opacity: 0.25;
             animation-duration: 20s;
             animation-delay: -10s;
         }
@@ -656,6 +656,16 @@ if (isset($_SESSION['user_id'])) {
     object-fit: cover;
     height: 100%;
 }
+
+#contact {
+    background: linear-gradient(
+        rgba(234, 226, 228, 0.9),
+        rgba(234, 226, 228, 0.9)
+    );
+    position: relative;
+    z-index: 1;
+}
+
 
 
     </style>
