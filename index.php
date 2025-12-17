@@ -722,17 +722,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- CATEGORY FILTERS (dari file lama — ditambahkan kembali) -->
-    <section class="category-filters scroll-reveal">
-        <h2>Explore Collections</h2>
-        <div class="filter-tabs">
-            <button class="filter-tab active">All</button>
-            <button class="filter-tab">Women</button>
-            <button class="filter-tab">Men</button>
-            <button class="filter-tab">Accessories</button>
-            <button class="filter-tab">Shoes</button>
-        </div>
-    </section>
+    
 
     <!-- ABOUT SECTION (dari file lama) -->
     <section id="about" class="py-5 bg-light scroll-reveal">
