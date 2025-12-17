@@ -131,7 +131,85 @@ if (isset($_POST['submit'])) {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, var(--misty) 0%, #f5f5f5 100%);
             min-height: 100vh;
+            margin: 0;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e63b6, #0f3f82);
+            padding: 18px 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .logo-box {
+            text-align: center;
+            padding: 10px 0 18px;
+        }
+
+        .logo-box img {
+            width: 72px;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
+            transition: .3s ease;
+        }
+
+        .logo-box img:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-title {
+            color: #dbe6ff;
+            font-size: 13px;
+            padding: 8px 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 10px;
+            transition: .25s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, .18);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, .32);
+            font-weight: 600;
+        }
+
+        .sidebar .logout {
+            margin-top: auto;
+            background: rgba(255, 80, 80, .15);
+            color: #ffd6d6 !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 14px;
+            transition: .3s ease;
+            margin-bottom: 12px;
+        }
+
+        .sidebar .logout:hover {
+            background: #ff4d4d;
+            color: #fff !important;
+            box-shadow: 0 10px 25px rgba(255, 77, 77, .6);
+            transform: translateY(-2px);
+        }
+
+        /* ================= CONTENT ================= */
+        .content {
+            margin-left: 220px;
             padding: 30px 20px;
+            min-height: 100vh;
         }
 
         .container {
@@ -518,7 +596,26 @@ if (isset($_POST['submit'])) {
             padding-left: 40px;
         }
 
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .content {
+                margin-left: 200px;
+            }
+        }
+
         @media (max-width: 768px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .content {
+                margin-left: 180px;
+                padding: 20px 15px;
+            }
+
             .form-card {
                 padding: 1.5rem;
             }
@@ -540,126 +637,163 @@ if (isset($_POST['submit'])) {
                 padding: 1.5rem;
             }
         }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 160px;
+            }
+
+            .content {
+                margin-left: 160px;
+                padding: 15px 10px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .logo-box img {
+                width: 60px;
+            }
+
+            .menu-title {
+                font-size: 11px;
+            }
+
+            .sidebar a {
+                padding: 10px 15px;
+                margin: 3px 8px;
+                font-size: 0.9rem;
+            }
+
+            .form-card {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <nav class="breadcrumb">
-            <a class="breadcrumb-item" href="dashboard.php">Dashboard</a>
-            <span class="breadcrumb-item active">Tambah Produk</span>
-        </nav>
+    <?php include 'sidebar.php'; ?>
 
-        <h1 class="page-title">➕ Tambah Produk Baru</h1>
+    <div class="content">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a class="breadcrumb-item" href="dashboard.php">Dashboard</a>
+                <span class="breadcrumb-item active">Tambah Produk</span>
+            </nav>
 
-        <?php if (!empty($msg)): ?>
-            <div class="alert alert-<?php echo $msg_type; ?>">
-                <?php echo $msg; ?>
-            </div>
-        <?php endif; ?>
+            <h1 class="page-title">➕ Tambah Produk Baru</h1>
 
-        <div class="form-card">
-            <form method="POST" id="formTambahProduk">
-                <!-- KATEGORI & NAMA -->
-                <div class="form-section">
-                    <h3 class="section-title">📋 Informasi Dasar</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="kategori">Kategori Produk *</label>
-                            <select id="kategori" name="kategori" required>
-                                <option value="">-- Pilih Kategori --</option>
-                                <option value="Men" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Men') ? 'selected' : ''; ?>>Men</option>
-                                <option value="Women" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Women') ? 'selected' : ''; ?>>Women</option>
-                                <option value="Shoes" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Shoes') ? 'selected' : ''; ?>>Shoes</option>
-                                <option value="Accessories" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Accessories') ? 'selected' : ''; ?>>Accessories</option>
-                            </select>
-                            <div class="info-text">Pilih kategori yang sesuai untuk produk</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="nama">Nama Produk *</label>
-                            <input type="text" id="nama" name="nama" placeholder="Contoh: T-Shirt Premium Cotton" 
-                                   value="<?php echo isset($_POST['nama']) ? htmlspecialchars($_POST['nama']) : ''; ?>" required>
-                            <div class="info-text">Nama produk harus unik dan tidak boleh sama dengan yang lain</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="merk">Merk Produk *</label>
-                            <input type="text" id="merk" name="merk" placeholder="Contoh: Urban Hype, Nike, Adidas" 
-                                   value="<?php echo isset($_POST['merk']) ? htmlspecialchars($_POST['merk']) : ''; ?>" required>
-                            <div class="info-text">Masukkan merk atau brand resmi produk</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="stok">Stok Produk *</label>
-                            <input type="number" id="stok" name="stok" placeholder="Contoh: 50" 
-                                   value="<?php echo isset($_POST['stok']) ? intval($_POST['stok']) : ''; ?>" min="0" required>
-                            <div class="info-text">Jumlah stok barang yang tersedia</div>
-                        </div>
-                    </div>
+            <?php if (!empty($msg)): ?>
+                <div class="alert alert-<?php echo $msg_type; ?>">
+                    <?php echo $msg; ?>
                 </div>
+            <?php endif; ?>
 
-                <!-- DESKRIPSI & HARGA -->
-                <div class="form-section">
-                    <h3 class="section-title">💬 Detail Produk</h3>
+            <div class="form-card">
+                <form method="POST" id="formTambahProduk">
+                    <!-- KATEGORI & NAMA -->
+                    <div class="form-section">
+                        <h3 class="section-title">📋 Informasi Dasar</h3>
 
-                    <div class="form-group">
-                        <label for="deskripsi">Deskripsi Produk *</label>
-                        <textarea id="deskripsi" name="deskripsi" placeholder="Jelaskan spesifikasi, fitur, dan keunggulan produk..." required><?php echo isset($_POST['deskripsi']) ? htmlspecialchars($_POST['deskripsi']) : ''; ?></textarea>
-                        <div class="info-text">Deskripsi yang detail membantu pelanggan memahami produk dengan lebih baik</div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="harga">Harga Produk (Rp) *</label>
-                            <div class="price-input-wrapper">
-                                <span class="currency-symbol">Rp</span>
-                                <input type="number" id="harga" name="harga" placeholder="Contoh: 150000" 
-                                       value="<?php echo isset($_POST['harga']) ? intval($_POST['harga']) : ''; ?>" min="1" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="kategori">Kategori Produk *</label>
+                                <select id="kategori" name="kategori" required>
+                                    <option value="">-- Pilih Kategori --</option>
+                                    <option value="Men" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Men') ? 'selected' : ''; ?>>Men</option>
+                                    <option value="Women" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Women') ? 'selected' : ''; ?>>Women</option>
+                                    <option value="Shoes" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Shoes') ? 'selected' : ''; ?>>Shoes</option>
+                                    <option value="Accessories" <?php echo (isset($_POST['kategori']) && $_POST['kategori'] === 'Accessories') ? 'selected' : ''; ?>>Accessories</option>
+                                </select>
+                                <div class="info-text">Pilih kategori yang sesuai untuk produk</div>
                             </div>
-                            <div class="info-text">Harga produk dalam rupiah (tanpa titik/koma)</div>
+
+                            <div class="form-group">
+                                <label for="nama">Nama Produk *</label>
+                                <input type="text" id="nama" name="nama" placeholder="Contoh: T-Shirt Premium Cotton" 
+                                       value="<?php echo isset($_POST['nama']) ? htmlspecialchars($_POST['nama']) : ''; ?>" required>
+                                <div class="info-text">Nama produk harus unik dan tidak boleh sama dengan yang lain</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="merk">Merk Produk *</label>
+                                <input type="text" id="merk" name="merk" placeholder="Contoh: Urban Hype, Nike, Adidas" 
+                                       value="<?php echo isset($_POST['merk']) ? htmlspecialchars($_POST['merk']) : ''; ?>" required>
+                                <div class="info-text">Masukkan merk atau brand resmi produk</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stok">Stok Produk *</label>
+                                <input type="number" id="stok" name="stok" placeholder="Contoh: 50" 
+                                       value="<?php echo isset($_POST['stok']) ? intval($_POST['stok']) : ''; ?>" min="0" required>
+                                <div class="info-text">Jumlah stok barang yang tersedia</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- FOTO PRODUK -->
-                <div class="form-section">
-                    <h3 class="section-title">📸 Foto Produk</h3>
+                    <!-- DESKRIPSI & HARGA -->
+                    <div class="form-section">
+                        <h3 class="section-title">💬 Detail Produk</h3>
 
-                    <div class="foto-section" id="fotoSection">
-                        <div class="foto-preview" id="fotoPreview">
-                            <img id="previewImage" src="" alt="Foto Produk">
+                        <div class="form-group">
+                            <label for="deskripsi">Deskripsi Produk *</label>
+                            <textarea id="deskripsi" name="deskripsi" placeholder="Jelaskan spesifikasi, fitur, dan keunggulan produk..." required><?php echo isset($_POST['deskripsi']) ? htmlspecialchars($_POST['deskripsi']) : ''; ?></textarea>
+                            <div class="info-text">Deskripsi yang detail membantu pelanggan memahami produk dengan lebih baik</div>
                         </div>
 
-                        <div class="foto-input-wrapper">
-                            <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/jpg" required>
-                            <label for="fotoInput" class="file-input-label">
-                                🖼️ Pilih Foto Produk
-                            </label>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="harga">Harga Produk (Rp) *</label>
+                                <div class="price-input-wrapper">
+                                    <span class="currency-symbol">Rp</span>
+                                    <input type="number" id="harga" name="harga" placeholder="Contoh: 150000" 
+                                           value="<?php echo isset($_POST['harga']) ? intval($_POST['harga']) : ''; ?>" min="1" required>
+                                </div>
+                                <div class="info-text">Harga produk dalam rupiah (tanpa titik/koma)</div>
+                            </div>
                         </div>
-
-                        <div class="foto-info">
-                            Format: JPG, JPEG, PNG | Ukuran max: 5MB | Akan dicrop menjadi square (1:1)
-                        </div>
-
-                        <!-- Hidden input untuk foto crop data -->
-                        <input type="hidden" id="fotoData" name="foto_data">
                     </div>
-                </div>
 
-                <!-- FORM BUTTONS -->
-                <div class="form-actions">
-                    <button type="submit" name="submit" class="btn btn-submit">
-                        ✅ Tambah Produk
-                    </button>
-                    <a href="dashboard.php" class="btn btn-cancel-form" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                        ❌ Batal
-                    </a>
-                </div>
-            </form>
+                    <!-- FOTO PRODUK -->
+                    <div class="form-section">
+                        <h3 class="section-title">📸 Foto Produk</h3>
+
+                        <div class="foto-section" id="fotoSection">
+                            <div class="foto-preview" id="fotoPreview">
+                                <img id="previewImage" src="" alt="Foto Produk">
+                            </div>
+
+                            <div class="foto-input-wrapper">
+                                <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/jpg" required>
+                                <label for="fotoInput" class="file-input-label">
+                                    🖼️ Pilih Foto Produk
+                                </label>
+                            </div>
+
+                            <div class="foto-info">
+                                Format: JPG, JPEG, PNG | Ukuran max: 5MB | Akan dicrop menjadi square (1:1)
+                            </div>
+
+                            <!-- Hidden input untuk foto crop data -->
+                            <input type="hidden" id="fotoData" name="foto_data">
+                        </div>
+                    </div>
+
+                    <!-- FORM BUTTONS -->
+                    <div class="form-actions">
+                        <button type="submit" name="submit" class="btn btn-submit">
+                            ✅ Tambah Produk
+                        </button>
+                        <a href="dashboard.php" class="btn btn-cancel-form" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                            ❌ Batal
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
