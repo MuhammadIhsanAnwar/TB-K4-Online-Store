@@ -17,7 +17,6 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UrbanHype - Unisex Fashion Store</title>
-    <link rel="icon" type="image/png" href="images/Background dan Logo/logo.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -466,171 +465,6 @@ if (isset($_SESSION['user_id'])) {
             left: 0;
         }
 
-        /* ===== PRODUCT GRID (MODERN CARD WITH HOVER EFFECT) ===== */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            padding: 2rem 5%;
-            background: var(--white);
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
-            transform: scale(0.95);
-            opacity: 0;
-            animation: fadeInScale 0.8s ease forwards;
-        }
-
-        @keyframes fadeInScale {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .product-card:nth-child(1) { animation-delay: 0.1s; }
-        .product-card:nth-child(2) { animation-delay: 0.15s; }
-        .product-card:nth-child(3) { animation-delay: 0.2s; }
-        .product-card:nth-child(4) { animation-delay: 0.25s; }
-        .product-card:nth-child(5) { animation-delay: 0.3s; }
-        .product-card:nth-child(6) { animation-delay: 0.35s; }
-        .product-card:nth-child(7) { animation-delay: 0.4s; }
-        .product-card:nth-child(8) { animation-delay: 0.45s; }
-
-        .product-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(30, 93, 172, 0.25);
-        }
-
-        .product-image-wrapper {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            background: var(--light);
-        }
-
-        .product-card img {
-            width: 100%;
-            border-radius: 20px;
-            transition: var(--transition);
-            transform: scale(1);
-        }
-
-        .product-card:hover img {
-            transform: scale(1.15);
-        }
-
-        .product-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(30, 93, 172, 0.85) 0%, rgba(183, 197, 218, 0.85) 100%);
-            opacity: 0;
-            transition: var(--transition);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .product-card:hover .product-overlay {
-            opacity: 1;
-        }
-
-        .overlay-text {
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: var(--transition) 0.1s;
-        }
-
-        .product-card:hover .overlay-text {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .product-info {
-            padding: 1.5rem;
-        }
-
-        .product-card .category {
-            color: var(--secondary);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
-        }
-
-        .product-card h6 {
-            font-weight: 600;
-            color: var(--dark);
-            transition: var(--transition);
-            font-size: 1rem;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .product-card:hover h6 {
-            color: var(--primary);
-        }
-
-        .product-card .price {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.25rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* ===== FOOTER PROMO ===== */
-        .promo-section {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--light) 100%);
-            padding: 80px 0;
-            margin-top: 80px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .promo-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -10%;
-            width: 40%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(30, 93, 172, 0.1) 0%, transparent 70%);
-            animation: float 15s ease-in-out infinite;
-        }
-
-        .promo-content {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .promo-content h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
-        .promo-content p {
-            font-size: 1.1rem;
-            color: var(--dark);
-            opacity: 0.8;
-        }
 
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 992px) {
@@ -773,11 +607,12 @@ if (isset($_SESSION['user_id'])) {
 
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav ms-auto gap-2">
+                    <ul class="navbar-nav ms-auto gap-2">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Pages</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.php">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+</ul>
                 </ul>
 
                 <ul class="navbar-nav ms-4 d-flex align-items-center gap-3">
@@ -821,7 +656,7 @@ if (isset($_SESSION['user_id'])) {
     </nav>
 
     <!-- HERO -->
-    <section class="hero-section">
+    <section id="home" class="hero-section">
         <div class="container">
             <div class="hero-content">
                 <p class="subtitle">New Season Collection</p>
@@ -835,50 +670,72 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- CATEGORY FILTERS -->
-    <section class="category-filters scroll-reveal">
-        <h2>Explore Collections</h2>
-        <div class="filter-tabs">
-            <button class="filter-tab active">All</button>
-            <button class="filter-tab">Women</button>
-            <button class="filter-tab">Men</button>
-            <button class="filter-tab">Accessories</button>
+    <!-- ABOUT SECTION -->
+<section id="about" class="py-5 bg-light scroll-reveal">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="text-primary">About <span class="text-dark">UrbanHype</span></h2>
+                <p class="lead mt-3">UrbanHype was founded in 2023 with a vision to break fashion boundaries. We believe style has no gender — only expression.</p>
+                <p>Our unisex collections are designed for the bold, the thoughtful, and the effortlessly cool. Every piece is crafted with sustainable materials and timeless aesthetics.</p>
+                <a href="#" class="btn btn-dark mt-3">Learn More</a>
+            </div>
+            <div class="col-lg-6">
+                <div class="ratio ratio-16x9">
+                    <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- PRODUCT GRID -->
-    <section class="products-grid">
-        <?php
-        $query = mysqli_query($koneksi, "SELECT * FROM products ORDER BY id DESC LIMIT 8");
-        while ($row = mysqli_fetch_assoc($query)):
-        ?>
-            <div class="product-card scroll-reveal">
-                <a href="user/produk_pembayaran/product_detail.php?id=<?php echo $row['id']; ?>" class="text-decoration-none">
-                    <div class="product-image-wrapper">
-                        <img src="foto_produk/<?php echo $row['gambar']; ?>" class="img-fluid">
-                        <div class="product-overlay">
-                            <span class="overlay-text">View Details</span>
+<!-- CONTACT SECTION -->
+<section id="contact" class="py-5 scroll-reveal">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-primary">Get In <span class="text-dark">Touch</span></h2>
+            <p class="text-muted mt-2">Have questions? We’re here to help.</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="email" class="form-control" placeholder="Your Email" required>
                         </div>
                     </div>
-                    <div class="product-info">
-                        <p class="category mb-1"><?php echo strtoupper($row['kategori']); ?></p>
-                        <h6><?php echo $row['nama']; ?></h6>
-                        <p class="price mb-0">$<?php echo number_format($row['harga'], 2); ?></p>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Subject">
                     </div>
-                </a>
-            </div>
-        <?php endwhile; ?>
-    </section>
-
-    <!-- PROMO SECTION -->
-    <section class="promo-section">
-        <div class="container">
-            <div class="promo-content">
-                <h3>Step Into Your Style</h3>
-                <p>Experience fashion that transcends boundaries. Premium quality, unisex designs.</p>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100">Send Message</button>
+                </form>
             </div>
         </div>
-    </section>
+        <div class="row mt-5 text-center">
+            <div class="col-md-4 mb-4">
+                <i class="bi bi-geo-alt fs-2 text-primary"></i>
+                <h6 class="mt-3">Location</h6>
+                <p>Jl. Fashion Avenue No. 45,<br>Jakarta, Indonesia</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="bi bi-envelope fs-2 text-primary"></i>
+                <h6 class="mt-3">Email</h6>
+                <p>hello@urbanhype.id</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="bi bi-telephone fs-2 text-primary"></i>
+                <h6 class="mt-3">Phone</h6>
+                <p>+62 812-3456-7890</p>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- FOOTER -->
     <footer class="bg-dark text-white pt-5 pb-4">
@@ -893,8 +750,8 @@ if (isset($_SESSION['user_id'])) {
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white text-decoration-none">Home</a></li>
                         <li><a href="#" class="text-white text-decoration-none">Shop</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">About Us</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Contact</a></li>
+                        <li><a href="#about" class="text-white text-decoration-none">About Us</a></li>
+                        <li><a href="#contact" class="text-white text-decoration-none">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 mb-4">
