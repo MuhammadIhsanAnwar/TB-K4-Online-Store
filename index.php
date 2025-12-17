@@ -68,7 +68,7 @@ if (isset($_SESSION['user_id'])) {
             position: absolute;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            filter: blur(120px);
+            filter: blur(80px);
             animation: float 15s ease-in-out infinite;
         }
 
