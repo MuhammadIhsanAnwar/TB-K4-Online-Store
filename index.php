@@ -578,34 +578,6 @@ if (isset($_SESSION['user_id'])) {
                 transform: scale(1);
             }
         }
-        /* Mobile navbar tweaks */
-@media (max-width: 767.98px) {
-    .navbar-brand {
-        font-size: 1.5rem;
-    }
-    
-    .navbar-nav .nav-link {
-        padding: 0.4rem 0.6rem !important;
-    }
-
-    /* Prevent navbar from expanding vertically */
-    .navbar-collapse {
-        flex-wrap: nowrap;
-    }
-
-    /* Ensure dropdown toggle has enough tap target */
-    .nav-item.dropdown .nav-link {
-        min-width: 44px;
-        min-height: 44px;
-    }
-}
-
-/* Prevent username from stretching navbar */
-.navbar-nav .text-truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
     </style>
 </head>
@@ -643,83 +615,42 @@ if (isset($_SESSION['user_id'])) {
 </ul>
                 </ul>
 
-                <!-- Auth & Tools (mobile-friendly) -->
-            <!-- Right-aligned nav items (responsive) -->
-<ul class="navbar-nav ms-auto d-flex flex-row flex-lg-row align-items-center gap-2">
+                <ul class="navbar-nav ms-4 d-flex align-items-center gap-3">
+                    <li><i class="bi bi-search fs-5"></i></li>
 
-    <!-- Search: always icon, compact -->
-    <li class="nav-item">
-        <a href="#" class="nav-link p-2" aria-label="Search">
-            <i class="bi bi-search fs-5"></i>
-        </a>
-    </li>
+                    <?php if ($user): ?>
+                        <!-- Keranjang user -->
+                        <li class="nav-item position-relative">
+                            <a href="user/produk_pembayaran/cart.php" class="nav-link position-relative">
+                                <i class="bi bi-bag-fill fs-5"></i>
+                                <?php
+                                $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+                                if ($cart_count > 0):
+                                ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-cart">
+                                        <?php echo $cart_count; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
 
-    <?php if ($user): ?>
-        <!-- Cart -->
-        <li class="nav-item">
-            <a href="user/produk_pembayaran/cart.php" class="nav-link position-relative p-2" aria-label="Cart">
-                <i class="bi bi-bag-fill fs-5"></i>
-                <?php
-                $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
-                if ($cart_count > 0): ?>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
-                          style="font-size:0.65rem; min-width:18px; padding:2px 4px;">
-                        <?php echo $cart_count; ?>
-                    </span>
-                <?php endif; ?>
-            </a>
-        </li>
-
-        <!-- User section: responsive layout -->
-        <li class="nav-item dropdown">
-            <!-- Desktop & Tablet (≥768px): foto + nama pendek -->
-            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 py-2 d-md-flex d-lg-flex flex-nowrap"
-               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" 
-                     alt="Profil" class="rounded-circle"
-                     style="width:32px; height:32px; object-fit:cover; flex-shrink:0;">
-                <span class="d-none d-md-inline text-truncate" style="max-width:100px;">
-                    <?php echo htmlspecialchars(substr($user['nama_lengkap'], 0, 12)); ?>
-                    <?php if (strlen($user['nama_lengkap']) > 12) echo '…'; ?>
-                </span>
-            </a>
-
-            <!-- Mobile-only (<768px): hanya ikon dropdown (lebih ringkas) -->
-            <a class="nav-link p-2 d-md-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical fs-4"></i>
-            </a>
-
-            <!-- Dropdown menu (sama untuk semua ukuran) -->
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li class="px-3 py-2 d-md-none">
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>" 
-                             alt="Profil" class="rounded-circle"
-                             style="width:40px; height:40px; object-fit:cover;">
-                        <div>
-                            <div class="fw-bold"><?php echo htmlspecialchars($user['nama_lengkap']); ?></div>
-                            <div class="small text-muted"><?php echo htmlspecialchars($user['email']); ?></div>
-                        </div>
-                    </div>
-                </li>
-                <li><hr class="dropdown-divider d-md-none"></li>
-                <li><a class="dropdown-item" href="user/settings/settings.php"><i class="bi bi-gear me-2"></i> Setting Akun</a></li>
-                <li><a class="dropdown-item" href="user/logout_user.php"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
-            </ul>
-        </li>
-
-    <?php else: ?>
-        <!-- Login button: full text on tablet+, icon on mobile -->
-        <li class="nav-item d-none d-md-block">
-            <a href="user/login_user.php" class="btn btn-dark btn-sm px-3 py-1 rounded-pill">Login</a>
-        </li>
-        <li class="nav-item d-md-none">
-            <a href="user/login_user.php" class="nav-link p-2" aria-label="Login">
-                <i class="bi bi-box-arrow-in-right fs-4"></i>
-            </a>
-        </li>
-    <?php endif; ?>
-</ul>
+                        <!-- User dropdown -->
+                        <li class="nav-item dropdown user-dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="foto_profil/<?php echo $user['foto_profil']; ?>" alt="Foto Profil" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">
+                                <span class="d-none d-lg-inline"><?php echo $user['nama_lengkap']; ?></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="user/settings/settings.php">Setting Akun</a></li>
+                                <li><a class="dropdown-item" href="user/logout_user.php">Logout</a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li>
+                            <a href="/user/login_user.php" class="btn btn-dark px-4 py-2 rounded-pill">Login</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
             </div>
         </div>
     </nav>
