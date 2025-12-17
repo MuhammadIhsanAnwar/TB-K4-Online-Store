@@ -657,16 +657,6 @@ if (isset($_SESSION['user_id'])) {
     height: 100%;
 }
 
-#contact {
-    background: linear-gradient(
-        rgba(163, 235, 251, 0.9),
-        rgba(142, 189, 230, 0.9)
-    );
-    position: relative;
-    z-index: 1;
-}
-
-
 
     </style>
 </head>
