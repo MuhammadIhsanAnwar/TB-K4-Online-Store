@@ -1,5 +1,6 @@
 <?php
 include "admin/koneksi.php";
+include "navbar.php";
 session_start();
 
 // Ambil data user jika sudah login
@@ -70,53 +71,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             color: var(--dark);
         }
 
-        /* NAVBAR */
-        .navbar {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.95) !important;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            border-bottom: 1px solid rgba(30, 93, 172, 0.1);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 1.8rem;
-            letter-spacing: 2px;
-            color: var(--primary) !important;
-        }
-
-        .nav-link {
-            color: var(--dark) !important;
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: var(--primary) !important;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: var(--transition);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
         /* HERO SECTION */
         .hero-shop {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -124,6 +78,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             padding: 4rem 0;
             text-align: center;
             margin-bottom: 3rem;
+            margin-top: 80px;
         }
 
         .hero-shop h1 {
@@ -367,6 +322,10 @@ while ($row = mysqli_fetch_assoc($result)) {
         }
 
         @media (max-width: 768px) {
+            .hero-shop {
+                margin-top: 70px;
+            }
+
             .hero-shop h1 {
                 font-size: 2rem;
             }
@@ -389,41 +348,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 </head>
 
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-shop">
-            <a class="navbar-brand" href="index.php">URBANHYPE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="shop.php">Shop</a>
-                    </li>
-                    <?php if ($user): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/settings/settings.php">👤 Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/logout.php">🚪 Logout</a>
-                        </li>
-                    <?php else: ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/login_user.php">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/register.php">Register</a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- HERO SECTION -->
     <section class="hero-shop">
         <div class="container-shop">
@@ -455,8 +379,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="products-grid">
                 <?php foreach ($products as $product): ?>
                     <div class="product-card" onclick="openProductDetail(<?php echo $product['id']; ?>)">
-                        <img src="foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" 
-                             alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image">
+                        <img src="foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>"
+                            alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image">
                         <div class="product-info">
                             <span class="product-kategori"><?php echo htmlspecialchars($product['kategori']); ?></span>
                             <h3 class="product-name"><?php echo htmlspecialchars($product['nama']); ?></h3>

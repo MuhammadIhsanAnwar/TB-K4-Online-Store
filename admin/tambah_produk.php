@@ -455,12 +455,17 @@ if (isset($_POST['submit'])) {
             animation: fadeIn 0.3s ease-out;
             overflow-y: auto;
             padding: 20px 0;
+            visibility: hidden;
+            opacity: 0;
         }
 
         .cropper-modal.show {
             display: flex;
             align-items: center;
             justify-content: center;
+            visibility: visible;
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.95);
         }
 
         @keyframes fadeIn {
@@ -483,6 +488,8 @@ if (isset($_POST['submit'])) {
             animation: slideUp 0.4s ease-out;
             max-height: 90vh;
             overflow-y: auto;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .cropper-title {
@@ -626,6 +633,7 @@ if (isset($_POST['submit'])) {
                 font-size: 0.85rem;
             }
         }
+
         @media (max-width: 480px) {
             .cropper-modal {
                 padding: 10px;
@@ -934,7 +942,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </div>
-    
+
     <!-- SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>

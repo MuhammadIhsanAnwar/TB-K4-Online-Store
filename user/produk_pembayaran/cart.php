@@ -1,5 +1,6 @@
 <?php
 session_start();
+include "../../navbar.php";
 $cart = $_SESSION['cart'] ?? [];
 $total = 0;
 
@@ -47,74 +48,11 @@ if (isset($_POST['remove'])) {
             line-height: 1.6;
         }
 
-        .navbar {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 20px rgba(30, 93, 172, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(-50%);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
         .container {
             max-width: 1200px;
             margin: 4rem auto;
             padding: 0 2rem;
+            margin-top: 100px;
         }
 
         .page-header {
@@ -312,6 +250,7 @@ if (isset($_POST['remove'])) {
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -322,6 +261,7 @@ if (isset($_POST['remove'])) {
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -333,6 +273,7 @@ if (isset($_POST['remove'])) {
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -340,6 +281,10 @@ if (isset($_POST['remove'])) {
         }
 
         @media (max-width: 768px) {
+            .container {
+                margin-top: 80px;
+            }
+
             .page-header h1 {
                 font-size: 2rem;
             }
@@ -361,26 +306,11 @@ if (isset($_POST['remove'])) {
                 width: 100%;
                 text-align: center;
             }
-
-            .nav-links {
-                gap: 1rem;
-            }
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.php" class="logo">URBAN HYPE</a>
-            <ul class="nav-links">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="products.php">Products</a></li>
-                <li><a href="cart.php">Cart</a></li>
-            </ul>
-        </div>
-    </nav>
-
     <div class="container">
         <div class="page-header">
             <h1>Shopping Cart</h1>
@@ -392,7 +322,7 @@ if (isset($_POST['remove'])) {
                 <div class="empty-cart-icon">🛒</div>
                 <h3>Your Cart is Empty</h3>
                 <p>Looks like you haven't added anything to your cart yet.</p>
-                <a href="products.php" class="btn btn-primary">Start Shopping</a>
+                <a href="../../shop.php" class="btn btn-primary">Start Shopping</a>
             </div>
         <?php else: ?>
             <div class="cart-table">
@@ -413,9 +343,9 @@ if (isset($_POST['remove'])) {
                         ?>
                             <tr>
                                 <td class="product-name"><?php echo $item['nama']; ?></td>
-                                <td class="price">$<?php echo number_format($item['harga'], 2); ?></td>
+                                <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
                                 <td><span class="qty-badge"><?php echo $item['qty']; ?></span></td>
-                                <td class="subtotal">$<?php echo number_format($subtotal, 2); ?></td>
+                                <td class="subtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
                                 <td>
                                     <form method="POST" style="margin: 0;">
                                         <input type="hidden" name="id" value="<?php echo $item['id']; ?>">
@@ -426,14 +356,14 @@ if (isset($_POST['remove'])) {
                         <?php endforeach; ?>
                         <tr class="total-row">
                             <td colspan="3" style="text-align: right;">Total</td>
-                            <td colspan="2">$<?php echo number_format($total, 2); ?></td>
+                            <td colspan="2">Rp <?php echo number_format($total, 0, ',', '.'); ?></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="cart-actions">
-                <a href="products.php" class="btn btn-secondary">Continue Shopping</a>
+                <a href="../../shop.php" class="btn btn-secondary">Continue Shopping</a>
                 <a href="checkout.php" class="btn btn-primary">Proceed to Checkout</a>
             </div>
         <?php endif; ?>

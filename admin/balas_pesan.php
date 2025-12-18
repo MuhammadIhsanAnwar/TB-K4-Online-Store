@@ -38,17 +38,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                           </div>';
     } else {
         // Simpan balasan ke database
-        $query_insert = "INSERT INTO pesan_balasan (pesan_id, subject, pesan, email_tujuan, created_at) 
+        $query_insert = "INSERT INTO pesan_balasan (id, subject, pesan, email_tujuan, created_at) 
                          VALUES ('$id', '$subject', '$pesan', '$email_penerima', NOW())";
 
         if (mysqli_query($koneksi, $query_insert)) {
             // Tandai pesan original sebagai sudah dibalas
             mysqli_query($koneksi, "UPDATE pesan_kontak SET status='dibalas' WHERE id='$id'");
 
-            $status_proses = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>Sukses!</strong> Balasan pesan telah disimpan.
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                              </div>';
+            // Include fungsi email dan kirim email
+            include 'email_balas_pesan.php';
+            $email_berhasil = kirimEmailBalasan($email_penerima, $nama_pengirim, $subject, $pesan);
+
+            if ($email_berhasil) {
+                $status_proses = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>✅ Sukses!</strong> Balasan pesan telah disimpan dan email telah dikirim ke ' . htmlspecialchars($email_penerima) . '.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                  </div>';
+            } else {
+                $status_proses = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>⚠️ Peringatan!</strong> Balasan pesan telah disimpan, namun gagal mengirim email ke ' . htmlspecialchars($email_penerima) . '.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                  </div>';
+            }
         } else {
             $status_proses = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <strong>Error!</strong> Gagal menyimpan balasan: ' . mysqli_error($koneksi) . '

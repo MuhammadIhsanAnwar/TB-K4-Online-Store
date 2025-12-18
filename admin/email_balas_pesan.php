@@ -1,5 +1,4 @@
 <?php
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
@@ -16,8 +15,7 @@ require '../phpmailer/src/SMTP.php';
  * @param string $pesan - Isi pesan balasan
  * @return array - Array dengan status dan message
  */
-function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan)
-{
+function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan) {
     $mail = new PHPMailer(true);
 
     try {
@@ -26,7 +24,7 @@ function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan)
         $mail->isSMTP();
         $mail->Host       = "urbanhype.neoverse.my.id";
         $mail->SMTPAuth   = true;
-        $mail->Username   = "mailreset@urbanhype.neoverse.my.id";
+        $mail->Username   = "helpdesk@urbanhype.neoverse.my.id";
         $mail->Password   = "administrator-online-store";
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
@@ -39,7 +37,7 @@ function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan)
         ];
 
         // Set From dan To
-        $mail->setFrom("mailreset@urbanhype.neoverse.my.id", "URBANHYPE - Balasan Pesan");
+        $mail->setFrom("helpdesk@urbanhype.neoverse.my.id", "URBANHYPE - Balasan Pesan");
         $mail->addAddress($email_tujuan, $nama_penerima);
 
         // Atur format HTML
@@ -174,3 +172,4 @@ function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan)
         ];
     }
 }
+?>

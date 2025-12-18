@@ -1,495 +1,647 @@
 <?php
-session_start();
 include "admin/koneksi.php";
+session_start();
 
-$id = $_GET['id'] ?? 0;
-$query = mysqli_query($koneksi, "SELECT * FROM products WHERE id='$id'");
-$product = mysqli_fetch_assoc($query);
-
-if (!$product) {
-    die("Produk tidak ditemukan!");
+// Ambil data user jika sudah login
+$user = null;
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $result = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE id='$user_id'");
+    $user = mysqli_fetch_assoc($result);
 }
 
-// Tambah ke keranjang
-if (isset($_POST['add_to_cart'])) {
-    $cart_item = [
-        'id' => $product['id'],
-        'nama' => $product['nama'],
-        'harga' => $product['harga'],
-        'gambar' => $product['gambar'],
-        'qty' => $_POST['qty']
-    ];
+// Ambil ID produk dari URL
+if (!isset($_GET['id'])) {
+    header("Location: shop.php");
+    exit;
+}
 
-    // Jika session cart kosong, buat baru
-    if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
+$product_id = intval($_GET['id']);
+
+// Ambil data produk
+$query = "SELECT * FROM products WHERE id='$product_id'";
+$result = mysqli_query($koneksi, $query);
+
+if (!$result || mysqli_num_rows($result) == 0) {
+    header("Location: shop.php");
+    exit;
+}
+
+$product = mysqli_fetch_assoc($result);
+
+// PROSES TAMBAH KE KERANJANG
+if (isset($_POST['add_to_cart'])) {
+    if (!$user) {
+        echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
+        exit;
+    }
+
+    $quantity = intval($_POST['quantity']);
+    
+    if ($quantity <= 0 || $quantity > $product['stok']) {
+        echo json_encode(['status' => 'error', 'message' => 'Jumlah produk tidak valid']);
+        exit;
+    }
 
     // Cek apakah produk sudah ada di keranjang
-    $found = false;
-    foreach ($_SESSION['cart'] as &$item) {
-        if ($item['id'] == $cart_item['id']) {
-            $item['qty'] += $cart_item['qty'];
-            $found = true;
-            break;
-        }
-    }
-    if (!$found) $_SESSION['cart'][] = $cart_item;
+    $check_query = "SELECT * FROM keranjang WHERE user_id='$user_id' AND product_id='$product_id'";
+    $check_result = mysqli_query($koneksi, $check_query);
 
-    header("Location: cart.php");
+    if (mysqli_num_rows($check_result) > 0) {
+        // Update quantity
+        $existing = mysqli_fetch_assoc($check_result);
+        $new_quantity = $existing['quantity'] + $quantity;
+
+        if ($new_quantity > $product['stok']) {
+            echo json_encode(['status' => 'error', 'message' => 'Stok tidak mencukupi']);
+            exit;
+        }
+
+        $update_query = "UPDATE keranjang SET quantity='$new_quantity' WHERE user_id='$user_id' AND product_id='$product_id'";
+        mysqli_query($koneksi, $update_query);
+    } else {
+        // Insert ke keranjang
+        $insert_query = "INSERT INTO keranjang (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
+        mysqli_query($koneksi, $insert_query);
+    }
+
+    echo json_encode(['status' => 'success', 'message' => 'Produk berhasil ditambahkan ke keranjang']);
+    exit;
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $product['nama']; ?> - Urban Hype</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/Background dan Logo/logo.png">
+    <title><?php echo htmlspecialchars($product['nama']); ?> - UrbanHype</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="icons/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
     <style>
+        :root {
+            --primary: #1E5DAC;
+            --secondary: #B7C5DA;
+            --accent: #E8D3C1;
+            --light: #EAE2E4;
+            --dark: #2d3748;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(30, 93, 172, 0.1);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #1E5DAC;
-            --beige: #E8D3C1;
-            --alley: #B7C5DA;
-            --misty: #EAE2E4;
-            --dark: #1a1a1a;
-            --gray: #666;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--misty) 0%, #ffffff 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #f5f5f5 100%);
             color: var(--dark);
-            min-height: 100vh;
-            line-height: 1.6;
         }
 
-        /* Navbar */
+        /* NAVBAR */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 20px rgba(30, 93, 172, 0.1);
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            border-bottom: 1px solid rgba(30, 93, 172, 0.1);
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
-            animation: slideDown 0.5s ease;
         }
 
-        @keyframes slideDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .navbar .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
+        .navbar-brand {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
             font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            color: var(--primary) !important;
         }
 
-        .logo:hover {
-            transform: scale(1.05);
-            color: var(--dark);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
+        .nav-link {
+            color: var(--dark) !important;
             font-weight: 500;
-            position: relative;
-            transition: color 0.3s ease;
-            padding: 0.5rem 0;
+            transition: var(--transition);
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%) scaleX(0);
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-            transition: transform 0.3s ease;
+        .nav-link:hover {
+            color: var(--primary) !important;
         }
 
-        .nav-links a:hover::after {
-            transform: translateX(-50%) scaleX(1);
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        /* Product Section */
-        .product-container {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            animation: fadeIn 0.8s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* BREADCRUMB */
+        .breadcrumb-section {
+            background: white;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--light);
+            margin-bottom: 2rem;
         }
 
         .breadcrumb {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            color: var(--gray);
-            font-size: 0.9rem;
+            background: transparent;
+            padding: 0;
+            margin: 0;
         }
 
-        .breadcrumb a {
+        .breadcrumb-item a {
             color: var(--primary);
             text-decoration: none;
-            transition: opacity 0.3s ease;
+            font-weight: 500;
         }
 
-        .breadcrumb a:hover {
-            opacity: 0.7;
+        .breadcrumb-item a:hover {
+            text-decoration: underline;
         }
 
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
+        /* CONTAINER */
+        .container-detail {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .product-image-container {
-            position: relative;
+        /* PRODUCT DETAIL */
+        .product-detail {
             background: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(30, 93, 172, 0.15);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
         }
 
-        .product-image-container:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(30, 93, 172, 0.25);
+        .product-image-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .product-image {
+        .product-image-main {
             width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s ease;
+            max-width: 400px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid var(--light);
         }
 
-        .product-image-container:hover .product-image {
-            transform: scale(1.05);
+        .product-info-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .product-badge {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--alley));
+        .product-kategori {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
+            padding: 6px 16px;
+            border-radius: 25px;
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
-        }
-
-        .product-info {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .product-category {
-            color: var(--primary);
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
             margin-bottom: 1rem;
+            width: fit-content;
+            letter-spacing: 0.5px;
         }
 
-        .product-title {
+        .product-name {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
             line-height: 1.2;
         }
 
-        .product-price {
+        .product-merk {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .product-harga {
+            font-family: 'Playfair Display', serif;
             font-size: 2rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-rating {
+            color: #fbbf24;
             margin-bottom: 1.5rem;
-        }
-
-        .product-description {
-            color: var(--gray);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
-        }
-
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--alley), transparent);
-            margin: 2rem 0;
-        }
-
-        /* Quantity Selector */
-        .quantity-section {
-            margin-bottom: 2rem;
-        }
-
-        .quantity-label {
-            display: block;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 0.75rem;
             font-size: 1rem;
         }
 
-        .quantity-input {
-            width: 120px;
-            padding: 1rem;
-            border: 2px solid var(--alley);
+        .product-description {
+            color: #6b7280;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .product-specs {
+            background: var(--light);
+            padding: 1.5rem;
             border-radius: 12px;
-            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(30, 93, 172, 0.1);
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
             font-weight: 600;
+            color: var(--primary);
+        }
+
+        .spec-value {
             color: var(--dark);
+        }
+
+        /* QUANTITY & ADD TO CART */
+        .add-to-cart-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .quantity-selector {
+            display: flex;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            background: white;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background: var(--light);
+        }
+
+        .quantity-input {
+            width: 60px;
+            border: none;
             text-align: center;
-            transition: all 0.3s ease;
-            background: var(--misty);
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--primary);
         }
 
         .quantity-input:focus {
             outline: none;
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(30, 93, 172, 0.1);
         }
 
-        /* Add to Cart Button */
         .btn-add-cart {
-            width: 100%;
-            padding: 1.25rem 2rem;
-            background: linear-gradient(135deg, var(--primary) 0%, #2a7fd9 100%);
+            flex: 1;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
+            font-weight: 700;
             font-size: 1.1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 25px rgba(30, 93, 172, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-add-cart::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-add-cart:hover::before {
-            left: 100%;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
         }
 
         .btn-add-cart:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(30, 93, 172, 0.4);
+            box-shadow: 0 8px 25px rgba(30, 93, 172, 0.4);
         }
 
-        .btn-add-cart:active {
-            transform: translateY(-1px);
+        .btn-add-cart:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        /* Product Features */
-        .product-features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .feature-item {
-            padding: 1.5rem;
-            background: linear-gradient(135deg, var(--misty), white);
-            border-radius: 12px;
-            border: 1px solid var(--alley);
-            transition: all 0.3s ease;
-        }
-
-        .feature-item:hover {
-            transform: translateX(5px);
-            border-color: var(--primary);
-            box-shadow: 0 5px 20px rgba(30, 93, 172, 0.15);
-        }
-
-        .feature-title {
+        .stok-status {
+            padding: 12px 16px;
+            border-radius: 8px;
             font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 0.25rem;
+            text-align: center;
+            margin-bottom: 1rem;
         }
 
-        .feature-text {
-            color: var(--gray);
-            font-size: 0.9rem;
+        .stok-ready {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
         }
 
-        /* Responsive */
+        .stok-low {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .stok-out {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
         @media (max-width: 768px) {
-            .nav-links {
-                gap: 1.5rem;
-            }
-
-            .product-grid {
+            .product-detail {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+                padding: 1.5rem;
             }
 
-            .product-info {
-                padding: 2rem;
+            .product-name {
+                font-size: 1.8rem;
             }
 
-            .product-title {
-                font-size: 2rem;
+            .product-harga {
+                font-size: 1.5rem;
             }
 
-            .product-features {
-                grid-template-columns: 1fr;
+            .product-image-main {
+                max-width: 100%;
+            }
+
+            .add-to-cart-section {
+                flex-direction: column;
+            }
+
+            .btn-add-cart {
+                width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
-
-<!-- Navbar -->
-<nav class="navbar">
-    <div class="container">
-        <a href="index.php" class="logo">Urban Hype</a>
-        <ul class="nav-links">
-            <li><a href="index.php">Home</a></li>
-            <li><a href="products.php">Products</a></li>
-            <li><a href="cart.php">Cart</a></li>
-        </ul>
-    </div>
-</nav>
-
-<!-- Product Section -->
-<div class="product-container">
-    <div class="breadcrumb">
-        <a href="index.php">Home</a>
-        <span>/</span>
-        <a href="products.php">Products</a>
-        <span>/</span>
-        <span><?php echo $product['nama']; ?></span>
-    </div>
-
-    <div class="product-grid">
-        <!-- Product Image -->
-        <div class="product-image-container">
-            <div class="product-badge">New Arrival</div>
-            <img src="foto_produk/<?php echo $product['gambar']; ?>" alt="<?php echo $product['nama']; ?>" class="product-image">
-        </div>
-
-        <!-- Product Info -->
-        <div class="product-info">
-            <div class="product-category"><?php echo strtoupper($product['kategori']); ?></div>
-            <h1 class="product-title"><?php echo $product['nama']; ?></h1>
-            <div class="product-price">$<?php echo number_format($product['harga'], 2); ?></div>
-            
-            <div class="divider"></div>
-            
-            <p class="product-description"><?php echo $product['deskripsi']; ?></p>
-
-            <form method="POST">
-                <div class="quantity-section">
-                    <label class="quantity-label">Quantity</label>
-                    <input type="number" name="qty" value="1" min="1" class="quantity-input">
-                </div>
-                
-                <button type="submit" name="add_to_cart" class="btn-add-cart">
-                    Add to Cart
-                </button>
-            </form>
-
-            <div class="product-features">
-                <div class="feature-item">
-                    <div class="feature-title">Free Shipping</div>
-                    <div class="feature-text">On orders over $100</div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-title">Easy Returns</div>
-                    <div class="feature-text">30-day return policy</div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-title">Authentic</div>
-                    <div class="feature-text">100% genuine products</div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-title">Secure Payment</div>
-                    <div class="feature-text">Safe & encrypted</div>
-                </div>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-detail">
+            <a class="navbar-brand" href="index.php">URBANHYPE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="shop.php">Shop</a>
+                    </li>
+                    <?php if ($user): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="user/settings/settings.php">👤 Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="user/logout.php">🚪 Logout</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="user/login_user.php">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="user/register.php">Register</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
             </div>
         </div>
-    </div>
-</div>
+    </nav>
 
+    <!-- BREADCRUMB -->
+    <section class="breadcrumb-section">
+        <div class="container-detail">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="shop.php">Shop</a></li>
+                    <li class="breadcrumb-item"><a href="shop.php?kategori=<?php echo htmlspecialchars($product['kategori']); ?>"><?php echo htmlspecialchars($product['kategori']); ?></a></li>
+                    <li class="breadcrumb-item active"><?php echo htmlspecialchars($product['nama']); ?></li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- PRODUCT DETAIL -->
+    <main class="container-detail">
+        <div class="product-detail">
+            <!-- IMAGE SECTION -->
+            <div class="product-image-section">
+                <img src="foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" 
+                     alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image-main">
+            </div>
+
+            <!-- INFO SECTION -->
+            <div class="product-info-section">
+                <span class="product-kategori">📂 <?php echo htmlspecialchars($product['kategori']); ?></span>
+                <h1 class="product-name"><?php echo htmlspecialchars($product['nama']); ?></h1>
+                <p class="product-merk">Brand: <?php echo htmlspecialchars($product['merk']); ?></p>
+                <div class="product-rating">⭐⭐⭐⭐⭐ (4.8/5) · 125 Ulasan</div>
+
+                <!-- PRICE -->
+                <div class="product-harga">Rp <?php echo number_format($product['harga'], 0, ',', '.'); ?></div>
+
+                <!-- STOK STATUS -->
+                <div class="stok-status <?php echo $product['stok'] > 10 ? 'stok-ready' : ($product['stok'] > 0 ? 'stok-low' : 'stok-out'); ?>">
+                    <?php 
+                    if ($product['stok'] > 10) {
+                        echo "✓ Stok Tersedia (" . $product['stok'] . ")";
+                    } elseif ($product['stok'] > 0) {
+                        echo "⚠ Stok Terbatas (" . $product['stok'] . ")";
+                    } else {
+                        echo "✗ Stok Habis";
+                    }
+                    ?>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <p class="product-description"><?php echo nl2br(htmlspecialchars($product['deskripsi'])); ?></p>
+
+                <!-- SPECIFICATIONS -->
+                <div class="product-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">SKU</span>
+                        <span class="spec-value">PROD-<?php echo str_pad($product['id'], 5, '0', STR_PAD_LEFT); ?></span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Kategori</span>
+                        <span class="spec-value"><?php echo htmlspecialchars($product['kategori']); ?></span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Merek</span>
+                        <span class="spec-value"><?php echo htmlspecialchars($product['merk']); ?></span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Ketersediaan</span>
+                        <span class="spec-value">
+                            <?php 
+                            if ($product['stok'] > 0) {
+                                echo $product['stok'] . " Item Tersedia";
+                            } else {
+                                echo "Sedang Tidak Tersedia";
+                            }
+                            ?>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- ADD TO CART -->
+                <?php if ($product['stok'] > 0): ?>
+                    <div class="add-to-cart-section">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" id="decreaseBtn" onclick="decreaseQuantity()">−</button>
+                            <input type="number" id="quantityInput" class="quantity-input" value="1" min="1" max="<?php echo $product['stok']; ?>">
+                            <button class="quantity-btn" id="increaseBtn" onclick="increaseQuantity()">+</button>
+                        </div>
+                        <button class="btn-add-cart" id="addCartBtn" onclick="addToCart()">
+                            🛒 Tambah ke Keranjang
+                        </button>
+                    </div>
+                <?php else: ?>
+                    <button class="btn-add-cart" disabled style="opacity: 0.5;">
+                        Stok Habis
+                    </button>
+                <?php endif; ?>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container-detail">
+            <p>&copy; 2025 UrbanHype. All rights reserved. | Designed with ❤️</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+
+    <script>
+        const maxStok = <?php echo $product['stok']; ?>;
+        
+        function decreaseQuantity() {
+            const input = document.getElementById('quantityInput');
+            if (input.value > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        function increaseQuantity() {
+            const input = document.getElementById('quantityInput');
+            if (parseInt(input.value) < maxStok) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+
+        function addToCart() {
+            <?php if (!$user): ?>
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Anda Harus Login',
+                    text: 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang',
+                    confirmButtonText: 'Login',
+                    confirmButtonColor: '#1E5DAC'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'user/login_user.php';
+                    }
+                });
+                return;
+            <?php endif; ?>
+
+            const quantity = parseInt(document.getElementById('quantityInput').value);
+            const addBtn = document.getElementById('addCartBtn');
+            
+            addBtn.disabled = true;
+            addBtn.textContent = '⏳ Menambahkan...';
+
+            const formData = new FormData();
+            formData.append('add_to_cart', '1');
+            formData.append('quantity', quantity);
+
+            fetch('product-detail.php?id=<?php echo $product['id']; ?>', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message,
+                        confirmButtonColor: '#1E5DAC'
+                    });
+                    document.getElementById('quantityInput').value = 1;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: data.message,
+                        confirmButtonColor: '#1E5DAC'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan pada sistem',
+                    confirmButtonColor: '#1E5DAC'
+                });
+            })
+            .finally(() => {
+                addBtn.disabled = false;
+                addBtn.textContent = '🛒 Tambah ke Keranjang';
+            });
+        }
+    </script>
 </body>
+
 </html>
