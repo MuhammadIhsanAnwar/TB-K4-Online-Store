@@ -6,7 +6,7 @@ include "koneksi.php";
 // PROSES HAPUS PRODUK
 if (isset($_POST['delete_id'])) {
     $delete_id = intval($_POST['delete_id']);
-    
+
     // Ambil data foto
     $res = mysqli_query($koneksi, "SELECT foto_produk FROM products WHERE id='$delete_id'");
     if ($res && mysqli_num_rows($res) > 0) {
@@ -16,10 +16,10 @@ if (isset($_POST['delete_id'])) {
             unlink("../foto_produk/" . $row['foto_produk']);
         }
     }
-    
+
     // Hapus data dari database
     $delete_query = mysqli_query($koneksi, "DELETE FROM products WHERE id='$delete_id'");
-    
+
     if ($delete_query) {
         echo json_encode(['status' => 'success', 'message' => 'Produk berhasil dihapus']);
     } else {
@@ -360,6 +360,13 @@ while ($row = mysqli_fetch_assoc($query)) {
             background: var(--misty);
         }
 
+        /* KOLOM NOMOR */
+        .nomor-col {
+            font-weight: 600;
+            color: var(--blue);
+            text-align: center;
+        }
+
         /* KOLOM FOTO */
         .foto-col {
             width: 80px;
@@ -573,7 +580,8 @@ while ($row = mysqli_fetch_assoc($query)) {
                 font-size: 0.8rem;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 0.75rem;
             }
 
@@ -638,8 +646,8 @@ while ($row = mysqli_fetch_assoc($query)) {
             <form method="GET" class="filter-search-section">
                 <div class="filter-group">
                     <label for="search">🔍 Cari Produk</label>
-                    <input type="text" id="search" name="search" placeholder="Cari berdasarkan nama, merk, atau deskripsi..." 
-                           value="<?php echo htmlspecialchars($search); ?>">
+                    <input type="text" id="search" name="search" placeholder="Cari berdasarkan nama, merk, atau deskripsi..."
+                        value="<?php echo htmlspecialchars($search); ?>">
                 </div>
 
                 <div class="filter-group">
@@ -669,7 +677,7 @@ while ($row = mysqli_fetch_assoc($query)) {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Nomor</th>
                                     <th>Foto</th>
                                     <th>Kategori</th>
                                     <th>Nama Produk</th>
@@ -682,9 +690,12 @@ while ($row = mysqli_fetch_assoc($query)) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($products as $product): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($product['id']); ?></td>
+                                <?php
+                                $nomor = $offset + 1;
+                                foreach ($products as $product):
+                                ?>
+                                    <tr id="row-<?= $product['id'] ?>">
+                                        <td class="nomor-col"><?php echo $nomor++; ?></td>
                                         <td>
                                             <?php if (!empty($product['foto_produk']) && file_exists("../foto_produk/" . $product['foto_produk'])): ?>
                                                 <img src="../foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" alt="<?php echo htmlspecialchars($product['nama']); ?>" class="foto-col">
@@ -748,7 +759,8 @@ while ($row = mysqli_fetch_assoc($query)) {
                             <!-- Tombol Previous -->
                             <?php if ($page > 1): ?>
                                 <a href="?page=1<?php echo $query_string; ?>" class="pagination-btn">« Pertama</a>
-                                <a href="?page=<?php echo $page - 1; echo $query_string; ?>" class="pagination-btn">‹ Sebelumnya</a>
+                                <a href="?page=<?php echo $page - 1;
+                                                echo $query_string; ?>" class="pagination-btn">‹ Sebelumnya</a>
                             <?php endif; ?>
 
                             <!-- Tombol Nomor Halaman -->
@@ -772,8 +784,10 @@ while ($row = mysqli_fetch_assoc($query)) {
 
                             <!-- Tombol Next -->
                             <?php if ($page < $total_pages): ?>
-                                <a href="?page=<?php echo $page + 1; echo $query_string; ?>" class="pagination-btn">Selanjutnya ›</a>
-                                <a href="?page=<?php echo $total_pages; echo $query_string; ?>" class="pagination-btn">Terakhir »</a>
+                                <a href="?page=<?php echo $page + 1;
+                                                echo $query_string; ?>" class="pagination-btn">Selanjutnya ›</a>
+                                <a href="?page=<?php echo $total_pages;
+                                                echo $query_string; ?>" class="pagination-btn">Terakhir »</a>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
@@ -795,61 +809,56 @@ while ($row = mysqli_fetch_assoc($query)) {
 
     <!-- SWEET ALERT SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
     <script>
         function hapusProduk(id, nama) {
             Swal.fire({
-                title: '🗑️ Hapus Produk?',
-                html: `Anda yakin ingin menghapus produk <strong>${nama}</strong>? <br><br><small style="color: #ef4444;">Tindakan ini tidak dapat dibatalkan dan foto produk akan dihapus secara permanen!</small>`,
+                title: 'Hapus Produk?',
+                html: `<p>Yakin ingin menghapus produk <strong>${nama}</strong>?</p><p style="color: #ef4444; font-size: 12px;">⚠️ Aksi ini tidak dapat dibatalkan</p>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#dc2626',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: '✓ Ya, Hapus',
-                cancelButtonText: '✗ Batal',
-                reverseButtons: true
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                backdrop: true,
+                didOpen: (modal) => {
+                    modal.style.zIndex = '9999';
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Kirim request delete
-                    const formData = new FormData();
-                    formData.append('delete_id', id);
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", "", true);
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhr.onload = function() {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                const row = document.getElementById("row-" + id);
+                                if (row) {
+                                    row.style.animation = "fadeOut 0.3s ease";
+                                    setTimeout(() => row.remove(), 300);
+                                }
 
-                    fetch('data_produk.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            Swal.fire({
-                                title: '✅ Berhasil!',
-                                text: 'Produk telah dihapus',
-                                icon: 'success',
-                                confirmButtonColor: '#1E5DAC'
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                title: '❌ Gagal!',
-                                text: data.message || 'Terjadi kesalahan saat menghapus produk',
-                                icon: 'error',
-                                confirmButtonColor: '#1E5DAC'
-                            });
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            } else {
+                                Swal.fire('Error', response.message, 'error');
+                            }
+                        } catch (e) {
+                            Swal.fire('Error', 'Terjadi kesalahan saat menghapus data', 'error');
                         }
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            title: '❌ Error!',
-                            text: 'Terjadi kesalahan pada sistem',
-                            icon: 'error',
-                            confirmButtonColor: '#1E5DAC'
-                        });
-                    });
+                    };
+                    xhr.send("delete_id=" + id);
                 }
             });
         }
     </script>
+
 </body>
 
 </html>

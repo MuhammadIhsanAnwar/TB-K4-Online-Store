@@ -5,6 +5,7 @@ include '../admin/koneksi.php';
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Data User</title>
@@ -47,7 +48,7 @@ include '../admin/koneksi.php';
 
         .logo-box img {
             width: 72px;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
             transition: .3s ease;
         }
 
@@ -71,17 +72,17 @@ include '../admin/koneksi.php';
         }
 
         .sidebar a:hover {
-            background: rgba(255,255,255,.18);
+            background: rgba(255, 255, 255, .18);
         }
 
         .sidebar a.active {
-            background: rgba(255,255,255,.32);
+            background: rgba(255, 255, 255, .32);
             font-weight: 600;
         }
 
         .sidebar .logout {
             margin-top: auto;
-            background: rgba(255,80,80,.15);
+            background: rgba(255, 80, 80, .15);
             color: #ffd6d6 !important;
             font-weight: 600;
             text-align: center;
@@ -92,7 +93,7 @@ include '../admin/koneksi.php';
         .sidebar .logout:hover {
             background: #ff4d4d;
             color: #fff !important;
-            box-shadow: 0 10px 25px rgba(255,77,77,.6);
+            box-shadow: 0 10px 25px rgba(255, 77, 77, .6);
             transform: translateY(-2px);
         }
 
@@ -104,8 +105,15 @@ include '../admin/koneksi.php';
         }
 
         @keyframes fade {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h2 {
@@ -123,7 +131,7 @@ include '../admin/koneksi.php';
             background: var(--white);
             padding: 18px;
             border-radius: 20px;
-            box-shadow: 0 20px 45px rgba(30,93,172,.2);
+            box-shadow: 0 20px 45px rgba(30, 93, 172, .2);
             overflow-x: auto;
         }
 
@@ -157,10 +165,15 @@ include '../admin/koneksi.php';
             text-align: center;
         }
 
+        .table td:nth-child(1) {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
         .table td:nth-child(2),
         .table td:nth-child(3),
-        .table td:nth-child(11),
-        .table td:nth-child(12) {
+        .table td:nth-child(12),
+        .table td:nth-child(13) {
             text-align: left;
         }
 
@@ -169,73 +182,75 @@ include '../admin/koneksi.php';
             height: 46px;
             object-fit: cover;
             border-radius: 50%;
-            box-shadow: 0 6px 14px rgba(0,0,0,.25);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, .25);
         }
     </style>
 </head>
 
 <body>
 
-<?php include 'sidebar.php'; ?>
+    <?php include 'sidebar.php'; ?>
 
-<div class="content">
-    <h2>Data User</h2>
-    <hr>
+    <div class="content">
+        <h2>Data User</h2>
+        <hr>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Nama Lengkap</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Provinsi</th>
-                    <th>Kabupaten/Kota</th>
-                    <th>Kecamatan</th>
-                    <th>Kelurahan/Desa</th>
-                    <th>Kode Pos</th>
-                    <th>Alamat</th>
-                    <th>Email</th>
-                    <th>Password</th>
-                    <th>Foto Profil</th>
-                    <th>Status</th>
-                    <th>Token</th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Nomor</th>
+                        <th>Username</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Provinsi</th>
+                        <th>Kabupaten/Kota</th>
+                        <th>Kecamatan</th>
+                        <th>Kelurahan/Desa</th>
+                        <th>Kode Pos</th>
+                        <th>Alamat</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Foto Profil</th>
+                        <th>Status</th>
+                        <th>Token</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <?php
-                $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
-                while ($row = mysqli_fetch_assoc($res)) :
-                ?>
-                <tr>
-                    <td><?= $row['id'] ?></td>
-                    <td><?= $row['username'] ?></td>
-                    <td><?= $row['nama_lengkap'] ?></td>
-                    <td><?= $row['jenis_kelamin'] ?></td>
-                    <td><?= $row['tanggal_lahir'] ?></td>
-                    <td><?= $row['provinsi'] ?></td>
-                    <td><?= $row['kabupaten_kota'] ?></td>
-                    <td><?= $row['kecamatan'] ?></td>
-                    <td><?= $row['kelurahan_desa'] ?></td>
-                    <td><?= $row['kode_pos'] ?></td>
-                    <td><?= $row['alamat'] ?></td>
-                    <td><?= $row['email'] ?></td>
-                    <td><?= $row['password'] ?></td>
-                    <td>
-                        <img src="../foto_profil/<?= $row['foto_profil'] ?>" alt="Foto Profil">
-                    </td>
-                    <td><?= $row['status'] ?></td>
-                    <td><?= $row['token'] ?></td>
-                </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                <tbody>
+                    <?php
+                    $res = mysqli_query($koneksi, "SELECT * FROM akun_user ORDER BY id DESC");
+                    $nomor = 1;
+                    while ($row = mysqli_fetch_assoc($res)) :
+                    ?>
+                        <tr>
+                            <td><?= $nomor++ ?></td>
+                            <td><?= $row['username'] ?></td>
+                            <td><?= $row['nama_lengkap'] ?></td>
+                            <td><?= $row['jenis_kelamin'] ?></td>
+                            <td><?= $row['tanggal_lahir'] ?></td>
+                            <td><?= $row['provinsi'] ?></td>
+                            <td><?= $row['kabupaten_kota'] ?></td>
+                            <td><?= $row['kecamatan'] ?></td>
+                            <td><?= $row['kelurahan_desa'] ?></td>
+                            <td><?= $row['kode_pos'] ?></td>
+                            <td><?= $row['alamat'] ?></td>
+                            <td><?= $row['email'] ?></td>
+                            <td><?= $row['password'] ?></td>
+                            <td>
+                                <img src="../foto_profil/<?= $row['foto_profil'] ?>" alt="Foto Profil">
+                            </td>
+                            <td><?= $row['status'] ?></td>
+                            <td><?= $row['token'] ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-<script src="../js/bootstrap.bundle.js"></script>
+    <script src="../js/bootstrap.bundle.js"></script>
 </body>
+
 </html>
