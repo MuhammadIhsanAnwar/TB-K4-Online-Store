@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once 'koneksi.php';
+require 'auth_check.php'; 
+include 'koneksi.php'; 
 
 // Cek login admin SETELAH koneksi berhasil
 if (!isset($_SESSION['admin_id'])) {
