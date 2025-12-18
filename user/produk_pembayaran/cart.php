@@ -327,7 +327,7 @@ if (isset($_POST['remove'])) {
                 <div class="empty-cart-icon">🛒</div>
                 <h3>Your Cart is Empty</h3>
                 <p>Looks like you haven't added anything to your cart yet.</p>
-                <a href="../../shop.php" class="btn btn-primary">Start Shopping</a>
+                <a href="shop.php" class="btn btn-primary">Start Shopping</a>
             </div>
         <?php else: ?>
             <div class="cart-table">
