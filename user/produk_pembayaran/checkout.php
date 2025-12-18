@@ -99,8 +99,8 @@ if (isset($_POST['complete_payment'])) {
 
             // Update stok hanya jika stok cukup (tidak boleh minus)
             $update_stok = "UPDATE products
-                            SET stok = stok - $qty
-                            WHERE id = $product_id AND stok >= $qty";
+                        SET stok = stok - $qty
+                        WHERE id = $product_id AND stok >= $qty";
 
             if (!mysqli_query($koneksi, $update_stok)) {
                 throw new Exception('Gagal update stok: ' . mysqli_error($koneksi));
@@ -119,8 +119,8 @@ if (isset($_POST['complete_payment'])) {
 
         // 2) Insert 1 baris ke tabel pemesanan dengan produk yang digabung
         $order_query = "INSERT INTO pemesanan 
-                        (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, status, waktu_pemesanan)
-                        VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
+                    (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, status, waktu_pemesanan)
+                    VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
 
         if (!mysqli_query($koneksi, $order_query)) {
             throw new Exception('Gagal membuat pesanan: ' . mysqli_error($koneksi));
