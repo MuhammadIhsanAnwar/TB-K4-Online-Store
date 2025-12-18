@@ -42,14 +42,14 @@ while ($row = mysqli_fetch_assoc($result)) {
     <title>Shop - UrbanHype</title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/bootstrap.css">
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../../css/bootstrap-icons.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-
+  
     <style>
         :root {
             --primary: #1E5DAC;
