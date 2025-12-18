@@ -59,6 +59,75 @@ if (isset($_POST['add_comment'])) {
     exit;
 }
 
+// PROSES EDIT KOMENTAR
+if (isset($_POST['edit_comment'])) {
+    if (!$user) {
+        echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
+        exit;
+    }
+
+    $comment_id = intval($_POST['comment_id']);
+    $komentar = mysqli_real_escape_string($koneksi, $_POST['komentar']);
+    $rating = intval($_POST['rating']);
+
+    if (empty($komentar) || strlen($komentar) < 5) {
+        echo json_encode(['status' => 'error', 'message' => 'Komentar minimal 5 karakter']);
+        exit;
+    }
+
+    if ($rating < 1 || $rating > 5) {
+        $rating = 5;
+    }
+
+    // Verifikasi bahwa komentar milik user yang sedang login
+    $check_query = "SELECT user_id FROM komentar_produk WHERE id='$comment_id'";
+    $check_result = mysqli_query($koneksi, $check_query);
+    $comment_data = mysqli_fetch_assoc($check_result);
+
+    if (!$comment_data || $comment_data['user_id'] != $user_id) {
+        echo json_encode(['status' => 'error', 'message' => 'Anda tidak memiliki izin untuk mengedit komentar ini']);
+        exit;
+    }
+
+    $update_query = "UPDATE komentar_produk SET komentar='$komentar', rating='$rating', updated_at=NOW() WHERE id='$comment_id'";
+
+    if (mysqli_query($koneksi, $update_query)) {
+        echo json_encode(['status' => 'success', 'message' => 'Komentar berhasil diperbarui']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui komentar']);
+    }
+    exit;
+}
+
+// PROSES DELETE KOMENTAR
+if (isset($_POST['delete_comment'])) {
+    if (!$user) {
+        echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
+        exit;
+    }
+
+    $comment_id = intval($_POST['comment_id']);
+
+    // Verifikasi bahwa komentar milik user yang sedang login
+    $check_query = "SELECT user_id FROM komentar_produk WHERE id='$comment_id'";
+    $check_result = mysqli_query($koneksi, $check_query);
+    $comment_data = mysqli_fetch_assoc($check_result);
+
+    if (!$comment_data || $comment_data['user_id'] != $user_id) {
+        echo json_encode(['status' => 'error', 'message' => 'Anda tidak memiliki izin untuk menghapus komentar ini']);
+        exit;
+    }
+
+    $delete_query = "DELETE FROM komentar_produk WHERE id='$comment_id'";
+
+    if (mysqli_query($koneksi, $delete_query)) {
+        echo json_encode(['status' => 'success', 'message' => 'Komentar berhasil dihapus']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus komentar']);
+    }
+    exit;
+}
+
 // PROSES TAMBAH KE KERANJANG
 if (isset($_POST['add_to_cart'])) {
     if (!$user) {
@@ -125,7 +194,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="../../icons/bootstrap-icons.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -390,47 +458,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             color: #ef4444;
         }
 
-        /* FOOTER */
-        .footer {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            margin-top: 3rem;
-        }
-
-        @media (max-width: 768px) {
-            .breadcrumb-section {
-                margin-top: 70px;
-            }
-
-            .product-detail {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                padding: 1.5rem;
-            }
-
-            .product-name {
-                font-size: 1.8rem;
-            }
-
-            .product-harga {
-                font-size: 1.5rem;
-            }
-
-            .product-image-main {
-                max-width: 100%;
-            }
-
-            .add-to-cart-section {
-                flex-direction: column;
-            }
-
-            .btn-add-cart {
-                width: 100%;
-            }
-        }
-
         /* COMMENTS SECTION */
         .comments-section {
             margin-top: 4rem;
@@ -533,6 +560,7 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             border-left: 4px solid var(--primary);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .comment-item:hover {
@@ -544,6 +572,13 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             align-items: center;
             gap: 1rem;
             margin-bottom: 0.8rem;
+            justify-content: space-between;
+        }
+
+        .comment-user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .comment-avatar {
@@ -569,6 +604,38 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             color: #999;
         }
 
+        .comment-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit-comment,
+        .btn-delete-comment {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit-comment {
+            color: #3b82f6;
+        }
+
+        .btn-edit-comment:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-delete-comment {
+            color: #ef4444;
+        }
+
+        .btn-delete-comment:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
         .comment-rating {
             display: flex;
             gap: 0.2rem;
@@ -586,6 +653,13 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             font-size: 0.95rem;
         }
 
+        .comment-edited {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
         .no-comments {
             text-align: center;
             padding: 2rem;
@@ -595,6 +669,120 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
         .no-comments-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
+        }
+
+        /* EDIT FORM MODAL */
+        .edit-comment-form {
+            display: none;
+            background: linear-gradient(135deg, var(--light) 0%, rgba(183, 197, 218, 0.2) 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .edit-comment-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-comment-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
+        }
+
+        .edit-form-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .btn-save-edit,
+        .btn-cancel-edit {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save-edit {
+            background: linear-gradient(135deg, var(--primary) 0%, #164a8a 100%);
+            color: white;
+        }
+
+        .btn-save-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
+        }
+
+        .btn-cancel-edit {
+            background: #e5e7eb;
+            color: var(--dark);
+        }
+
+        .btn-cancel-edit:hover {
+            background: #d1d5db;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb-section {
+                margin-top: 70px;
+            }
+
+            .product-detail {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 1.5rem;
+            }
+
+            .product-name {
+                font-size: 1.8rem;
+            }
+
+            .product-harga {
+                font-size: 1.5rem;
+            }
+
+            .product-image-main {
+                max-width: 100%;
+            }
+
+            .add-to-cart-section {
+                flex-direction: column;
+            }
+
+            .btn-add-cart {
+                width: 100%;
+            }
+
+            .comment-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .comment-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
         }
     </style>
 </head>
@@ -697,6 +885,7 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                 <?php endif; ?>
             </div>
         </div>
+
         <!-- COMMENTS SECTION -->
         <section class="comments-section">
             <h3>💬 Komentar Produk</h3>
@@ -737,13 +926,25 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                     </div>
                 <?php else: ?>
                     <?php foreach ($comments as $comment): ?>
-                        <div class="comment-item">
+                        <div class="comment-item" id="comment-<?php echo $comment['id']; ?>">
                             <div class="comment-header">
-                                <img src="<?php echo !empty($comment['foto_profil']) ? '../../foto_profil/' . htmlspecialchars($comment['foto_profil']) : 'https://via.placeholder.com/40'; ?>" alt="<?php echo htmlspecialchars($comment['nama_lengkap']); ?>" class="comment-avatar">
-                                <div class="comment-user-info">
-                                    <div class="comment-user-name"><?php echo htmlspecialchars($comment['nama_lengkap']); ?></div>
-                                    <div class="comment-date"><?php echo date('d M Y H:i', strtotime($comment['created_at'])); ?></div>
+                                <div class="comment-user-section">
+                                    <img src="<?php echo !empty($comment['foto_profil']) ? '../../foto_profil/' . htmlspecialchars($comment['foto_profil']) : 'https://via.placeholder.com/40'; ?>" alt="<?php echo htmlspecialchars($comment['nama_lengkap']); ?>" class="comment-avatar">
+                                    <div class="comment-user-info">
+                                        <div class="comment-user-name"><?php echo htmlspecialchars($comment['nama_lengkap']); ?></div>
+                                        <div class="comment-date"><?php echo date('d M Y H:i', strtotime($comment['created_at'])); ?></div>
+                                    </div>
                                 </div>
+                                <?php if ($user && $user['id'] == $comment['user_id']): ?>
+                                    <div class="comment-actions">
+                                        <button class="btn-edit-comment" onclick="showEditForm(<?php echo $comment['id']; ?>)" title="Edit Komentar">
+                                            ✏️
+                                        </button>
+                                        <button class="btn-delete-comment" onclick="deleteComment(<?php echo $comment['id']; ?>)" title="Hapus Komentar">
+                                            🗑️
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
                             </div>
 
                             <div class="comment-rating">
@@ -752,9 +953,37 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                                 <?php endfor; ?>
                             </div>
 
-                            <div class="comment-text">
+                            <div class="comment-text" id="comment-text-<?php echo $comment['id']; ?>">
                                 <?php echo htmlspecialchars($comment['komentar']); ?>
                             </div>
+
+                            <?php if (!empty($comment['updated_at']) && $comment['updated_at'] != $comment['created_at']): ?>
+                                <div class="comment-edited">
+                                    Diubah pada <?php echo date('d M Y H:i', strtotime($comment['updated_at'])); ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- EDIT FORM -->
+                            <?php if ($user && $user['id'] == $comment['user_id']): ?>
+                                <div class="edit-comment-form" id="edit-form-<?php echo $comment['id']; ?>">
+                                    <div class="rating-input" style="margin-bottom: 1rem;">
+                                        <label>Rating:</label>
+                                        <div id="editRatingStars-<?php echo $comment['id']; ?>" class="edit-rating-stars">
+                                            <span class="star" data-rating="1" data-comment-id="<?php echo $comment['id']; ?>">★</span>
+                                            <span class="star" data-rating="2" data-comment-id="<?php echo $comment['id']; ?>">★</span>
+                                            <span class="star" data-rating="3" data-comment-id="<?php echo $comment['id']; ?>">★</span>
+                                            <span class="star" data-rating="4" data-comment-id="<?php echo $comment['id']; ?>">★</span>
+                                            <span class="star" data-rating="5" data-comment-id="<?php echo $comment['id']; ?>">★</span>
+                                        </div>
+                                        <input type="hidden" class="edit-rating-value" data-comment-id="<?php echo $comment['id']; ?>" value="<?php echo $comment['rating']; ?>">
+                                    </div>
+                                    <textarea class="edit-komentar-text" data-comment-id="<?php echo $comment['id']; ?>"><?php echo htmlspecialchars($comment['komentar']); ?></textarea>
+                                    <div class="edit-form-actions">
+                                        <button class="btn-save-edit" onclick="saveEditComment(<?php echo $comment['id']; ?>)">Simpan Perubahan</button>
+                                        <button class="btn-cancel-edit" onclick="cancelEditForm(<?php echo $comment['id']; ?>)">Batal</button>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -852,6 +1081,7 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                     addBtn.textContent = '🛒 Tambah ke Keranjang';
                 });
         }
+
         // ===== RATING STARS FUNCTIONALITY =====
         const ratingStars = document.querySelectorAll('#ratingStars .star');
         const ratingValue = document.getElementById('ratingValue');
@@ -861,7 +1091,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                 const rating = this.dataset.rating;
                 ratingValue.value = rating;
 
-                // Update visual
                 ratingStars.forEach(s => {
                     if (s.dataset.rating <= rating) {
                         s.classList.add('active');
@@ -871,7 +1100,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                 });
             });
 
-            // Hover effect
             star.addEventListener('mouseover', function() {
                 const rating = this.dataset.rating;
                 ratingStars.forEach(s => {
@@ -886,7 +1114,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             });
         });
 
-        // Reset hover effect
         document.getElementById('ratingStars').addEventListener('mouseout', function() {
             ratingStars.forEach(star => {
                 const rating = ratingValue.value;
@@ -907,7 +1134,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             const komentar = document.getElementById('komentarText').value.trim();
             const rating = document.getElementById('ratingValue').value;
 
-            // Validasi
             if (komentar.length < 5) {
                 Swal.fire({
                     icon: 'warning',
@@ -928,7 +1154,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                 return;
             }
 
-            // Submit form via AJAX
             const formData = new FormData();
             formData.append('add_comment', '1');
             formData.append('komentar', komentar);
@@ -947,11 +1172,9 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                             text: 'Komentar Anda telah ditambahkan',
                             confirmButtonColor: '#1E5DAC'
                         }).then(() => {
-                            // Reset form
                             document.getElementById('commentForm').reset();
                             document.getElementById('ratingValue').value = 5;
 
-                            // Update rating stars display
                             ratingStars.forEach(star => {
                                 if (star.dataset.rating <= 5) {
                                     star.classList.add('active');
@@ -960,7 +1183,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                                 }
                             });
 
-                            // Reload halaman untuk melihat komentar baru
                             setTimeout(() => {
                                 location.reload();
                             }, 1000);
@@ -984,6 +1206,192 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                     });
                 });
         });
+
+        // ===== EDIT COMMENT FUNCTIONALITY =====
+        function showEditForm(commentId) {
+            const editForm = document.getElementById(`edit-form-${commentId}`);
+            const commentText = document.getElementById(`comment-text-${commentId}`);
+            editForm.style.display = 'block';
+            commentText.style.display = 'none';
+
+            // Initialize rating stars untuk edit form
+            const editRatingStars = document.querySelectorAll(`#editRatingStars-${commentId} .star`);
+            const editRatingValue = document.querySelector(`.edit-rating-value[data-comment-id="${commentId}"]`);
+            const currentRating = editRatingValue.value;
+
+            editRatingStars.forEach(star => {
+                if (star.dataset.rating <= currentRating) {
+                    star.classList.add('active');
+                }
+
+                star.addEventListener('click', function() {
+                    const rating = this.dataset.rating;
+                    editRatingValue.value = rating;
+
+                    editRatingStars.forEach(s => {
+                        if (s.dataset.rating <= rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseover', function() {
+                    const rating = this.dataset.rating;
+                    editRatingStars.forEach(s => {
+                        if (s.dataset.rating <= rating) {
+                            s.style.color = '#ffc107';
+                            s.style.transform = 'scale(1.2)';
+                        } else {
+                            s.style.color = '#ddd';
+                            s.style.transform = 'scale(1)';
+                        }
+                    });
+                });
+            });
+
+            document.getElementById(`editRatingStars-${commentId}`).addEventListener('mouseout', function() {
+                editRatingStars.forEach(star => {
+                    const rating = editRatingValue.value;
+                    if (star.dataset.rating <= rating) {
+                        star.style.color = '#ffc107';
+                        star.style.transform = 'scale(1.2)';
+                    } else {
+                        star.style.color = '#ddd';
+                        star.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        }
+
+        function cancelEditForm(commentId) {
+            const editForm = document.getElementById(`edit-form-${commentId}`);
+            const commentText = document.getElementById(`comment-text-${commentId}`);
+            editForm.style.display = 'none';
+            commentText.style.display = 'block';
+        }
+
+        function saveEditComment(commentId) {
+            const editForm = document.getElementById(`edit-form-${commentId}`);
+            const komentarText = document.querySelector(`.edit-komentar-text[data-comment-id="${commentId}"]`).value.trim();
+            const ratingValue = document.querySelector(`.edit-rating-value[data-comment-id="${commentId}"]`).value;
+
+            if (komentarText.length < 5) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Komentar Terlalu Pendek',
+                    text: 'Komentar minimal harus 5 karakter',
+                    confirmButtonColor: '#1E5DAC'
+                });
+                return;
+            }
+
+            if (!ratingValue || ratingValue < 1 || ratingValue > 5) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Rating Belum Dipilih',
+                    text: 'Silakan pilih rating terlebih dahulu',
+                    confirmButtonColor: '#1E5DAC'
+                });
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('edit_comment', '1');
+            formData.append('comment_id', commentId);
+            formData.append('komentar', komentarText);
+            formData.append('rating', ratingValue);
+
+            fetch('product_detail.php?id=<?php echo $product['id']; ?>', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Komentar Anda telah diperbarui',
+                            confirmButtonColor: '#1E5DAC'
+                        }).then(() => {
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: data.message,
+                            confirmButtonColor: '#1E5DAC'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan pada sistem',
+                        confirmButtonColor: '#1E5DAC'
+                    });
+                });
+        }
+
+        function deleteComment(commentId) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Hapus Komentar?',
+                text: 'Apakah Anda yakin ingin menghapus komentar ini? Tindakan ini tidak dapat dibatalkan.',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#d1d5db'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('delete_comment', '1');
+                    formData.append('comment_id', commentId);
+
+                    fetch('product_detail.php?id=<?php echo $product['id']; ?>', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: 'Komentar Anda telah dihapus',
+                                    confirmButtonColor: '#1E5DAC'
+                                }).then(() => {
+                                    document.getElementById(`comment-${commentId}`).remove();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: data.message,
+                                    confirmButtonColor: '#1E5DAC'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'Terjadi kesalahan pada sistem',
+                                confirmButtonColor: '#1E5DAC'
+                            });
+                        });
+                }
+            });
+        }
 
         // Initialize rating stars with default value (5)
         window.addEventListener('load', function() {
