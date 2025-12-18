@@ -7,7 +7,7 @@
     <title>Data User - Admin</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css_admin/data_user_style.css">
+    <link rel="stylesheet" href="../css_admin/data_user_style.css">
     <link rel="icon" type="image/png" href="../images/icon/logo.png">
 
     <!-- Icons -->
