@@ -17,7 +17,7 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/images/icon/logo.png">
-    <title>UrbanHype - Unisex Fashion Store</title>
+    <title>UrbanHype - Fashion Store</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.css">

@@ -57,22 +57,13 @@ $base_path = $is_subdir ? '../../' : './';
     }
 
     .navbar-brand::before {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--primary), var(--secondary));
-        transition: var(--transition);
-        display: none;
-        /* Hilangkan garis bawah */
+        display: none !important;
     }
 
     .navbar-brand:hover::before {
-        width: 0;
-        /* Jangan tampilkan saat hover */
+        display: none !important;
     }
+
     .navbar-brand:hover {
         transform: translateY(-2px);
         color: var(--primary) !important;
@@ -399,7 +390,7 @@ $base_path = $is_subdir ? '../../' : './';
 
                 <?php if ($user): ?>
                     <a href="<?php echo $base_path; ?>user/produk_pembayaran/cart.php" class="cart-link">
-                        <img src="<?php echo $base_path; ?>images/cart-icon.png" alt="Cart" style="width:24px; height:24px; filter: var(--cart-icon-filter);">
+                        <img src="<?php echo $base_path; ?>images/icon/cart-icon.png" alt="Cart" style="width:24px; height:24px; filter: var(--cart-icon-filter);">
                         <?php
                         $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
                         if ($cart_count > 0):
