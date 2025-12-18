@@ -452,52 +452,48 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                             <th>Action</th>
                         </tr>
                     </thead>
-            <tbody>
-                <?php foreach ($cart as $item):
-                    $subtotal = $item['harga'] * $item['quantity'];
-                    $total += $subtotal;
-                ?>
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="selected_products[]" value="<?php echo $item['product_id']; ?>" class="product-checkbox">
-                        </td>
-                        <td class="product-name"><?php echo htmlspecialchars($item['nama']); ?></td>
-                        <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
-                        <td>
-                            <form method="POST" style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-                                <button type="submit" name="decrease_qty" class="qty-btn-cart">−</button>
-                                <input type="number" name="quantity" class="qty-input-cart" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stok']; ?>">
-                                <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
-                                <button type="submit" name="update_qty" class="qty-btn-save">✓</button>
-                            </form>
-                        </td>
-                        <td class="subtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
-                        <td>
-                            <form method="POST" style="margin: 0;">
-                                <input type="hidden" name="id" value="<?php echo $item['product_id']; ?>">
-                                <button type="submit" name="remove" class="remove-btn">Remove</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                <tr class="total-row">
-                    <td colspan="3" style="text-align: right;">Total</td>
-                    <td colspan="3">Rp <span id="totalPrice"><?php echo number_format($total, 0, ',', '.'); ?></span></td>
-                </tr>
-            </tbody>
+                    <tbody>
+                        <?php foreach ($cart as $item):
+                            $subtotal = $item['harga'] * $item['quantity'];
+                            $total += $subtotal;
+                        ?>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="selected_products[]" value="<?php echo $item['product_id']; ?>" class="product-checkbox">
+                                </td>
+                                <td class="product-name"><?php echo htmlspecialchars($item['nama']); ?></td>
+                                <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
+                                <td>
+                                    <form method="POST" style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                                        <button type="submit" name="decrease_qty" class="qty-btn-cart">−</button>
+                                        <input type="number" name="quantity" class="qty-input-cart" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stok']; ?>">
+                                        <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
+                                        <button type="submit" name="update_qty" class="qty-btn-save">✓</button>
+                                    </form>
+                                </td>
+                                <td class="subtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
+                                <td>
+                                    <form method="POST" style="margin: 0;">
+                                        <input type="hidden" name="id" value="<?php echo $item['product_id']; ?>">
+                                        <button type="submit" name="remove" class="remove-btn">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr class="total-row">
+                            <td colspan="3" style="text-align: right;">Total</td>
+                            <td colspan="3">Rp <span id="totalPrice"><?php echo number_format($total, 0, ',', '.'); ?></span></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
 
-            <form method="POST" style="margin-top: 2rem;">
-                <?php foreach ($cart as $item): ?>
-                    <input type="hidden" name="selected_products[]" value="<?php echo $item['product_id']; ?>" class="product-checkbox-hidden">
-                <?php endforeach; ?>
+            <form method="POST" id="checkoutForm" style="margin-top: 2rem;">
                 <div class="cart-actions">
                     <a href="shop.php" class="btn btn-secondary">Continue Shopping</a>
-                    <button type="submit" name="checkout_selected" class="btn btn-primary">Proceed to Checkout</button>
+                    <button type="submit" name="checkout_selected" class="btn btn-primary" onclick="return validateCheckout()">Proceed to Checkout</button>
                 </div>
-            </form>
-        <?php endif; ?>
+            </form> <?php endif; ?>
     </div>
     <script>
         function toggleSelectAll(checkbox) {
@@ -515,6 +511,77 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
             const checkedCount = document.querySelectorAll('.product-checkbox:checked').length;
             selectAllCheckbox.checked = checkedCount === checkboxes.length && checkboxes.length > 0;
         }
+
+        function toggleSelectAll(checkbox) {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            checkboxes.forEach(cb => cb.checked = checkbox.checked);
+            updateTotal();
+        }
+
+        document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateSelectAllStatus();
+                updateTotal();
+            });
+        });
+
+        function updateSelectAllStatus() {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const checkedCount = document.querySelectorAll('.product-checkbox:checked').length;
+            selectAllCheckbox.checked = checkedCount === checkboxes.length && checkboxes.length > 0;
+        }
+
+        function updateTotal() {
+            let newTotal = 0;
+            const rows = document.querySelectorAll('table tbody tr');
+
+            rows.forEach((row, index) => {
+                const checkbox = row.querySelector('.product-checkbox');
+                const priceText = row.querySelector('.price')?.textContent || '';
+                const qtyInput = row.querySelector('.qty-input-cart');
+
+                if (checkbox && checkbox.checked && priceText && qtyInput) {
+                    // Ambil harga dari text (format: "Rp XXX.XXX.XXX")
+                    const price = parseInt(priceText.replace(/[^\d]/g, ''));
+                    const qty = parseInt(qtyInput.value);
+                    const subtotal = price * qty;
+                    newTotal += subtotal;
+                }
+            });
+
+            // Update display total
+            document.getElementById('totalPrice').textContent = newTotal.toLocaleString('id-ID');
+        }
+
+        function validateCheckout() {
+            const checkedItems = document.querySelectorAll('.product-checkbox:checked');
+
+            if (checkedItems.length === 0) {
+                alert('Pilih minimal satu produk untuk checkout!');
+                return false;
+            }
+
+            // Buat hidden inputs untuk produk yang dicentang
+            const form = document.getElementById('checkoutForm');
+
+            // Hapus hidden inputs lama jika ada
+            form.querySelectorAll('input[name="selected_products[]"]').forEach(el => el.remove());
+
+            // Tambahkan hidden inputs untuk produk yang dicentang
+            checkedItems.forEach(checkbox => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'selected_products[]';
+                input.value = checkbox.value;
+                form.appendChild(input);
+            });
+
+            return true;
+        }
+
+        // Update total saat page load
+        updateTotal();
     </script>
 </body>
 
