@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (mysqli_query($koneksi, $sql)) {
             session_destroy();
-            showAlert('success', 'Akun Dihapus!', 'Akun Anda telah berhasil dihapus dari sistem. Kami harap Anda akan kembali lagi.', '../index.php');
+            showAlert('success', 'Akun Dihapus!', 'Akun Anda telah berhasil dihapus dari sistem. Kami harap Anda akan kembali lagi.', '../../index.php');
         } else {
             $error = "Error: " . mysqli_error($koneksi);
             showAlert('error', 'Gagal Menghapus', 'Terjadi kesalahan saat menghapus akun. Silakan coba lagi.', 'settings.php');
