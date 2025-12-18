@@ -412,7 +412,7 @@ if (isset($_SESSION['user_id'])) {
 </head>
 
 <body>
-
+    <?php include "navbar.php"; ?>
     <!-- LOADING SPINNER -->
     <div class="spinner-overlay">
         <div class="spinner"></div>
@@ -424,8 +424,6 @@ if (isset($_SESSION['user_id'])) {
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-
-    <?php include "navbar.php"; ?>
 
     <!-- HERO (dari file lama) -->
     <section id="home" class="hero-section">
