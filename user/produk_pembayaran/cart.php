@@ -444,6 +444,7 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 50px;"><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
                             <th>Product</th>
                             <th>Price</th>
                             <th>Quantity</th>
@@ -451,49 +452,70 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php foreach ($cart as $item):
-                            $subtotal = $item['harga'] * $item['quantity'];
-                            $total += $subtotal;
-                        ?>
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="selected_products[]" value="<?php echo $item['product_id']; ?>" class="product-checkbox">
-                                </td>
-                                <td class="product-name"><?php echo htmlspecialchars($item['nama']); ?></td>
-                                <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
-                                <td>
-                                    <form method="POST" style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-                                        <button type="submit" name="decrease_qty" class="qty-btn-cart" value="<?php echo $item['product_id']; ?>">−</button>
-                                        <input type="number" name="quantity" class="qty-input-cart" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stok']; ?>">
-                                        <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
-                                        <button type="submit" name="update_qty" class="qty-btn-save" value="1">✓</button>
-                                    </form>
-                                </td>
-                                <td class="subtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
-                                <td>
-                                    <form method="POST" style="margin: 0;">
-                                        <input type="hidden" name="id" value="<?php echo $item['product_id']; ?>">
-                                        <button type="submit" name="remove" class="remove-btn">Remove</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <tr class="total-row">
-                            <td colspan="2" style="text-align: right;">Total</td>
-                            <td colspan="4">Rp <span id="totalPrice"><?php echo number_format($total, 0, ',', '.'); ?></span></td>
-                        </tr>
-                    </tbody>
+            <tbody>
+                <?php foreach ($cart as $item):
+                    $subtotal = $item['harga'] * $item['quantity'];
+                    $total += $subtotal;
+                ?>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selected_products[]" value="<?php echo $item['product_id']; ?>" class="product-checkbox">
+                        </td>
+                        <td class="product-name"><?php echo htmlspecialchars($item['nama']); ?></td>
+                        <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
+                        <td>
+                            <form method="POST" style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                                <button type="submit" name="decrease_qty" class="qty-btn-cart">−</button>
+                                <input type="number" name="quantity" class="qty-input-cart" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stok']; ?>">
+                                <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
+                                <button type="submit" name="update_qty" class="qty-btn-save">✓</button>
+                            </form>
+                        </td>
+                        <td class="subtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
+                        <td>
+                            <form method="POST" style="margin: 0;">
+                                <input type="hidden" name="id" value="<?php echo $item['product_id']; ?>">
+                                <button type="submit" name="remove" class="remove-btn">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr class="total-row">
+                    <td colspan="3" style="text-align: right;">Total</td>
+                    <td colspan="3">Rp <span id="totalPrice"><?php echo number_format($total, 0, ',', '.'); ?></span></td>
+                </tr>
+            </tbody>
                 </table>
             </div>
 
-            <div class="cart-actions">
-                <a href="shop.php" class="btn btn-secondary">Continue Shopping</a>
-                <a href="checkout.php" class="btn btn-primary">Proceed to Checkout</a>
-            </div>
+            <form method="POST" style="margin-top: 2rem;">
+                <?php foreach ($cart as $item): ?>
+                    <input type="hidden" name="selected_products[]" value="<?php echo $item['product_id']; ?>" class="product-checkbox-hidden">
+                <?php endforeach; ?>
+                <div class="cart-actions">
+                    <a href="shop.php" class="btn btn-secondary">Continue Shopping</a>
+                    <button type="submit" name="checkout_selected" class="btn btn-primary">Proceed to Checkout</button>
+                </div>
+            </form>
         <?php endif; ?>
     </div>
+    <script>
+        function toggleSelectAll(checkbox) {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            checkboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
 
+        document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSelectAllStatus);
+        });
+
+        function updateSelectAllStatus() {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const checkedCount = document.querySelectorAll('.product-checkbox:checked').length;
+            selectAllCheckbox.checked = checkedCount === checkboxes.length && checkboxes.length > 0;
+        }
+    </script>
 </body>
 
 </html>
