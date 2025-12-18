@@ -275,7 +275,7 @@ try {
             <!-- FOOTER -->
             <div class='footer'>
                 <p>
-                    <a href='https://urbanhype.neoverse.my.id'>Website</a> | 
+                    <a href='https://urbanhype.neoverse.my.id'>Website</a> 
                 </p>
                 
                 <p class='footer-note'>
