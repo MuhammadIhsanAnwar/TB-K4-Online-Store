@@ -21,7 +21,7 @@
     <?php include 'sidebar.php'; ?>
 
     <div class="content">
-        <h2>📊 Dashboard</h2>
+       <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
         <p class="subtitle">Ringkasan Data Bisnis Anda</p>
 
         <div class="cards-wrapper">
@@ -33,7 +33,7 @@
                         <div class="card-icon">
                             <i class="bi bi-box-seam"></i>
                         </div>
-                        <h5>📦 Total Produk</h5>
+                        <h5> Total Produk</h5>
                     </div>
 
                     <p class="card-value">
@@ -54,7 +54,7 @@
                         <div class="card-icon">
                             <i class="bi bi-people"></i>
                         </div>
-                        <h5>👥 Total User</h5>
+                        <h5> Total User</h5>
                     </div>
 
                     <p class="card-value">
@@ -75,7 +75,7 @@
                         <div class="card-icon">
                             <i class="bi bi-inbox"></i>
                         </div>
-                        <h5>📬 Pesanan Masuk</h5>
+                        <h5> Pesanan Masuk</h5>
                     </div>
 
                     <p class="card-value">
@@ -96,7 +96,7 @@
                         <div class="card-icon">
                             <i class="bi bi-cart-check"></i>
                         </div>
-                        <h5>💰 Total Penjualan</h5>
+                        <h5>Total Penjualan</h5>
                     </div>
 
                     <p class="card-value">
@@ -117,7 +117,7 @@
                         <div class="card-icon">
                             <i class="bi bi-chat-dots"></i>
                         </div>
-                        <h5>💬 Komentar</h5>
+                        <h5>Komentar</h5>
                     </div>
 
                     <p class="card-value">
@@ -139,7 +139,7 @@
                         <div class="card-icon">
                             <i class="bi bi-envelope"></i>
                         </div>
-                        <h5>✉️ Data Pesan</h5>
+                        <h5>Data Pesan</h5>
                     </div>
 
                     <p class="card-value">
