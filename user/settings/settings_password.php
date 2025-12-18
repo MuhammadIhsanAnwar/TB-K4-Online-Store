@@ -230,7 +230,7 @@
     <div class="card">
         <!-- LOGO -->
         <div class="logo-container">
-            <img src="../images/icon/logo.png" alt="Urban Hype Logo">
+            <img src="../../images/icon/logo.png" alt="Urban Hype Logo">
         </div>
 
         <h2>🔐 Ubah Password</h2>

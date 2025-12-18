@@ -227,10 +227,6 @@
             <span class="icon">🔐</span>
             Ubah Password
         </a>
-        <a href="settings.php?menu=payment" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'payment') ? 'active' : ''; ?>">
-            <span class="icon">💳</span>
-            Metode Pembayaran
-        </a>
         <a href="settings.php?menu=lain" class="<?php echo (isset($_GET['menu']) && $_GET['menu'] == 'lain') ? 'active' : ''; ?>">
             <span class="icon">⚙️</span>
             Pengaturan Lainnya
