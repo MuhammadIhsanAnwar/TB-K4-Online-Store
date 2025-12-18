@@ -369,7 +369,6 @@ $base_path = $is_subdir ? '../../' : './';
             gap: 1rem;
         }
     }
-    
 </style>
 
 <!-- NAVBAR (dari file baru, diperbaiki & diperkaya) -->
@@ -400,13 +399,16 @@ $base_path = $is_subdir ? '../../' : './';
                     <a href="<?php echo $base_path; ?>user/produk_pembayaran/cart.php" class="cart-link">
                         <img src="<?php echo $base_path; ?>images/icon/cart-icon.png" alt="Cart" style="width:24px; height:24px; filter: var(--cart-icon-filter);">
                         <?php
-                        $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+                        // Hitung jumlah produk di keranjang dari database
+                        $cart_count_query = "SELECT COUNT(*) as total FROM keranjang WHERE user_id='{$user['id']}'";
+                        $cart_count_result = mysqli_query($koneksi, $cart_count_query);
+                        $cart_count_row = mysqli_fetch_assoc($cart_count_result);
+                        $cart_count = $cart_count_row['total'] ?? 0;
                         if ($cart_count > 0):
                         ?>
                             <span class="cart-badge"><?php echo $cart_count; ?></span>
                         <?php endif; ?>
                     </a>
-
                     <div class="dropdown user-dropdown">
                         <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="<?php echo $base_path; ?>foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>"
