@@ -369,6 +369,27 @@ $base_path = $is_subdir ? '../../' : './';
             gap: 1rem;
         }
     }
+
+    .user-dropdown .dropdown-menu {
+        border: 1px solid rgba(30, 93, 172, 0.1);
+        box-shadow: 0 4px 20px rgba(30, 93, 172, 0.15);
+        border-radius: 12px;
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        z-index: 9999 !important;
+    }
+
+    .dropdown-menu {
+        z-index: 9999 !important;
+    }
+
+    .navbar {
+        z-index: 1030 !important;
+    }
+
+    .navbar-collapse {
+        z-index: 1030 !important;
+    }
 </style>
 
 <!-- NAVBAR (dari file baru, diperbaiki & diperkaya) -->
