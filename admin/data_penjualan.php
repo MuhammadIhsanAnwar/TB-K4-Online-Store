@@ -194,6 +194,13 @@ include '../admin/koneksi.php';
             text-align: center;
         }
 
+        /* Kolom Nomor styling */
+        .nomor-col {
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+        }
+
         .table td:nth-child(2),
         .table td:nth-child(3) {
             text-align: left;
@@ -223,7 +230,7 @@ include '../admin/koneksi.php';
             <table class="table table-bordered table-striped table-sm">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Nomor</th>
                         <th>ID User</th>
                         <th>Produk</th>
                         <th>Jumlah</th>
@@ -234,15 +241,17 @@ include '../admin/koneksi.php';
                 <tbody>
                     <?php
                     $res = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
+                    $nomor = 1;
                     while ($row = mysqli_fetch_assoc($res)) {
                         echo "<tr>
-                        <td>{$row['id']}</td>
+                        <td class='nomor-col'>{$nomor}</td>
                         <td>{$row['user_id']}</td>
                         <td>{$row['produk']}</td>
                         <td>{$row['jumlah']}</td>
                         <td>{$row['total_harga']}</td>
                         <td>{$row['tanggal']}</td>
                     </tr>";
+                        $nomor++;
                     }
                     ?>
                 </tbody>
