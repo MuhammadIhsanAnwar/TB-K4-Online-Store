@@ -52,7 +52,7 @@ if (isset($_POST['remove'])) {
             line-height: 1.6;
         }
 
-        .container {
+        .cart-container {
             max-width: 1200px;
             margin: 4rem auto;
             padding: 0 2rem;
@@ -315,8 +315,8 @@ if (isset($_POST['remove'])) {
 </head>
 
 <body>
-    <?php include "../../navbar.php";?>
-    <div class="container">
+    <?php include "../../navbar.php"; ?>
+    <div class="cart-container">
         <div class="page-header">
             <h1>Shopping Cart</h1>
             <p>Review your items before checkout</p>
