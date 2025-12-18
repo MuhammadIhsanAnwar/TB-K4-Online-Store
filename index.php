@@ -16,7 +16,7 @@ if (isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="/images/icon/logo.png">
     <title>UrbanHype - Unisex Fashion Store</title>
 
     <!-- Bootstrap CSS -->
@@ -466,15 +466,15 @@ if (isset($_SESSION['user_id'])) {
                         <!-- Slides -->
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="images/Background dan Logo/slide11.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
+                                <img src="images/slide/slide11.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
                             </div>
 
                             <div class="carousel-item">
-                                <img src="images/Background dan Logo/slide12.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
+                                <img src="images/slide/slide12.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
                             </div>
 
                             <div class="carousel-item">
-                                <img src="images/Background dan Logo/slide13.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
+                                <img src="images/slide/slide13.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
                             </div>
 
                             <!-- Controls -->

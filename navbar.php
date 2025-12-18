@@ -29,6 +29,23 @@ $base_path = $is_subdir ? '../../' : './';
         background: rgba(255, 255, 255, 1) !important;
     }
 
+    .navbar-logo {
+        height: 50px;
+        width: 50px;
+        margin-right: 1rem;
+        object-fit: contain;
+        transition: var(--transition);
+    }
+
+    .navbar-logo:hover {
+        transform: scale(1.1);
+    }
+
+    .navbar-brand-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
     .navbar-brand {
         font-family: 'Playfair Display', serif;
         font-weight: 700;
@@ -357,8 +374,10 @@ $base_path = $is_subdir ? '../../' : './';
 <!-- NAVBAR (dari file baru, diperbaiki & diperkaya) -->
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="<?php echo $base_path; ?>index.php">URBANHYPE</a>
-
+        <a class="navbar-brand-wrapper" href="<?php echo $base_path; ?>index.php">
+            <img src="<?php echo $base_path; ?>images/icon/logo.png" alt="Logo" class="navbar-logo">
+            <span class="navbar-brand">URBANHYPE</span>
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
