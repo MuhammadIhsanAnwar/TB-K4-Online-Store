@@ -11,7 +11,7 @@ if (isset($_POST['update_status_dikemas'])) {
     if (mysqli_query($koneksi, $update_query)) {
         echo json_encode(['status' => 'success', 'message' => 'Status diperbarui menjadi Sedang Dikemas']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui status']);
+        echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui status: ' . mysqli_error($koneksi)]);
     }
     exit;
 }
@@ -30,7 +30,7 @@ if (isset($_POST['input_resi'])) {
     if (mysqli_query($koneksi, $update_query)) {
         echo json_encode(['status' => 'success', 'message' => 'Resi berhasil diinput dan status diperbarui menjadi Sedang Dikirim']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Gagal menginput resi']);
+        echo json_encode(['status' => 'error', 'message' => 'Gagal menginput resi: ' . mysqli_error($koneksi)]);
     }
     exit;
 }
@@ -46,6 +46,11 @@ if (isset($_POST['selesaikan_pesanan'])) {
         // 1) Ambil data pesanan
         $order_query = "SELECT * FROM pemesanan WHERE id='$order_id'";
         $order_result = mysqli_query($koneksi, $order_query);
+
+        if (!$order_result) {
+            throw new Exception('Database error: ' . mysqli_error($koneksi));
+        }
+
         $order = mysqli_fetch_assoc($order_result);
 
         if (!$order) {
@@ -80,27 +85,50 @@ if (isset($_POST['selesaikan_pesanan'])) {
     }
 }
 
-// Ambil semua pesanan dengan join ke products untuk mendapatkan harga
-$query = "SELECT p.*, GROUP_CONCAT(pr.harga SEPARATOR ',') as harga_list 
-          FROM pemesanan p 
-          LEFT JOIN products pr ON FIND_IN_SET(pr.id, p.product_id)
-          GROUP BY p.id
-          ORDER BY p.waktu_pemesanan DESC";
+// Ambil semua pesanan - PERBAIKAN: Query yang lebih sederhana dan reliable
+// Versi 1: Query sederhana tanpa JOIN (Recommended)
+$query = "SELECT * FROM pemesanan ORDER BY waktu_pemesanan DESC";
 $result = mysqli_query($koneksi, $query);
+
+if (!$result) {
+    die("Database Error: " . mysqli_error($koneksi));
+}
+
 $pesanan = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $pesanan[] = $row;
 }
 
+// Jika ingin JOIN dengan products, gunakan query alternatif:
+// Versi 2: Dengan JOIN yang lebih baik (optional)
+/*
+$query = "SELECT p.*, 
+                 GROUP_CONCAT(DISTINCT pr.id SEPARATOR ',') as product_ids,
+                 GROUP_CONCAT(DISTINCT pr.nama SEPARATOR ',') as product_names,
+                 GROUP_CONCAT(DISTINCT pr.harga SEPARATOR ',') as harga_list 
+          FROM pemesanan p 
+          LEFT JOIN products pr ON p.product_id = pr.id
+          GROUP BY p.id
+          ORDER BY p.waktu_pemesanan DESC";
+*/
+
 // Ambil pesanan yang sudah selesai dari history_penjualan
 $history_query = "SELECT * FROM history_penjualan ORDER BY tanggal_selesai DESC";
 $history_result = mysqli_query($koneksi, $history_query);
+
+if (!$history_result) {
+    die("Database Error: " . mysqli_error($koneksi));
+}
+
 $pesanan_selesai = [];
 if ($history_result) {
     while ($row = mysqli_fetch_assoc($history_result)) {
         $pesanan_selesai[] = $row;
     }
 }
+
+// Debug: Uncomment baris berikut untuk melihat struktur data
+// echo '<pre>'; var_dump($pesanan); echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -206,7 +234,6 @@ if ($history_result) {
                                             <th>Alamat</th>
                                             <th>Produk</th>
                                             <th>Qty</th>
-                                            <th>Harga</th>
                                             <th>Total Harga</th>
                                             <th>Kurir</th>
                                             <th>Resi</th>
@@ -215,100 +242,74 @@ if ($history_result) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($pesanan as $order):
-                                            // Parse produk dan quantity
-                                            $produk_array = array_map('trim', explode(',', $order['nama_produk']));
-                                            $qty_array = array_map('trim', explode(',', $order['quantity']));
-                                            $harga_array = !empty($order['harga_list']) ? array_map('trim', explode(',', $order['harga_list'])) : [];
-
-                                            $max_items = max(count($produk_array), count($qty_array), count($harga_array));
-                                            $total_harga = $order['harga_total'] ?? 0;
-                                            $first_row = true;
-                                        ?>
-                                            <?php for ($i = 0; $i < $max_items; $i++):
-                                                $produk = $produk_array[$i] ?? '';
-                                                $qty = $qty_array[$i] ?? '';
-                                                $harga = $harga_array[$i] ?? 0;
-                                            ?>
-                                                <tr class="order-row" data-status="<?php echo htmlspecialchars($order['status']); ?>" data-order-id="<?php echo $order['id']; ?>">
-                                                    <?php if ($first_row): ?>
-                                                        <td class="order-id-cell" rowspan="<?php echo $max_items; ?>">#<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></td>
-                                                        <td class="customer-name" rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nama_lengkap']); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nomor_hp']); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></td>
+                                        <?php foreach ($pesanan as $order): ?>
+                                            <tr class="order-row" data-status="<?php echo htmlspecialchars($order['status']); ?>" data-order-id="<?php echo $order['id']; ?>">
+                                                <td class="order-id-cell">#<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></td>
+                                                <td class="customer-name"><?php echo htmlspecialchars($order['nama_lengkap']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['nomor_hp']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['alamat_lengkap']); ?></td>
+                                                <td class="produk-col"><?php echo htmlspecialchars($order['nama_produk']); ?></td>
+                                                <td class="qty-col"><?php echo htmlspecialchars($order['quantity']); ?></td>
+                                                <td class="harga-col">Rp <?php echo number_format($order['harga_total'] ?? 0, 0, ',', '.'); ?></td>
+                                                <td><?php echo htmlspecialchars($order['kurir']); ?></td>
+                                                <td>
+                                                    <?php if (!empty($order['resi'])): ?>
+                                                        <span class="resi-number"><?php echo htmlspecialchars($order['resi']); ?></span>
+                                                    <?php else: ?>
+                                                        <span style="color: #9ca3af;">-</span>
                                                     <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $order['status'])); ?>">
+                                                        <?php echo htmlspecialchars($order['status']); ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <?php if ($order['status'] === 'Menunggu Konfirmasi'): ?>
+                                                            <button class="btn-action btn-dikemas" onclick="updateStatusDikemas(<?php echo $order['id']; ?>)">
+                                                                Dikemas
+                                                            </button>
+                                                        <?php endif; ?>
 
-                                                    <td class="produk-col"><?php echo htmlspecialchars($produk); ?></td>
-                                                    <td class="qty-col"><?php echo htmlspecialchars($qty); ?></td>
-                                                    <td class="harga-col">Rp <?php echo number_format($harga, 0, ',', '.'); ?></td>
+                                                        <?php if ($order['status'] === 'Sedang Dikemas' || $order['status'] === 'Menunggu Konfirmasi'): ?>
+                                                            <button class="btn-action btn-resi" onclick="showResiForm(<?php echo $order['id']; ?>)">
+                                                                Resi
+                                                            </button>
+                                                        <?php endif; ?>
 
-                                                    <?php if ($first_row): ?>
-                                                        <td class="harga-col" rowspan="<?php echo $max_items; ?>">Rp <?php echo number_format($total_harga, 0, ',', '.'); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['kurir']); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>">
-                                                            <?php if (!empty($order['resi'])): ?>
-                                                                <span class="resi-number"><?php echo htmlspecialchars($order['resi']); ?></span>
-                                                            <?php else: ?>
-                                                                <span style="color: #9ca3af;">-</span>
-                                                            <?php endif; ?>
-                                                        </td>
-                                                        <td rowspan="<?php echo $max_items; ?>">
-                                                            <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $order['status'])); ?>">
-                                                                <?php echo $order['status']; ?>
-                                                            </span>
-                                                        </td>
-                                                        <td rowspan="<?php echo $max_items; ?>">
-                                                            <div class="action-buttons">
-                                                                <?php if ($order['status'] === 'Menunggu Konfirmasi'): ?>
-                                                                    <button class="btn-action btn-dikemas" onclick="updateStatusDikemas(<?php echo $order['id']; ?>)">
-                                                                        Dikemas
-                                                                    </button>
-                                                                <?php endif; ?>
+                                                        <?php if ($order['status'] === 'Sedang Dikirim' && !empty($order['resi'])): ?>
+                                                            <button class="btn-action btn-selesai" onclick="selesaikanPesanan(<?php echo $order['id']; ?>)">
+                                                                Selesai
+                                                            </button>
+                                                        <?php elseif ($order['status'] !== 'Sedang Dikirim'): ?>
+                                                            <button class="btn-action btn-disabled" disabled>
+                                                                Selesai
+                                                            </button>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                                                                <?php if ($order['status'] === 'Sedang Dikemas' || $order['status'] === 'Menunggu Konfirmasi'): ?>
-                                                                    <button class="btn-action btn-resi" onclick="showResiForm(<?php echo $order['id']; ?>)">
-                                                                        Resi
-                                                                    </button>
-                                                                <?php endif; ?>
-
-                                                                <?php if ($order['status'] === 'Sedang Dikirim' && !empty($order['resi'])): ?>
-                                                                    <button class="btn-action btn-selesai" onclick="selesaikanPesanan(<?php echo $order['id']; ?>)">
-                                                                        Selesai
-                                                                    </button>
-                                                                <?php elseif ($order['status'] !== 'Sedang Dikirim'): ?>
-                                                                    <button class="btn-action btn-disabled" disabled>
-                                                                        Selesai
-                                                                    </button>
-                                                                <?php endif; ?>
-                                                            </div>
-                                                        </td>
-                                                    <?php endif; ?>
-                                                </tr>
-
-                                                <!-- RESI INPUT FORM (Hidden by default) -->
-                                                <?php if ($first_row): ?>
-                                                    <tr id="resiForm<?php echo $order['id']; ?>" style="display:none;">
-                                                        <td colspan="12" style="padding: 1.5rem; background: var(--bg);">
-                                                            <label style="display: block; font-weight: 600; color: var(--primary); margin-bottom: 0.75rem;">Masukkan Nomor Resi</label>
-                                                            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                                                                <input type="text"
-                                                                    id="resiInput<?php echo $order['id']; ?>"
-                                                                    style="flex: 1; min-width: 250px; padding: 10px 15px; border: 2px solid var(--border); border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;"
-                                                                    placeholder="Contoh: JNE123456789..."
-                                                                    autocomplete="off">
-                                                                <button class="btn-action btn-resi" onclick="submitResi(<?php echo $order['id']; ?>)">
-                                                                    Kirim Resi
-                                                                </button>
-                                                                <button class="btn-action btn-disabled" onclick="cancelResiForm(<?php echo $order['id']; ?>)">
-                                                                    Batal
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                <?php endif; ?>
-
-                                                <?php $first_row = false; ?>
-                                            <?php endfor; ?>
+                                            <!-- RESI INPUT FORM -->
+                                            <tr id="resiForm<?php echo $order['id']; ?>" style="display:none;">
+                                                <td colspan="11" style="padding: 1.5rem; background: var(--bg);">
+                                                    <label style="display: block; font-weight: 600; color: var(--primary); margin-bottom: 0.75rem;">Masukkan Nomor Resi</label>
+                                                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                                                        <input type="text"
+                                                            id="resiInput<?php echo $order['id']; ?>"
+                                                            style="flex: 1; min-width: 250px; padding: 10px 15px; border: 2px solid var(--border); border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;"
+                                                            placeholder="Contoh: JNE123456789..."
+                                                            autocomplete="off">
+                                                        <button class="btn-action btn-resi" onclick="submitResi(<?php echo $order['id']; ?>)">
+                                                            Kirim Resi
+                                                        </button>
+                                                        <button class="btn-action btn-disabled" onclick="cancelResiForm(<?php echo $order['id']; ?>)">
+                                                            Batal
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -361,44 +362,26 @@ if ($history_result) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($pesanan_selesai as $order):
-                                            // Parse produk dan quantity
-                                            $produk_array = array_map('trim', explode(',', $order['nama_produk']));
-                                            $qty_array = array_map('trim', explode(',', $order['quantity']));
-                                            $max_items = max(count($produk_array), count($qty_array));
-                                            $first_row = true;
-                                        ?>
-                                            <?php for ($i = 0; $i < $max_items; $i++):
-                                                $produk = $produk_array[$i] ?? '';
-                                                $qty = $qty_array[$i] ?? '';
-                                            ?>
-                                                <tr>
-                                                    <?php if ($first_row): ?>
-                                                        <td class="order-id-cell" rowspan="<?php echo $max_items; ?>">#<?php echo str_pad($order['id'] ?? 0, 6, '0', STR_PAD_LEFT); ?></td>
-                                                        <td class="customer-name" rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nama_lengkap']); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nomor_hp']); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></td>
+                                        <?php foreach ($pesanan_selesai as $order): ?>
+                                            <tr>
+                                                <td class="order-id-cell">#<?php echo str_pad($order['id'] ?? 0, 6, '0', STR_PAD_LEFT); ?></td>
+                                                <td class="customer-name"><?php echo htmlspecialchars($order['nama_lengkap']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['nomor_hp']); ?></td>
+                                                <td><?php echo htmlspecialchars($order['alamat_lengkap']); ?></td>
+                                                <td class="produk-col"><?php echo htmlspecialchars($order['nama_produk']); ?></td>
+                                                <td class="qty-col"><?php echo htmlspecialchars($order['quantity']); ?></td>
+                                                <td class="harga-col">Rp <?php echo number_format($order['harga_total'] ?? 0, 0, ',', '.'); ?></td>
+                                                <td><?php echo htmlspecialchars($order['kurir']); ?></td>
+                                                <td>
+                                                    <?php if (!empty($order['resi'])): ?>
+                                                        <span class="resi-number"><?php echo htmlspecialchars($order['resi']); ?></span>
+                                                    <?php else: ?>
+                                                        <span style="color: #9ca3af;">-</span>
                                                     <?php endif; ?>
-
-                                                    <td class="produk-col"><?php echo htmlspecialchars($produk); ?></td>
-                                                    <td class="qty-col"><?php echo htmlspecialchars($qty); ?></td>
-
-                                                    <?php if ($first_row): ?>
-                                                        <td class="harga-col" rowspan="<?php echo $max_items; ?>">Rp <?php echo number_format($order['harga_total'] ?? 0, 0, ',', '.'); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['kurir']); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>">
-                                                            <?php if (!empty($order['resi'])): ?>
-                                                                <span class="resi-number"><?php echo htmlspecialchars($order['resi']); ?></span>
-                                                            <?php else: ?>
-                                                                <span style="color: #9ca3af;">-</span>
-                                                            <?php endif; ?>
-                                                        </td>
-                                                        <td rowspan="<?php echo $max_items; ?>" style="font-size: 0.85rem;"><?php echo date('d M Y H:i', strtotime($order['tanggal_dipesan'] ?? 'now')); ?></td>
-                                                        <td rowspan="<?php echo $max_items; ?>" style="font-size: 0.85rem; color: var(--success); font-weight: 600;"><?php echo date('d M Y H:i', strtotime($order['tanggal_selesai'] ?? 'now')); ?></td>
-                                                    <?php endif; ?>
-                                                </tr>
-                                                <?php $first_row = false; ?>
-                                            <?php endfor; ?>
+                                                </td>
+                                                <td style="font-size: 0.85rem;"><?php echo date('d M Y H:i', strtotime($order['tanggal_dipesan'] ?? 'now')); ?></td>
+                                                <td style="font-size: 0.85rem; color: var(--success); font-weight: 600;"><?php echo date('d M Y H:i', strtotime($order['tanggal_selesai'] ?? 'now')); ?></td>
+                                            </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -427,7 +410,6 @@ if ($history_result) {
             });
             event.target.classList.add('active');
 
-            // Reset pagination saat switch tab
             if (tabName === 'pesanan-masuk') {
                 setupPagination('ordersList', 'paginationMasuk');
             } else {
@@ -441,18 +423,15 @@ if ($history_result) {
             const table = document.getElementById(tableId);
             const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
-            let visibleRows = 0;
             for (let row of rows) {
                 const text = row.textContent.toLowerCase();
                 if (text.includes(filter)) {
                     row.style.display = '';
-                    visibleRows++;
                 } else {
                     row.style.display = 'none';
                 }
             }
 
-            // Reset pagination setelah search
             if (tableId === 'ordersList') {
                 setupPagination('ordersList', 'paginationMasuk');
             } else {
@@ -471,34 +450,39 @@ if ($history_result) {
 
             if (pageCount <= 1) return;
 
-            // Previous button
             const prevBtn = document.createElement('button');
             prevBtn.textContent = '← Sebelumnya';
             prevBtn.className = 'pagination-btn';
-            prevBtn.onclick = () => goToPage(tableId, paginationId, currentPage - 1);
             paginationContainer.appendChild(prevBtn);
 
-            // Page numbers
             for (let i = 1; i <= pageCount; i++) {
                 const btn = document.createElement('button');
                 btn.textContent = i;
                 btn.className = 'pagination-btn' + (i === 1 ? ' active' : '');
-                btn.onclick = () => goToPage(tableId, paginationId, i);
+                btn.onclick = () => goToPage(tableId, i);
                 paginationContainer.appendChild(btn);
             }
 
-            // Next button
             const nextBtn = document.createElement('button');
             nextBtn.textContent = 'Selanjutnya →';
             nextBtn.className = 'pagination-btn';
-            nextBtn.onclick = () => goToPage(tableId, paginationId, currentPage + 1);
             paginationContainer.appendChild(nextBtn);
 
-            let currentPage = 1;
+            prevBtn.onclick = () => goToPage(tableId, getCurrentPage(paginationId) - 1);
+            nextBtn.onclick = () => goToPage(tableId, getCurrentPage(paginationId) + 1);
+
             showPage(tableId, 1);
         }
 
-        function goToPage(tableId, paginationId, pageNum) {
+        function getCurrentPage(paginationId) {
+            const buttons = document.querySelectorAll('#' + paginationId + ' .pagination-btn.active');
+            if (buttons.length > 0) {
+                return parseInt(buttons[0].textContent) || 1;
+            }
+            return 1;
+        }
+
+        function goToPage(tableId, pageNum) {
             const table = document.getElementById(tableId);
             const tbody = table.getElementsByTagName('tbody')[0];
             const rows = Array.from(tbody.getElementsByTagName('tr')).filter(row => row.style.display !== 'none');
@@ -508,9 +492,9 @@ if ($history_result) {
 
             showPage(tableId, pageNum);
 
-            // Update active button
+            const paginationId = tableId === 'ordersList' ? 'paginationMasuk' : 'paginationSelesai';
             const buttons = document.querySelectorAll('#' + paginationId + ' .pagination-btn');
-            buttons.forEach((btn, index) => {
+            buttons.forEach((btn) => {
                 btn.classList.remove('active');
                 if (parseInt(btn.textContent) === pageNum) {
                     btn.classList.add('active');
@@ -708,7 +692,6 @@ if ($history_result) {
             setupPagination('ordersList', 'paginationMasuk');
         }
 
-        // Initialize pagination saat halaman load
         document.addEventListener('DOMContentLoaded', function() {
             setupPagination('ordersList', 'paginationMasuk');
             setupPagination('orderSelesaiList', 'paginationSelesai');
