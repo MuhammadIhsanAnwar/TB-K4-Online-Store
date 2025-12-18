@@ -44,25 +44,19 @@ $mail = new PHPMailer(true);
 try {
     // ============ SERVER SETTINGS ============
     $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';                           // GANTI: SMTP Server (contoh: smtp.gmail.com, smtp.office365.com)
+    $mail->Host = 'urbanhype.neoverse.my.id';
     $mail->SMTPAuth = true;
-    $mail->Username = 'your-email@gmail.com';                 // GANTI: Email pengirim
-    $mail->Password = 'your-app-password';                    // GANTI: App Password (bukan password biasa!)
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Username = 'newslater@urbanhype.neoverse.my.id';
+    $mail->Password = 'administrator-online-store';
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = 587;
-
-    // Untuk menggunakan SSL (port 465):
-    // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-    // $mail->Port = 465;
-
-    // Debug mode (set ke 0 di production)
-    $mail->SMTPDebug = 0;  // 0 = no debug, 1 = errors only, 2 = messages and errors, 3 = all messages
+    $mail->SMTPDebug = 0;
     $mail->Debugoutput = 'error_log';
 
     // ============ RECIPIENTS ============
-    $mail->setFrom('noreply@urbanhype.com', 'URBANHYPE');     // GANTI: Email dan nama pengirim
-    $mail->addAddress($email);                                 // Penerima (dari form)
-    $mail->addReplyTo('info@urbanhype.com', 'URBANHYPE Support');  // GANTI: Email support
+    $mail->setFrom('newslater@urbanhype.neoverse.my.id', 'URBANHYPE');     
+    $mail->addAddress($email);                                 
+    $mail->addReplyTo('newslater@urbanhype.neoverse.my.id', 'URBANHYPE Support');  
 
     // ============ EMAIL CONTENT ============
     $mail->isHTML(true);
