@@ -13,6 +13,15 @@ $is_subdir = (strpos($current_path, '/user/produk_pembayaran/') !== false);
 $base_path = $is_subdir ? '../../' : './';
 ?>
 
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="icons/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
 <style>
     /* ===== NAVBAR STYLING (GLASSMORPHISM + IMPROVED) ===== */
     .navbar {
