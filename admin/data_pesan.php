@@ -12,7 +12,6 @@ if (isset($_POST['delete_id'])) {
     exit;
 }
 
-
 /* Tandai pesan dibaca */
 if (isset($_POST['read_id'])) {
     $id = intval($_POST['read_id']);
@@ -57,8 +56,15 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
         }
 
         @keyframes fade {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h2 {
@@ -131,208 +137,206 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
             border-radius: 8px;
         }
 
-:root {
-    --primary: #1e5dac;
-    --bg: #f3eded;
-    --white: #ffffff;
-}
+        :root {
+            --primary: #1e5dac;
+            --bg: #f3eded;
+            --white: #ffffff;
+        }
 
-body {
-    margin: 0;
-    background: var(--bg);
-    font-family: Poppins, system-ui, sans-serif;
-}
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: Poppins, system-ui, sans-serif;
+        }
 
-/* ===== SIDEBAR ===== */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 220px;
-    height: 100vh;
-    background: linear-gradient(180deg, #1e63b6, #0f3f82);
-    padding: 18px 0;
-    display: flex;
-    flex-direction: column;
-    z-index: 1000;
-}
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e63b6, #0f3f82);
+            padding: 18px 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
 
-.logo-box {
-    text-align: center;
-    padding: 10px 0 18px;
-}
+        .logo-box {
+            text-align: center;
+            padding: 10px 0 18px;
+        }
 
-.logo-box img {
-    width: 72px;
-    filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
-}
+        .logo-box img {
+            width: 72px;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
+        }
 
-.menu-title {
-    color: #dbe6ff;
-    font-size: 13px;
-    padding: 8px 20px;
-}
+        .menu-title {
+            color: #dbe6ff;
+            font-size: 13px;
+            padding: 8px 20px;
+        }
 
-.sidebar a {
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 20px;
-    margin: 4px 12px;
-    border-radius: 10px;
-    transition: .25s;
-}
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 10px;
+            transition: .25s;
+        }
 
-.sidebar a:hover {
-    background: rgba(255,255,255,.18);
-}
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, .18);
+        }
 
-.sidebar a.active {
-    background: rgba(255,255,255,.32);
-    font-weight: 600;
-}
+        .sidebar a.active {
+            background: rgba(255, 255, 255, .32);
+            font-weight: 600;
+        }
 
-.sidebar .logout {
-    margin-top: auto;
-    background: rgba(255,80,80,.15);
-    color: #ffd6d6 !important;
-    text-align: center;
-    border-radius: 14px;
-}
+        .sidebar .logout {
+            margin-top: auto;
+            background: rgba(255, 80, 80, .15);
+            color: #ffd6d6 !important;
+            text-align: center;
+            border-radius: 14px;
+        }
 
-/* ===== CONTENT ===== */
-.content {
-    padding: 30px;
-    transition: .3s;
-}
+        /* ===== CONTENT ===== */
+        .content {
+            padding: 30px;
+            transition: .3s;
+        }
 
-/* Desktop saja */
-@media (min-width: 992px) {
-    .content {
-        margin-left: 220px;
-    }
-}
+        /* Desktop saja */
+        @media (min-width: 992px) {
+            .content {
+                margin-left: 220px;
+            }
+        }
 
-/* SIDEBAR MOBILE */
-@media (max-width: 991px) {
-    .sidebar {
-        transform: translateX(-100%);
-        transition: .3s;
-    }
+        /* SIDEBAR MOBILE */
+        @media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: .3s;
+            }
 
-    .sidebar.show {
-        transform: translateX(0);
-    }
-}
-
-
+            .sidebar.show {
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
 
 <body>
 
-<?php include 'sidebar.php'; ?>
+    <?php include 'sidebar.php'; ?>
 
-<div class="content">
-    <div class="d-lg-none mb-3">
-    <button class="btn btn-primary" onclick="toggleSidebar()">
-        <i class="bi bi-list"></i>
-    </button>
-</div>
+    <div class="content">
+        <div class="d-lg-none mb-3">
+            <button class="btn btn-primary" onclick="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
 
-   <div class="d-flex justify-content-between align-items-center flex-wrap">
-    <h2 class="mb-2 mb-lg-0">Data Pesan</h2>
-</div>
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <h2 class="mb-2 mb-lg-0">Data Pesan</h2>
+        </div>
 
-    <hr>
+        <hr>
 
-    <div class="table-container table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Pesan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+        <div class="table-container table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Pesan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-            <?php $no=1; while($row = mysqli_fetch_assoc($query)): ?>
-                <tr id="row-<?= $row['id'] ?>">
-                    <td><?= $no++ ?></td>
-                    <td><?= htmlspecialchars($row['nama']) ?></td>
-                    <td><?= htmlspecialchars($row['email']) ?></td>
-                    <td><?= nl2br(htmlspecialchars($row['pesan'])) ?></td>
-                    <td>
-                        <?php if ($row['status']=='baru'): ?>
-                            <span class="badge-baru">Baru</span>
-                        <?php else: ?>
-                            <span class="badge-dibaca">Dibaca</span>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if ($row['status']=='baru'): ?>
-                            <button class="btn btn-sm btn-info"
-                                onclick="tandaiDibaca(<?= $row['id'] ?>)">
-                                <i class="bi bi-check2-circle"></i>
-                            </button>
-                        <?php else: ?>
-                            <td>
-    <?php if ($row['status'] == 'baru'): ?>
-        <button class="btn btn-sm btn-info mb-1"
-            onclick="tandaiDibaca(<?= $row['id'] ?>)">
-            <i class="bi bi-check2-circle"></i>
+                <tbody>
+                    <?php $no = 1;
+                    while ($row = mysqli_fetch_assoc($query)): ?>
+                        <tr id="row-<?= $row['id'] ?>">
+                            <td><?= $no++ ?></td>
+                            <td><?= htmlspecialchars($row['nama']) ?></td>
+                            <td><?= htmlspecialchars($row['email']) ?></td>
+<td><?= nl2br(htmlspecialchars($row['pesan'])) ?></td>
+<td>
+    <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
+        <!-- Tombol Balas Pesan -->
+        <a href="balas_pesan.php?id=<?= $row['id'] ?>&email=<?= urlencode($row['email']) ?>&nama=<?= urlencode($row['nama']) ?>" 
+           class="btn btn-sm btn-primary" 
+           title="Balas Pesan"
+           style="text-decoration: none;">
+            <i class="bi bi-reply"></i> Balas
+        </a>
+
+        <!-- Tombol Tandai Dibaca -->
+        <?php if ($row['status'] == 'baru'): ?>
+            <button class="btn btn-sm btn-info"
+                onclick="tandaiDibaca(<?= $row['id'] ?>)"
+                title="Tandai Dibaca">
+                <i class="bi bi-check2-circle"></i> Dibaca
+            </button>
+        <?php endif; ?>
+
+        <!-- Tombol Hapus -->
+        <button class="btn btn-sm btn-danger"
+            onclick="hapusPesan(<?= $row['id'] ?>)"
+            title="Hapus Pesan">
+            <i class="bi bi-trash"></i> Hapus
         </button>
-    <?php endif; ?>
-
-    <button class="btn btn-sm btn-danger"
-        onclick="hapusPesan(<?= $row['id'] ?>)">
-        <i class="bi bi-trash"></i>
-    </button>
-</td>
-
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-            </tbody>
-        </table>
     </div>
-</div>
+</td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<script>
-function tandaiDibaca(id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.onload = function () {
-        if (xhr.responseText.trim() === "success") {
-            location.reload();
+    <script>
+        function tandaiDibaca(id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.responseText.trim() === "success") {
+                    location.reload();
+                }
+            };
+            xhr.send("read_id=" + id);
         }
-    };
-    xhr.send("read_id=" + id);
-}
-function hapusPesan(id) {
-    if (!confirm("Yakin ingin menghapus pesan ini?")) return;
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.onload = function () {
-        if (xhr.responseText.trim() === "success") {
-            const row = document.getElementById("row-" + id);
-            if (row) row.remove();
+        function hapusPesan(id) {
+            if (!confirm("Yakin ingin menghapus pesan ini?")) return;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.responseText.trim() === "success") {
+                    const row = document.getElementById("row-" + id);
+                    if (row) row.remove();
+                }
+            };
+            xhr.send("delete_id=" + id);
         }
-    };
-    xhr.send("delete_id=" + id);
-}
 
-function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('show');
-}
-</script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        }
+    </script>
 
 </body>
+
 </html>
