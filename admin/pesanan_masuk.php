@@ -87,6 +87,16 @@ $pesanan = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $pesanan[] = $row;
 }
+
+// Ambil pesanan yang sudah selesai dari history_penjualan
+$history_query = "SELECT * FROM history_penjualan ORDER BY tanggal_selesai DESC LIMIT 100";
+$history_result = mysqli_query($koneksi, $history_query);
+$pesanan_selesai = [];
+if ($history_result) {
+    while ($row = mysqli_fetch_assoc($history_result)) {
+        $pesanan_selesai[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -255,6 +265,70 @@ while ($row = mysqli_fetch_assoc($result)) {
             font-family: 'Playfair Display', serif;
         }
 
+        /* ================= TABS SECTION ================= */
+        .tabs-container {
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.08);
+            overflow: hidden;
+        }
+
+        .tabs-header {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1.2rem 1rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background: rgba(30, 93, 172, 0.02);
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-bottom: none;
+        }
+
+        .tab-badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        .tab-btn.active .tab-badge {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .tabs-content {
+            padding: 2rem;
+        }
+
+        /* ================= STATS SECTION ================= */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -354,6 +428,10 @@ while ($row = mysqli_fetch_assoc($result)) {
             animation: slideUp 0.5s ease;
         }
 
+        .order-card.selesai {
+            border-top: 5px solid var(--success);
+        }
+
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -380,11 +458,19 @@ while ($row = mysqli_fetch_assoc($result)) {
             border-bottom: 1px solid var(--border);
         }
 
+        .order-card.selesai .order-header {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(167, 243, 208, 0.05) 100%);
+        }
+
         .order-id {
             font-weight: 700;
             font-size: 1.1rem;
             color: var(--primary);
             margin-bottom: 0.5rem;
+        }
+
+        .order-card.selesai .order-id {
+            color: var(--success);
         }
 
         .order-date {
@@ -622,6 +708,15 @@ while ($row = mysqli_fetch_assoc($result)) {
                 width: 100%;
             }
 
+            .tab-btn {
+                font-size: 0.8rem;
+                padding: 1rem 0.5rem;
+            }
+
+            .tab-badge {
+                font-size: 0.7rem;
+            }
+
             .order-header {
                 flex-direction: column;
                 gap: 1rem;
@@ -668,151 +763,248 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="container-fluid">
                 <!-- PAGE HEADER -->
                 <div class="page-header">
-                    <h1 class="page-title">📦 Pesanan Masuk</h1>
+                    <h1 class="page-title">📦 Pesanan</h1>
                 </div>
 
-                <!-- STATS SECTION -->
-                <div class="stats-container">
-                    <?php
-                    $menunggu = count(array_filter($pesanan, fn($p) => $p['status'] === 'Menunggu Konfirmasi'));
-                    $dikemas = count(array_filter($pesanan, fn($p) => $p['status'] === 'Sedang Dikemas'));
-                    $dikirim = count(array_filter($pesanan, fn($p) => $p['status'] === 'Sedang Dikirim'));
-                    $total = count($pesanan);
-                    ?>
-                    <div class="stat-card">
-                        <div class="stat-label">📦 Total Pesanan</div>
-                        <div class="stat-value"><?php echo $total; ?></div>
+                <!-- TABS SECTION -->
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" onclick="switchTab('pesanan-masuk')">
+                            📬 Pesanan Masuk
+                            <span class="tab-badge"><?php echo count($pesanan); ?></span>
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('pesanan-selesai')">
+                            ✓ Pesanan Selesai
+                            <span class="tab-badge"><?php echo count($pesanan_selesai); ?></span>
+                        </button>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-label">⏳ Menunggu Konfirmasi</div>
-                        <div class="stat-value" style="color: #b45309;"><?php echo $menunggu; ?></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">📋 Sedang Dikemas</div>
-                        <div class="stat-value" style="color: #1e40af;"><?php echo $dikemas; ?></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">🚚 Sedang Dikirim</div>
-                        <div class="stat-value" style="color: #1e40af;"><?php echo $dikirim; ?></div>
-                    </div>
-                </div>
 
-                <!-- FILTER SECTION -->
-                <div class="filter-section">
-                    <div class="filter-title">🔍 Filter Status:</div>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" onclick="filterByStatus('semua')">Semua Pesanan</button>
-                        <button class="filter-btn" onclick="filterByStatus('Menunggu Konfirmasi')">⏳ Menunggu Konfirmasi</button>
-                        <button class="filter-btn" onclick="filterByStatus('Sedang Dikemas')">📋 Sedang Dikemas</button>
-                        <button class="filter-btn" onclick="filterByStatus('Sedang Dikirim')">🚚 Sedang Dikirim</button>
-                    </div>
-                </div>
-
-                <!-- ORDERS LIST -->
-                <div class="orders-container" id="ordersList">
-                    <?php if (empty($pesanan)): ?>
-                        <div class="empty-state">
-                            <div class="empty-icon">📭</div>
-                            <h3>Tidak ada pesanan</h3>
-                            <p>Belum ada pesanan yang masuk. Tunggu pelanggan untuk melakukan pembelian.</p>
-                        </div>
-                    <?php else: ?>
-                        <?php foreach ($pesanan as $order): ?>
-                            <div class="order-card" data-status="<?php echo htmlspecialchars($order['status']); ?>">
-                                <div class="order-header">
-                                    <div>
-                                        <div class="order-id">Order #<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></div>
-                                        <small class="order-date">📅 <?php echo date('d M Y H:i', strtotime($order['waktu_pemesanan'])); ?></small>
-                                    </div>
-                                    <span class="order-status status-<?php echo strtolower(str_replace(' ', '-', $order['status'])); ?>">
-                                        <?php echo $order['status']; ?>
-                                    </span>
-                                </div>
-
-                                <div class="order-info">
-                                    <div class="info-row">
-                                        <span class="info-label">👤 Nama Customer:</span>
-                                        <span class="info-value"><?php echo htmlspecialchars($order['nama_lengkap']); ?></span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">📱 Nomor HP:</span>
-                                        <span class="info-value"><?php echo htmlspecialchars($order['nomor_hp']); ?></span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">📍 Alamat:</span>
-                                        <span class="info-value"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">🛍️ Produk:</span>
-                                        <span class="info-value"><?php echo htmlspecialchars($order['nama_produk']); ?></span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">📦 Kuantitas:</span>
-                                        <span class="info-value"><?php echo htmlspecialchars($order['quantity']); ?></span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">🚚 Kurir:</span>
-                                        <span class="info-value"><?php echo htmlspecialchars($order['kurir']); ?></span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">💳 Metode Pembayaran:</span>
-                                        <span class="info-value"><?php echo htmlspecialchars($order['metode_pembayaran']); ?></span>
-                                    </div>
-                                    <?php if (!empty($order['resi'])): ?>
-                                        <div class="info-row">
-                                            <span class="info-label">📮 Nomor Resi:</span>
-                                            <span class="resi-value"><?php echo htmlspecialchars($order['resi']); ?></span>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-
-                                <!-- ACTION BUTTONS -->
-                                <div class="order-actions">
-                                    <?php if ($order['status'] === 'Menunggu Konfirmasi'): ?>
-                                        <button class="btn-action btn-dikemas" onclick="updateStatusDikemas(<?php echo $order['id']; ?>)">
-                                            ✓ Ubah ke Sedang Dikemas
-                                        </button>
-                                    <?php endif; ?>
-
-                                    <?php if ($order['status'] === 'Sedang Dikemas' || $order['status'] === 'Menunggu Konfirmasi'): ?>
-                                        <button class="btn-action btn-resi" onclick="showResiForm(<?php echo $order['id']; ?>)">
-                                            📮 Input Resi
-                                        </button>
-                                    <?php endif; ?>
-
-                                    <?php if ($order['status'] === 'Sedang Dikirim' && !empty($order['resi'])): ?>
-                                        <button class="btn-action btn-selesai" onclick="selesaikanPesanan(<?php echo $order['id']; ?>)">
-                                            ✓ Pesanan Selesai
-                                        </button>
-                                    <?php elseif ($order['status'] !== 'Sedang Dikirim'): ?>
-                                        <button class="btn-action btn-disabled" disabled>
-                                            ✓ Tunggu Dikirim
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-
-                                <!-- RESI INPUT FORM (Hidden by default) -->
-                                <div id="resiForm<?php echo $order['id']; ?>" style="display:none; padding: 1.5rem; background: var(--bg); border-top: 1px solid var(--border);">
-                                    <div style="margin-bottom: 0.75rem;">
-                                        <label style="display: block; font-weight: 600; color: var(--primary); margin-bottom: 0.5rem;">Masukkan Nomor Resi</label>
-                                        <div class="resi-input-group">
-                                            <input type="text"
-                                                id="resiInput<?php echo $order['id']; ?>"
-                                                class="resi-input"
-                                                placeholder="Contoh: JNE123456789..."
-                                                autocomplete="off">
-                                            <button class="btn-action btn-resi" onclick="submitResi(<?php echo $order['id']; ?>)">
-                                                Kirim Resi
-                                            </button>
-                                            <button class="btn-action btn-disabled" onclick="cancelResiForm(<?php echo $order['id']; ?>)">
-                                                Batal
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                    <!-- TAB PESANAN MASUK -->
+                    <div id="pesanan-masuk" class="tabs-content" style="display: block;">
+                        <!-- STATS SECTION -->
+                        <div class="stats-container">
+                            <?php
+                            $menunggu = count(array_filter($pesanan, fn($p) => $p['status'] === 'Menunggu Konfirmasi'));
+                            $dikemas = count(array_filter($pesanan, fn($p) => $p['status'] === 'Sedang Dikemas'));
+                            $dikirim = count(array_filter($pesanan, fn($p) => $p['status'] === 'Sedang Dikirim'));
+                            $total = count($pesanan);
+                            ?>
+                            <div class="stat-card">
+                                <div class="stat-label">📦 Total Pesanan</div>
+                                <div class="stat-value"><?php echo $total; ?></div>
                             </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                            <div class="stat-card">
+                                <div class="stat-label">⏳ Menunggu Konfirmasi</div>
+                                <div class="stat-value" style="color: #b45309;"><?php echo $menunggu; ?></div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">📋 Sedang Dikemas</div>
+                                <div class="stat-value" style="color: #1e40af;"><?php echo $dikemas; ?></div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">🚚 Sedang Dikirim</div>
+                                <div class="stat-value" style="color: #1e40af;"><?php echo $dikirim; ?></div>
+                            </div>
+                        </div>
+
+                        <!-- FILTER SECTION -->
+                        <div class="filter-section">
+                            <div class="filter-title">🔍 Filter Status:</div>
+                            <div class="filter-buttons">
+                                <button class="filter-btn active" onclick="filterByStatus('semua')">Semua Pesanan</button>
+                                <button class="filter-btn" onclick="filterByStatus('Menunggu Konfirmasi')">⏳ Menunggu Konfirmasi</button>
+                                <button class="filter-btn" onclick="filterByStatus('Sedang Dikemas')">📋 Sedang Dikemas</button>
+                                <button class="filter-btn" onclick="filterByStatus('Sedang Dikirim')">🚚 Sedang Dikirim</button>
+                            </div>
+                        </div>
+
+                        <!-- ORDERS LIST -->
+                        <div class="orders-container" id="ordersList">
+                            <?php if (empty($pesanan)): ?>
+                                <div class="empty-state">
+                                    <div class="empty-icon">📭</div>
+                                    <h3>Tidak ada pesanan</h3>
+                                    <p>Belum ada pesanan yang masuk. Tunggu pelanggan untuk melakukan pembelian.</p>
+                                </div>
+                            <?php else: ?>
+                                <?php foreach ($pesanan as $order): ?>
+                                    <div class="order-card" data-status="<?php echo htmlspecialchars($order['status']); ?>">
+                                        <div class="order-header">
+                                            <div>
+                                                <div class="order-id">Order #<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></div>
+                                                <small class="order-date">📅 <?php echo date('d M Y H:i', strtotime($order['waktu_pemesanan'])); ?></small>
+                                            </div>
+                                            <span class="order-status status-<?php echo strtolower(str_replace(' ', '-', $order['status'])); ?>">
+                                                <?php echo $order['status']; ?>
+                                            </span>
+                                        </div>
+
+                                        <div class="order-info">
+                                            <div class="info-row">
+                                                <span class="info-label">👤 Nama Customer:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_lengkap']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">📱 Nomor HP:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['nomor_hp']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">📍 Alamat:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">🛍️ Produk:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_produk']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">📦 Kuantitas:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['quantity']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">🚚 Kurir:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['kurir']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">💳 Metode Pembayaran:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['metode_pembayaran']); ?></span>
+                                            </div>
+                                            <?php if (!empty($order['resi'])): ?>
+                                                <div class="info-row">
+                                                    <span class="info-label">📮 Nomor Resi:</span>
+                                                    <span class="resi-value"><?php echo htmlspecialchars($order['resi']); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <!-- ACTION BUTTONS -->
+                                        <div class="order-actions">
+                                            <?php if ($order['status'] === 'Menunggu Konfirmasi'): ?>
+                                                <button class="btn-action btn-dikemas" onclick="updateStatusDikemas(<?php echo $order['id']; ?>)">
+                                                    ✓ Ubah ke Sedang Dikemas
+                                                </button>
+                                            <?php endif; ?>
+
+                                            <?php if ($order['status'] === 'Sedang Dikemas' || $order['status'] === 'Menunggu Konfirmasi'): ?>
+                                                <button class="btn-action btn-resi" onclick="showResiForm(<?php echo $order['id']; ?>)">
+                                                    📮 Input Resi
+                                                </button>
+                                            <?php endif; ?>
+
+                                            <?php if ($order['status'] === 'Sedang Dikirim' && !empty($order['resi'])): ?>
+                                                <button class="btn-action btn-selesai" onclick="selesaikanPesanan(<?php echo $order['id']; ?>)">
+                                                    ✓ Pesanan Selesai
+                                                </button>
+                                            <?php elseif ($order['status'] !== 'Sedang Dikirim'): ?>
+                                                <button class="btn-action btn-disabled" disabled>
+                                                    ✓ Tunggu Dikirim
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <!-- RESI INPUT FORM (Hidden by default) -->
+                                        <div id="resiForm<?php echo $order['id']; ?>" style="display:none; padding: 1.5rem; background: var(--bg); border-top: 1px solid var(--border);">
+                                            <div style="margin-bottom: 0.75rem;">
+                                                <label style="display: block; font-weight: 600; color: var(--primary); margin-bottom: 0.5rem;">Masukkan Nomor Resi</label>
+                                                <div class="resi-input-group">
+                                                    <input type="text"
+                                                        id="resiInput<?php echo $order['id']; ?>"
+                                                        class="resi-input"
+                                                        placeholder="Contoh: JNE123456789..."
+                                                        autocomplete="off">
+                                                    <button class="btn-action btn-resi" onclick="submitResi(<?php echo $order['id']; ?>)">
+                                                        Kirim Resi
+                                                    </button>
+                                                    <button class="btn-action btn-disabled" onclick="cancelResiForm(<?php echo $order['id']; ?>)">
+                                                        Batal
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- TAB PESANAN SELESAI -->
+                    <div id="pesanan-selesai" class="tabs-content" style="display: none;">
+                        <!-- STATS SECTION SELESAI -->
+                        <div class="stats-container">
+                            <div class="stat-card" style="border-left-color: var(--success);">
+                                <div class="stat-label">✓ Total Pesanan Selesai</div>
+                                <div class="stat-value" style="color: var(--success);"><?php echo count($pesanan_selesai); ?></div>
+                            </div>
+                        </div>
+
+                        <!-- ORDERS SELESAI LIST -->
+                        <div class="orders-container" id="orderSelesaiList">
+                            <?php if (empty($pesanan_selesai)): ?>
+                                <div class="empty-state">
+                                    <div class="empty-icon">📪</div>
+                                    <h3>Belum ada pesanan selesai</h3>
+                                    <p>Pesanan yang sudah diselesaikan akan tampil di sini.</p>
+                                </div>
+                            <?php else: ?>
+                                <?php foreach ($pesanan_selesai as $order): ?>
+                                    <div class="order-card selesai">
+                                        <div class="order-header">
+                                            <div>
+                                                <div class="order-id">Order #<?php echo str_pad($order['id'] ?? 0, 6, '0', STR_PAD_LEFT); ?></div>
+                                                <small class="order-date">📅 Dipesan: <?php echo date('d M Y H:i', strtotime($order['tanggal_dipesan'] ?? 'now')); ?></small>
+                                                <small class="order-date" style="display: block; margin-top: 0.3rem;">✓ Selesai: <?php echo date('d M Y H:i', strtotime($order['tanggal_selesai'] ?? 'now')); ?></small>
+                                            </div>
+                                            <span class="order-status status-selesai">
+                                                ✓ Selesai
+                                            </span>
+                                        </div>
+
+                                        <div class="order-info">
+                                            <div class="info-row">
+                                                <span class="info-label">👤 Nama Customer:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_lengkap']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">📱 Nomor HP:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['nomor_hp']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">📍 Alamat:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">🛍️ Produk:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_produk']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">📦 Kuantitas:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['quantity']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">🚚 Kurir:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['kurir']); ?></span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">💳 Metode Pembayaran:</span>
+                                                <span class="info-value"><?php echo htmlspecialchars($order['metode_pembayaran']); ?></span>
+                                            </div>
+                                            <?php if (!empty($order['resi'])): ?>
+                                                <div class="info-row">
+                                                    <span class="info-label">📮 Nomor Resi:</span>
+                                                    <span class="resi-value"><?php echo htmlspecialchars($order['resi']); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <div class="order-actions" style="background: rgba(16, 185, 129, 0.05);">
+                                            <div style="width: 100%; text-align: center; color: var(--success); font-weight: 600;">
+                                                ✓ Pesanan Telah Diselesaikan
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -820,6 +1012,22 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
+        function switchTab(tabName) {
+            // Sembunyikan semua tab
+            document.getElementById('pesanan-masuk').style.display = 'none';
+            document.getElementById('pesanan-selesai').style.display = 'none';
+
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabName).style.display = 'block';
+
+            // Update tombol aktif
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
         function updateStatusDikemas(orderId) {
             Swal.fire({
                 icon: 'info',
@@ -976,7 +1184,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         }
 
         function filterByStatus(status) {
-            const cards = document.querySelectorAll('.order-card');
+            const cards = document.querySelectorAll('#ordersList .order-card');
             const buttons = document.querySelectorAll('.filter-btn');
 
             // Update button active state
