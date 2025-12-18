@@ -1,176 +1,57 @@
-<?php
+    <!-- NAVBAR (dari file baru, diperbaiki & diperkaya) -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">URBANHYPE</a>
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-require '../phpmailer/src/Exception.php';
-require '../phpmailer/src/PHPMailer.php';
-require '../phpmailer/src/SMTP.php';
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto me-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="user/produk_pembayaran/shop.php">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+                </ul>
 
-/**
- * Fungsi untuk mengirim email balasan pesan
- * @param string $email_tujuan - Email penerima
- * @param string $nama_penerima - Nama penerima
- * @param string $subject - Subject email
- * @param string $pesan - Isi pesan balasan
- * @return array - Array dengan status dan message
- */
-function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan)
-{
-    $mail = new PHPMailer(true);
-
-    try {
-        // Konfigurasi SMTP (sama dengan proses_kirim_reset.php)
-        $mail->SMTPDebug = 0;
-        $mail->isSMTP();
-        $mail->Host       = "urbanhype.neoverse.my.id";
-        $mail->SMTPAuth   = true;
-        $mail->Username   = "mailreset@urbanhype.neoverse.my.id";
-        $mail->Password   = "administrator-online-store";
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port       = 465;
-        $mail->SMTPOptions = [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
-            ]
-        ];
-
-        // Set From dan To
-        $mail->setFrom("mailreset@urbanhype.neoverse.my.id", "URBANHYPE - Balasan Pesan");
-        $mail->addAddress($email_tujuan, $nama_penerima);
-
-        // Atur format HTML
-        $mail->isHTML(true);
-        $mail->Subject = "Balasan: " . $subject;
-
-        // Template HTML Email
-        $mail->Body = "
-        <!DOCTYPE html>
-        <html lang='id'>
-        <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <style>
-                body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    background-color: #f5f5f5;
-                    margin: 0;
-                    padding: 0;
-                }
-                .container {
-                    max-width: 600px;
-                    margin: 20px auto;
-                    background-color: white;
-                    border-radius: 10px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                    overflow: hidden;
-                }
-                .header {
-                    background: linear-gradient(135deg, #1E5DAC 0%, #1a4d8f 100%);
-                    color: white;
-                    padding: 30px;
-                    text-align: center;
-                }
-                .header h1 {
-                    margin: 0;
-                    font-size: 24px;
-                    font-weight: 700;
-                }
-                .header p {
-                    margin: 10px 0 0 0;
-                    font-size: 14px;
-                    opacity: 0.9;
-                }
-                .content {
-                    padding: 30px;
-                }
-                .greeting {
-                    color: #333;
-                    font-size: 16px;
-                    margin-bottom: 20px;
-                }
-                .message-box {
-                    background-color: #f8f9fa;
-                    border-left: 4px solid #1E5DAC;
-                    padding: 20px;
-                    margin: 20px 0;
-                    border-radius: 5px;
-                    line-height: 1.6;
-                    color: #333;
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                }
-                .footer {
-                    background-color: #f5f5f5;
-                    padding: 20px;
-                    text-align: center;
-                    font-size: 12px;
-                    color: #666;
-                    border-top: 1px solid #ddd;
-                }
-                .footer a {
-                    color: #1E5DAC;
-                    text-decoration: none;
-                }
-                .divider {
-                    height: 1px;
-                    background-color: #ddd;
-                    margin: 30px 0;
-                }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='header'>
-                    <h1>🛍️ URBANHYPE</h1>
-                    <p>Balasan atas Pertanyaan Anda</p>
-                </div>
-                
-                <div class='content'>
-                    <div class='greeting'>
-                        Halo <strong>" . htmlspecialchars($nama_penerima) . "</strong>,
+                <div class="navbar-actions">
+                    <div class="nav-icon">
+                        <i class="bi bi-search fs-5"></i>
                     </div>
-                    
-                    <p>Terima kasih telah menghubungi kami. Berikut adalah balasan atas pertanyaan/pesan Anda:</p>
-                    
-                    <div class='message-box'>
-                        " . nl2br(htmlspecialchars($pesan)) . "
-                    </div>
-                    
-                    <p>Jika Anda memiliki pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami kembali.</p>
-                    
-                    <div class='divider'></div>
-                    
-                    <p style='color: #666; font-size: 14px;'>
-                        <strong>Informasi Kontak:</strong><br>
-                        Email: admin@urbanhype.com<br>
-                        Website: www.urbanhype.com<br>
-                        Jam Kerja: Senin - Jumat, 09:00 - 17:00 WIB
-                    </p>
-                </div>
-                
-                <div class='footer'>
-                    <p>&copy; 2025 URBANHYPE. Semua hak dilindungi.</p>
-                    <p>Email ini dikirim otomatis oleh sistem kami.</p>
+
+                    <?php if ($user): ?>
+                        <a href="user/produk_pembayaran/cart.php" class="cart-link">
+                            <img src="images/cart-icon.png" alt="Cart" style="width:24px; height:24px; filter: var(--cart-icon-filter);">
+                            <?php
+                            $cart_count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+                            if ($cart_count > 0):
+                            ?>
+                                <span class="cart-badge"><?php echo $cart_count; ?></span>
+                            <?php endif; ?>
+                        </a>
+
+                        <div class="dropdown user-dropdown">
+                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>"
+                                    alt="<?php echo htmlspecialchars($user['nama_lengkap']); ?>"
+                                    class="rounded-circle"
+                                    style="width:40px; height:40px; object-fit:cover;">
+                                <span class="user-name d-none d-lg-inline"><?php echo htmlspecialchars($user['nama_lengkap']); ?></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="user/settings/settings.php"><i class="bi bi-gear me-2"></i>Setting Akun</a></li>
+                                <li><a class="dropdown-item" href="user/pesanan_saya.php"><i class="bi bi-bag me-2"></i>Pesanan Saya</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="user/logout_user.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    <?php else: ?>
+                        <a href="/user/login_user.php" class="btn btn-dark">Login</a>
+                    <?php endif; ?>
                 </div>
             </div>
-        </body>
-        </html>
-        ";
-
-        // Kirim email
-        $mail->send();
-        return [
-            'status' => true,
-            'message' => 'Email berhasil dikirim'
-        ];
-    } catch (Exception $e) {
-        return [
-            'status' => false,
-            'message' => 'Error: ' . $mail->ErrorInfo
-        ];
-    }
-}
+        </div>
+    </nav>
