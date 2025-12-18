@@ -764,8 +764,83 @@ while ($row = mysqli_fetch_assoc($count_result)) {
 <body>
     <?php include '../../navbar.php'; ?>
 
-    <div class="orders-container">
-        <!-- rest of content -->
+    <div class="orders-header">
+        <h1>📦 Pesanan Saya</h1>
+    </div>
+
+    <!-- Status Tabs -->
+    <div class="status-tabs">
+        <a href="?status=semua" class="status-tab <?php echo $status_filter === 'semua' ? 'active' : ''; ?>">
+            <span>Semua</span>
+            <span class="status-count"><?php echo array_sum($status_counts); ?></span>
+        </a>
+        <a href="?status=Sedang%20Dikemas" class="status-tab <?php echo $status_filter === 'Sedang Dikemas' ? 'active' : ''; ?>">
+            <span>Sedang Dikemas</span>
+            <span class="status-count"><?php echo $status_counts['Sedang Dikemas']; ?></span>
+        </a>
+        <a href="?status=Sedang%20Dikirim" class="status-tab <?php echo $status_filter === 'Sedang Dikirim' ? 'active' : ''; ?>">
+            <span>Sedang Dikirim</span>
+            <span class="status-count"><?php echo $status_counts['Sedang Dikirim']; ?></span>
+        </a>
+        <a href="?status=Selesai" class="status-tab <?php echo $status_filter === 'Selesai' ? 'active' : ''; ?>">
+            <span>Selesai</span>
+            <span class="status-count"><?php echo $status_counts['Selesai']; ?></span>
+        </a>
+        <a href="?status=Pesanan%20Batal" class="status-tab <?php echo $status_filter === 'Pesanan Batal' ? 'active' : ''; ?>">
+            <span>Pesanan Batal</span>
+            <span class="status-count"><?php echo $status_counts['Pesanan Batal']; ?></span>
+        </a>
+    </div>
+
+    <!-- Orders List -->
+    <div class="orders-list">
+        <?php if (empty($pesanan)) : ?>
+            <div class="empty-state">
+                <h3>Belum Ada Pesanan</h3>
+                <p>Anda belum memiliki pesanan <?php echo $status_filter !== 'semua' ? 'dengan status ' . $status_filter : ''; ?>.</p>
+                <a href="shop.php">Lanjut Belanja</a>
+            </div>
+        <?php else : ?>
+            <?php foreach ($pesanan as $order) : ?>
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <div class="order-id">Order ID: #<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></div>
+                            <div class="order-date">Tanggal Pesanan: <?php echo date('d M Y, H:i', strtotime($order['waktu_pemesanan'])); ?></div>
+                        </div>
+                        <span class="order-status status-<?php echo strtolower(str_replace(' ', '', $order['status'])); ?>">
+                            <?php echo $order['status']; ?>
+                        </span>
+                    </div>
+
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-details">
+                                <h4><?php echo htmlspecialchars($order['nama_produk']); ?></h4>
+                                <p>Kuantitas: <strong><?php echo $order['quantity']; ?></strong></p>
+                                <p>Kurir: <strong><?php echo htmlspecialchars($order['kurir']); ?></strong></p>
+                                <p>Metode Pembayaran: <strong><?php echo htmlspecialchars($order['metode_pembayaran']); ?></strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-footer">
+                        <div>
+                            <div class="order-total">Total: Rp <?php echo number_format($order['quantity'] * 100000, 0, ',', '.'); ?></div>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Alamat: <?php echo htmlspecialchars($order['alamat_lengkap']); ?></p>
+                        </div>
+                        <div class="order-actions">
+                            <?php if ($order['status'] === 'Sedang Dikemas') : ?>
+                                <button class="btn btn-cancel" onclick="cancelOrder(<?php echo $order['id']; ?>)">Batalkan Pesanan</button>
+                            <?php else : ?>
+                                <button class="btn btn-disabled" disabled>Tidak Bisa Dibatalkan</button>
+                            <?php endif; ?>
+                            <button class="btn btn-track" onclick="viewOrderDetail(<?php echo $order['id']; ?>)">Rincian</button>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
