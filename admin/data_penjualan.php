@@ -31,10 +31,10 @@ if (isset($_GET['download'])) {
         $pdf->SetTextColor(255, 255, 255);
         $pdf->Cell(15, 8, 'No', 1, 0, 'C', true);
         $pdf->Cell(25, 8, 'User ID', 1, 0, 'C', true);
-        $pdf->Cell(50, 8, 'Nama Customer', 1, 0, 'C', true);
+        $pdf->Cell(45, 8, 'Nama Customer', 1, 0, 'C', true);
         $pdf->Cell(40, 8, 'Produk', 1, 0, 'C', true);
         $pdf->Cell(15, 8, 'Qty', 1, 0, 'C', true);
-        $pdf->Cell(30, 8, 'Tanggal Selesai', 1, 1, 'C', true);
+        $pdf->Cell(35, 8, 'Tanggal Selesai', 1, 1, 'C', true);
 
         // Data Tabel
         $pdf->SetFont('Arial', '', 8);
@@ -42,12 +42,35 @@ if (isset($_GET['download'])) {
         $nomor = 1;
 
         foreach ($data as $row) {
-            $pdf->Cell(15, 7, $nomor++, 1, 0, 'C');
-            $pdf->Cell(25, 7, $row['user_id'], 1, 0, 'C');
-            $pdf->Cell(50, 7, substr($row['nama_lengkap'], 0, 20), 1, 0, 'L');
-            $pdf->Cell(40, 7, substr($row['nama_produk'], 0, 15), 1, 0, 'L');
-            $pdf->Cell(15, 7, $row['quantity'], 1, 0, 'C');
-            $pdf->Cell(30, 7, date('d/m/Y', strtotime($row['tanggal_selesai'])), 1, 1, 'C');
+            // Parse produk dan quantity yang dipisah dengan koma
+            $produk_array = array_map('trim', explode(',', $row['nama_produk']));
+            $qty_array = array_map('trim', explode(',', $row['quantity']));
+
+            // Pastikan jumlah produk dan qty sama
+            $max_items = max(count($produk_array), count($qty_array));
+
+            for ($i = 0; $i < $max_items; $i++) {
+                $produk = $produk_array[$i] ?? '-';
+                $qty = $qty_array[$i] ?? '-';
+
+                if ($i === 0) {
+                    // Baris pertama dengan info user
+                    $pdf->Cell(15, 7, $nomor++, 1, 0, 'C');
+                    $pdf->Cell(25, 7, $row['user_id'], 1, 0, 'C');
+                    $pdf->Cell(45, 7, substr($row['nama_lengkap'], 0, 15), 1, 0, 'L');
+                    $pdf->Cell(40, 7, substr($produk, 0, 15), 1, 0, 'L');
+                    $pdf->Cell(15, 7, $qty, 1, 0, 'C');
+                    $pdf->Cell(35, 7, date('d/m/Y', strtotime($row['tanggal_selesai'])), 1, 1, 'C');
+                } else {
+                    // Baris produk tambahan (tanpa info user)
+                    $pdf->Cell(15, 7, '', 1, 0, 'C');
+                    $pdf->Cell(25, 7, '', 1, 0, 'C');
+                    $pdf->Cell(45, 7, '', 1, 0, 'L');
+                    $pdf->Cell(40, 7, substr($produk, 0, 15), 1, 0, 'L');
+                    $pdf->Cell(15, 7, $qty, 1, 0, 'C');
+                    $pdf->Cell(35, 7, '', 1, 1, 'C');
+                }
+            }
         }
 
         // Output PDF
@@ -82,16 +105,33 @@ if (isset($_GET['download'])) {
 
         $nomor = 1;
         foreach ($data as $row) {
-            echo '<tr>';
-            echo '<td>' . $nomor++ . '</td>';
-            echo '<td>' . $row['user_id'] . '</td>';
-            echo '<td>' . htmlspecialchars($row['nama_lengkap']) . '</td>';
-            echo '<td>' . htmlspecialchars($row['nama_produk']) . '</td>';
-            echo '<td style="text-align: center;">' . $row['quantity'] . '</td>';
-            echo '<td>' . $row['metode_pembayaran'] . '</td>';
-            echo '<td>' . $row['kurir'] . '</td>';
-            echo '<td>' . date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) . '</td>';
-            echo '</tr>';
+            // Parse produk dan quantity
+            $produk_array = array_map('trim', explode(',', $row['nama_produk']));
+            $qty_array = array_map('trim', explode(',', $row['quantity']));
+            $max_items = max(count($produk_array), count($qty_array));
+
+            for ($i = 0; $i < $max_items; $i++) {
+                $produk = $produk_array[$i] ?? '-';
+                $qty = $qty_array[$i] ?? '-';
+
+                echo '<tr>';
+                if ($i === 0) {
+                    echo '<td>' . $nomor++ . '</td>';
+                    echo '<td>' . $row['user_id'] . '</td>';
+                    echo '<td>' . htmlspecialchars($row['nama_lengkap']) . '</td>';
+                    echo '<td>' . htmlspecialchars($produk) . '</td>';
+                    echo '<td style="text-align: center;">' . $qty . '</td>';
+                    echo '<td>' . $row['metode_pembayaran'] . '</td>';
+                    echo '<td>' . $row['kurir'] . '</td>';
+                    echo '<td>' . date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) . '</td>';
+                } else {
+                    echo '<td colspan="3"></td>';
+                    echo '<td>' . htmlspecialchars($produk) . '</td>';
+                    echo '<td style="text-align: center;">' . $qty . '</td>';
+                    echo '<td colspan="3"></td>';
+                }
+                echo '</tr>';
+            }
         }
 
         echo '</table>';
@@ -130,6 +170,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
             --alley: #B7C5DA;
             --misty: #EAE2E4;
             --white: #ffffff;
+            --success: #10b981;
         }
 
         body {
@@ -270,7 +311,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
         }
 
         .btn-excel {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, var(--success), #059669);
             color: white;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
@@ -342,46 +383,38 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
             background: var(--misty);
         }
 
-        /* KOLOM NOMOR */
         .nomor-col {
             font-weight: 600;
             color: var(--blue);
             text-align: center;
         }
 
-        /* KOLOM USER ID */
         .user-id-col {
             text-align: center;
         }
 
-        /* KOLOM NAMA */
         .nama-col {
             font-weight: 500;
         }
 
-        /* KOLOM KUANTITAS */
         .qty-col {
             text-align: center;
             font-weight: 500;
         }
 
-        /* KOLOM METODE */
         .metode-col {
             text-align: center;
         }
 
-        /* KOLOM KURIR */
         .kurir-col {
             text-align: center;
         }
 
-        /* KOLOM TANGGAL */
         .tanggal-col {
             text-align: center;
             color: #6b7280;
         }
 
-        /* KOLOM PRODUK */
         .produk-col {
             max-width: 200px;
             overflow: hidden;
@@ -409,7 +442,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
         /* SUMMARY SECTION */
         .summary-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -421,6 +454,16 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
             box-shadow: 0 4px 12px rgba(30, 93, 172, 0.1);
             text-align: center;
             border-left: 5px solid var(--blue);
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(30, 93, 172, 0.15);
+        }
+
+        .summary-card.success {
+            border-left-color: var(--success);
         }
 
         .summary-card h4 {
@@ -435,6 +478,10 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
             color: var(--blue);
             font-size: 1.8rem;
             font-weight: 700;
+        }
+
+        .summary-card.success .value {
+            color: var(--success);
         }
 
         @media (max-width: 1024px) {
@@ -548,11 +595,20 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
             <?php
             $total_query = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM history_penjualan");
             $summary = mysqli_fetch_assoc($total_query);
+
+            // Hitung total pendapatan dari semua transaksi
+            $pendapatan_query = mysqli_query($koneksi, "SELECT SUM(harga_total) as total_pendapatan FROM history_penjualan");
+            $pendapatan = mysqli_fetch_assoc($pendapatan_query);
+            $total_pendapatan = $pendapatan['total_pendapatan'] ?? 0;
             ?>
             <div class="summary-section">
                 <div class="summary-card">
                     <h4>✓ Total Pesanan Selesai</h4>
                     <div class="value"><?= $summary['total'] ?? 0 ?></div>
+                </div>
+                <div class="summary-card success">
+                    <h4>💰 Total Pendapatan</h4>
+                    <div class="value">Rp <?= number_format($total_pendapatan, 0, ',', '.') ?></div>
                 </div>
             </div>
 
@@ -582,17 +638,31 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
                                 <?php
                                 $nomor = 1;
                                 while ($row = mysqli_fetch_assoc($res)):
+                                    // Parse produk dan quantity yang dipisah dengan koma
+                                    $produk_array = array_map('trim', explode(',', $row['nama_produk']));
+                                    $qty_array = array_map('trim', explode(',', $row['quantity']));
+                                    $max_items = max(count($produk_array), count($qty_array));
                                 ?>
-                                    <tr>
-                                        <td class="nomor-col"><?= $nomor++ ?></td>
-                                        <td class="user-id-col"><?= $row['user_id'] ?></td>
-                                        <td class="nama-col"><?= htmlspecialchars($row['nama_lengkap']) ?></td>
-                                        <td class="produk-col" title="<?= htmlspecialchars($row['nama_produk']) ?>"><?= htmlspecialchars($row['nama_produk']) ?></td>
-                                        <td class="qty-col"><?= $row['quantity'] ?> unit</td>
-                                        <td class="metode-col"><?= $row['metode_pembayaran'] ?></td>
-                                        <td class="kurir-col"><?= $row['kurir'] ?></td>
-                                        <td class="tanggal-col"><?= date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) ?></td>
-                                    </tr>
+                                    <?php for ($i = 0; $i < $max_items; $i++): ?>
+                                        <?php
+                                        $produk = $produk_array[$i] ?? '-';
+                                        $qty = $qty_array[$i] ?? '-';
+                                        ?>
+                                        <tr>
+                                            <?php if ($i === 0): ?>
+                                                <td class="nomor-col" rowspan="<?= $max_items ?>"><?= $nomor++ ?></td>
+                                                <td class="user-id-col" rowspan="<?= $max_items ?>"><?= $row['user_id'] ?></td>
+                                                <td class="nama-col" rowspan="<?= $max_items ?>"><?= htmlspecialchars($row['nama_lengkap']) ?></td>
+                                            <?php endif; ?>
+                                            <td class="produk-col" title="<?= htmlspecialchars($produk) ?>"><?= htmlspecialchars($produk) ?></td>
+                                            <td class="qty-col"><?= $qty ?> unit</td>
+                                            <?php if ($i === 0): ?>
+                                                <td class="metode-col" rowspan="<?= $max_items ?>"><?= $row['metode_pembayaran'] ?></td>
+                                                <td class="kurir-col" rowspan="<?= $max_items ?>"><?= $row['kurir'] ?></td>
+                                                <td class="tanggal-col" rowspan="<?= $max_items ?>"><?= date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) ?></td>
+                                            <?php endif; ?>
+                                        </tr>
+                                    <?php endfor; ?>
                                 <?php endwhile; ?>
                             </tbody>
                         </table>
