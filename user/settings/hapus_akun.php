@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../admin/koneksi.php";
+include "../../admin/koneksi.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['confirm_delete']) && $_POST['confirm_delete'] == 'yes') {
