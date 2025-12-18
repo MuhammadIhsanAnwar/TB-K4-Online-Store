@@ -89,20 +89,21 @@ while ($row = mysqli_fetch_assoc($query)) {
         <div class="container">
             <!-- PAGE HEADER -->
             <div class="page-header">
-                <h1 class="page-title">📦 Data Produk</h1>
-                <a href="tambah_produk.php" class="btn-add">➕ Tambah Produk Baru</a>
+                <h1 class="page-title"><i class="bi bi-box-seam"></i> Data Produk</h1>
+                <a href="tambah_produk.php" class="btn-add"><i class="bi bi-plus-circle"></i> Tambah Produk Baru</a>
             </div>
 
             <!-- FILTER & SEARCH SECTION -->
             <form method="GET" class="filter-search-section">
                 <div class="filter-group">
-                    <label for="search">🔍 Cari Produk</label>
+                    <label for="search"><i class="bi bi-search"></i> Cari Produk</label>
+
                     <input type="text" id="search" name="search" placeholder="Cari berdasarkan nama, merk, atau deskripsi..."
                         value="<?php echo htmlspecialchars($search); ?>">
                 </div>
 
                 <div class="filter-group">
-                    <label for="kategori">📂 Filter Kategori</label>
+                    <label for="kategori"><i class="bi bi-folder2-open"></i> Filter Kategori</label>
                     <select id="kategori" name="kategori">
                         <option value="">-- Semua Kategori --</option>
                         <option value="Men" <?php echo $kategori === 'Men' ? 'selected' : ''; ?>>Men</option>
@@ -115,8 +116,8 @@ while ($row = mysqli_fetch_assoc($query)) {
                 <div class="filter-group">
                     <label>&nbsp;</label>
                     <div class="filter-buttons">
-                        <button type="submit" class="btn-filter">🔎 Cari</button>
-                        <a href="data_produk.php" class="btn-reset">↺ Reset</a>
+                        <button type="submit" class="btn-filter"><i class="bi bi-search"></i> Cari</button>
+                        <a href="data_produk.php" class="btn-reset"><i class="bi bi-arrow-counterclockwise"></i> Reset</a>
                     </div>
                 </div>
             </form>
@@ -173,11 +174,11 @@ while ($row = mysqli_fetch_assoc($query)) {
                                         </td>
                                         <td class="stok-col">
                                             <?php if ($product['stok'] > 10): ?>
-                                                <span class="stok-ready">✓ <?php echo $product['stok']; ?></span>
+                                              <span class="stok-ready"><i class="bi bi-check-circle-fill"></i> <?php echo $product['stok']; ?></span>
                                             <?php elseif ($product['stok'] > 0): ?>
-                                                <span class="stok-low">⚠ <?php echo $product['stok']; ?></span>
+                                                <span class="stok-low"><i class="bi bi-exclamation-triangle-fill"></i> <?php echo $product['stok']; ?></span>
                                             <?php else: ?>
-                                                <span class="stok-out">✗ Habis</span>
+                                                <span class="stok-out"><i class="bi bi-x-circle-fill"></i> Habis</span>
                                             <?php endif; ?>
                                         </td>
                                         <td>
@@ -185,8 +186,8 @@ while ($row = mysqli_fetch_assoc($query)) {
                                         </td>
                                         <td>
                                             <div class="aksi-col">
-                                                <a href="edit_produk.php?id=<?php echo $product['id']; ?>" class="btn-action btn-edit">✏️ Edit</a>
-                                                <button type="button" class="btn-action btn-delete" onclick="hapusProduk(<?php echo $product['id']; ?>, '<?php echo htmlspecialchars($product['nama']); ?>')">🗑️ Hapus</button>
+                                                <a href="edit_produk.php?id=<?php echo $product['id']; ?>"class="btn-action btn-edit"><i class="bi bi-pencil-square"></i> Edit</a>
+                                                <button type="button" class="btn-action btn-delete"><i class="bi bi-trash-fill" onclick="hapusProduk(<?php echo $product['id']; ?>, '<?php echo htmlspecialchars($product['nama']); ?>')">Hapus</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -245,7 +246,7 @@ while ($row = mysqli_fetch_assoc($query)) {
 
                 <?php else: ?>
                     <div class="empty-state">
-                        <div class="empty-state-icon">📦</div>
+                        <div class="empty-state-icon"><i class="bi bi-box" style="font-size: 3rem;"></i></div>
                         <p class="empty-state-text">Tidak ada produk yang ditemukan</p>
                         <?php if (!empty($search) || !empty($kategori)): ?>
                             <p style="margin-top: 1rem; color: var(--alley);">
@@ -264,7 +265,7 @@ while ($row = mysqli_fetch_assoc($query)) {
         function hapusProduk(id, nama) {
             Swal.fire({
                 title: 'Hapus Produk?',
-                html: `<p>Yakin ingin menghapus produk <strong>${nama}</strong>?</p><p style="color: #ef4444; font-size: 12px;">⚠️ Aksi ini tidak dapat dibatalkan</p>`,
+                html: `<p>Yakin ingin menghapus produk <strong>${nama}</strong>?</p><p style="color:#ef4444;font-size:12px;"><i class="bi bi-exclamation-triangle-fill"></i>Aksi ini tidak dapat dibatalkan</p>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#dc2626',
