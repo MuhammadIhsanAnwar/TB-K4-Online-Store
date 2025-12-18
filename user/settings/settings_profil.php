@@ -208,6 +208,7 @@ if (isset($_POST['update'])) {
     }
 
     input[type="text"],
+    input[type="tel"],
     input[type="date"],
     input[type="number"],
     input[type="file"],
@@ -224,9 +225,17 @@ if (isset($_POST['update'])) {
     }
 
     input[type="text"]:focus,
+    input[type="tel"]:focus,
     input[type="date"]:focus,
     input[type="number"]:focus,
     select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #1E5DAC;
+        box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
+        transform: translateY(-2px);
+    }
+
     textarea:focus {
         outline: none;
         border-color: #1E5DAC;
@@ -367,18 +376,6 @@ if (isset($_POST['update'])) {
     input:disabled {
         background-color: #f0f0f0;
         cursor: not-allowed;
-    }
-
-    /* Nomor HP styling */
-    input[type="tel"] {
-        width: 100%;
-    }
-
-    input[type="tel"]:focus {
-        outline: none;
-        border-color: #1E5DAC;
-        box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
-        transform: translateY(-2px);
     }
 </style>
 
