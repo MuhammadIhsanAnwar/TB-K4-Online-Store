@@ -852,6 +852,148 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                     addBtn.textContent = '🛒 Tambah ke Keranjang';
                 });
         }
+        // ===== RATING STARS FUNCTIONALITY =====
+        const ratingStars = document.querySelectorAll('#ratingStars .star');
+        const ratingValue = document.getElementById('ratingValue');
+
+        ratingStars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.dataset.rating;
+                ratingValue.value = rating;
+
+                // Update visual
+                ratingStars.forEach(s => {
+                    if (s.dataset.rating <= rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+
+            // Hover effect
+            star.addEventListener('mouseover', function() {
+                const rating = this.dataset.rating;
+                ratingStars.forEach(s => {
+                    if (s.dataset.rating <= rating) {
+                        s.style.color = '#ffc107';
+                        s.style.transform = 'scale(1.2)';
+                    } else {
+                        s.style.color = '#ddd';
+                        s.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        });
+
+        // Reset hover effect
+        document.getElementById('ratingStars').addEventListener('mouseout', function() {
+            ratingStars.forEach(star => {
+                const rating = ratingValue.value;
+                if (star.dataset.rating <= rating) {
+                    star.style.color = '#ffc107';
+                    star.style.transform = 'scale(1.2)';
+                } else {
+                    star.style.color = '#ddd';
+                    star.style.transform = 'scale(1)';
+                }
+            });
+        });
+
+        // ===== COMMENT FORM SUBMISSION =====
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const komentar = document.getElementById('komentarText').value.trim();
+            const rating = document.getElementById('ratingValue').value;
+
+            // Validasi
+            if (komentar.length < 5) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Komentar Terlalu Pendek',
+                    text: 'Komentar minimal harus 5 karakter',
+                    confirmButtonColor: '#1E5DAC'
+                });
+                return;
+            }
+
+            if (!rating || rating < 1 || rating > 5) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Rating Belum Dipilih',
+                    text: 'Silakan pilih rating terlebih dahulu',
+                    confirmButtonColor: '#1E5DAC'
+                });
+                return;
+            }
+
+            // Submit form via AJAX
+            const formData = new FormData();
+            formData.append('add_comment', '1');
+            formData.append('komentar', komentar);
+            formData.append('rating', rating);
+
+            fetch('product_detail.php?id=<?php echo $product['id']; ?>', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Komentar Anda telah ditambahkan',
+                            confirmButtonColor: '#1E5DAC'
+                        }).then(() => {
+                            // Reset form
+                            document.getElementById('commentForm').reset();
+                            document.getElementById('ratingValue').value = 5;
+
+                            // Update rating stars display
+                            ratingStars.forEach(star => {
+                                if (star.dataset.rating <= 5) {
+                                    star.classList.add('active');
+                                } else {
+                                    star.classList.remove('active');
+                                }
+                            });
+
+                            // Reload halaman untuk melihat komentar baru
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: data.message,
+                            confirmButtonColor: '#1E5DAC'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan pada sistem',
+                        confirmButtonColor: '#1E5DAC'
+                    });
+                });
+        });
+
+        // Initialize rating stars with default value (5)
+        window.addEventListener('load', function() {
+            const defaultRating = 5;
+            ratingStars.forEach(star => {
+                if (star.dataset.rating <= defaultRating) {
+                    star.classList.add('active');
+                }
+            });
+        });
     </script>
 </body>
 
