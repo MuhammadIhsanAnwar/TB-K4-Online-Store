@@ -31,6 +31,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
     <title>Data Pesan - Admin</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
     <!-- 🔥 CSS DISAMAKAN DENGAN DATA PRODUK -->
@@ -311,6 +312,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         function tandaiDibaca(id) {
             const xhr = new XMLHttpRequest();
@@ -325,18 +327,41 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
         }
 
         function hapusPesan(id) {
-            if (!confirm("Yakin ingin menghapus pesan ini?")) return;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onload = function() {
-                if (xhr.responseText.trim() === "success") {
-                    const row = document.getElementById("row-" + id);
-                    if (row) row.remove();
+            Swal.fire({
+                title: 'Hapus Pesan?',
+                text: 'Pesan ini akan dihapus secara permanen!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                backdrop: true,
+                didOpen: (modal) => {
+                    modal.style.zIndex = '9999';
                 }
-            };
-            xhr.send("delete_id=" + id);
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", "", true);
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhr.onload = function() {
+                        if (xhr.responseText.trim() === "success") {
+                            const row = document.getElementById("row-" + id);
+                            if (row) row.remove();
+
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'Pesan telah dihapus',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        }
+                    };
+                    xhr.send("delete_id=" + id);
+                }
+            });
         }
 
         function toggleSidebar() {
