@@ -57,7 +57,7 @@ if (isset($_POST['selesaikan_pesanan'])) {
                           (user_id, nama_lengkap, nomor_hp, alamat_lengkap, nama_produk, quantity, 
                            harga_total, metode_pembayaran, kurir, resi, tanggal_dipesan, tanggal_selesai)
                           SELECT user_id, nama_lengkap, nomor_hp, alamat_lengkap, nama_produk, quantity, 
-                                 0, metode_pembayaran, kurir, resi, waktu_pemesanan, NOW()
+                                 harga_total, metode_pembayaran, kurir, resi, waktu_pemesanan, NOW()
                           FROM pemesanan WHERE id='$order_id'";
 
         if (!mysqli_query($koneksi, $insert_history)) {
@@ -80,8 +80,12 @@ if (isset($_POST['selesaikan_pesanan'])) {
     }
 }
 
-// Ambil semua pesanan
-$query = "SELECT * FROM pemesanan ORDER BY waktu_pemesanan DESC";
+// Ambil semua pesanan dengan join ke products untuk mendapatkan harga
+$query = "SELECT p.*, GROUP_CONCAT(pr.harga SEPARATOR ',') as harga_list 
+          FROM pemesanan p 
+          LEFT JOIN products pr ON FIND_IN_SET(pr.id, p.product_id)
+          GROUP BY p.id
+          ORDER BY p.waktu_pemesanan DESC";
 $result = mysqli_query($koneksi, $query);
 $pesanan = [];
 while ($row = mysqli_fetch_assoc($result)) {
@@ -411,31 +415,50 @@ if ($history_result) {
             box-shadow: 0 4px 12px rgba(30, 93, 172, 0.3);
         }
 
-        /* ================= ORDER CARDS ================= */
-        .orders-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-            gap: 1.5rem;
-        }
-
-        .order-card {
+        /* ================= TABLE STYLES ================= */
+        .table-wrapper {
             background: white;
             border-radius: 15px;
-            overflow: hidden;
             box-shadow: 0 4px 12px rgba(30, 93, 172, 0.08);
-            transition: all 0.3s ease;
-            border-top: 5px solid var(--primary);
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .orders-table thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .orders-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .orders-table tbody tr {
+            border-bottom: 1px solid var(--border);
             animation: slideUp 0.5s ease;
         }
 
-        .order-card.selesai {
-            border-top: 5px solid var(--success);
+        .orders-table tbody tr:hover {
+            background: rgba(30, 93, 172, 0.02);
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
 
             to {
@@ -444,44 +467,45 @@ if ($history_result) {
             }
         }
 
-        .order-card:hover {
-            box-shadow: 0 12px 24px rgba(30, 93, 172, 0.15);
-            transform: translateY(-5px);
+        .orders-table td {
+            padding: 1rem;
+            vertical-align: top;
         }
 
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, rgba(30, 93, 172, 0.05) 0%, rgba(183, 197, 218, 0.05) 100%);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .order-card.selesai .order-header {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(167, 243, 208, 0.05) 100%);
-        }
-
-        .order-id {
+        .order-id-cell {
             font-weight: 700;
-            font-size: 1.1rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
         }
 
-        .order-card.selesai .order-id {
+        .customer-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .produk-col {
+            word-wrap: break-word;
+            white-space: normal;
+            min-width: 250px;
+        }
+
+        .qty-col {
+            text-align: center;
+            font-weight: 600;
+            color: var(--info);
+        }
+
+        .harga-col {
+            text-align: right;
+            font-weight: 600;
             color: var(--success);
+            min-width: 140px;
         }
 
-        .order-date {
-            color: #9ca3af;
-            font-size: 0.85rem;
-        }
-
-        .order-status {
-            padding: 8px 16px;
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -502,107 +526,60 @@ if ($history_result) {
             color: #1e40af;
         }
 
-        .status-selesai {
-            background: rgba(16, 185, 129, 0.2);
-            color: #065f46;
-        }
-
-        .order-info {
-            padding: 1.5rem;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border);
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #6b7280;
-            min-width: 150px;
-            font-size: 0.9rem;
-        }
-
-        .info-value {
-            color: var(--text);
-            word-break: break-word;
-            flex: 1;
-            text-align: right;
-        }
-
-        .resi-value {
-            color: var(--primary);
-            font-weight: 600;
+        .resi-number {
             font-family: 'Courier New', monospace;
             background: rgba(30, 93, 172, 0.05);
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--primary);
         }
 
-        .order-actions {
-            padding: 1.5rem;
-            background: var(--bg);
-            border-top: 1px solid var(--border);
+        .action-buttons {
             display: flex;
-            gap: 0.75rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
         .btn-action {
-            padding: 10px 16px;
+            padding: 8px 12px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            justify-content: center;
-            min-width: 150px;
+            font-size: 0.85rem;
+            white-space: nowrap;
         }
 
         .btn-dikemas {
             background: linear-gradient(135deg, var(--info) 0%, #2563eb 100%);
             color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .btn-dikemas:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .btn-resi {
             background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
             color: white;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
         .btn-resi:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
         .btn-selesai {
             background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
             color: white;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         .btn-selesai:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         .btn-disabled {
@@ -614,30 +591,6 @@ if ($history_result) {
 
         .btn-disabled:hover {
             transform: none;
-        }
-
-        /* ================= RESI FORM ================= */
-        .resi-input-group {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .resi-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px 15px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .resi-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
         }
 
         /* ================= EMPTY STATE ================= */
@@ -666,6 +619,21 @@ if ($history_result) {
         }
 
         /* ================= RESPONSIVE ================= */
+        @media (max-width: 1024px) {
+            .orders-table {
+                font-size: 0.9rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 0.75rem;
+            }
+
+            .produk-col {
+                min-width: 200px;
+            }
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 70px;
@@ -717,39 +685,59 @@ if ($history_result) {
                 font-size: 0.7rem;
             }
 
-            .order-header {
+            .table-wrapper {
+                border-radius: 10px;
+            }
+
+            .orders-table {
+                font-size: 0.85rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 0.5rem;
+            }
+
+            .action-buttons {
                 flex-direction: column;
-                gap: 1rem;
-            }
-
-            .info-row {
-                flex-direction: column;
-            }
-
-            .info-label {
-                min-width: auto;
-            }
-
-            .info-value {
-                text-align: left;
-            }
-
-            .order-actions {
-                flex-direction: column;
+                gap: 0.25rem;
             }
 
             .btn-action {
-                min-width: auto;
                 width: 100%;
+                padding: 6px 8px;
+                font-size: 0.75rem;
             }
 
-            .resi-input-group {
-                flex-direction: column;
+            .produk-col {
+                min-width: 150px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 10px;
             }
 
-            .resi-input {
-                min-width: auto;
-                width: 100%;
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .tabs-content {
+                padding: 1rem;
+            }
+
+            .orders-table {
+                font-size: 0.8rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 0.4rem;
+            }
+
+            .harga-col {
+                min-width: 100px;
             }
         }
     </style>
@@ -818,112 +806,132 @@ if ($history_result) {
                             </div>
                         </div>
 
-                        <!-- ORDERS LIST -->
-                        <div class="orders-container" id="ordersList">
-                            <?php if (empty($pesanan)): ?>
-                                <div class="empty-state">
-                                    <div class="empty-icon">📭</div>
-                                    <h3>Tidak ada pesanan</h3>
-                                    <p>Belum ada pesanan yang masuk. Tunggu pelanggan untuk melakukan pembelian.</p>
-                                </div>
-                            <?php else: ?>
-                                <?php foreach ($pesanan as $order): ?>
-                                    <div class="order-card" data-status="<?php echo htmlspecialchars($order['status']); ?>">
-                                        <div class="order-header">
-                                            <div>
-                                                <div class="order-id">Order #<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></div>
-                                                <small class="order-date">📅 <?php echo date('d M Y H:i', strtotime($order['waktu_pemesanan'])); ?></small>
-                                            </div>
-                                            <span class="order-status status-<?php echo strtolower(str_replace(' ', '-', $order['status'])); ?>">
-                                                <?php echo $order['status']; ?>
-                                            </span>
-                                        </div>
+                        <!-- ORDERS TABLE -->
+                        <?php if (empty($pesanan)): ?>
+                            <div class="empty-state">
+                                <div class="empty-icon">📭</div>
+                                <h3>Tidak ada pesanan</h3>
+                                <p>Belum ada pesanan yang masuk. Tunggu pelanggan untuk melakukan pembelian.</p>
+                            </div>
+                        <?php else: ?>
+                            <div class="table-wrapper">
+                                <table class="orders-table" id="ordersList">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Nama Customer</th>
+                                            <th>No. HP</th>
+                                            <th>Alamat</th>
+                                            <th>Produk</th>
+                                            <th>Qty</th>
+                                            <th>Harga</th>
+                                            <th>Total Harga</th>
+                                            <th>Kurir</th>
+                                            <th>Resi</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($pesanan as $order):
+                                            // Parse produk dan quantity
+                                            $produk_array = array_map('trim', explode(',', $order['nama_produk']));
+                                            $qty_array = array_map('trim', explode(',', $order['quantity']));
+                                            $harga_array = !empty($order['harga_list']) ? array_map('trim', explode(',', $order['harga_list'])) : [];
 
-                                        <div class="order-info">
-                                            <div class="info-row">
-                                                <span class="info-label">👤 Nama Customer:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_lengkap']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">📱 Nomor HP:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['nomor_hp']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">📍 Alamat:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">🛍️ Produk:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_produk']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">📦 Kuantitas:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['quantity']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">🚚 Kurir:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['kurir']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">💳 Metode Pembayaran:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['metode_pembayaran']); ?></span>
-                                            </div>
-                                            <?php if (!empty($order['resi'])): ?>
-                                                <div class="info-row">
-                                                    <span class="info-label">📮 Nomor Resi:</span>
-                                                    <span class="resi-value"><?php echo htmlspecialchars($order['resi']); ?></span>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
+                                            $max_items = max(count($produk_array), count($qty_array), count($harga_array));
+                                            $total_harga = $order['harga_total'] ?? 0;
+                                            $first_row = true;
+                                        ?>
+                                            <?php for ($i = 0; $i < $max_items; $i++):
+                                                $produk = $produk_array[$i] ?? '';
+                                                $qty = $qty_array[$i] ?? '';
+                                                $harga = $harga_array[$i] ?? 0;
+                                            ?>
+                                                <tr class="order-row" data-status="<?php echo htmlspecialchars($order['status']); ?>" data-order-id="<?php echo $order['id']; ?>">
+                                                    <?php if ($first_row): ?>
+                                                        <td class="order-id-cell" rowspan="<?php echo $max_items; ?>">#<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></td>
+                                                        <td class="customer-name" rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nama_lengkap']); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nomor_hp']); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></td>
+                                                    <?php endif; ?>
 
-                                        <!-- ACTION BUTTONS -->
-                                        <div class="order-actions">
-                                            <?php if ($order['status'] === 'Menunggu Konfirmasi'): ?>
-                                                <button class="btn-action btn-dikemas" onclick="updateStatusDikemas(<?php echo $order['id']; ?>)">
-                                                    ✓ Ubah ke Sedang Dikemas
-                                                </button>
-                                            <?php endif; ?>
+                                                    <td class="produk-col"><?php echo htmlspecialchars($produk); ?></td>
+                                                    <td class="qty-col"><?php echo htmlspecialchars($qty); ?></td>
+                                                    <td class="harga-col">Rp <?php echo number_format($harga, 0, ',', '.'); ?></td>
 
-                                            <?php if ($order['status'] === 'Sedang Dikemas' || $order['status'] === 'Menunggu Konfirmasi'): ?>
-                                                <button class="btn-action btn-resi" onclick="showResiForm(<?php echo $order['id']; ?>)">
-                                                    📮 Input Resi
-                                                </button>
-                                            <?php endif; ?>
+                                                    <?php if ($first_row): ?>
+                                                        <td class="harga-col" rowspan="<?php echo $max_items; ?>">Rp <?php echo number_format($total_harga, 0, ',', '.'); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['kurir']); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>">
+                                                            <?php if (!empty($order['resi'])): ?>
+                                                                <span class="resi-number"><?php echo htmlspecialchars($order['resi']); ?></span>
+                                                            <?php else: ?>
+                                                                <span style="color: #9ca3af;">-</span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td rowspan="<?php echo $max_items; ?>">
+                                                            <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $order['status'])); ?>">
+                                                                <?php echo $order['status']; ?>
+                                                            </span>
+                                                        </td>
+                                                        <td rowspan="<?php echo $max_items; ?>">
+                                                            <div class="action-buttons">
+                                                                <?php if ($order['status'] === 'Menunggu Konfirmasi'): ?>
+                                                                    <button class="btn-action btn-dikemas" onclick="updateStatusDikemas(<?php echo $order['id']; ?>)">
+                                                                        Dikemas
+                                                                    </button>
+                                                                <?php endif; ?>
 
-                                            <?php if ($order['status'] === 'Sedang Dikirim' && !empty($order['resi'])): ?>
-                                                <button class="btn-action btn-selesai" onclick="selesaikanPesanan(<?php echo $order['id']; ?>)">
-                                                    ✓ Pesanan Selesai
-                                                </button>
-                                            <?php elseif ($order['status'] !== 'Sedang Dikirim'): ?>
-                                                <button class="btn-action btn-disabled" disabled>
-                                                    ✓ Tunggu Dikirim
-                                                </button>
-                                            <?php endif; ?>
-                                        </div>
+                                                                <?php if ($order['status'] === 'Sedang Dikemas' || $order['status'] === 'Menunggu Konfirmasi'): ?>
+                                                                    <button class="btn-action btn-resi" onclick="showResiForm(<?php echo $order['id']; ?>)">
+                                                                        Resi
+                                                                    </button>
+                                                                <?php endif; ?>
 
-                                        <!-- RESI INPUT FORM (Hidden by default) -->
-                                        <div id="resiForm<?php echo $order['id']; ?>" style="display:none; padding: 1.5rem; background: var(--bg); border-top: 1px solid var(--border);">
-                                            <div style="margin-bottom: 0.75rem;">
-                                                <label style="display: block; font-weight: 600; color: var(--primary); margin-bottom: 0.5rem;">Masukkan Nomor Resi</label>
-                                                <div class="resi-input-group">
-                                                    <input type="text"
-                                                        id="resiInput<?php echo $order['id']; ?>"
-                                                        class="resi-input"
-                                                        placeholder="Contoh: JNE123456789..."
-                                                        autocomplete="off">
-                                                    <button class="btn-action btn-resi" onclick="submitResi(<?php echo $order['id']; ?>)">
-                                                        Kirim Resi
-                                                    </button>
-                                                    <button class="btn-action btn-disabled" onclick="cancelResiForm(<?php echo $order['id']; ?>)">
-                                                        Batal
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
+                                                                <?php if ($order['status'] === 'Sedang Dikirim' && !empty($order['resi'])): ?>
+                                                                    <button class="btn-action btn-selesai" onclick="selesaikanPesanan(<?php echo $order['id']; ?>)">
+                                                                        Selesai
+                                                                    </button>
+                                                                <?php elseif ($order['status'] !== 'Sedang Dikirim'): ?>
+                                                                    <button class="btn-action btn-disabled" disabled>
+                                                                        Selesai
+                                                                    </button>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </td>
+                                                    <?php endif; ?>
+                                                </tr>
+
+                                                <!-- RESI INPUT FORM (Hidden by default) -->
+                                                <?php if ($first_row): ?>
+                                                    <tr id="resiForm<?php echo $order['id']; ?>" style="display:none;">
+                                                        <td colspan="12" style="padding: 1.5rem; background: var(--bg);">
+                                                            <label style="display: block; font-weight: 600; color: var(--primary); margin-bottom: 0.75rem;">Masukkan Nomor Resi</label>
+                                                            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                                                                <input type="text"
+                                                                    id="resiInput<?php echo $order['id']; ?>"
+                                                                    style="flex: 1; min-width: 250px; padding: 10px 15px; border: 2px solid var(--border); border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;"
+                                                                    placeholder="Contoh: JNE123456789..."
+                                                                    autocomplete="off">
+                                                                <button class="btn-action btn-resi" onclick="submitResi(<?php echo $order['id']; ?>)">
+                                                                    Kirim Resi
+                                                                </button>
+                                                                <button class="btn-action btn-disabled" onclick="cancelResiForm(<?php echo $order['id']; ?>)">
+                                                                    Batal
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+
+                                                <?php $first_row = false; ?>
+                                            <?php endfor; ?>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <!-- TAB PESANAN SELESAI -->
@@ -936,74 +944,75 @@ if ($history_result) {
                             </div>
                         </div>
 
-                        <!-- ORDERS SELESAI LIST -->
-                        <div class="orders-container" id="orderSelesaiList">
-                            <?php if (empty($pesanan_selesai)): ?>
-                                <div class="empty-state">
-                                    <div class="empty-icon">📪</div>
-                                    <h3>Belum ada pesanan selesai</h3>
-                                    <p>Pesanan yang sudah diselesaikan akan tampil di sini.</p>
-                                </div>
-                            <?php else: ?>
-                                <?php foreach ($pesanan_selesai as $order): ?>
-                                    <div class="order-card selesai">
-                                        <div class="order-header">
-                                            <div>
-                                                <div class="order-id">Order #<?php echo str_pad($order['id'] ?? 0, 6, '0', STR_PAD_LEFT); ?></div>
-                                                <small class="order-date">📅 Dipesan: <?php echo date('d M Y H:i', strtotime($order['tanggal_dipesan'] ?? 'now')); ?></small>
-                                                <small class="order-date" style="display: block; margin-top: 0.3rem;">✓ Selesai: <?php echo date('d M Y H:i', strtotime($order['tanggal_selesai'] ?? 'now')); ?></small>
-                                            </div>
-                                            <span class="order-status status-selesai">
-                                                ✓ Selesai
-                                            </span>
-                                        </div>
+                        <!-- ORDERS SELESAI TABLE -->
+                        <?php if (empty($pesanan_selesai)): ?>
+                            <div class="empty-state">
+                                <div class="empty-icon">📪</div>
+                                <h3>Belum ada pesanan selesai</h3>
+                                <p>Pesanan yang sudah diselesaikan akan tampil di sini.</p>
+                            </div>
+                        <?php else: ?>
+                            <div class="table-wrapper">
+                                <table class="orders-table" id="orderSelesaiList">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Nama Customer</th>
+                                            <th>No. HP</th>
+                                            <th>Alamat</th>
+                                            <th>Produk</th>
+                                            <th>Qty</th>
+                                            <th>Total Harga</th>
+                                            <th>Kurir</th>
+                                            <th>Resi</th>
+                                            <th>Tgl Dipesan</th>
+                                            <th>Tgl Selesai</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($pesanan_selesai as $order):
+                                            // Parse produk dan quantity
+                                            $produk_array = array_map('trim', explode(',', $order['nama_produk']));
+                                            $qty_array = array_map('trim', explode(',', $order['quantity']));
+                                            $max_items = max(count($produk_array), count($qty_array));
+                                            $first_row = true;
+                                        ?>
+                                            <?php for ($i = 0; $i < $max_items; $i++):
+                                                $produk = $produk_array[$i] ?? '';
+                                                $qty = $qty_array[$i] ?? '';
+                                            ?>
+                                                <tr>
+                                                    <?php if ($first_row): ?>
+                                                        <td class="order-id-cell" rowspan="<?php echo $max_items; ?>">#<?php echo str_pad($order['id'] ?? 0, 6, '0', STR_PAD_LEFT); ?></td>
+                                                        <td class="customer-name" rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nama_lengkap']); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['nomor_hp']); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></td>
+                                                    <?php endif; ?>
 
-                                        <div class="order-info">
-                                            <div class="info-row">
-                                                <span class="info-label">👤 Nama Customer:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_lengkap']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">📱 Nomor HP:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['nomor_hp']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">📍 Alamat:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['alamat_lengkap']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">🛍️ Produk:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['nama_produk']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">📦 Kuantitas:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['quantity']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">🚚 Kurir:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['kurir']); ?></span>
-                                            </div>
-                                            <div class="info-row">
-                                                <span class="info-label">💳 Metode Pembayaran:</span>
-                                                <span class="info-value"><?php echo htmlspecialchars($order['metode_pembayaran']); ?></span>
-                                            </div>
-                                            <?php if (!empty($order['resi'])): ?>
-                                                <div class="info-row">
-                                                    <span class="info-label">📮 Nomor Resi:</span>
-                                                    <span class="resi-value"><?php echo htmlspecialchars($order['resi']); ?></span>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
+                                                    <td class="produk-col"><?php echo htmlspecialchars($produk); ?></td>
+                                                    <td class="qty-col"><?php echo htmlspecialchars($qty); ?></td>
 
-                                        <div class="order-actions" style="background: rgba(16, 185, 129, 0.05);">
-                                            <div style="width: 100%; text-align: center; color: var(--success); font-weight: 600;">
-                                                ✓ Pesanan Telah Diselesaikan
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
+                                                    <?php if ($first_row): ?>
+                                                        <td class="harga-col" rowspan="<?php echo $max_items; ?>">Rp <?php echo number_format($order['harga_total'] ?? 0, 0, ',', '.'); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>"><?php echo htmlspecialchars($order['kurir']); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>">
+                                                            <?php if (!empty($order['resi'])): ?>
+                                                                <span class="resi-number"><?php echo htmlspecialchars($order['resi']); ?></span>
+                                                            <?php else: ?>
+                                                                <span style="color: #9ca3af;">-</span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td rowspan="<?php echo $max_items; ?>" style="font-size: 0.85rem;"><?php echo date('d M Y H:i', strtotime($order['tanggal_dipesan'] ?? 'now')); ?></td>
+                                                        <td rowspan="<?php echo $max_items; ?>" style="font-size: 0.85rem; color: var(--success); font-weight: 600;"><?php echo date('d M Y H:i', strtotime($order['tanggal_selesai'] ?? 'now')); ?></td>
+                                                    <?php endif; ?>
+                                                </tr>
+                                                <?php $first_row = false; ?>
+                                            <?php endfor; ?>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -1073,7 +1082,7 @@ if ($history_result) {
         }
 
         function showResiForm(orderId) {
-            document.getElementById('resiForm' + orderId).style.display = 'block';
+            document.getElementById('resiForm' + orderId).style.display = 'table-row';
             document.getElementById('resiInput' + orderId).focus();
         }
 
@@ -1184,7 +1193,7 @@ if ($history_result) {
         }
 
         function filterByStatus(status) {
-            const cards = document.querySelectorAll('#ordersList .order-card');
+            const rows = document.querySelectorAll('#ordersList tbody tr.order-row');
             const buttons = document.querySelectorAll('.filter-btn');
 
             // Update button active state
@@ -1195,12 +1204,12 @@ if ($history_result) {
                 }
             });
 
-            // Filter cards
-            cards.forEach(card => {
-                if (status === 'semua' || card.dataset.status === status) {
-                    card.style.display = 'block';
+            // Filter rows
+            rows.forEach(row => {
+                if (status === 'semua' || row.dataset.status === status) {
+                    row.style.display = 'table-row';
                 } else {
-                    card.style.display = 'none';
+                    row.style.display = 'none';
                 }
             });
         }
