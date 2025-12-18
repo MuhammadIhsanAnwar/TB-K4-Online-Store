@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
@@ -13,9 +14,11 @@ require '../phpmailer/src/SMTP.php';
  * @param string $nama_penerima - Nama penerima
  * @param string $subject - Subject email
  * @param string $pesan - Isi pesan balasan
+ * @param string $pesan_original - Pesan original dari user (opsional)
  * @return array - Array dengan status dan message
  */
-function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan) {
+function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan, $pesan_original = '')
+{
     $mail = new PHPMailer(true);
 
     try {
@@ -44,7 +47,21 @@ function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan) {
         $mail->isHTML(true);
         $mail->Subject = "Balasan: " . $subject;
 
-        // Template HTML Email
+        // Template HTML Email dengan pesan original
+        $pesan_original_html = '';
+        if (!empty($pesan_original)) {
+            $pesan_original_html = "
+            <div class='divider'></div>
+            
+            <div class='original-message-section'>
+                <h3 style='color: #1E5DAC; margin-top: 30px; margin-bottom: 15px;'>📨 Pesan Anda Sebelumnya:</h3>
+                <div class='original-message-box'>
+                    " . nl2br(htmlspecialchars($pesan_original)) . "
+                </div>
+            </div>
+            ";
+        }
+
         $mail->Body = "
         <!DOCTYPE html>
         <html lang='id'>
@@ -101,6 +118,22 @@ function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan) {
                     white-space: pre-wrap;
                     word-wrap: break-word;
                 }
+                .original-message-box {
+                    background-color: #f0f7ff;
+                    border-left: 4px solid #B7C5DA;
+                    padding: 20px;
+                    margin: 15px 0;
+                    border-radius: 5px;
+                    line-height: 1.6;
+                    color: #555;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    font-size: 14px;
+                }
+                .original-message-section h3 {
+                    font-size: 14px;
+                    color: #1E5DAC;
+                }
                 .footer {
                     background-color: #f5f5f5;
                     padding: 20px;
@@ -135,23 +168,26 @@ function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan) {
                     <p>Terima kasih telah menghubungi kami. Berikut adalah balasan atas pertanyaan/pesan Anda:</p>
                     
                     <div class='message-box'>
+                        <strong>📝 Balasan dari Tim Support:</strong><br><br>
                         " . nl2br(htmlspecialchars($pesan)) . "
                     </div>
                     
                     <p>Jika Anda memiliki pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami kembali.</p>
                     
+                    " . $pesan_original_html . "
+                    
                     <div class='divider'></div>
                     
                     <p style='color: #666; font-size: 14px;'>
                         <strong>Informasi Kontak:</strong><br>
-                        Email: admin@urbanhype.com<br>
-                        Website: www.urbanhype.com<br>
+                        Email: helpdesk@urbanhype.neoverse.my.id<br>
+                        Website: urbanhype.neoverse.my.id<br>
                         Jam Kerja: Senin - Jumat, 09:00 - 17:00 WIB
                     </p>
                 </div>
                 
                 <div class='footer'>
-                    <p>&copy; 2025 URBANHYPE. Semua hak dilindungi.</p>
+                    <p>&copy; 2025 UrbanHype. All Right Reserved.</p>
                     <p>Email ini dikirim otomatis oleh sistem kami.</p>
                 </div>
             </div>
@@ -172,4 +208,3 @@ function kirimEmailBalasan($email_tujuan, $nama_penerima, $subject, $pesan) {
         ];
     }
 }
-?>
