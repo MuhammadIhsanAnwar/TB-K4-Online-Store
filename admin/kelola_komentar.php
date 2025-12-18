@@ -3,12 +3,6 @@ session_start();
 require 'auth_check.php'; 
 include 'koneksi.php'; 
 
-// Cek login admin SETELAH koneksi berhasil
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: login_admin.php");
-    exit;
-}
-
 // Proses hapus komentar
 if (isset($_POST['delete_comment'])) {
     $comment_id = intval($_POST['comment_id']);

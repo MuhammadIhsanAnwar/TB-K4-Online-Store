@@ -3,12 +3,6 @@ session_start();
 require 'auth_check.php'; 
 include 'koneksi.php'; 
 
-// Cek login admin SETELAH koneksi berhasil
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: login_admin.php");
-    exit;
-}
-
 // Proses update status ke sedang dikemas
 if (isset($_POST['update_status_dikemas'])) {
     $order_id = intval($_POST['order_id']);
