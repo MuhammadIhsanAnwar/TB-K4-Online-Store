@@ -1,0 +1,130 @@
+:root {
+    --primary: #1e5dac;
+    --bg: #f3eded;
+    --white: #ffffff;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --danger: #ef4444;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    font-family: Poppins, system-ui, sans-serif;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1e63b6, #0f3f82);
+    padding: 18px 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 20px;
+    margin: 4px 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: .25s;
+}
+
+.sidebar a:hover {
+    background: rgba(255, 255, 255, .18);
+    transform: translateX(5px);
+}
+
+.sidebar a.active {
+    background: rgba(255, 255, 255, .32);
+    font-weight: 600;
+}
+
+.sidebar .logout {
+    margin-top: auto;
+    background: rgba(255, 80, 80, .15);
+    color: #ffd6d6;
+    text-align: center;
+    border-radius: 14px;
+    font-weight: 600;
+}
+
+/* CONTENT */
+.content {
+    margin-left: 220px;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+h2 {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 2rem;
+}
+
+/* CARDS */
+.cards-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 1.8rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+}
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.card.primary .card-icon { color: var(--primary); background: rgba(30,93,172,.1); }
+.card.success .card-icon { color: var(--success); background: rgba(16,185,129,.1); }
+.card.warning .card-icon { color: var(--warning); background: rgba(245,158,11,.1); }
+.card.info .card-icon { color: var(--info); background: rgba(59,130,246,.1); }
+.card.danger .card-icon { color: var(--danger); background: rgba(239,68,68,.1); }
+
+.card-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-top: .5rem;
+}
+
+.card-footer {
+    margin-top: 1rem;
+    font-size: .85rem;
+    color: #9ca3af;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .sidebar { width: 70px; }
+    .content { margin-left: 70px; padding: 15px; }
+}
