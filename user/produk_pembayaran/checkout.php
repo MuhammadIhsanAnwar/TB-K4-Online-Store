@@ -428,81 +428,88 @@ if (isset($_POST['checkout'])) {
                         <div class="order-item">
                             <div class="item-details">
                                 <div class="item-name"><?php echo htmlspecialchars($item['nama']); ?></div>
-                                <div class="item-qty">Quantity: <?php echo $item['qty']; ?></div>
+
+                                <div class="item-qty">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <button type="button" class="qty-btn" onclick="updateQty(this, -1)">−</button>
+                                        <input type="number" class="qty-input" value="<?php echo $item['qty']; ?>" min="1" data-product="<?php echo $item['id']; ?>" onchange="updateQuantity(this)">
+                                        <button type="button" class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="item-price">
+                                    $<?php echo number_format($item['harga'] * $item['qty'], 2); ?>
+                                </div>
                             </div>
-                            <div class="item-price">
-                                $<?php echo number_format($item['harga'] * $item['qty'], 2); ?>
+                        <?php endforeach; ?>
+                        </div>
+                        <div class="order-total">
+                            <span class="label">Total Amount:</span>
+                            <span class="amount">$<?php echo number_format($total, 2); ?></span>
+                        </div>
+                </div>
+
+                <!-- Payment form section -->
+                <form method="POST">
+                    <div class="payment-section">
+                        <h3>Shipping Information</h3>
+                        <div class="form-group">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-                <div class="order-total">
-                    <span class="label">Total Amount:</span>
-                    <span class="amount">$<?php echo number_format($total, 2); ?></span>
-                </div>
+                        <div class="form-group">
+                            <label for="address">Shipping Address</label>
+                            <textarea id="address" name="address" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="zipcode">ZIP Code</label>
+                                <input type="text" id="zipcode" name="zipcode" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-section">
+                        <h3>Payment Method</h3>
+                        <div class="form-group">
+                            <label for="payment">Select Payment Method</label>
+                            <select id="payment" name="payment" required>
+                                <option value="">Choose payment method</option>
+                                <option value="credit">Credit Card</option>
+                                <option value="debit">Debit Card</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="bank">Bank Transfer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="checkout-actions">
+                        <a href="cart.php" class="btn btn-secondary">Back to Cart</a>
+                        <button type="submit" name="checkout" class="btn btn-primary">Complete Payment</button>
+                    </div>
+
+                    <!-- Security badge -->
+                    <div class="security-badge">
+                        <p>🔒 Your payment information is secure and encrypted</p>
+                    </div>
+                </form>
             </div>
-
-            <!-- Payment form section -->
-            <form method="POST">
-                <div class="payment-section">
-                    <h3>Shipping Information</h3>
-                    <div class="form-group">
-                        <label for="fullname">Full Name</label>
-                        <input type="text" id="fullname" name="fullname" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Shipping Address</label>
-                        <textarea id="address" name="address" rows="3" required></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" id="city" name="city" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="zipcode">ZIP Code</label>
-                            <input type="text" id="zipcode" name="zipcode" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="payment-section">
-                    <h3>Payment Method</h3>
-                    <div class="form-group">
-                        <label for="payment">Select Payment Method</label>
-                        <select id="payment" name="payment" required>
-                            <option value="">Choose payment method</option>
-                            <option value="credit">Credit Card</option>
-                            <option value="debit">Debit Card</option>
-                            <option value="paypal">PayPal</option>
-                            <option value="bank">Bank Transfer</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Action buttons -->
-                <div class="checkout-actions">
-                    <a href="cart.php" class="btn btn-secondary">Back to Cart</a>
-                    <button type="submit" name="checkout" class="btn btn-primary">Complete Payment</button>
-                </div>
-
-                <!-- Security badge -->
-                <div class="security-badge">
-                    <p>🔒 Your payment information is secure and encrypted</p>
-                </div>
-            </form>
         </div>
-    </div>
 </body>
 
 </html>
