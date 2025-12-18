@@ -38,6 +38,19 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
 
 // Proses complete payment
 if (isset($_POST['complete_payment'])) {
+    header('Content-Type: application/json');
+
+    if (empty($cart)) {
+        echo json_encode(['status' => 'error', 'message' => 'Keranjang checkout kosong.']);
+        exit;
+    }
+
+    $kurir_post = $_POST['kurir'] ?? '';
+    if ($kurir_post === '') {
+        echo json_encode(['status' => 'error', 'message' => 'Kurir harus dipilih.']);
+        exit;
+    }
+
     $nama_lengkap = mysqli_real_escape_string($koneksi, $user['nama_lengkap']);
 
     // Gabungkan alamat dengan urutan: alamat, kelurahan_desa, kecamatan, kabupaten_kota, provinsi, kode_pos
@@ -53,7 +66,7 @@ if (isset($_POST['complete_payment'])) {
 
     $nomor_hp = mysqli_real_escape_string($koneksi, $user['nomor_hp']);
     $metode_pembayaran = 'COD';
-    $kurir = mysqli_real_escape_string($koneksi, $_POST['kurir']);
+    $kurir = mysqli_real_escape_string($koneksi, $kurir_post);
     $status = 'Menunggu Konfirmasi';
     $waktu_pemesanan = date('Y-m-d H:i:s');
 
@@ -67,29 +80,70 @@ if (isset($_POST['complete_payment'])) {
     // Gabungkan semua quantity dengan koma
     $quantity_array = [];
     foreach ($cart as $item) {
-        $quantity_array[] = $item['quantity'];
+        $quantity_array[] = (int)$item['quantity'];
     }
-    $quantity_gabung = implode(', ', $quantity_array);
+    $quantity_gabung = mysqli_real_escape_string($koneksi, implode(', ', $quantity_array));
 
-    // Insert 1 baris ke tabel pemesanan dengan produk yang digabung
-    $order_query = "INSERT INTO pemesanan 
-                    (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, status, waktu_pemesanan)
-                    VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
+    // Mulai transaksi database
+    mysqli_begin_transaction($koneksi);
 
-    if (!mysqli_query($koneksi, $order_query)) {
-        echo json_encode(['status' => 'error', 'message' => 'Gagal membuat pesanan: ' . mysqli_error($koneksi)]);
+    try {
+        // 1) Kurangi stok untuk setiap produk di keranjang
+        foreach ($cart as $item) {
+            $product_id = (int)$item['product_id'];
+            $qty = (int)$item['quantity'];
+
+            if ($qty <= 0) {
+                throw new Exception('Quantity tidak valid.');
+            }
+
+            // Update stok hanya jika stok cukup (tidak boleh minus)
+            $update_stok = "UPDATE products
+                            SET stok = stok - $qty
+                            WHERE id = $product_id AND stok >= $qty";
+
+            if (!mysqli_query($koneksi, $update_stok)) {
+                throw new Exception('Gagal update stok: ' . mysqli_error($koneksi));
+            }
+
+            // Cek apakah update berhasil (affected rows > 0)
+            if (mysqli_affected_rows($koneksi) === 0) {
+                $stok_res = mysqli_query($koneksi, "SELECT stok FROM products WHERE id = $product_id");
+                $stok_row = $stok_res ? mysqli_fetch_assoc($stok_res) : null;
+                $stok_tersisa = $stok_row ? (int)$stok_row['stok'] : 0;
+
+                $nama_produk = isset($item['nama']) ? $item['nama'] : 'produk';
+                throw new Exception("Stok tidak cukup untuk $nama_produk (butuh: $qty, tersisa: $stok_tersisa)");
+            }
+        }
+
+        // 2) Insert 1 baris ke tabel pemesanan dengan produk yang digabung
+        $order_query = "INSERT INTO pemesanan 
+                        (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, status, waktu_pemesanan)
+                        VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
+
+        if (!mysqli_query($koneksi, $order_query)) {
+            throw new Exception('Gagal membuat pesanan: ' . mysqli_error($koneksi));
+        }
+
+        // 3) Hapus dari keranjang setelah berhasil
+        $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id' AND product_id IN ($placeholders)";
+        if (!mysqli_query($koneksi, $delete_query)) {
+            throw new Exception('Gagal menghapus keranjang: ' . mysqli_error($koneksi));
+        }
+
+        // Commit transaksi jika semua berhasil
+        mysqli_commit($koneksi);
+
+        unset($_SESSION['checkout_items']);
+        echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil dibuat']);
+        exit;
+    } catch (Exception $e) {
+        // Rollback jika ada error
+        mysqli_rollback($koneksi);
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         exit;
     }
-
-    // Hapus dari keranjang setelah berhasil
-    $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id' AND product_id IN ($placeholders)";
-    mysqli_query($koneksi, $delete_query);
-
-    // Hapus session checkout items
-    unset($_SESSION['checkout_items']);
-
-    echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil dibuat']);
-    exit;
 }
 
 // Gabungkan alamat lengkap dengan urutan: alamat, kelurahan_desa, kecamatan, kabupaten_kota, provinsi, kode_pos
