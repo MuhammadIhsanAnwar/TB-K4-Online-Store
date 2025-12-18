@@ -44,6 +44,11 @@ $base_path = $is_subdir ? '../../' : './';
     .navbar-brand-wrapper {
         display: flex;
         align-items: center;
+        text-decoration: none !important;
+    }
+
+    .navbar-brand-wrapper:hover {
+        text-decoration: none !important;
     }
 
     .navbar-brand {
@@ -54,6 +59,7 @@ $base_path = $is_subdir ? '../../' : './';
         position: relative;
         color: var(--primary) !important;
         transition: var(--transition);
+        text-decoration: none !important;
     }
 
     .navbar-brand::before {
@@ -67,6 +73,7 @@ $base_path = $is_subdir ? '../../' : './';
     .navbar-brand:hover {
         transform: translateY(-2px);
         color: var(--primary) !important;
+        text-decoration: none !important;
     }
 
     .navbar-toggler {
