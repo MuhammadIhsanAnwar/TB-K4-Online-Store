@@ -12,6 +12,11 @@ require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
 
+// ============================================
+// IMPORT DATABASE
+// ============================================
+include 'admin/koneksi.php';
+
 // Validasi request method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -37,6 +42,21 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // ============================================
+// CEK EMAIL SUDAH TERDAFTAR ATAU BELUM
+// ============================================
+$email_escaped = mysqli_real_escape_string($koneksi, $email);
+$check_email = mysqli_query($koneksi, "SELECT id FROM subscribers WHERE email='$email_escaped'");
+
+if (mysqli_num_rows($check_email) > 0) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Email ini sudah terdaftar di newsletter kami. Silakan gunakan email lain.'
+    ]);
+    exit;
+}
+
+// ============================================
 // KONFIGURASI PHPMAILER
 // ============================================
 
@@ -48,7 +68,7 @@ try {
     $mail->isSMTP();
     $mail->Host = 'urbanhype.neoverse.my.id';                    // GANTI: Sesuai domain Anda
     $mail->SMTPAuth = true;
-    $mail->Username = 'newslater@urbanhype.neoverse.my.id';       // GANTI: Email sender
+    $mail->Username = 'mailreset@urbanhype.neoverse.my.id';       // GANTI: Email sender
     $mail->Password = 'administrator-online-store';               // GANTI: Email password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = 465;
@@ -63,9 +83,9 @@ try {
     ];
 
     // ============ RECIPIENTS ============
-    $mail->setFrom('newslater@urbanhype.neoverse.my.id', 'URBANHYPE Newsletter');
+    $mail->setFrom('mailreset@urbanhype.neoverse.my.id', 'URBANHYPE Newsletter');
     $mail->addAddress($email);
-    $mail->addReplyTo('newslater@urbanhype.neoverse.my.id', 'URBANHYPE Support');
+    $mail->addReplyTo('mailreset@urbanhype.neoverse.my.id', 'URBANHYPE Support');
 
     // ============ EMAIL CONTENT ============
     $mail->isHTML(true);
@@ -256,12 +276,10 @@ try {
             <div class='footer'>
                 <p>
                     <a href='https://urbanhype.neoverse.my.id'>Website</a> | 
-                    <a href='#'>FAQ</a> | 
-                    <a href='#'>Kebijakan Privasi</a>
                 </p>
                 
                 <p class='footer-note'>
-                    © 2025 URBANHYPE. Semua hak dilindungi.<br>
+                    © 2025 UrbanHype. Semua hak dilindungi.<br>
                     Anda menerima email ini karena telah subscribe ke newsletter kami.
                 </p>
             </div>
@@ -275,19 +293,25 @@ try {
 
     // ============ SEND EMAIL ============
     if ($mail->send()) {
-        // OPTIONAL: Simpan ke database
-        // include 'admin/koneksi.php';
-        // $email_db = mysqli_real_escape_string($koneksi, $email);
-        // $subscribe_date = date('Y-m-d H:i:s');
-        // $query = "INSERT INTO subscribers (email, subscribed_at) VALUES ('$email_db', '$subscribe_date')
-        //           ON DUPLICATE KEY UPDATE subscribed_at='$subscribe_date'";
-        // mysqli_query($koneksi, $query);
+        // ============ SIMPAN KE DATABASE ============
+        $subscribe_date = date('Y-m-d H:i:s');
+        $query = "INSERT INTO subscribers (email, subscribed_at) VALUES ('$email_escaped', '$subscribe_date')";
 
-        http_response_code(200);
-        echo json_encode([
-            'success' => true,
-            'message' => 'Email konfirmasi berhasil dikirim! Cek inbox Anda.'
-        ]);
+        if (mysqli_query($koneksi, $query)) {
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Email konfirmasi berhasil dikirim! Cek inbox Anda.'
+            ]);
+        } else {
+            // Email sudah terkirim tapi gagal simpan database (jarang terjadi)
+            error_log("Database Error: " . mysqli_error($koneksi));
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Email konfirmasi berhasil dikirim! Cek inbox Anda.'
+            ]);
+        }
     } else {
         throw new Exception('Email gagal dikirim: ' . $mail->ErrorInfo);
     }
