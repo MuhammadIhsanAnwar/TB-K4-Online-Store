@@ -863,17 +863,17 @@ if (isset($_SESSION['user_id'])) {
                 <div class="col-md-4 mb-4">
                     <i class="bi bi-geo-alt fs-2 text-primary"></i>
                     <h6 class="mt-3">Location</h6>
-                    <p>Jl. Fashion Avenue No. 45,<br>Jakarta, Indonesia</p>
+                    <p>Jl. Dr. Mansyur,<br>Kota Medan, Indonesia</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <i class="bi bi-envelope fs-2 text-primary"></i>
                     <h6 class="mt-3">Email</h6>
-                    <p>hello@urbanhype.id</p>
+                    <p>helpdesk@urbanhype.neoverse.my.id</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <i class="bi bi-telephone fs-2 text-primary"></i>
                     <h6 class="mt-3">Phone</h6>
-                    <p>+62 812-3456-7890</p>
+                    <p>+62 852-7978-8815</p>
                 </div>
             </div>
         </div>
@@ -896,24 +896,75 @@ if (isset($_SESSION['user_id'])) {
                         <li><a href="#contact" class="text-white text-decoration-none">Contact Us</a></li>
                     </ul>
                 </div>
-                <div class="col-md-2 mb-4">
-                    <h6>Categories</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white text-decoration-none">Women</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Men</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Accessories</a></li>
-                        <li><a href="#" class="text-white text-decoration-none">Shoes</a></li>
-                    </ul>
-                </div>
                 <div class="col-md-4">
                     <h6>Subscribe to Our Newsletter</h6>
                     <p>Get the latest updates on new arrivals and exclusive offers.</p>
-                    <form>
+                    <form id="subscribeForm">
                         <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Your Email" aria-label="Your Email">
-                            <button class="btn btn-primary" type="button">Subscribe</button>
+                            <input type="email" class="form-control" placeholder="Your Email" aria-label="Your Email" name="email" required>
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
                         </div>
                     </form>
+
+                    <script>
+                        document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+                            e.preventDefault();
+
+                            const email = this.querySelector('input[name="email"]').value;
+                            const button = this.querySelector('button');
+                            const originalText = button.textContent;
+
+                            // Disable button dan tampilkan loading
+                            button.disabled = true;
+                            button.textContent = 'Mengirim...';
+
+                            // Kirim request ke proses_subscribe.php
+                            fetch('proses_subscribe.php', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                    },
+                                    body: 'email=' + encodeURIComponent(email)
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    button.disabled = false;
+                                    button.textContent = originalText;
+
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Subscribe Berhasil!',
+                                            html: `<p>Terima kasih telah subscribe dengan <strong>${email}</strong></p><p>Email konfirmasi telah kami kirim ke inbox Anda!</p>`,
+                                            confirmButtonColor: '#1E5DAC',
+                                            backdrop: true,
+                                            allowOutsideClick: false
+                                        }).then(() => {
+                                            this.reset();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Gagal Subscribe',
+                                            text: data.message || 'Terjadi kesalahan. Coba lagi nanti.',
+                                            confirmButtonColor: '#1E5DAC'
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    button.disabled = false;
+                                    button.textContent = originalText;
+
+                                    console.error('Error:', error);
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Gagal menghubungi server. Periksa koneksi internet Anda.',
+                                        confirmButtonColor: '#1E5DAC'
+                                    });
+                                });
+                        });
+                    </script>
                     <div class="social-icons mt-3">
                         <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
                         <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
@@ -924,7 +975,7 @@ if (isset($_SESSION['user_id'])) {
             </div>
             <hr class="my-4">
             <div class="text-center">
-                <p>&copy; 2025 UrbanHype. All rights reserved.</p>
+                <p>&copy; 2025 UrbanHype. Kelompok 4 Tugas Besar Pemrograman Web. All rights reserved.</p>
             </div>
         </div>
     </footer>
