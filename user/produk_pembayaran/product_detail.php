@@ -1,7 +1,7 @@
 <?php
+session_start();  // HARUS PERTAMA
 include "../../admin/koneksi.php";
 include "../../navbar.php";
-session_start();
 
 // Ambil data user jika sudah login
 $user = null;
@@ -85,6 +85,7 @@ if (isset($_POST['add_to_cart'])) {
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="../../icons/bootstrap-icons.css">
     <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">

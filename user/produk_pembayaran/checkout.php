@@ -20,11 +20,13 @@ if (isset($_POST['checkout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Urban Hype</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -123,11 +125,11 @@ if (isset($_POST['checkout'])) {
             font-size: 3rem;
             color: #fff;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .checkout-header p {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 1.1rem;
         }
 
@@ -145,6 +147,7 @@ if (isset($_POST['checkout'])) {
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -395,6 +398,7 @@ if (isset($_POST['checkout'])) {
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar with Urban Hype branding -->
     <nav class="navbar">
@@ -421,15 +425,15 @@ if (isset($_POST['checkout'])) {
                 <h2>Order Summary</h2>
                 <div class="order-items">
                     <?php foreach ($cart as $item): ?>
-                    <div class="order-item">
-                        <div class="item-details">
-                            <div class="item-name"><?php echo htmlspecialchars($item['nama']); ?></div>
-                            <div class="item-qty">Quantity: <?php echo $item['qty']; ?></div>
+                        <div class="order-item">
+                            <div class="item-details">
+                                <div class="item-name"><?php echo htmlspecialchars($item['nama']); ?></div>
+                                <div class="item-qty">Quantity: <?php echo $item['qty']; ?></div>
+                            </div>
+                            <div class="item-price">
+                                $<?php echo number_format($item['harga'] * $item['qty'], 2); ?>
+                            </div>
                         </div>
-                        <div class="item-price">
-                            $<?php echo number_format($item['harga'] * $item['qty'], 2); ?>
-                        </div>  
-                    </div>
                     <?php endforeach; ?>
                 </div>
                 <div class="order-total">
@@ -500,4 +504,5 @@ if (isset($_POST['checkout'])) {
         </div>
     </div>
 </body>
+
 </html>
