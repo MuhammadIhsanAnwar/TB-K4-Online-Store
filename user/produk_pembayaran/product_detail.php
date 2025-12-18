@@ -1,5 +1,6 @@
 <?php
-include "admin/koneksi.php";
+include "../../admin/koneksi.php";
+include "../../navbar.php";
 session_start();
 
 // Ambil data user jika sudah login
@@ -37,7 +38,7 @@ if (isset($_POST['add_to_cart'])) {
     }
 
     $quantity = intval($_POST['quantity']);
-    
+
     if ($quantity <= 0 || $quantity > $product['stok']) {
         echo json_encode(['status' => 'error', 'message' => 'Jumlah produk tidak valid']);
         exit;
@@ -76,13 +77,13 @@ if (isset($_POST['add_to_cart'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../../images/Background dan Logo/logo.png">
     <title><?php echo htmlspecialchars($product['nama']); ?> - UrbanHype</title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/bootstrap.css">
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../../icons/bootstrap-icons.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
@@ -112,43 +113,13 @@ if (isset($_POST['add_to_cart'])) {
             color: var(--dark);
         }
 
-        /* NAVBAR */
-        .navbar {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.95) !important;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            border-bottom: 1px solid rgba(30, 93, 172, 0.1);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 1.8rem;
-            letter-spacing: 2px;
-            color: var(--primary) !important;
-        }
-
-        .nav-link {
-            color: var(--dark) !important;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .nav-link:hover {
-            color: var(--primary) !important;
-        }
-
         /* BREADCRUMB */
         .breadcrumb-section {
             background: white;
             padding: 1.5rem 0;
             border-bottom: 1px solid var(--light);
             margin-bottom: 2rem;
+            margin-top: 80px;
         }
 
         .breadcrumb {
@@ -388,6 +359,10 @@ if (isset($_POST['add_to_cart'])) {
         }
 
         @media (max-width: 768px) {
+            .breadcrumb-section {
+                margin-top: 70px;
+            }
+
             .product-detail {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -418,47 +393,12 @@ if (isset($_POST['add_to_cart'])) {
 </head>
 
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-detail">
-            <a class="navbar-brand" href="index.php">URBANHYPE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="shop.php">Shop</a>
-                    </li>
-                    <?php if ($user): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/settings/settings.php">👤 Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/logout.php">🚪 Logout</a>
-                        </li>
-                    <?php else: ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/login_user.php">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="user/register.php">Register</a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- BREADCRUMB -->
     <section class="breadcrumb-section">
         <div class="container-detail">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
                     <li class="breadcrumb-item"><a href="shop.php">Shop</a></li>
                     <li class="breadcrumb-item"><a href="shop.php?kategori=<?php echo htmlspecialchars($product['kategori']); ?>"><?php echo htmlspecialchars($product['kategori']); ?></a></li>
                     <li class="breadcrumb-item active"><?php echo htmlspecialchars($product['nama']); ?></li>
@@ -472,8 +412,8 @@ if (isset($_POST['add_to_cart'])) {
         <div class="product-detail">
             <!-- IMAGE SECTION -->
             <div class="product-image-section">
-                <img src="foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" 
-                     alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image-main">
+                <img src="../../foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>"
+                    alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image-main">
             </div>
 
             <!-- INFO SECTION -->
@@ -488,7 +428,7 @@ if (isset($_POST['add_to_cart'])) {
 
                 <!-- STOK STATUS -->
                 <div class="stok-status <?php echo $product['stok'] > 10 ? 'stok-ready' : ($product['stok'] > 0 ? 'stok-low' : 'stok-out'); ?>">
-                    <?php 
+                    <?php
                     if ($product['stok'] > 10) {
                         echo "✓ Stok Tersedia (" . $product['stok'] . ")";
                     } elseif ($product['stok'] > 0) {
@@ -519,7 +459,7 @@ if (isset($_POST['add_to_cart'])) {
                     <div class="spec-item">
                         <span class="spec-label">Ketersediaan</span>
                         <span class="spec-value">
-                            <?php 
+                            <?php
                             if ($product['stok'] > 0) {
                                 echo $product['stok'] . " Item Tersedia";
                             } else {
@@ -560,11 +500,11 @@ if (isset($_POST['add_to_cart'])) {
 
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-    <script src="js/bootstrap.bundle.js"></script>
+    <script src="../../js/bootstrap.bundle.js"></script>
 
     <script>
         const maxStok = <?php echo $product['stok']; ?>;
-        
+
         function decreaseQuantity() {
             const input = document.getElementById('quantityInput');
             if (input.value > 1) {
@@ -589,7 +529,7 @@ if (isset($_POST['add_to_cart'])) {
                     confirmButtonColor: '#1E5DAC'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = 'user/login_user.php';
+                        window.location.href = '../../user/login_user.php';
                     }
                 });
                 return;
@@ -597,7 +537,7 @@ if (isset($_POST['add_to_cart'])) {
 
             const quantity = parseInt(document.getElementById('quantityInput').value);
             const addBtn = document.getElementById('addCartBtn');
-            
+
             addBtn.disabled = true;
             addBtn.textContent = '⏳ Menambahkan...';
 
@@ -605,41 +545,41 @@ if (isset($_POST['add_to_cart'])) {
             formData.append('add_to_cart', '1');
             formData.append('quantity', quantity);
 
-            fetch('product-detail.php?id=<?php echo $product['id']; ?>', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: data.message,
-                        confirmButtonColor: '#1E5DAC'
-                    });
-                    document.getElementById('quantityInput').value = 1;
-                } else {
+            fetch('product_detail.php?id=<?php echo $product['id']; ?>', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message,
+                            confirmButtonColor: '#1E5DAC'
+                        });
+                        document.getElementById('quantityInput').value = 1;
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: data.message,
+                            confirmButtonColor: '#1E5DAC'
+                        });
+                    }
+                })
+                .catch(error => {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Gagal!',
-                        text: data.message,
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan pada sistem',
                         confirmButtonColor: '#1E5DAC'
                     });
-                }
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Terjadi kesalahan pada sistem',
-                    confirmButtonColor: '#1E5DAC'
+                })
+                .finally(() => {
+                    addBtn.disabled = false;
+                    addBtn.textContent = '🛒 Tambah ke Keranjang';
                 });
-            })
-            .finally(() => {
-                addBtn.disabled = false;
-                addBtn.textContent = '🛒 Tambah ke Keranjang';
-            });
         }
     </script>
 </body>
