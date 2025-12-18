@@ -2,9 +2,27 @@
 session_start();
 require_once 'koneksi.php';
 
+// Cek login admin SETELAH koneksi berhasil
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login_admin.php");
+    exit;
+}
+
+// Proses hapus komentar
+if (isset($_POST['delete_comment'])) {
+    $comment_id = intval($_POST['comment_id']);
+
+    $delete_query = "DELETE FROM komentar_produk WHERE id='$comment_id'";
+    if (mysqli_query($koneksi, $delete_query)) {
+        echo json_encode(['status' => 'success', 'message' => 'Komentar berhasil dihapus']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus komentar']);
+    }
+    exit;
+}
 // Cek login admin
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: login.php");
+    header("Location: login_admin.php");
     exit;
 }
 

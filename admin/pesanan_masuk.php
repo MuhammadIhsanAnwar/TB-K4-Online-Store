@@ -2,12 +2,24 @@
 session_start();
 require_once 'koneksi.php';
 
-// Cek login admin
+// Cek login admin SETELAH koneksi berhasil
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: login.php");
+    header("Location: login_admin.php");
     exit;
 }
 
+// Proses update status ke sedang dikemas
+if (isset($_POST['update_status_dikemas'])) {
+    $order_id = intval($_POST['order_id']);
+
+    $update_query = "UPDATE pemesanan SET status='Sedang Dikemas' WHERE id='$order_id'";
+    if (mysqli_query($koneksi, $update_query)) {
+        echo json_encode(['status' => 'success', 'message' => 'Status diperbarui menjadi Sedang Dikemas']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui status']);
+    }
+    exit;
+}
 // Proses update status ke sedang dikemas
 if (isset($_POST['update_status_dikemas'])) {
     $order_id = intval($_POST['order_id']);

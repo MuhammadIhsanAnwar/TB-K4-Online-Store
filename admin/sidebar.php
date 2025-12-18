@@ -74,7 +74,7 @@ $notifKomentarBaru = mysqli_fetch_assoc($qKomentarBaru)['total'];
     <a href="pesanan_masuk.php"
         class="<?= basename($_SERVER['PHP_SELF']) == 'pesanan_masuk.php' ? 'active' : '' ?>"
         style="position:relative;">
-        📦 Pesanan Masuk
+        Pesanan Masuk
         <?php if ($notifPesananBaru > 0): ?>
             <span class="badge-notif"><?= $notifPesananBaru ?></span>
         <?php endif; ?>
@@ -84,7 +84,7 @@ $notifKomentarBaru = mysqli_fetch_assoc($qKomentarBaru)['total'];
     <a href="kelola_komentar.php"
         class="<?= basename($_SERVER['PHP_SELF']) == 'kelola_komentar.php' ? 'active' : '' ?>"
         style="position:relative;">
-        💬 Kelola Komentar
+        Kelola Komentar
         <?php if ($notifKomentarBaru > 0): ?>
             <span class="badge-notif"><?= $notifKomentarBaru ?></span>
         <?php endif; ?>
