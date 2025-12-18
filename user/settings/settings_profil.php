@@ -369,9 +369,16 @@ if (isset($_POST['update'])) {
         cursor: not-allowed;
     }
 
-    /* Nomor HP full width */
+    /* Nomor HP styling */
     input[type="tel"] {
         width: 100%;
+    }
+
+    input[type="tel"]:focus {
+        outline: none;
+        border-color: #1E5DAC;
+        box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
+        transform: translateY(-2px);
     }
 </style>
 
@@ -439,12 +446,10 @@ if (isset($_POST['update'])) {
                     <div class="info-text">Email tidak dapat diubah</div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nomor HP</label>
-                        <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
-                        <div class="info-text">Contoh: 08123456789 (10-13 digit)</div>
-                    </div>
+                <div class="form-group">
+                    <label>Nomor HP</label>
+                    <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
+                    <div class="info-text">Contoh: 08123456789 (10-13 digit)</div>
                 </div>
             </div>
     </div>
