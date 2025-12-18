@@ -472,7 +472,7 @@ if (isset($_POST['add_to_cart'])) {
         <div class="product-detail">
             <!-- IMAGE SECTION -->
             <div class="product-image-section">
-                <img src="admin/foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" 
+                <img src="foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" 
                      alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image-main">
             </div>
 
