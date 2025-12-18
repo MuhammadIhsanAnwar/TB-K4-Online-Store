@@ -156,6 +156,8 @@ function showAlert($type, $message, $redirect)
     <html>
 
     <head>
+        <link rel="icon" type="image/png" href="../images/icon/logo.png">
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 

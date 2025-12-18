@@ -38,6 +38,8 @@ function showAlert($type, $title, $message, $redirect)
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $title; ?></title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="icon" type="image/png" href="../images/icon/logo.png">
+
         <style>
             body {
                 margin: 0;
