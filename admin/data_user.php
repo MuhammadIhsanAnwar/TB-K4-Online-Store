@@ -47,7 +47,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM akun_user $where ORDER BY id DESC
         <div class="container">
             <!-- PAGE HEADER -->
             <div class="page-header">
-                <h1 class="page-title">👥 Data User</h1>
+                <h1 class="page-title"><i class="bi bi-people-fill"></i> Data User</h1>
             </div>
 
             <hr>
@@ -56,7 +56,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM akun_user $where ORDER BY id DESC
             <div class="search-section">
                 <form method="GET" class="search-group" style="flex: 1;">
                     <div style="width: 100%;">
-                        <label for="search">🔍 Cari User</label>
+                        <label for="search"><i class="bi bi-search"></i> Cari User</label>
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="text" id="search" name="search" placeholder="Cari berdasarkan username, nama, atau email..."
                                 value="<?php echo htmlspecialchars($search); ?>" style="flex: 1;">
@@ -64,7 +64,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM akun_user $where ORDER BY id DESC
                         </div>
                     </div>
                 </form>
-                <a href="data_user.php" class="btn-reset">↺ Reset</a>
+                <a href="data_user.php" class="btn-reset"><i class="bi bi-arrow-counterclockwise"></i> Reset</a>
             </div>
 
             <!-- TABLE SECTION -->
