@@ -11,6 +11,30 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $total = 0;
 
+// Proses update quantity
+if (isset($_POST['update_qty'])) {
+    $product_id = intval($_POST['product_id']);
+    $new_quantity = intval($_POST['quantity']);
+
+    if ($new_quantity <= 0) {
+        $new_quantity = 1;
+    }
+
+    // Cek stok produk
+    $stok_query = "SELECT stok FROM products WHERE id='$product_id'";
+    $stok_result = mysqli_query($koneksi, $stok_query);
+    $stok_row = mysqli_fetch_assoc($stok_result);
+
+    if ($new_quantity > $stok_row['stok']) {
+        $new_quantity = $stok_row['stok'];
+    }
+
+    $update_query = "UPDATE keranjang SET quantity='$new_quantity' WHERE user_id='$user_id' AND product_id='$product_id'";
+    mysqli_query($koneksi, $update_query);
+    header("Location: cart.php");
+    exit;
+}
+
 // Proses hapus dari keranjang
 if (isset($_POST['remove'])) {
     $product_id = intval($_POST['id']);
@@ -21,7 +45,7 @@ if (isset($_POST['remove'])) {
 }
 
 // Ambil data keranjang dari database
-$cart_query = "SELECT k.*, p.nama, p.harga, p.foto_produk FROM keranjang k JOIN products p ON k.product_id = p.id WHERE k.user_id='$user_id'";
+$cart_query = "SELECT k.*, p.nama, p.harga, p.foto_produk, p.stok FROM keranjang k JOIN products p ON k.product_id = p.id WHERE k.user_id='$user_id'";
 $cart_result = mysqli_query($koneksi, $cart_query);
 $cart = [];
 while ($row = mysqli_fetch_assoc($cart_result)) {
@@ -299,6 +323,63 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
             }
         }
 
+        .qty-btn-cart {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn-cart:hover {
+            background: #164a8a;
+            transform: scale(1.1);
+        }
+
+        .qty-input-cart {
+            width: 50px;
+            padding: 0.4rem 0.5rem;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .qty-input-cart:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
+        }
+
+        .qty-btn-save {
+            background: #28a745;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn-save:hover {
+            background: #218838;
+            transform: scale(1.1);
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin-top: 80px;
@@ -364,7 +445,14 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                             <tr>
                                 <td class="product-name"><?php echo htmlspecialchars($item['nama']); ?></td>
                                 <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
-                                <td><span class="qty-badge"><?php echo $item['quantity']; ?></span></td>
+                                <td>
+                                    <form method="POST" style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                                        <button type="submit" name="decrease_qty" class="qty-btn-cart" value="<?php echo $item['product_id']; ?>">−</button>
+                                        <input type="number" name="quantity" class="qty-input-cart" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stok']; ?>">
+                                        <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
+                                        <button type="submit" name="update_qty" class="qty-btn-save" value="1">✓</button>
+                                    </form>
+                                </td>
                                 <td class="subtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
                                 <td>
                                     <form method="POST" style="margin: 0;">
