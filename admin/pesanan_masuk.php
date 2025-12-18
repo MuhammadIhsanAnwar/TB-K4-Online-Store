@@ -93,7 +93,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 // Ambil pesanan yang sudah selesai dari history_penjualan
-$history_query = "SELECT * FROM history_penjualan ORDER BY tanggal_selesai DESC LIMIT 100";
+$history_query = "SELECT * FROM history_penjualan ORDER BY tanggal_selesai DESC";
 $history_result = mysqli_query($koneksi, $history_query);
 $pesanan_selesai = [];
 if ($history_result) {
@@ -115,632 +115,7 @@ if ($history_result) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --primary: #1E5DAC;
-            --primary-dark: #0f3f82;
-            --primary-light: #3b7bc9;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
-            --bg: #f8fafc;
-            --white: #ffffff;
-            --text: #1f2937;
-            --border: #e5e7eb;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            font-family: 'Poppins', sans-serif;
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        /* ================= SIDEBAR ================= */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 220px;
-            height: 100vh;
-            background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-dark) 100%);
-            padding: 18px 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 1000;
-            box-shadow: 4px 0 15px rgba(30, 93, 172, 0.2);
-        }
-
-        .logo-box {
-            text-align: center;
-            padding: 10px 0 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo-box img {
-            width: 72px;
-            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
-            transition: 0.3s ease;
-        }
-
-        .logo-box img:hover {
-            transform: scale(1.05);
-        }
-
-        .menu-title {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
-            padding: 12px 20px;
-            margin-top: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            padding: 12px 20px;
-            margin: 4px 12px;
-            border-radius: 10px;
-            transition: 0.25s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar a:hover {
-            background: rgba(255, 255, 255, 0.18);
-            transform: translateX(5px);
-        }
-
-        .sidebar a.active {
-            background: rgba(255, 255, 255, 0.32);
-            font-weight: 600;
-        }
-
-        .sidebar .logout {
-            margin-top: auto;
-            background: rgba(255, 80, 80, 0.15);
-            color: #ffd6d6 !important;
-            font-weight: 600;
-            text-align: center;
-            border-radius: 14px;
-            transition: 0.3s ease;
-            margin-bottom: 12px;
-            margin-left: 12px;
-            margin-right: 12px;
-        }
-
-        .sidebar .logout:hover {
-            background: var(--danger);
-            color: white !important;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.6);
-            transform: translateY(-2px);
-        }
-
-        /* ================= MAIN CONTENT ================= */
-        .wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .main-content {
-            margin-left: 220px;
-            padding: 30px;
-            flex: 1;
-            animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .page-title {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 2.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* ================= TABS SECTION ================= */
-        .tabs-container {
-            background: white;
-            border-radius: 15px;
-            padding: 0;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.08);
-            overflow: hidden;
-        }
-
-        .tabs-header {
-            display: flex;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 1.2rem 1rem;
-            background: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: #6b7280;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .tab-btn:hover {
-            color: var(--primary);
-            background: rgba(30, 93, 172, 0.02);
-        }
-
-        .tab-btn.active {
-            color: white;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-bottom: none;
-        }
-
-        .tab-badge {
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            min-width: 28px;
-            text-align: center;
-        }
-
-        .tab-btn.active .tab-badge {
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .tabs-content {
-            padding: 2rem;
-        }
-
-        /* ================= STATS SECTION ================= */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.08);
-            border-left: 5px solid var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(30, 93, 172, 0.15);
-        }
-
-        .stat-label {
-            color: #6b7280;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        /* ================= FILTER SECTION ================= */
-        .filter-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.08);
-        }
-
-        .filter-title {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 10px 18px;
-            border: 2px solid var(--border);
-            background: white;
-            color: var(--text);
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .filter-btn.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.3);
-        }
-
-        /* ================= TABLE STYLES ================= */
-        .table-wrapper {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.08);
-            overflow-x: auto;
-            margin-top: 1.5rem;
-        }
-
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        .orders-table thead {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .orders-table th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid var(--border);
-            white-space: nowrap;
-        }
-
-        .orders-table tbody tr {
-            border-bottom: 1px solid var(--border);
-            animation: slideUp 0.5s ease;
-        }
-
-        .orders-table tbody tr:hover {
-            background: rgba(30, 93, 172, 0.02);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .orders-table td {
-            padding: 1rem;
-            vertical-align: top;
-        }
-
-        .order-id-cell {
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .customer-name {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .produk-col {
-            word-wrap: break-word;
-            white-space: normal;
-            min-width: 250px;
-        }
-
-        .qty-col {
-            text-align: center;
-            font-weight: 600;
-            color: var(--info);
-        }
-
-        .harga-col {
-            text-align: right;
-            font-weight: 600;
-            color: var(--success);
-            min-width: 140px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-menunggu-konfirmasi {
-            background: rgba(245, 158, 11, 0.2);
-            color: #b45309;
-        }
-
-        .status-sedang-dikemas {
-            background: rgba(59, 130, 246, 0.2);
-            color: #1e40af;
-        }
-
-        .status-sedang-dikirim {
-            background: rgba(59, 130, 246, 0.2);
-            color: #1e40af;
-        }
-
-        .resi-number {
-            font-family: 'Courier New', monospace;
-            background: rgba(30, 93, 172, 0.05);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-action {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-
-        .btn-dikemas {
-            background: linear-gradient(135deg, var(--info) 0%, #2563eb 100%);
-            color: white;
-        }
-
-        .btn-dikemas:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-resi {
-            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
-            color: white;
-        }
-
-        .btn-resi:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        .btn-selesai {
-            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
-            color: white;
-        }
-
-        .btn-selesai:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-disabled {
-            background: #d1d5db;
-            color: #9ca3af;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .btn-disabled:hover {
-            transform: none;
-        }
-
-        /* ================= EMPTY STATE ================= */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.08);
-        }
-
-        .empty-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .empty-state h3 {
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: #6b7280;
-            font-size: 1rem;
-        }
-
-        /* ================= RESPONSIVE ================= */
-        @media (max-width: 1024px) {
-            .orders-table {
-                font-size: 0.9rem;
-            }
-
-            .orders-table th,
-            .orders-table td {
-                padding: 0.75rem;
-            }
-
-            .produk-col {
-                min-width: 200px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 70px;
-            }
-
-            .main-content {
-                margin-left: 70px;
-                padding: 15px;
-            }
-
-            .menu-title,
-            .sidebar a span {
-                display: none;
-            }
-
-            .sidebar a {
-                text-align: center;
-                padding: 15px 10px;
-                justify-content: center;
-            }
-
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .page-title {
-                font-size: 1.8rem;
-            }
-
-            .stats-container {
-                grid-template-columns: 1fr;
-            }
-
-            .filter-buttons {
-                flex-direction: column;
-            }
-
-            .filter-btn {
-                width: 100%;
-            }
-
-            .tab-btn {
-                font-size: 0.8rem;
-                padding: 1rem 0.5rem;
-            }
-
-            .tab-badge {
-                font-size: 0.7rem;
-            }
-
-            .table-wrapper {
-                border-radius: 10px;
-            }
-
-            .orders-table {
-                font-size: 0.85rem;
-            }
-
-            .orders-table th,
-            .orders-table td {
-                padding: 0.5rem;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-                gap: 0.25rem;
-            }
-
-            .btn-action {
-                width: 100%;
-                padding: 6px 8px;
-                font-size: 0.75rem;
-            }
-
-            .produk-col {
-                min-width: 150px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .main-content {
-                padding: 10px;
-            }
-
-            .page-title {
-                font-size: 1.5rem;
-            }
-
-            .tabs-content {
-                padding: 1rem;
-            }
-
-            .orders-table {
-                font-size: 0.8rem;
-            }
-
-            .orders-table th,
-            .orders-table td {
-                padding: 0.4rem;
-            }
-
-            .harga-col {
-                min-width: 100px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css_admin/pesanan_masuk_style.css">
 </head>
 
 <body>
@@ -795,14 +170,21 @@ if ($history_result) {
                             </div>
                         </div>
 
-                        <!-- FILTER SECTION -->
+                        <!-- FILTER & SEARCH SECTION -->
                         <div class="filter-section">
-                            <div class="filter-title">🔍 Filter Status:</div>
-                            <div class="filter-buttons">
-                                <button class="filter-btn active" onclick="filterByStatus('semua')">Semua Pesanan</button>
-                                <button class="filter-btn" onclick="filterByStatus('Menunggu Konfirmasi')">⏳ Menunggu Konfirmasi</button>
-                                <button class="filter-btn" onclick="filterByStatus('Sedang Dikemas')">📋 Sedang Dikemas</button>
-                                <button class="filter-btn" onclick="filterByStatus('Sedang Dikirim')">🚚 Sedang Dikirim</button>
+                            <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                                <div>
+                                    <div class="filter-title">🔍 Filter Status:</div>
+                                    <div class="filter-buttons">
+                                        <button class="filter-btn active" onclick="filterByStatus('semua')">Semua Pesanan</button>
+                                        <button class="filter-btn" onclick="filterByStatus('Menunggu Konfirmasi')">⏳ Menunggu Konfirmasi</button>
+                                        <button class="filter-btn" onclick="filterByStatus('Sedang Dikemas')">📋 Sedang Dikemas</button>
+                                        <button class="filter-btn" onclick="filterByStatus('Sedang Dikirim')">🚚 Sedang Dikirim</button>
+                                    </div>
+                                </div>
+                                <div class="search-box">
+                                    <input type="text" id="searchMasuk" placeholder="🔎 Cari Order ID, Nama, HP..." onkeyup="searchTable('ordersList', 'searchMasuk')">
+                                </div>
                             </div>
                         </div>
 
@@ -931,6 +313,8 @@ if ($history_result) {
                                     </tbody>
                                 </table>
                             </div>
+                            <!-- PAGINATION -->
+                            <div class="pagination-container" id="paginationMasuk"></div>
                         <?php endif; ?>
                     </div>
 
@@ -941,6 +325,13 @@ if ($history_result) {
                             <div class="stat-card" style="border-left-color: var(--success);">
                                 <div class="stat-label">✓ Total Pesanan Selesai</div>
                                 <div class="stat-value" style="color: var(--success);"><?php echo count($pesanan_selesai); ?></div>
+                            </div>
+                        </div>
+
+                        <!-- SEARCH SECTION SELESAI -->
+                        <div class="filter-section">
+                            <div class="search-box">
+                                <input type="text" id="searchSelesai" placeholder="🔎 Cari Order ID, Nama, HP..." onkeyup="searchTable('orderSelesaiList', 'searchSelesai')">
                             </div>
                         </div>
 
@@ -1012,6 +403,8 @@ if ($history_result) {
                                     </tbody>
                                 </table>
                             </div>
+                            <!-- PAGINATION -->
+                            <div class="pagination-container" id="paginationSelesai"></div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -1021,20 +414,121 @@ if ($history_result) {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
+        const ITEMS_PER_PAGE = 10;
+
         function switchTab(tabName) {
-            // Sembunyikan semua tab
             document.getElementById('pesanan-masuk').style.display = 'none';
             document.getElementById('pesanan-selesai').style.display = 'none';
-
-            // Tampilkan tab yang dipilih
             document.getElementById(tabName).style.display = 'block';
 
-            // Update tombol aktif
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
+
+            // Reset pagination saat switch tab
+            if (tabName === 'pesanan-masuk') {
+                setupPagination('ordersList', 'paginationMasuk');
+            } else {
+                setupPagination('orderSelesaiList', 'paginationSelesai');
+            }
+        }
+
+        function searchTable(tableId, searchInputId) {
+            const input = document.getElementById(searchInputId);
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById(tableId);
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            let visibleRows = 0;
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                    visibleRows++;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+
+            // Reset pagination setelah search
+            if (tableId === 'ordersList') {
+                setupPagination('ordersList', 'paginationMasuk');
+            } else {
+                setupPagination('orderSelesaiList', 'paginationSelesai');
+            }
+        }
+
+        function setupPagination(tableId, paginationId) {
+            const table = document.getElementById(tableId);
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr')).filter(row => row.style.display !== 'none');
+
+            const pageCount = Math.ceil(rows.length / ITEMS_PER_PAGE);
+            const paginationContainer = document.getElementById(paginationId);
+            paginationContainer.innerHTML = '';
+
+            if (pageCount <= 1) return;
+
+            // Previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = '← Sebelumnya';
+            prevBtn.className = 'pagination-btn';
+            prevBtn.onclick = () => goToPage(tableId, paginationId, currentPage - 1);
+            paginationContainer.appendChild(prevBtn);
+
+            // Page numbers
+            for (let i = 1; i <= pageCount; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = 'pagination-btn' + (i === 1 ? ' active' : '');
+                btn.onclick = () => goToPage(tableId, paginationId, i);
+                paginationContainer.appendChild(btn);
+            }
+
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Selanjutnya →';
+            nextBtn.className = 'pagination-btn';
+            nextBtn.onclick = () => goToPage(tableId, paginationId, currentPage + 1);
+            paginationContainer.appendChild(nextBtn);
+
+            let currentPage = 1;
+            showPage(tableId, 1);
+        }
+
+        function goToPage(tableId, paginationId, pageNum) {
+            const table = document.getElementById(tableId);
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr')).filter(row => row.style.display !== 'none');
+            const pageCount = Math.ceil(rows.length / ITEMS_PER_PAGE);
+
+            if (pageNum < 1 || pageNum > pageCount) return;
+
+            showPage(tableId, pageNum);
+
+            // Update active button
+            const buttons = document.querySelectorAll('#' + paginationId + ' .pagination-btn');
+            buttons.forEach((btn, index) => {
+                btn.classList.remove('active');
+                if (parseInt(btn.textContent) === pageNum) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function showPage(tableId, pageNum) {
+            const table = document.getElementById(tableId);
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr')).filter(row => row.style.display !== 'none');
+
+            const start = (pageNum - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? '' : 'none';
+            });
         }
 
         function updateStatusDikemas(orderId) {
@@ -1196,7 +690,6 @@ if ($history_result) {
             const rows = document.querySelectorAll('#ordersList tbody tr.order-row');
             const buttons = document.querySelectorAll('.filter-btn');
 
-            // Update button active state
             buttons.forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.textContent.includes(status) || (status === 'semua' && btn.textContent.includes('Semua'))) {
@@ -1204,7 +697,6 @@ if ($history_result) {
                 }
             });
 
-            // Filter rows
             rows.forEach(row => {
                 if (status === 'semua' || row.dataset.status === status) {
                     row.style.display = 'table-row';
@@ -1212,7 +704,15 @@ if ($history_result) {
                     row.style.display = 'none';
                 }
             });
+
+            setupPagination('ordersList', 'paginationMasuk');
         }
+
+        // Initialize pagination saat halaman load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupPagination('ordersList', 'paginationMasuk');
+            setupPagination('orderSelesaiList', 'paginationSelesai');
+        });
     </script>
 </body>
 
