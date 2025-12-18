@@ -1,7 +1,6 @@
 <?php
 session_start();  // HARUS PERTAMA
 include "../../admin/koneksi.php";
-include "../../navbar.php";
 
 // Ambil data user jika sudah login
 $user = null;
@@ -352,6 +351,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 </head>
 
 <body>
+    <?php include "../../navbar.php"; ?>
     <!-- HERO SECTION -->
     <section class="hero-shop">
         <div class="container-shop">

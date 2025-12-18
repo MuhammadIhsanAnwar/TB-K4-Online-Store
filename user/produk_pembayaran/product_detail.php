@@ -1,7 +1,6 @@
 <?php
 session_start();  // HARUS PERTAMA
 include "../../admin/koneksi.php";
-include "../../navbar.php";
 
 // Ambil data user jika sudah login
 $user = null;
@@ -394,6 +393,7 @@ if (isset($_POST['add_to_cart'])) {
 </head>
 
 <body>
+    <?php include "../../navbar.php"; ?>
     <!-- BREADCRUMB -->
     <section class="breadcrumb-section">
         <div class="container-detail">
