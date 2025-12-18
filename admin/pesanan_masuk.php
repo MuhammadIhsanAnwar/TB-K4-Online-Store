@@ -15,18 +15,6 @@ if (isset($_POST['update_status_dikemas'])) {
     }
     exit;
 }
-// Proses update status ke sedang dikemas
-if (isset($_POST['update_status_dikemas'])) {
-    $order_id = intval($_POST['order_id']);
-
-    $update_query = "UPDATE pemesanan SET status='Sedang Dikemas' WHERE id='$order_id'";
-    if (mysqli_query($koneksi, $update_query)) {
-        echo json_encode(['status' => 'success', 'message' => 'Status diperbarui menjadi Sedang Dikemas']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui status']);
-    }
-    exit;
-}
 
 // Proses input resi kurir
 if (isset($_POST['input_resi'])) {

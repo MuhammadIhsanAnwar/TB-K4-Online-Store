@@ -15,11 +15,6 @@ if (isset($_POST['delete_comment'])) {
     }
     exit;
 }
-// Cek login admin
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: login_admin.php");
-    exit;
-}
 
 // Proses hapus komentar
 if (isset($_POST['delete_comment'])) {
