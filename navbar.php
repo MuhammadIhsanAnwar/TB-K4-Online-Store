@@ -412,6 +412,8 @@ $base_path = $is_subdir ? '../../' : './';
     </div>
 </nav>
 
+<script src="js/bootstrap.bundle.js"></script>
+
 <script>
     // Scroll effect untuk navbar
     window.addEventListener('scroll', function() {
