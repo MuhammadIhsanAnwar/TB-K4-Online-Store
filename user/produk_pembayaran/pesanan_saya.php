@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Proses pembatalan pesanan
+// ===== PROSES PEMBATALAN PESANAN =====
 if (isset($_POST['cancel_order'])) {
     $order_id = intval($_POST['order_id']);
 
@@ -19,41 +19,124 @@ if (isset($_POST['cancel_order'])) {
     $check_result = mysqli_query($koneksi, $check_query);
     $order = mysqli_fetch_assoc($check_result);
 
-    if ($order && $order['status'] === 'Sedang Dikemas') {
+    // User bisa membatalkan pesanan jika masih "Menunggu Konfirmasi" atau "Sedang Dikemas"
+    if ($order && ($order['status'] === 'Menunggu Konfirmasi' || $order['status'] === 'Sedang Dikemas')) {
         // Update status ke batal
         $update_query = "UPDATE pemesanan SET status='Pesanan Batal' WHERE id='$order_id'";
 
         if (mysqli_query($koneksi, $update_query)) {
             echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan']);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Gagal membatalkan pesanan']);
+            echo json_encode(['status' => 'error', 'message' => 'Gagal membatalkan pesanan: ' . mysqli_error($koneksi)]);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Pesanan tidak bisa dibatalkan (sudah dikirim atau lebih)']);
+        echo json_encode(['status' => 'error', 'message' => 'Pesanan tidak bisa dibatalkan (status tidak memungkinkan)']);
     }
     exit;
 }
 
-// Ambil parameter filter status
+// ===== PROSES MENYELESAIKAN PESANAN =====
+if (isset($_POST['selesaikan_pesanan'])) {
+    $order_id = intval($_POST['order_id']);
+
+    // Mulai transaksi
+    mysqli_begin_transaction($koneksi);
+
+    try {
+        // 1) Ambil data pesanan
+        $order_query = "SELECT * FROM pemesanan WHERE id='$order_id' AND user_id='$user_id'";
+        $order_result = mysqli_query($koneksi, $order_query);
+
+        if (!$order_result) {
+            throw new Exception('Database error: ' . mysqli_error($koneksi));
+        }
+
+        $order = mysqli_fetch_assoc($order_result);
+
+        if (!$order) {
+            throw new Exception('Pesanan tidak ditemukan');
+        }
+
+        // Cek status harus "Sedang Dikirim"
+        if ($order['status'] !== 'Sedang Dikirim') {
+            throw new Exception('Pesanan hanya bisa diselesaikan jika sedang dikirim');
+        }
+
+        // 2) Insert ke tabel history_penjualan
+        $insert_history = "INSERT INTO history_penjualan 
+                          (user_id, nama_lengkap, nomor_hp, alamat_lengkap, nama_produk, quantity, 
+                           harga_total, metode_pembayaran, kurir, resi, tanggal_dipesan, tanggal_selesai)
+                          VALUES ('$order[user_id]', 
+                                  '" . mysqli_real_escape_string($koneksi, $order['nama_lengkap']) . "',
+                                  '" . mysqli_real_escape_string($koneksi, $order['nomor_hp']) . "',
+                                  '" . mysqli_real_escape_string($koneksi, $order['alamat_lengkap']) . "',
+                                  '" . mysqli_real_escape_string($koneksi, $order['nama_produk']) . "',
+                                  '$order[quantity]',
+                                  '$order[harga_total]',
+                                  '" . mysqli_real_escape_string($koneksi, $order['metode_pembayaran']) . "',
+                                  '" . mysqli_real_escape_string($koneksi, $order['kurir']) . "',
+                                  '" . mysqli_real_escape_string($koneksi, $order['resi']) . "',
+                                  '$order[waktu_pemesanan]',
+                                  NOW())";
+
+        if (!mysqli_query($koneksi, $insert_history)) {
+            throw new Exception('Gagal menambah ke history penjualan: ' . mysqli_error($koneksi));
+        }
+
+        // 3) Hapus dari pemesanan
+        $delete_query = "DELETE FROM pemesanan WHERE id='$order_id'";
+        if (!mysqli_query($koneksi, $delete_query)) {
+            throw new Exception('Gagal menghapus pesanan: ' . mysqli_error($koneksi));
+        }
+
+        mysqli_commit($koneksi);
+        echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil diselesaikan']);
+        exit;
+    } catch (Exception $e) {
+        mysqli_rollback($koneksi);
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        exit;
+    }
+}
+
+// ===== AMBIL DATA PESANAN AKTIF (DARI TABEL pemesanan) =====
 $status_filter = isset($_GET['status']) ? $_GET['status'] : 'semua';
 
-// Query dasar
+// Query dasar untuk pesanan aktif
 $query = "SELECT * FROM pemesanan WHERE user_id='$user_id'";
 
 // Filter berdasarkan status
-if ($status_filter !== 'semua') {
+if ($status_filter !== 'semua' && $status_filter !== 'Selesai') {
     $query .= " AND status='" . mysqli_real_escape_string($koneksi, $status_filter) . "'";
 }
 
 $query .= " ORDER BY waktu_pemesanan DESC";
 
 $result = mysqli_query($koneksi, $query);
+
+if (!$result) {
+    die("Database Error: " . mysqli_error($koneksi));
+}
+
 $pesanan = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $pesanan[] = $row;
 }
 
-// Hitung pesanan per status
+// ===== AMBIL DATA PESANAN SELESAI (DARI TABEL history_penjualan) =====
+$pesanan_selesai = [];
+if ($status_filter === 'semua' || $status_filter === 'Selesai') {
+    $history_query = "SELECT * FROM history_penjualan WHERE user_id='$user_id' ORDER BY tanggal_selesai DESC";
+    $history_result = mysqli_query($koneksi, $history_query);
+
+    if ($history_result) {
+        while ($row = mysqli_fetch_assoc($history_result)) {
+            $pesanan_selesai[] = $row;
+        }
+    }
+}
+
+// ===== HITUNG PESANAN PER STATUS =====
 $status_counts = [
     'Menunggu Konfirmasi' => 0,
     'Sedang Dikemas' => 0,
@@ -62,6 +145,7 @@ $status_counts = [
     'Pesanan Batal' => 0
 ];
 
+// Hitung dari pesanan aktif
 $count_query = "SELECT status, COUNT(*) as count FROM pemesanan WHERE user_id='$user_id' GROUP BY status";
 $count_result = mysqli_query($koneksi, $count_query);
 while ($row = mysqli_fetch_assoc($count_result)) {
@@ -69,6 +153,12 @@ while ($row = mysqli_fetch_assoc($count_result)) {
         $status_counts[$row['status']] = $row['count'];
     }
 }
+
+// Hitung dari history_penjualan
+$history_count_query = "SELECT COUNT(*) as count FROM history_penjualan WHERE user_id='$user_id'";
+$history_count_result = mysqli_query($koneksi, $history_count_query);
+$history_count = mysqli_fetch_assoc($history_count_result);
+$status_counts['Selesai'] = $history_count['count'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -92,6 +182,10 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             --light: #ecf0f1;
             --shadow: 0 8px 32px rgba(30, 93, 172, 0.1);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
         }
 
         * {
@@ -111,7 +205,7 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             padding-top: 80px;
         }
 
-        /* ===== NAVBAR STYLING (GLASSMORPHISM + IMPROVED) ===== */
+        /* ===== NAVBAR STYLING ===== */
         .navbar {
             backdrop-filter: blur(20px);
             background: rgba(255, 255, 255, 0.95) !important;
@@ -119,6 +213,10 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             box-shadow: var(--shadow);
             border-bottom: 1px solid rgba(30, 93, 172, 0.1);
             padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
         }
 
         .navbar.scrolled {
@@ -144,33 +242,19 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             text-decoration: none !important;
         }
 
-        .navbar-brand-wrapper:hover {
-            text-decoration: none !important;
-        }
-
         .navbar-brand {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
             font-size: 1.8rem;
             letter-spacing: 2px;
-            position: relative;
             color: var(--primary) !important;
             transition: var(--transition);
             text-decoration: none !important;
         }
 
-        .navbar-brand::before {
-            display: none !important;
-        }
-
-        .navbar-brand:hover::before {
-            display: none !important;
-        }
-
         .navbar-brand:hover {
             transform: translateY(-2px);
             color: var(--primary) !important;
-            text-decoration: none !important;
         }
 
         .navbar-toggler {
@@ -205,20 +289,6 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             letter-spacing: 1px;
         }
 
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
-            opacity: 0;
-            transition: var(--transition);
-        }
-
         .nav-link::after {
             content: '';
             position: absolute;
@@ -235,33 +305,8 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             color: var(--primary) !important;
         }
 
-        .nav-link:hover::before {
-            opacity: 1;
-            top: -8px;
-        }
-
         .nav-link:hover::after {
             width: 100%;
-        }
-
-        .nav-icon {
-            cursor: pointer;
-            transition: var(--transition);
-            padding: 8px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-icon:hover {
-            color: var(--primary);
-            transform: scale(1.1);
-            background: rgba(30, 93, 172, 0.1);
-        }
-
-        .nav-icon .bi-search:hover {
-            transform: rotate(90deg);
         }
 
         .cart-link {
@@ -280,15 +325,11 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             background: rgba(30, 93, 172, 0.1);
         }
 
-        .cart-link .bi-bag-fill {
-            font-size: 1.25rem;
-        }
-
         .cart-badge {
             position: absolute;
             top: -4px;
             right: -4px;
-            background: var(--primary) !important;
+            background: var(--danger) !important;
             color: white;
             font-size: 0.7rem;
             padding: 0.2rem 0.4rem;
@@ -333,18 +374,10 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             transform: translateY(-2px);
         }
 
-        .user-dropdown .dropdown-toggle::after {
-            margin-left: 0.5rem;
-        }
-
         .user-dropdown img {
             border: 2px solid var(--primary);
             transition: var(--transition);
             box-shadow: 0 2px 10px rgba(30, 93, 172, 0.2);
-        }
-
-        .user-dropdown img:hover {
-            border-color: var(--secondary);
         }
 
         .user-name {
@@ -377,90 +410,6 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             transform: translateX(4px);
         }
 
-        .btn-dark {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border: none;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-        }
-
-        .btn-dark:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(30, 93, 172, 0.5);
-            background: linear-gradient(135deg, #1a4d8f 0%, #9badc2 100%);
-        }
-
-        .navbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        @media (max-width: 991px) {
-            .navbar-brand {
-                font-size: 1.5rem;
-            }
-
-            .navbar-collapse {
-                margin-top: 1rem;
-                padding: 1.5rem;
-                background: rgba(255, 255, 255, 0.98);
-                border-radius: 12px;
-                box-shadow: 0 4px 20px rgba(30, 93, 172, 0.1);
-            }
-
-            .nav-link {
-                margin: 4px 0;
-                text-align: center;
-                padding: 12px 18px !important;
-            }
-
-            .navbar-nav.ms-auto {
-                margin-left: 0 !important;
-            }
-
-            .navbar-actions {
-                justify-content: center;
-                margin-top: 1rem;
-                padding-top: 1rem;
-                border-top: 1px solid rgba(30, 93, 172, 0.1);
-                gap: 1.5rem;
-            }
-
-            .user-dropdown .dropdown-toggle {
-                justify-content: center;
-            }
-
-            .user-name {
-                display: inline !important;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .navbar-brand {
-                font-size: 1.3rem;
-                letter-spacing: 1px;
-            }
-
-            .user-name {
-                max-width: 100px;
-            }
-
-            .nav-link {
-                font-size: 0.8rem;
-            }
-
-            .navbar-actions {
-                gap: 1rem;
-            }
-        }
-
         /* ===== ORDERS PAGE STYLING ===== */
         .orders-container {
             max-width: 1200px;
@@ -470,27 +419,28 @@ while ($row = mysqli_fetch_assoc($count_result)) {
 
         .orders-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .orders-header h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #fff;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .status-tabs {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
             justify-content: center;
+            padding: 0 1rem;
         }
 
         .status-tab {
-            padding: 0.8rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             border: 2px solid #B7C5DA;
             border-radius: 25px;
             background: white;
@@ -502,21 +452,24 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .status-tab:hover {
             background: #B7C5DA;
             color: white;
+            transform: translateY(-2px);
         }
 
         .status-tab.active {
             background: #1E5DAC;
             color: white;
             border-color: #1E5DAC;
+            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.3);
         }
 
         .status-count {
-            background: #dc3545;
+            background: var(--danger);
             color: white;
             border-radius: 50%;
             width: 24px;
@@ -540,17 +493,38 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             padding: 1.5rem;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            border-left: 5px solid var(--primary);
         }
 
         .order-card:hover {
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+        }
+
+        .order-card.menunggu {
+            border-left-color: var(--warning);
+        }
+
+        .order-card.dikemas {
+            border-left-color: var(--info);
+        }
+
+        .order-card.dikirim {
+            border-left-color: var(--warning);
+        }
+
+        .order-card.selesai {
+            border-left-color: var(--success);
+        }
+
+        .order-card.batal {
+            border-left-color: var(--danger);
         }
 
         .order-header {
             display: flex;
             justify-content: space-between;
-            align-items: start;
+            align-items: flex-start;
             margin-bottom: 1rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid #f0f0f0;
@@ -560,18 +534,20 @@ while ($row = mysqli_fetch_assoc($count_result)) {
 
         .order-info {
             flex: 1;
+            min-width: 200px;
         }
 
         .order-id {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #999;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
         }
 
         .order-date {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #666;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .order-status {
@@ -580,22 +556,24 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
+            min-width: 140px;
+            text-align: center;
         }
 
-        /* STATUS */
+        /* STATUS STYLES */
         .status-menunggu {
-            background: #f3e5f5;
-            color: #6a1b9a;
+            background: #fef3c7;
+            color: #92400e;
         }
 
         .status-dikemas {
-            background: #fff3cd;
-            color: #856404;
+            background: #cfe2ff;
+            color: #084298;
         }
 
         .status-dikirim {
-            background: #cfe2ff;
-            color: #084298;
+            background: #fff3cd;
+            color: #664d03;
         }
 
         .status-selesai {
@@ -613,29 +591,37 @@ while ($row = mysqli_fetch_assoc($count_result)) {
         }
 
         .order-item {
-            padding: 0.8rem;
+            padding: 1rem;
             background: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 0.8rem;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .item-details {
+            flex: 1;
         }
 
         .item-details h4 {
-            color: #1E5DAC;
-            margin-bottom: 0.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
         .item-details p {
             color: #666;
             font-size: 0.9rem;
-            margin: 0.2rem 0;
+            margin: 0.3rem 0;
         }
 
         .item-price {
             font-weight: 700;
-            color: #1E5DAC;
+            color: var(--primary);
+            font-size: 1.1rem;
+            white-space: nowrap;
         }
 
         .order-footer {
@@ -648,15 +634,38 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             gap: 1rem;
         }
 
+        .order-info-bottom {
+            flex: 1;
+        }
+
         .order-total {
             font-size: 1.2rem;
             font-weight: 700;
-            color: #1E5DAC;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .order-address {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .order-resi {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .resi-label {
+            font-weight: 600;
+            color: var(--primary);
         }
 
         .order-actions {
             display: flex;
             gap: 0.8rem;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -667,26 +676,40 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             font-weight: 600;
             font-size: 0.9rem;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .btn-cancel {
-            background: #dc3545;
+            background: var(--danger);
             color: white;
         }
 
         .btn-cancel:hover {
-            background: #c82333;
-            transform: scale(1.05);
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
-        .btn-track {
-            background: #1E5DAC;
+        .btn-complete {
+            background: var(--success);
             color: white;
         }
 
-        .btn-track:hover {
-            background: #164390;
-            transform: scale(1.05);
+        .btn-complete:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-details {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-details:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .btn-disabled {
@@ -705,18 +728,25 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             background: white;
             border-radius: 15px;
             color: #999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
 
         .empty-state h3 {
-            color: #1E5DAC;
-            margin-bottom: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
         }
 
         .empty-state a {
             display: inline-block;
             margin-top: 1rem;
             padding: 0.8rem 1.5rem;
-            background: #1E5DAC;
+            background: var(--primary);
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -726,24 +756,22 @@ while ($row = mysqli_fetch_assoc($count_result)) {
 
         .empty-state a:hover {
             background: #164390;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 100px;
-            }
-
             .orders-header h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             .status-tabs {
-                flex-direction: column;
-                align-items: stretch;
+                gap: 0.5rem;
+                padding: 0;
             }
 
             .status-tab {
-                justify-content: center;
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
             }
 
             .order-header {
@@ -757,10 +785,40 @@ while ($row = mysqli_fetch_assoc($count_result)) {
 
             .order-actions {
                 width: 100%;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                flex: 1;
+                text-align: center;
+                min-width: 140px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .orders-container {
+                padding: 1rem;
+            }
+
+            .orders-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .order-card {
+                padding: 1rem;
+            }
+
+            .order-item {
                 flex-direction: column;
             }
 
             .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .order-status {
+                min-width: auto;
                 width: 100%;
                 text-align: center;
             }
@@ -771,87 +829,170 @@ while ($row = mysqli_fetch_assoc($count_result)) {
 <body>
     <?php include '../../navbar.php'; ?>
 
-    <div class="orders-header">
-        <h1>📦 Pesanan Saya</h1>
-    </div>
+    <div class="orders-container">
+        <div class="orders-header">
+            <h1>📦 Pesanan Saya</h1>
+        </div>
 
-    <!-- Status Tabs -->
-    <div class="status-tabs">
-        <a href="?status=semua" class="status-tab <?php echo $status_filter === 'semua' ? 'active' : ''; ?>">
-            <span>Semua</span>
-            <span class="status-count"><?php echo array_sum($status_counts); ?></span>
-        </a>
-        <a href="?status=Menunggu%20Konfirmasi" class="status-tab <?php echo $status_filter === 'Menunggu Konfirmasi' ? 'active' : ''; ?>">
-            <span>Menunggu Konfirmasi</span>
-            <span class="status-count"><?php echo $status_counts['Menunggu Konfirmasi']; ?></span>
-        </a>
-        <a href="?status=Sedang%20Dikemas" class="status-tab <?php echo $status_filter === 'Sedang Dikemas' ? 'active' : ''; ?>">
-            <span>Sedang Dikemas</span>
-            <span class="status-count"><?php echo $status_counts['Sedang Dikemas']; ?></span>
-        </a>
-        <a href="?status=Sedang%20Dikirim" class="status-tab <?php echo $status_filter === 'Sedang Dikirim' ? 'active' : ''; ?>">
-            <span>Sedang Dikirim</span>
-            <span class="status-count"><?php echo $status_counts['Sedang Dikirim']; ?></span>
-        </a>
-        <a href="?status=Selesai" class="status-tab <?php echo $status_filter === 'Selesai' ? 'active' : ''; ?>">
-            <span>Selesai</span>
-            <span class="status-count"><?php echo $status_counts['Selesai']; ?></span>
-        </a>
-        <a href="?status=Pesanan%20Batal" class="status-tab <?php echo $status_filter === 'Pesanan Batal' ? 'active' : ''; ?>">
-            <span>Pesanan Batal</span>
-            <span class="status-count"><?php echo $status_counts['Pesanan Batal']; ?></span>
-        </a>
-    </div>
+        <!-- Status Tabs -->
+        <div class="status-tabs">
+            <a href="?status=semua" class="status-tab <?php echo $status_filter === 'semua' ? 'active' : ''; ?>">
+                <span><i class="bi bi-box-seam"></i> Semua</span>
+                <span class="status-count"><?php echo array_sum($status_counts); ?></span>
+            </a>
+            <a href="?status=Menunggu%20Konfirmasi" class="status-tab <?php echo $status_filter === 'Menunggu Konfirmasi' ? 'active' : ''; ?>">
+                <span><i class="bi bi-clock-history"></i> Menunggu</span>
+                <span class="status-count"><?php echo $status_counts['Menunggu Konfirmasi']; ?></span>
+            </a>
+            <a href="?status=Sedang%20Dikemas" class="status-tab <?php echo $status_filter === 'Sedang Dikemas' ? 'active' : ''; ?>">
+                <span><i class="bi bi-box"></i> Dikemas</span>
+                <span class="status-count"><?php echo $status_counts['Sedang Dikemas']; ?></span>
+            </a>
+            <a href="?status=Sedang%20Dikirim" class="status-tab <?php echo $status_filter === 'Sedang Dikirim' ? 'active' : ''; ?>">
+                <span><i class="bi bi-truck"></i> Dikirim</span>
+                <span class="status-count"><?php echo $status_counts['Sedang Dikirim']; ?></span>
+            </a>
+            <a href="?status=Selesai" class="status-tab <?php echo $status_filter === 'Selesai' ? 'active' : ''; ?>">
+                <span><i class="bi bi-check-circle"></i> Selesai</span>
+                <span class="status-count"><?php echo $status_counts['Selesai']; ?></span>
+            </a>
+            <a href="?status=Pesanan%20Batal" class="status-tab <?php echo $status_filter === 'Pesanan Batal' ? 'active' : ''; ?>">
+                <span><i class="bi bi-x-circle"></i> Batal</span>
+                <span class="status-count"><?php echo $status_counts['Pesanan Batal']; ?></span>
+            </a>
+        </div>
 
-    <!-- Orders List -->
-    <div class="orders-list">
-        <?php if (empty($pesanan)) : ?>
-            <div class="empty-state">
-                <h3>Belum Ada Pesanan</h3>
-                <p>Anda belum memiliki pesanan <?php echo $status_filter !== 'semua' ? 'dengan status ' . $status_filter : ''; ?>.</p>
-                <a href="shop.php">Lanjut Belanja</a>
-            </div>
-        <?php else : ?>
-            <?php foreach ($pesanan as $order) : ?>
-                <div class="order-card">
-                    <div class="order-header">
-                        <div class="order-info">
-                            <div class="order-id">Order ID: #<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></div>
-                            <div class="order-date">Tanggal Pesanan: <?php echo date('d M Y, H:i', strtotime($order['waktu_pemesanan'])); ?></div>
+        <!-- Orders List -->
+        <div class="orders-list">
+            <?php
+            $show_empty = true;
+
+            // Tampilkan pesanan aktif (non-selesai)
+            if (!empty($pesanan)) {
+                $show_empty = false;
+                foreach ($pesanan as $order) {
+                    $status_class = strtolower(str_replace(' ', '', $order['status']));
+            ?>
+                    <div class="order-card <?php echo $status_class; ?>">
+                        <div class="order-header">
+                            <div class="order-info">
+                                <div class="order-id"><i class="bi bi-hash"></i> #<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></div>
+                                <div class="order-date"><i class="bi bi-calendar-event"></i> <?php echo date('d M Y, H:i', strtotime($order['waktu_pemesanan'])); ?></div>
+                            </div>
+                            <span class="order-status status-<?php echo $status_class; ?>">
+                                <?php echo $order['status']; ?>
+                            </span>
                         </div>
-                        <span class="order-status status-<?php echo strtolower(str_replace(' ', '', $order['status'])); ?>">
-                            <?php echo $order['status']; ?>
-                        </span>
-                    </div>
 
-                    <div class="order-items">
-                        <div class="order-item">
-                            <div class="item-details">
-                                <h4><?php echo htmlspecialchars($order['nama_produk']); ?></h4>
-                                <p>Kuantitas: <strong><?php echo $order['quantity']; ?></strong></p>
-                                <p>Kurir: <strong><?php echo htmlspecialchars($order['kurir']); ?></strong></p>
-                                <p>Metode Pembayaran: <strong><?php echo htmlspecialchars($order['metode_pembayaran']); ?></strong></p>
+                        <div class="order-items">
+                            <div class="order-item">
+                                <div class="item-details">
+                                    <h4><?php echo htmlspecialchars($order['nama_produk']); ?></h4>
+                                    <p><strong>Kuantitas:</strong> <?php echo $order['quantity']; ?></p>
+                                    <p><strong>Kurir:</strong> <?php echo htmlspecialchars($order['kurir']); ?></p>
+                                    <p><strong>Metode Pembayaran:</strong> <?php echo htmlspecialchars($order['metode_pembayaran']); ?></p>
+                                </div>
+                                <div class="item-price">Rp <?php echo number_format($order['harga_total'], 0, ',', '.'); ?></div>
+                            </div>
+                        </div>
+
+                        <div class="order-footer">
+                            <div class="order-info-bottom">
+                                <div class="order-total">Total: Rp <?php echo number_format($order['harga_total'], 0, ',', '.'); ?></div>
+                                <div class="order-address"><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($order['alamat_lengkap']); ?></div>
+                                <?php if (!empty($order['resi'])) { ?>
+                                    <div class="order-resi"><span class="resi-label"><i class="bi bi-barcode"></i> Resi:</span> <?php echo htmlspecialchars($order['resi']); ?></div>
+                                <?php } ?>
+                            </div>
+                            <div class="order-actions">
+                                <?php
+                                // Tombol pembatalan untuk status Menunggu Konfirmasi atau Sedang Dikemas
+                                if ($order['status'] === 'Menunggu Konfirmasi' || $order['status'] === 'Sedang Dikemas') {
+                                ?>
+                                    <button class="btn btn-cancel" onclick="cancelOrder(<?php echo $order['id']; ?>)">
+                                        <i class="bi bi-x-lg"></i> Batalkan
+                                    </button>
+                                <?php } ?>
+
+                                <?php
+                                // Tombol penyelesaian untuk status Sedang Dikirim
+                                if ($order['status'] === 'Sedang Dikirim') {
+                                ?>
+                                    <button class="btn btn-complete" onclick="completeOrder(<?php echo $order['id']; ?>)">
+                                        <i class="bi bi-check-lg"></i> Terima Pesanan
+                                    </button>
+                                <?php } ?>
+
+                                <button class="btn btn-details" onclick="viewOrderDetail(<?php echo $order['id']; ?>)">
+                                    <i class="bi bi-eye"></i> Rincian
+                                </button>
                             </div>
                         </div>
                     </div>
+                <?php
+                }
+            }
 
-                    <div class="order-footer">
-                        <div>
-                            <div class="order-total">Total: Rp <?php echo number_format($order['quantity'] * 100000, 0, ',', '.'); ?></div>
-                            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Alamat: <?php echo htmlspecialchars($order['alamat_lengkap']); ?></p>
+            // Tampilkan pesanan selesai dari history_penjualan
+            if (!empty($pesanan_selesai)) {
+                $show_empty = false;
+                foreach ($pesanan_selesai as $order) {
+                ?>
+                    <div class="order-card selesai">
+                        <div class="order-header">
+                            <div class="order-info">
+                                <div class="order-id"><i class="bi bi-check-circle"></i> Pesanan Selesai</div>
+                                <div class="order-date"><i class="bi bi-calendar-check"></i> Diterima: <?php echo date('d M Y, H:i', strtotime($order['tanggal_selesai'])); ?></div>
+                            </div>
+                            <span class="order-status status-selesai">
+                                ✓ Selesai
+                            </span>
                         </div>
-                        <div class="order-actions">
-                            <?php if ($order['status'] === 'Sedang Dikemas') : ?>
-                                <button class="btn btn-cancel" onclick="cancelOrder(<?php echo $order['id']; ?>)">Batalkan Pesanan</button>
-                            <?php else : ?>
-                                <button class="btn btn-disabled" disabled>Tidak Bisa Dibatalkan</button>
-                            <?php endif; ?>
-                            <button class="btn btn-track" onclick="viewOrderDetail(<?php echo $order['id']; ?>)">Rincian</button>
+
+                        <div class="order-items">
+                            <div class="order-item">
+                                <div class="item-details">
+                                    <h4><?php echo htmlspecialchars($order['nama_produk']); ?></h4>
+                                    <p><strong>Kuantitas:</strong> <?php echo $order['quantity']; ?></p>
+                                    <p><strong>Kurir:</strong> <?php echo htmlspecialchars($order['kurir']); ?></p>
+                                    <p><strong>Metode Pembayaran:</strong> <?php echo htmlspecialchars($order['metode_pembayaran']); ?></p>
+                                </div>
+                                <div class="item-price">Rp <?php echo number_format($order['harga_total'], 0, ',', '.'); ?></div>
+                            </div>
+                        </div>
+
+                        <div class="order-footer">
+                            <div class="order-info-bottom">
+                                <div class="order-total">Total: Rp <?php echo number_format($order['harga_total'], 0, ',', '.'); ?></div>
+                                <div class="order-address"><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($order['alamat_lengkap']); ?></div>
+                                <?php if (!empty($order['resi'])) { ?>
+                                    <div class="order-resi"><span class="resi-label"><i class="bi bi-barcode"></i> Resi:</span> <?php echo htmlspecialchars($order['resi']); ?></div>
+                                <?php } ?>
+                            </div>
+                            <div class="order-actions">
+                                <button class="btn btn-details" onclick="viewOrderDetail(null)">
+                                    <i class="bi bi-eye"></i> Rincian
+                                </button>
+                            </div>
                         </div>
                     </div>
+                <?php
+                }
+            }
+
+            // Tampilkan empty state jika tidak ada pesanan
+            if ($show_empty) {
+                ?>
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h3>Belum Ada Pesanan</h3>
+                    <p>Anda belum memiliki pesanan <?php echo $status_filter !== 'semua' ? 'dengan status ' . htmlspecialchars($status_filter) : ''; ?>.</p>
+                    <a href="../../admin/produk.php">← Lanjut Belanja</a>
                 </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+            <?php
+            }
+            ?>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -867,16 +1008,16 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             }
         });
 
-        // Cancel order function
+        // Cancel order function - untuk pembatalan pesanan
         function cancelOrder(orderId) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Batalkan Pesanan?',
-                text: 'Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak bisa dibatalkan.',
+                text: 'Apakah Anda yakin ingin membatalkan pesanan ini?',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Batalkan',
                 cancelButtonText: 'Jangan',
-                confirmButtonColor: '#dc3545',
+                confirmButtonColor: '#ef4444',
                 cancelButtonColor: '#1E5DAC'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -920,13 +1061,75 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             });
         }
 
-        function viewOrderDetail(orderId) {
+        // Complete order function - untuk menyelesaikan pesanan yang sedang dikirim
+        function completeOrder(orderId) {
             Swal.fire({
-                icon: 'info',
-                title: 'Rincian Pesanan',
-                text: 'Fitur detail pesanan akan segera tersedia',
-                confirmButtonColor: '#1E5DAC'
+                icon: 'question',
+                title: 'Terima Pesanan?',
+                text: 'Apakah pesanan sudah sampai dan dalam kondisi baik?',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Terima',
+                cancelButtonText: 'Belum',
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#1E5DAC'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('selesaikan_pesanan', '1');
+                    formData.append('order_id', orderId);
+
+                    fetch('pesanan_saya.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Terima Kasih!',
+                                    text: 'Pesanan telah diselesaikan. Data penjualan telah tersimpan.',
+                                    confirmButtonColor: '#1E5DAC'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: data.message,
+                                    confirmButtonColor: '#1E5DAC'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'Terjadi kesalahan: ' + error,
+                                confirmButtonColor: '#1E5DAC'
+                            });
+                        });
+                }
             });
+        }
+
+        function viewOrderDetail(orderId) {
+            if (orderId) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Pesanan #' + String(orderId).padStart(6, '0'),
+                    text: 'Rincian lengkap pesanan Anda',
+                    confirmButtonColor: '#1E5DAC'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Pesanan Selesai',
+                    text: 'Terima kasih telah berbelanja!',
+                    confirmButtonColor: '#1E5DAC'
+                });
+            }
         }
     </script>
 </body>
