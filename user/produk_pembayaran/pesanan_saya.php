@@ -55,6 +55,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 // Hitung pesanan per status
 $status_counts = [
+    'Menunggu Konfirmasi' => 0,
     'Sedang Dikemas' => 0,
     'Sedang Dikirim' => 0,
     'Selesai' => 0,
@@ -581,6 +582,12 @@ while ($row = mysqli_fetch_assoc($count_result)) {
             font-weight: 600;
         }
 
+        /* STATUS */
+        .status-menunggu {
+            background: #f3e5f5;
+            color: #6a1b9a;
+        }
+
         .status-dikemas {
             background: #fff3cd;
             color: #856404;
@@ -773,6 +780,10 @@ while ($row = mysqli_fetch_assoc($count_result)) {
         <a href="?status=semua" class="status-tab <?php echo $status_filter === 'semua' ? 'active' : ''; ?>">
             <span>Semua</span>
             <span class="status-count"><?php echo array_sum($status_counts); ?></span>
+        </a>
+        <a href="?status=Menunggu%20Konfirmasi" class="status-tab <?php echo $status_filter === 'Menunggu Konfirmasi' ? 'active' : ''; ?>">
+            <span>Menunggu Konfirmasi</span>
+            <span class="status-count"><?php echo $status_counts['Menunggu Konfirmasi']; ?></span>
         </a>
         <a href="?status=Sedang%20Dikemas" class="status-tab <?php echo $status_filter === 'Sedang Dikemas' ? 'active' : ''; ?>">
             <span>Sedang Dikemas</span>

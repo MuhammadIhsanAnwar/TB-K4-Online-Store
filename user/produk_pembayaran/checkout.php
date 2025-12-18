@@ -54,6 +54,7 @@ if (isset($_POST['complete_payment'])) {
     $nomor_hp = mysqli_real_escape_string($koneksi, $user['nomor_hp']);
     $metode_pembayaran = 'COD';
     $kurir = mysqli_real_escape_string($koneksi, $_POST['kurir']);
+    $status = 'Menunggu Konfirmasi';
     $waktu_pemesanan = date('Y-m-d H:i:s');
 
     // Gabungkan semua nama produk dengan koma
@@ -72,8 +73,8 @@ if (isset($_POST['complete_payment'])) {
 
     // Insert 1 baris ke tabel pemesanan dengan produk yang digabung
     $order_query = "INSERT INTO pemesanan 
-                    (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, waktu_pemesanan)
-                    VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$waktu_pemesanan')";
+                    (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, status, waktu_pemesanan)
+                    VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
 
     if (!mysqli_query($koneksi, $order_query)) {
         echo json_encode(['status' => 'error', 'message' => 'Gagal membuat pesanan: ' . mysqli_error($koneksi)]);
