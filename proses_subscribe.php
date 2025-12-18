@@ -6,6 +6,7 @@ header('Content-Type: application/json');
 // ============================================
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
@@ -43,24 +44,32 @@ $mail = new PHPMailer(true);
 
 try {
     // ============ SERVER SETTINGS ============
-    $mail->isSMTP();
-    $mail->Host = 'urbanhype.neoverse.my.id';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'newslater@urbanhype.neoverse.my.id';
-    $mail->Password = 'administrator-online-store';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-    $mail->Port = 587;
     $mail->SMTPDebug = 0;
-    $mail->Debugoutput = 'error_log';
+    $mail->isSMTP();
+    $mail->Host = 'urbanhype.neoverse.my.id';                    // GANTI: Sesuai domain Anda
+    $mail->SMTPAuth = true;
+    $mail->Username = 'mailreset@urbanhype.neoverse.my.id';       // GANTI: Email sender
+    $mail->Password = 'administrator-online-store';               // GANTI: Email password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+    $mail->Port = 465;
+
+    // SSL Options untuk self-signed certificate
+    $mail->SMTPOptions = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ];
 
     // ============ RECIPIENTS ============
-    $mail->setFrom('newslater@urbanhype.neoverse.my.id', 'URBANHYPE');     
-    $mail->addAddress($email);                                 
-    $mail->addReplyTo('newslater@urbanhype.neoverse.my.id', 'URBANHYPE Support');  
+    $mail->setFrom('mailreset@urbanhype.neoverse.my.id', 'URBANHYPE Newsletter');
+    $mail->addAddress($email);
+    $mail->addReplyTo('mailreset@urbanhype.neoverse.my.id', 'URBANHYPE Support');
 
     // ============ EMAIL CONTENT ============
     $mail->isHTML(true);
-    $mail->Subject = 'Terima Kasih Telah Subscribe URBANHYPE! 🎉';
+    $mail->Subject = 'Selamat Datang di URBANHYPE Newsletter! 🎉';
     $mail->CharSet = 'UTF-8';
 
     // HTML Body Email
@@ -163,12 +172,6 @@ try {
                 border-radius: 6px;
                 font-weight: bold;
                 margin: 25px 0;
-                transition: all 0.3s ease;
-            }
-            
-            .cta-button:hover {
-                background: linear-gradient(135deg, #059669 0%, #047857 100%);
-                transform: translateY(-2px);
             }
             
             .divider {
@@ -195,27 +198,9 @@ try {
                 text-decoration: none;
             }
             
-            .social-links {
-                margin-top: 15px;
-            }
-            
-            .social-links a {
-                display: inline-block;
-                margin: 0 10px;
-                width: 35px;
-                height: 35px;
-                background: #1E5DAC;
-                color: white;
-                border-radius: 50%;
-                text-decoration: none;
-                text-align: center;
-                line-height: 35px;
-                font-size: 18px;
-            }
-            
             .footer-note {
-                font-size: 11px !important;
-                color: #999 !important;
+                font-size: 11px;
+                color: #999;
                 margin-top: 20px;
                 border-top: 1px solid #eee;
                 padding-top: 20px;
@@ -234,9 +219,9 @@ try {
             <div class='content'>
                 <h2>Halo,</h2>
                 
-                <p>Kami dengan senang hati menerima subscription Anda ke newsletter <strong>URBANHYPE</strong>! Email <strong>" . htmlspecialchars($email) . "</strong> telah terdaftar dan aktif.</p>
+                <p>Kami dengan senang hati menerima subscription Anda ke newsletter <strong>URBANHYPE</strong>!</p>
                 
-                <p>Mulai sekarang, Anda akan mendapatkan akses eksklusif ke penawaran terbaik kami.</p>
+                <p>Email <strong>" . htmlspecialchars($email) . "</strong> telah terdaftar dan aktif di database kami.</p>
                 
                 <div class='benefits'>
                     <h3>📋 Keuntungan Sebagai Subscriber:</h3>
@@ -250,20 +235,15 @@ try {
                     </ul>
                 </div>
                 
-                <p>Jangan lewatkan kesempatan emas untuk mendapatkan fashion terbaik dengan harga istimewa. Koleksi terbaru kami sudah menunggu!</p>
+                <p>Mulai sekarang, Anda akan mendapatkan akses eksklusif ke penawaran terbaik kami. Jangan lewatkan kesempatan emas untuk mendapatkan fashion terbaik dengan harga istimewa!</p>
                 
                 <center>
-                    <a href='https://urbanhype.com/shop.php' class='cta-button'>Mulai Belanja Sekarang →</a>
+                    <a href='https://urbanhype.neoverse.my.id/shop.php' class='cta-button'>Mulai Belanja Sekarang →</a>
                 </center>
                 
                 <div class='divider'></div>
                 
-                <p>Jika Anda memiliki pertanyaan atau butuh bantuan, tim customer service kami siap membantu. Hubungi kami melalui:</p>
-                <p>
-                    📧 Email: <a href='mailto:info@urbanhype.com'>info@urbanhype.com</a><br>
-                    📞 WhatsApp: <a href='https://wa.me/6281234567890'>+62 812 3456 7890</a><br>
-                    🕒 Jam Operasional: Senin - Jumat (09:00 - 17:00)
-                </p>
+                <p>Jika Anda memiliki pertanyaan atau butuh bantuan, tim customer service kami siap membantu Anda 24/7.</p>
                 
                 <p style='margin-top: 25px;'>
                     Salam hangat,<br>
@@ -274,24 +254,15 @@ try {
             
             <!-- FOOTER -->
             <div class='footer'>
-                <div class='social-links'>
-                    <a href='https://facebook.com/urbanhype' title='Facebook'>f</a>
-                    <a href='https://instagram.com/urbanhype' title='Instagram'>📷</a>
-                    <a href='https://twitter.com/urbanhype' title='Twitter'>𝕏</a>
-                    <a href='https://tiktok.com/@urbanhype' title='TikTok'>♪</a>
-                </div>
-                
-                <p style='margin-top: 20px;'>
-                    <a href='https://urbanhype.com'>Website</a> | 
+                <p>
+                    <a href='https://urbanhype.neoverse.my.id'>Website</a> | 
                     <a href='#'>FAQ</a> | 
-                    <a href='#'>Kebijakan Privasi</a> | 
-                    <a href='#'>Syarat &amp; Ketentuan</a>
+                    <a href='#'>Kebijakan Privasi</a>
                 </p>
                 
                 <p class='footer-note'>
                     © 2025 URBANHYPE. Semua hak dilindungi.<br>
-                    Anda menerima email ini karena telah subscribe ke newsletter kami.<br>
-                    <a href='#' style='color: #1E5DAC;'>Unsubscribe dari mailing list</a>
+                    Anda menerima email ini karena telah subscribe ke newsletter kami.
                 </p>
             </div>
         </div>
@@ -300,21 +271,17 @@ try {
     ";
 
     $mail->Body = $htmlBody;
-
-    // Plain text alternative (untuk email clients yang tidak support HTML)
     $mail->AltBody = strip_tags($htmlBody);
 
     // ============ SEND EMAIL ============
     if ($mail->send()) {
-        // Email berhasil dikirim
-
         // OPTIONAL: Simpan ke database
-        include 'admin/koneksi.php';
-        $email_db = mysqli_real_escape_string($koneksi, $email);
-        $subscribe_date = date('Y-m-d H:i:s');
-        $query = "INSERT INTO subscribers (email, subscribed_at) VALUES ('$email_db', '$subscribe_date')
-                  ON DUPLICATE KEY UPDATE subscribed_at='$subscribe_date'";
-        mysqli_query($koneksi, $query);
+        // include 'admin/koneksi.php';
+        // $email_db = mysqli_real_escape_string($koneksi, $email);
+        // $subscribe_date = date('Y-m-d H:i:s');
+        // $query = "INSERT INTO subscribers (email, subscribed_at) VALUES ('$email_db', '$subscribe_date')
+        //           ON DUPLICATE KEY UPDATE subscribed_at='$subscribe_date'";
+        // mysqli_query($koneksi, $query);
 
         http_response_code(200);
         echo json_encode([
@@ -332,7 +299,7 @@ try {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Terjadi kesalahan saat memproses subscribe. Coba lagi nanti.'
+        'message' => 'Terjadi kesalahan: ' . $e->getMessage()
     ]);
 }
 
