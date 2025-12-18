@@ -11,12 +11,12 @@ if (isset($_SESSION['user_id'])) {
     $user = mysqli_fetch_assoc($result);
 }
 
-// Ambil kategori dari URL (default: Men)
-$kategori = isset($_GET['kategori']) ? mysqli_real_escape_string($koneksi, $_GET['kategori']) : 'Men';
+// Ambil kategori dari URL (default: All)
+$kategori = isset($_GET['kategori']) ? mysqli_real_escape_string($koneksi, $_GET['kategori']) : 'All';
 $valid_categories = ['Men', 'Women', 'Shoes', 'Accessories', 'All'];
 
 if (!in_array($kategori, $valid_categories)) {
-    $kategori = 'Men';
+    $kategori = 'All';
 }
 
 // Ambil data produk berdasarkan kategori
