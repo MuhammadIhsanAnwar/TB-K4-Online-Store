@@ -120,7 +120,8 @@ if (isset($_SESSION['user_id'])) {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             position: relative;
             margin-top: 70px;
-            overflow: hidden;
+            overflow-y: visible;
+            overflow-x: hidden;
             display: flex;
             align-items: center;
         }
