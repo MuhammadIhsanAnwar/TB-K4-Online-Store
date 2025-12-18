@@ -791,7 +791,6 @@ if (isset($_SESSION['user_id'])) {
                     <h2 class="text-primary">About <span class="text-dark">UrbanHype</span></h2>
                     <p class="lead mt-3">UrbanHype was founded in 2023 with a vision to break fashion boundaries. We believe style has no gender — only expression.</p>
                     <p>Our unisex collections are designed for the bold, the thoughtful, and the effortlessly cool. Every piece is crafted with sustainable materials and timeless aesthetics.</p>
-                    <a href="#" class="btn btn-dark mt-3">Learn More</a>
                 </div>
                 <div class="col-lg-6">
                     <div id="aboutCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="4000">
