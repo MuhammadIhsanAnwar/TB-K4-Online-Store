@@ -1,26 +1,57 @@
 <?php
 require_once 'koneksi.php';
 
-$qPesan = mysqli_query($koneksi,
+$qPesan = mysqli_query(
+    $koneksi,
     "SELECT COUNT(*) AS total
      FROM pesan_kontak
      WHERE status='baru'"
 );
 $notifPesan = mysqli_fetch_assoc($qPesan)['total'];
+
+// Hitung notifikasi pesanan yang menunggu konfirmasi
+$qPesananBaru = mysqli_query(
+    $koneksi,
+    "SELECT COUNT(*) AS total
+     FROM pemesanan
+     WHERE status='Menunggu Konfirmasi'"
+);
+$notifPesananBaru = mysqli_fetch_assoc($qPesananBaru)['total'];
+
+// Hitung notifikasi komentar belum di-review
+$qKomentarBaru = mysqli_query(
+    $koneksi,
+    "SELECT COUNT(*) AS total
+     FROM komentar_produk
+     WHERE status='belum_direview' OR status IS NULL"
+);
+$notifKomentarBaru = mysqli_fetch_assoc($qKomentarBaru)['total'];
 ?>
 
 <style>
-.badge-pesan {
-    position: absolute;
-    top: 8px;
-    right: 15px;
-    background: #dc3545;
-    color: white;
-    font-size: 11px;
-    padding: 3px 7px;
-    border-radius: 50%;
-    font-weight: 600;
-}
+    .badge-pesan {
+        position: absolute;
+        top: 8px;
+        right: 15px;
+        background: #dc3545;
+        color: white;
+        font-size: 11px;
+        padding: 3px 7px;
+        border-radius: 50%;
+        font-weight: 600;
+    }
+
+    .badge-notif {
+        position: absolute;
+        top: 8px;
+        right: 15px;
+        background: #dc3545;
+        color: white;
+        font-size: 11px;
+        padding: 3px 7px;
+        border-radius: 50%;
+        font-weight: 600;
+    }
 </style>
 
 
@@ -33,22 +64,40 @@ $notifPesan = mysqli_fetch_assoc($qPesan)['total'];
 
     <p class="menu-title">Menu Admin</p>
 
-    <a href="dashboard.php" class="<?= basename($_SERVER['PHP_SELF'])=='dashboard.php'?'active':'' ?>">Dashboard</a>
-    <a href="data_user.php" class="<?= basename($_SERVER['PHP_SELF'])=='data_user.php'?'active':'' ?>">Data User</a>
-    <a href="data_produk.php" class="<?= basename($_SERVER['PHP_SELF'])=='data_produk.php'?'active':'' ?>">Data Produk</a>
-    <a href="tambah_produk.php" class="<?= basename($_SERVER['PHP_SELF'])=='tambah_produk.php'?'active':'' ?>">Tambah Produk</a>
-    <a href="data_penjualan.php" class="<?= basename($_SERVER['PHP_SELF'])=='data_penjualan.php'?'active':'' ?>">Data Penjualan</a>
+    <a href="dashboard.php" class="<?= basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : '' ?>">Dashboard</a>
+    <a href="data_user.php" class="<?= basename($_SERVER['PHP_SELF']) == 'data_user.php' ? 'active' : '' ?>">Data User</a>
+    <a href="data_produk.php" class="<?= basename($_SERVER['PHP_SELF']) == 'data_produk.php' ? 'active' : '' ?>">Data Produk</a>
+    <a href="tambah_produk.php" class="<?= basename($_SERVER['PHP_SELF']) == 'tambah_produk.php' ? 'active' : '' ?>">Tambah Produk</a>
+    <a href="data_penjualan.php" class="<?= basename($_SERVER['PHP_SELF']) == 'data_penjualan.php' ? 'active' : '' ?>">Data Penjualan</a>
+
+    <!-- PESANAN MASUK -->
+    <a href="pesanan_masuk.php"
+        class="<?= basename($_SERVER['PHP_SELF']) == 'pesanan_masuk.php' ? 'active' : '' ?>"
+        style="position:relative;">
+        📦 Pesanan Masuk
+        <?php if ($notifPesananBaru > 0): ?>
+            <span class="badge-notif"><?= $notifPesananBaru ?></span>
+        <?php endif; ?>
+    </a>
+
+    <!-- KELOLA KOMENTAR -->
+    <a href="kelola_komentar.php"
+        class="<?= basename($_SERVER['PHP_SELF']) == 'kelola_komentar.php' ? 'active' : '' ?>"
+        style="position:relative;">
+        💬 Kelola Komentar
+        <?php if ($notifKomentarBaru > 0): ?>
+            <span class="badge-notif"><?= $notifKomentarBaru ?></span>
+        <?php endif; ?>
+    </a>
+
     <a href="data_pesan.php"
-   class="<?= basename($_SERVER['PHP_SELF'])=='data_pesan.php'?'active':'' ?>"
-   style="position:relative;">
-
-    Data Pesan
-
-    <?php if($notifPesan > 0): ?>
-        <span class="badge-pesan"><?= $notifPesan ?></span>
-    <?php endif; ?>
-</a>
-
+        class="<?= basename($_SERVER['PHP_SELF']) == 'data_pesan.php' ? 'active' : '' ?>"
+        style="position:relative;">
+        Data Pesan
+        <?php if ($notifPesan > 0): ?>
+            <span class="badge-pesan"><?= $notifPesan ?></span>
+        <?php endif; ?>
+    </a>
 
     <a href="logout.php" class="logout">Logout</a>
 
