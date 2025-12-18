@@ -6,8 +6,8 @@ include '../admin/koneksi.php';
 if (isset($_GET['download'])) {
     $format = $_GET['download'];
 
-    // Ambil data penjualan
-    $res = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
+    // Ambil data penjualan dari history_penjualan
+    $res = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tanggal_selesai DESC");
     $data = [];
     while ($row = mysqli_fetch_assoc($res)) {
         $data[] = $row;
@@ -31,32 +31,24 @@ if (isset($_GET['download'])) {
         $pdf->SetTextColor(255, 255, 255);
         $pdf->Cell(15, 8, 'No', 1, 0, 'C', true);
         $pdf->Cell(25, 8, 'User ID', 1, 0, 'C', true);
-        $pdf->Cell(60, 8, 'Produk', 1, 0, 'C', true);
-        $pdf->Cell(20, 8, 'Jumlah', 1, 0, 'C', true);
-        $pdf->Cell(45, 8, 'Total Harga', 1, 0, 'C', true);
-        $pdf->Cell(30, 8, 'Tanggal', 1, 1, 'C', true);
+        $pdf->Cell(50, 8, 'Nama Customer', 1, 0, 'C', true);
+        $pdf->Cell(40, 8, 'Produk', 1, 0, 'C', true);
+        $pdf->Cell(15, 8, 'Qty', 1, 0, 'C', true);
+        $pdf->Cell(30, 8, 'Tanggal Selesai', 1, 1, 'C', true);
 
         // Data Tabel
-        $pdf->SetFont('Arial', '', 9);
+        $pdf->SetFont('Arial', '', 8);
         $pdf->SetTextColor(0, 0, 0);
         $nomor = 1;
-        $grand_total = 0;
 
         foreach ($data as $row) {
-            $grand_total += $row['total_harga'];
             $pdf->Cell(15, 7, $nomor++, 1, 0, 'C');
             $pdf->Cell(25, 7, $row['user_id'], 1, 0, 'C');
-            $pdf->Cell(60, 7, substr($row['produk'], 0, 25), 1, 0, 'L');
-            $pdf->Cell(20, 7, $row['jumlah'], 1, 0, 'C');
-            $pdf->Cell(45, 7, 'Rp ' . number_format($row['total_harga'], 0, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(30, 7, date('d/m/Y', strtotime($row['tanggal'])), 1, 1, 'C');
+            $pdf->Cell(50, 7, substr($row['nama_lengkap'], 0, 20), 1, 0, 'L');
+            $pdf->Cell(40, 7, substr($row['nama_produk'], 0, 15), 1, 0, 'L');
+            $pdf->Cell(15, 7, $row['quantity'], 1, 0, 'C');
+            $pdf->Cell(30, 7, date('d/m/Y', strtotime($row['tanggal_selesai'])), 1, 1, 'C');
         }
-
-        // Total
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetFillColor(230, 230, 230);
-        $pdf->Cell(100, 8, 'TOTAL', 1, 0, 'R', true);
-        $pdf->Cell(45, 8, 'Rp ' . number_format($grand_total, 0, ',', '.'), 1, 1, 'R', true);
 
         // Output PDF
         $pdf->Output('D', 'Laporan_Penjualan_' . date('d-m-Y_H-i-s') . '.pdf');
@@ -72,46 +64,43 @@ if (isset($_GET['download'])) {
         echo '<html><head><meta charset="UTF-8"></head><body>';
         echo '<table border="1" cellpadding="5" cellspacing="0">';
         echo '<tr style="background-color: #1e5dac; color: white; font-weight: bold;">';
-        echo '<td colspan="6" style="text-align: center; font-size: 14px;">LAPORAN DATA PENJUALAN</td>';
+        echo '<td colspan="8" style="text-align: center; font-size: 14px;">LAPORAN DATA PENJUALAN</td>';
         echo '</tr>';
         echo '<tr style="background-color: #1e5dac; color: white; font-weight: bold;">';
-        echo '<td colspan="6" style="text-align: center;">Tanggal: ' . date('d/m/Y H:i:s') . '</td>';
+        echo '<td colspan="8" style="text-align: center;">Tanggal: ' . date('d/m/Y H:i:s') . '</td>';
         echo '</tr>';
         echo '<tr style="background-color: #1e5dac; color: white; font-weight: bold;">';
         echo '<td>No</td>';
         echo '<td>User ID</td>';
+        echo '<td>Nama Customer</td>';
         echo '<td>Produk</td>';
-        echo '<td>Jumlah</td>';
-        echo '<td>Total Harga</td>';
-        echo '<td>Tanggal</td>';
+        echo '<td>Kuantitas</td>';
+        echo '<td>Metode Pembayaran</td>';
+        echo '<td>Kurir</td>';
+        echo '<td>Tanggal Selesai</td>';
         echo '</tr>';
 
         $nomor = 1;
-        $grand_total = 0;
         foreach ($data as $row) {
-            $grand_total += $row['total_harga'];
             echo '<tr>';
             echo '<td>' . $nomor++ . '</td>';
             echo '<td>' . $row['user_id'] . '</td>';
-            echo '<td>' . $row['produk'] . '</td>';
-            echo '<td>' . $row['jumlah'] . '</td>';
-            echo '<td>Rp ' . number_format($row['total_harga'], 0, ',', '.') . '</td>';
-            echo '<td>' . date('d/m/Y H:i', strtotime($row['tanggal'])) . '</td>';
+            echo '<td>' . htmlspecialchars($row['nama_lengkap']) . '</td>';
+            echo '<td>' . htmlspecialchars($row['nama_produk']) . '</td>';
+            echo '<td style="text-align: center;">' . $row['quantity'] . '</td>';
+            echo '<td>' . $row['metode_pembayaran'] . '</td>';
+            echo '<td>' . $row['kurir'] . '</td>';
+            echo '<td>' . date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) . '</td>';
             echo '</tr>';
         }
 
-        echo '<tr style="background-color: #e6e6e6; font-weight: bold;">';
-        echo '<td colspan="4" style="text-align: right;">TOTAL</td>';
-        echo '<td>Rp ' . number_format($grand_total, 0, ',', '.') . '</td>';
-        echo '<td></td>';
-        echo '</tr>';
         echo '</table>';
         echo '</body></html>';
         exit;
     }
 }
 
-$query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
+$query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tanggal_selesai DESC");
 ?>
 
 <!DOCTYPE html>
@@ -365,17 +354,25 @@ $query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
             text-align: center;
         }
 
-        /* KOLOM JUMLAH */
-        .jumlah-col {
+        /* KOLOM NAMA */
+        .nama-col {
+            font-weight: 500;
+        }
+
+        /* KOLOM KUANTITAS */
+        .qty-col {
             text-align: center;
             font-weight: 500;
         }
 
-        /* KOLOM TOTAL HARGA */
-        .harga-col {
-            font-weight: 600;
-            color: var(--blue);
-            text-align: right;
+        /* KOLOM METODE */
+        .metode-col {
+            text-align: center;
+        }
+
+        /* KOLOM KURIR */
+        .kurir-col {
+            text-align: center;
         }
 
         /* KOLOM TANGGAL */
@@ -386,7 +383,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
 
         /* KOLOM PRODUK */
         .produk-col {
-            max-width: 250px;
+            max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -423,6 +420,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(30, 93, 172, 0.1);
             text-align: center;
+            border-left: 5px solid var(--blue);
         }
 
         .summary-card h4 {
@@ -548,24 +546,20 @@ $query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
 
             <!-- SUMMARY SECTION -->
             <?php
-            $total_query = mysqli_query($koneksi, "SELECT COUNT(*) as total, SUM(total_harga) as grand_total FROM penjualan");
+            $total_query = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM history_penjualan");
             $summary = mysqli_fetch_assoc($total_query);
             ?>
             <div class="summary-section">
                 <div class="summary-card">
-                    <h4>Total Transaksi</h4>
+                    <h4>✓ Total Pesanan Selesai</h4>
                     <div class="value"><?= $summary['total'] ?? 0 ?></div>
-                </div>
-                <div class="summary-card">
-                    <h4>Total Pendapatan</h4>
-                    <div class="value">Rp <?= number_format($summary['grand_total'] ?? 0, 0, ',', '.') ?></div>
                 </div>
             </div>
 
             <!-- TABLE SECTION -->
             <div class="table-wrapper">
                 <?php
-                $res = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
+                $res = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tanggal_selesai DESC");
                 $count = mysqli_num_rows($res);
                 ?>
 
@@ -576,10 +570,12 @@ $query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
                                 <tr>
                                     <th>No.</th>
                                     <th>User ID</th>
+                                    <th>Nama Customer</th>
                                     <th>Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Total Harga</th>
-                                    <th>Tanggal</th>
+                                    <th>Kuantitas</th>
+                                    <th>Metode Pembayaran</th>
+                                    <th>Kurir</th>
+                                    <th>Tanggal Selesai</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -590,10 +586,12 @@ $query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
                                     <tr>
                                         <td class="nomor-col"><?= $nomor++ ?></td>
                                         <td class="user-id-col"><?= $row['user_id'] ?></td>
-                                        <td class="produk-col" title="<?= htmlspecialchars($row['produk']) ?>"><?= htmlspecialchars($row['produk']) ?></td>
-                                        <td class="jumlah-col"><?= $row['jumlah'] ?> unit</td>
-                                        <td class="harga-col">Rp <?= number_format($row['total_harga'], 0, ',', '.') ?></td>
-                                        <td class="tanggal-col"><?= date('d/m/Y H:i', strtotime($row['tanggal'])) ?></td>
+                                        <td class="nama-col"><?= htmlspecialchars($row['nama_lengkap']) ?></td>
+                                        <td class="produk-col" title="<?= htmlspecialchars($row['nama_produk']) ?>"><?= htmlspecialchars($row['nama_produk']) ?></td>
+                                        <td class="qty-col"><?= $row['quantity'] ?> unit</td>
+                                        <td class="metode-col"><?= $row['metode_pembayaran'] ?></td>
+                                        <td class="kurir-col"><?= $row['kurir'] ?></td>
+                                        <td class="tanggal-col"><?= date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) ?></td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
@@ -602,7 +600,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
                 <?php else: ?>
                     <div class="empty-state">
                         <div class="empty-state-icon">📊</div>
-                        <p class="empty-state-text">Belum ada data penjualan</p>
+                        <p class="empty-state-text">Belum ada data penjualan. Tunggu sampai pesanan selesai.</p>
                     </div>
                 <?php endif; ?>
             </div>
