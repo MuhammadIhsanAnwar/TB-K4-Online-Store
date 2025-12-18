@@ -1,8 +1,9 @@
 <?php
 session_start();
+include "../../admin/koneksi.php";
 $cart = $_SESSION['cart'] ?? [];
 if (!$cart) {
-    header("Location: index.php");
+    header("Location: ../../index.php");
     exit;
 }
 
