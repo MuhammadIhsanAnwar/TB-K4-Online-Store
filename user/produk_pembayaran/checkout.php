@@ -1,24 +1,47 @@
 <?php
 session_start();
 include "../../admin/koneksi.php";
-$cart = $_SESSION['cart'] ?? [];
-if (!$cart) {
-    header("Location: ../../index.php");
+
+// Cek login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../../user/login_user.php");
     exit;
 }
 
-// Contoh checkout sederhana
-$total = 0;
-foreach ($cart as $item) {
-    $total += $item['harga'] * $item['qty'];
+$user_id = $_SESSION['user_id'];
+
+// Ambil data keranjang dari database
+$cart_query = "SELECT k.*, p.nama, p.harga, p.foto_produk FROM keranjang k JOIN products p ON k.product_id = p.id WHERE k.user_id='$user_id'";
+$cart_result = mysqli_query($koneksi, $cart_query);
+$cart = [];
+while ($row = mysqli_fetch_assoc($cart_result)) {
+    $cart[] = $row;
 }
 
-// Setelah checkout, bisa kosongkan keranjang
+// Cek apakah keranjang kosong
+if (empty($cart)) {
+    header("Location: cart.php");
+    exit;
+}
+
+// Hitung total
+$total = 0;
+foreach ($cart as $item) {
+    $total += $item['harga'] * $item['quantity'];
+}
+
+// Proses checkout
 if (isset($_POST['checkout'])) {
-    $_SESSION['cart'] = [];
-    echo "<script>alert('Pembayaran berhasil!'); window.location='index.php';</script>";
+    // Simpan order ke database atau process pembayaran
+    // Hapus dari keranjang setelah checkout berhasil
+    $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id'";
+    mysqli_query($koneksi, $delete_query);
+
+    echo "<script>alert('Pembayaran berhasil!'); window.location='../../index.php';</script>";
+    exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 
