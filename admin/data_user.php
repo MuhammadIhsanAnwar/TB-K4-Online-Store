@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <title>Data User - Admin</title>
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="css_admin/data_user_style.css">
+    <link rel="icon" type="image/png" href="../images/icon/logo.png">
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css_admin/data_user_style.css">
-
-    <link rel="icon" type="image/png" href="../images/icon/logo.png">
 </head>
 <body>
 
