@@ -27,13 +27,13 @@ if (isset($_POST['update'])) {
     $tanggal_lahir  = $_POST['tanggal_lahir'];
     $alamat         = mysqli_real_escape_string($koneksi, $_POST['alamat']);
     $jenis_kelamin  = $_POST['jenis_kelamin'];
+    $nomor_hp       = preg_replace('/[^0-9]/', '', $_POST['nomor_hp']); // Hapus karakter non-digit
 
     $provinsi       = mysqli_real_escape_string($koneksi, $_POST['provinsi']);
     $kabupaten_kota = mysqli_real_escape_string($koneksi, $_POST['kabupaten_kota']);
     $kecamatan      = mysqli_real_escape_string($koneksi, $_POST['kecamatan']);
     $kelurahan_desa = mysqli_real_escape_string($koneksi, $_POST['kelurahan_desa']);
     $kode_pos       = mysqli_real_escape_string($koneksi, $_POST['kode_pos']);
-
     $update_foto_sql = "";
 
     // UPLOAD FOTO
@@ -79,6 +79,7 @@ if (isset($_POST['update'])) {
                 tanggal_lahir='$tanggal_lahir',
                 jenis_kelamin='$jenis_kelamin',
                 alamat='$alamat',
+                nomor_hp='$nomor_hp',
                 provinsi='$provinsi',
                 kabupaten_kota='$kabupaten_kota',
                 kecamatan='$kecamatan',
@@ -472,6 +473,12 @@ if (isset($_POST['update'])) {
                     <label>Alamat Detail</label>
                     <textarea name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat'] ?? ''); ?></textarea>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label>Nomor HP</label>
+                <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
+                <div class="info-text">Contoh: 08123456789 (10-13 digit)</div>
             </div>
 
             <button type="submit" name="update" class="btn-submit">

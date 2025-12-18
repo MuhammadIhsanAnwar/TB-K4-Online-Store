@@ -364,6 +364,24 @@ session_start();
                     <textarea name="alamat" class="form-control" rows="2" required><?php echo isset($_SESSION['form_data']['alamat']) ? htmlspecialchars($_SESSION['form_data']['alamat']) : ''; ?></textarea>
                 </div>
 
+                <!-- NOMOR HP -->
+                <div class="mb-3">
+                    <label class="form-label">Nomor HP</label>
+                    <input type="tel" name="nomor_hp" id="nomor_hp" class="form-control" value="<?php echo isset($_SESSION['form_data']['nomor_hp']) ? htmlspecialchars($_SESSION['form_data']['nomor_hp']) : ''; ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
+                    <small class="text-muted">Contoh: 08123456789 (10-13 digit)</small>
+                </div>
+
+                <script>
+                    // Validasi nomor HP (hanya angka 10-13 digit)
+                    document.getElementById('nomor_hp').addEventListener('blur', function() {
+                        const nomorHp = this.value.trim();
+                        if (nomorHp && !/^[0-9]{10,13}$/.test(nomorHp)) {
+                            alert('Nomor HP harus 10-13 digit angka!');
+                            this.value = '';
+                        }
+                    });
+                </script>
+                
                 <!-- EMAIL -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>

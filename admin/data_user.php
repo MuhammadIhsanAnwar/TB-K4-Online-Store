@@ -546,6 +546,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM akun_user $where ORDER BY id DESC
                                     <th>Provinsi</th>
                                     <th>Kabupaten/Kota</th>
                                     <th>Alamat</th>
+                                    <th>Nomor Hp</th>
                                     <th>Foto Profil</th>
                                     <th>Status</th>
                                 </tr>
@@ -565,6 +566,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM akun_user $where ORDER BY id DESC
                                         <td><?= htmlspecialchars($row['provinsi']) ?></td>
                                         <td><?= htmlspecialchars($row['kabupaten_kota']) ?></td>
                                         <td class="text-truncate-col" title="<?= htmlspecialchars($row['alamat']) ?>"><?= htmlspecialchars($row['alamat']) ?></td>
+                                        <td><?= htmlspecialchars($row['nomor_hp']) ?></td>
                                         <td class="foto-profil-col">
                                             <?php if (!empty($row['foto_profil']) && file_exists("../foto_profil/" . $row['foto_profil'])): ?>
                                                 <img src="../foto_profil/<?= htmlspecialchars($row['foto_profil']) ?>" alt="<?= htmlspecialchars($row['username']) ?>">
