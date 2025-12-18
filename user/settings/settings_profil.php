@@ -368,6 +368,11 @@ if (isset($_POST['update'])) {
         background-color: #f0f0f0;
         cursor: not-allowed;
     }
+
+    /* Nomor HP full width */
+    input[type="tel"] {
+        width: 100%;
+    }
 </style>
 
 <body>
@@ -442,51 +447,52 @@ if (isset($_POST['update'])) {
                     </div>
                 </div>
             </div>
+    </div>
 
-            <hr>
+    <hr>
 
-            <div class="form-section">
-                <h3 class="section-title">Alamat Lengkap</h3>
+    <div class="form-section">
+        <h3 class="section-title">Alamat Lengkap</h3>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Provinsi</label>
-                        <input type="text" name="provinsi" value="<?php echo htmlspecialchars($user['provinsi'] ?? ''); ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kabupaten/Kota</label>
-                        <input type="text" name="kabupaten_kota" value="<?php echo htmlspecialchars($user['kabupaten_kota'] ?? ''); ?>" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Kecamatan</label>
-                        <input type="text" name="kecamatan" value="<?php echo htmlspecialchars($user['kecamatan'] ?? ''); ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kelurahan/Desa</label>
-                        <input type="text" name="kelurahan_desa" value="<?php echo htmlspecialchars($user['kelurahan_desa'] ?? ''); ?>" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Kode Pos</label>
-                    <input type="text" name="kode_pos" value="<?php echo htmlspecialchars($user['kode_pos'] ?? ''); ?>" required pattern="[0-9]{5}">
-                </div>
-
-                <div class="form-group">
-                    <label>Alamat Detail</label>
-                    <textarea name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat'] ?? ''); ?></textarea>
-                </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Provinsi</label>
+                <input type="text" name="provinsi" value="<?php echo htmlspecialchars($user['provinsi'] ?? ''); ?>" required>
             </div>
 
-            <button type="submit" name="update" class="btn-submit">
-                💾 Simpan Perubahan
-            </button>
-        </form>
+            <div class="form-group">
+                <label>Kabupaten/Kota</label>
+                <input type="text" name="kabupaten_kota" value="<?php echo htmlspecialchars($user['kabupaten_kota'] ?? ''); ?>" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Kecamatan</label>
+                <input type="text" name="kecamatan" value="<?php echo htmlspecialchars($user['kecamatan'] ?? ''); ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Kelurahan/Desa</label>
+                <input type="text" name="kelurahan_desa" value="<?php echo htmlspecialchars($user['kelurahan_desa'] ?? ''); ?>" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Kode Pos</label>
+            <input type="text" name="kode_pos" value="<?php echo htmlspecialchars($user['kode_pos'] ?? ''); ?>" required pattern="[0-9]{5}">
+        </div>
+
+        <div class="form-group">
+            <label>Alamat Detail</label>
+            <textarea name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat'] ?? ''); ?></textarea>
+        </div>
+    </div>
+
+    <button type="submit" name="update" class="btn-submit">
+        💾 Simpan Perubahan
+    </button>
+    </form>
     </div>
 
     <script>
