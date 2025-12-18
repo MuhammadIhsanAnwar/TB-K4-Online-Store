@@ -1,16 +1,31 @@
 <?php
 session_start();
 include "../../admin/koneksi.php";
-$cart = $_SESSION['cart'] ?? [];
+
+// Ambil user ID
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../../user/login_user.php");
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
 $total = 0;
 
+// Proses hapus dari keranjang
 if (isset($_POST['remove'])) {
-    $id = $_POST['id'];
-    foreach ($cart as $key => $item) {
-        if ($item['id'] == $id) unset($cart[$key]);
-    }
-    $_SESSION['cart'] = $cart;
+    $product_id = intval($_POST['id']);
+    $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id' AND product_id='$product_id'";
+    mysqli_query($koneksi, $delete_query);
     header("Location: cart.php");
+    exit;
+}
+
+// Ambil data keranjang dari database
+$cart_query = "SELECT k.*, p.nama, p.harga, p.foto_produk FROM keranjang k JOIN products p ON k.product_id = p.id WHERE k.user_id='$user_id'";
+$cart_result = mysqli_query($koneksi, $cart_query);
+$cart = [];
+while ($row = mysqli_fetch_assoc($cart_result)) {
+    $cart[] = $row;
 }
 ?>
 
@@ -343,22 +358,21 @@ if (isset($_POST['remove'])) {
                     </thead>
                     <tbody>
                         <?php foreach ($cart as $item):
-                            $subtotal = $item['harga'] * $item['qty'];
+                            $subtotal = $item['harga'] * $item['quantity'];
                             $total += $subtotal;
                         ?>
                             <tr>
-                                <td class="product-name"><?php echo $item['nama']; ?></td>
+                                <td class="product-name"><?php echo htmlspecialchars($item['nama']); ?></td>
                                 <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
-                                <td><span class="qty-badge"><?php echo $item['qty']; ?></span></td>
+                                <td><span class="qty-badge"><?php echo $item['quantity']; ?></span></td>
                                 <td class="subtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
                                 <td>
                                     <form method="POST" style="margin: 0;">
-                                        <input type="hidden" name="id" value="<?php echo $item['id']; ?>">
+                                        <input type="hidden" name="id" value="<?php echo $item['product_id']; ?>">
                                         <button type="submit" name="remove" class="remove-btn">Remove</button>
                                     </form>
                                 </td>
-                            </tr>
-                        <?php endforeach; ?>
+                            </tr> <?php endforeach; ?>
                         <tr class="total-row">
                             <td colspan="3" style="text-align: right;">Total</td>
                             <td colspan="2">Rp <?php echo number_format($total, 0, ',', '.'); ?></td>

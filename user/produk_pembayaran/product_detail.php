@@ -495,7 +495,7 @@ if (isset($_POST['add_to_cart'])) {
     <!-- FOOTER -->
     <footer class="footer">
         <div class="container-detail">
-            <p>&copy; 2025 UrbanHype. All rights reserved. | Designed with ❤️</p>
+            <p>&copy; 2025 UrbanHype. Kelompok 4 Tugas Besar Pemrograman Web. All rights reserved.</p>
         </div>
     </footer>
 

@@ -43,7 +43,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="../../css/bootstrap-icons.css">
+    <link rel="stylesheet" href="../../icons/bootstrap-icons.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
@@ -413,7 +413,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <!-- FOOTER -->
     <footer class="footer">
         <div class="container-shop">
-            <p>&copy; 2025 UrbanHype. All rights reserved. | Designed with ❤️</p>
+            <p>&copy; 2025 UrbanHype. Kelompok 4 Tugas Besar Pemrograman Web. All rights reserved.</p>
         </div>
     </footer>
 

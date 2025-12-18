@@ -640,19 +640,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </footer>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="js/bootstrap.bundle.js"></script>
     <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
         // Category filter active state
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.addEventListener('click', function(e) {
