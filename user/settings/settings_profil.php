@@ -433,57 +433,61 @@ if (isset($_POST['update'])) {
                     <input type="text" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" disabled>
                     <div class="info-text">Email tidak dapat diubah</div>
                 </div>
+
+                <div class="form-group">
+                    <label>Nomor HP</label>
+                    <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
+                    <div class="info-text">Contoh: 08123456789 (10-13 digit)</div>
+                </div>
             </div>
 
             <hr>
 
             <div class="form-section">
                 <h3 class="section-title">Alamat Lengkap</h3>
+                <hr>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Provinsi</label>
-                        <input type="text" name="provinsi" value="<?php echo htmlspecialchars($user['provinsi'] ?? ''); ?>" required>
+                <div class="form-section">
+                    <h3 class="section-title">Alamat Lengkap</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Provinsi</label>
+                            <input type="text" name="provinsi" value="<?php echo htmlspecialchars($user['provinsi'] ?? ''); ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kabupaten/Kota</label>
+                            <input type="text" name="kabupaten_kota" value="<?php echo htmlspecialchars($user['kabupaten_kota'] ?? ''); ?>" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Kecamatan</label>
+                            <input type="text" name="kecamatan" value="<?php echo htmlspecialchars($user['kecamatan'] ?? ''); ?>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kelurahan/Desa</label>
+                            <input type="text" name="kelurahan_desa" value="<?php echo htmlspecialchars($user['kelurahan_desa'] ?? ''); ?>" required>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Kabupaten/Kota</label>
-                        <input type="text" name="kabupaten_kota" value="<?php echo htmlspecialchars($user['kabupaten_kota'] ?? ''); ?>" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Kecamatan</label>
-                        <input type="text" name="kecamatan" value="<?php echo htmlspecialchars($user['kecamatan'] ?? ''); ?>" required>
+                        <label>Kode Pos</label>
+                        <input type="text" name="kode_pos" value="<?php echo htmlspecialchars($user['kode_pos'] ?? ''); ?>" required pattern="[0-9]{5}">
                     </div>
 
                     <div class="form-group">
-                        <label>Kelurahan/Desa</label>
-                        <input type="text" name="kelurahan_desa" value="<?php echo htmlspecialchars($user['kelurahan_desa'] ?? ''); ?>" required>
+                        <label>Alamat Detail</label>
+                        <textarea name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat'] ?? ''); ?></textarea>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Kode Pos</label>
-                    <input type="text" name="kode_pos" value="<?php echo htmlspecialchars($user['kode_pos'] ?? ''); ?>" required pattern="[0-9]{5}">
-                </div>
-
-                <div class="form-group">
-                    <label>Alamat Detail</label>
-                    <textarea name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat'] ?? ''); ?></textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Nomor HP</label>
-                <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
-                <div class="info-text">Contoh: 08123456789 (10-13 digit)</div>
-            </div>
-
-            <button type="submit" name="update" class="btn-submit">
-                💾 Simpan Perubahan
-            </button>
+                <button type="submit" name="update" class="btn-submit">
+                    💾 Simpan Perubahan
+                </button>
         </form>
     </div>
 
