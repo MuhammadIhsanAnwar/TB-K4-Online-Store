@@ -432,7 +432,7 @@ $base_path = $is_subdir ? '../../' : './';
     </div>
 </nav>
 
-<script src="<?php echo $base_path; ?>js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
 
 <script>
     // Scroll effect untuk navbar
