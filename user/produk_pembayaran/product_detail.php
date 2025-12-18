@@ -29,6 +29,36 @@ if (!$result || mysqli_num_rows($result) == 0) {
 
 $product = mysqli_fetch_assoc($result);
 
+// PROSES TAMBAH KOMENTAR
+if (isset($_POST['add_comment'])) {
+    if (!$user) {
+        echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
+        exit;
+    }
+
+    $komentar = mysqli_real_escape_string($koneksi, $_POST['komentar']);
+    $rating = intval($_POST['rating']);
+
+    if (empty($komentar) || strlen($komentar) < 5) {
+        echo json_encode(['status' => 'error', 'message' => 'Komentar minimal 5 karakter']);
+        exit;
+    }
+
+    if ($rating < 1 || $rating > 5) {
+        $rating = 5;
+    }
+
+    $insert_comment = "INSERT INTO komentar_produk (product_id, user_id, komentar, rating, created_at) 
+                       VALUES ('$product_id', '$user_id', '$komentar', '$rating', NOW())";
+
+    if (mysqli_query($koneksi, $insert_comment)) {
+        echo json_encode(['status' => 'success', 'message' => 'Komentar berhasil ditambahkan']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Gagal menambahkan komentar']);
+    }
+    exit;
+}
+
 // PROSES TAMBAH KE KERANJANG
 if (isset($_POST['add_to_cart'])) {
     if (!$user) {
@@ -67,6 +97,17 @@ if (isset($_POST['add_to_cart'])) {
 
     echo json_encode(['status' => 'success', 'message' => 'Produk berhasil ditambahkan ke keranjang']);
     exit;
+}
+
+// Ambil komentar produk
+$comments_query = "SELECT k.*, u.nama_lengkap, u.foto_profil FROM komentar_produk k 
+                   JOIN akun_user u ON k.user_id = u.id 
+                   WHERE k.product_id = '$product_id' 
+                   ORDER BY k.created_at DESC";
+$comments_result = mysqli_query($koneksi, $comments_query);
+$comments = [];
+while ($row = mysqli_fetch_assoc($comments_result)) {
+    $comments[] = $row;
 }
 ?>
 
@@ -389,6 +430,172 @@ if (isset($_POST['add_to_cart'])) {
                 width: 100%;
             }
         }
+
+        /* COMMENTS SECTION */
+        .comments-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .comments-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .comment-form {
+            background: linear-gradient(135deg, var(--light) 0%, rgba(183, 197, 218, 0.2) 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
+        }
+
+        .rating-input {
+            margin: 1rem 0;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .rating-input label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-right: 1rem;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #ddd;
+        }
+
+        .star.active {
+            color: #ffc107;
+            transform: scale(1.2);
+        }
+
+        .star:hover {
+            color: #ffc107;
+            transform: scale(1.2);
+        }
+
+        .btn-submit-comment {
+            background: linear-gradient(135deg, var(--primary) 0%, #164a8a 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-submit-comment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .comment-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .comment-item:hover {
+            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.1);
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+        }
+
+        .comment-user-info {
+            flex: 1;
+        }
+
+        .comment-user-name {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .comment-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .comment-rating {
+            display: flex;
+            gap: 0.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .comment-rating .star-display {
+            color: #ffc107;
+            font-size: 1rem;
+        }
+
+        .comment-text {
+            color: var(--dark);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+        }
+
+        .no-comments-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 
@@ -490,6 +697,69 @@ if (isset($_POST['add_to_cart'])) {
                 <?php endif; ?>
             </div>
         </div>
+        <!-- COMMENTS SECTION -->
+        <section class="comments-section">
+            <h3>💬 Komentar Produk</h3>
+
+            <?php if ($user): ?>
+                <div class="comment-form">
+                    <h4 style="color: var(--primary); margin-bottom: 1.5rem; font-weight: 600;">Berikan Komentar Anda</h4>
+
+                    <form id="commentForm">
+                        <div class="rating-input">
+                            <label>Rating:</label>
+                            <div id="ratingStars">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                            <input type="hidden" id="ratingValue" name="rating" value="5">
+                        </div>
+
+                        <textarea name="komentar" id="komentarText" placeholder="Tulis komentar Anda di sini... (minimal 5 karakter)" required></textarea>
+
+                        <button type="submit" class="btn-submit-comment">Kirim Komentar</button>
+                    </form>
+                </div>
+            <?php else: ?>
+                <div style="background: linear-gradient(135deg, var(--light) 0%, rgba(183, 197, 218, 0.2) 100%); padding: 2rem; border-radius: 12px; text-align: center;">
+                    <p style="color: var(--dark); margin-bottom: 1rem;">Silakan <a href="../../user/login_user.php" style="color: var(--primary); font-weight: 600;">login</a> untuk memberikan komentar.</p>
+                </div>
+            <?php endif; ?>
+
+            <div class="comments-list" style="margin-top: 2rem;">
+                <?php if (empty($comments)): ?>
+                    <div class="no-comments">
+                        <div class="no-comments-icon">📝</div>
+                        <p>Belum ada komentar. Jadilah yang pertama memberikan komentar!</p>
+                    </div>
+                <?php else: ?>
+                    <?php foreach ($comments as $comment): ?>
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <img src="<?php echo !empty($comment['foto_profil']) ? '../../foto_profil/' . htmlspecialchars($comment['foto_profil']) : 'https://via.placeholder.com/40'; ?>" alt="<?php echo htmlspecialchars($comment['nama_lengkap']); ?>" class="comment-avatar">
+                                <div class="comment-user-info">
+                                    <div class="comment-user-name"><?php echo htmlspecialchars($comment['nama_lengkap']); ?></div>
+                                    <div class="comment-date"><?php echo date('d M Y H:i', strtotime($comment['created_at'])); ?></div>
+                                </div>
+                            </div>
+
+                            <div class="comment-rating">
+                                <?php for ($i = 0; $i < $comment['rating']; $i++): ?>
+                                    <span class="star-display">★</span>
+                                <?php endfor; ?>
+                            </div>
+
+                            <div class="comment-text">
+                                <?php echo htmlspecialchars($comment['komentar']); ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </section>
     </main>
 
     <!-- FOOTER -->

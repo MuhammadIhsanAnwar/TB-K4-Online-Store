@@ -10,36 +10,73 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Ambil data keranjang dari database
-$cart_query = "SELECT k.*, p.nama, p.harga, p.foto_produk FROM keranjang k JOIN products p ON k.product_id = p.id WHERE k.user_id='$user_id'";
-$cart_result = mysqli_query($koneksi, $cart_query);
-$cart = [];
-while ($row = mysqli_fetch_assoc($cart_result)) {
-    $cart[] = $row;
-}
+// Ambil data user
+$user_query = "SELECT * FROM akun_user WHERE id='$user_id'";
+$user_result = mysqli_query($koneksi, $user_query);
+$user = mysqli_fetch_assoc($user_result);
 
-// Cek apakah keranjang kosong
-if (empty($cart)) {
+// Ambil selected products atau semua keranjang
+$selected_products = isset($_SESSION['checkout_items']) ? $_SESSION['checkout_items'] : [];
+
+if (empty($selected_products)) {
     header("Location: cart.php");
     exit;
 }
 
-// Hitung total
+// Ambil detail produk yang akan dibeli
+$placeholders = implode(',', array_map('intval', $selected_products));
+$cart_query = "SELECT k.*, p.nama, p.harga FROM keranjang k 
+               JOIN products p ON k.product_id = p.id 
+               WHERE k.user_id='$user_id' AND k.product_id IN ($placeholders)";
+$cart_result = mysqli_query($koneksi, $cart_query);
+$cart = [];
 $total = 0;
-foreach ($cart as $item) {
-    $total += $item['harga'] * $item['quantity'];
+while ($row = mysqli_fetch_assoc($cart_result)) {
+    $cart[] = $row;
+    $total += $row['harga'] * $row['quantity'];
 }
 
-// Proses checkout
-if (isset($_POST['checkout'])) {
-    // Simpan order ke database atau process pembayaran
-    // Hapus dari keranjang setelah checkout berhasil
-    $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id'";
+// Proses complete payment
+if (isset($_POST['complete_payment'])) {
+    $nama_lengkap = $user['nama_lengkap'];
+    $alamat_lengkap = $user['provinsi'] . ', ' . $user['kabupaten_kota'] . ', ' .
+        $user['kecamatan'] . ', ' . $user['kelurahan_desa'] . ', ' .
+        $user['kode_pos'] . ' - ' . $user['alamat'];
+    $nomor_hp = $user['nomor_hp'];
+    $metode_pembayaran = 'COD';
+    $kurir = mysqli_real_escape_string($koneksi, $_POST['kurir']);
+    $waktu_pemesanan = date('Y-m-d H:i:s');
+
+    // Insert setiap produk ke tabel pemesanan
+    foreach ($cart as $item) {
+        $nama_produk = mysqli_real_escape_string($koneksi, $item['nama']);
+        $quantity = $item['quantity'];
+
+        $order_query = "INSERT INTO pemesanan 
+                        (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, waktu_pemesanan)
+                        VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk', '$quantity', '$metode_pembayaran', '$kurir', '$waktu_pemesanan')";
+
+        if (!mysqli_query($koneksi, $order_query)) {
+            echo json_encode(['status' => 'error', 'message' => 'Gagal membuat pesanan: ' . mysqli_error($koneksi)]);
+            exit;
+        }
+    }
+
+    // Hapus dari keranjang setelah berhasil
+    $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id' AND product_id IN ($placeholders)";
     mysqli_query($koneksi, $delete_query);
 
-    echo "<script>alert('Pembayaran berhasil!'); window.location='../../index.php';</script>";
+    // Hapus session checkout items
+    unset($_SESSION['checkout_items']);
+
+    echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil dibuat']);
     exit;
 }
+
+// Gabungkan alamat lengkap
+$alamat_lengkap = $user['provinsi'] . ', ' . $user['kabupaten_kota'] . ', ' .
+    $user['kecamatan'] . ', ' . $user['kelurahan_desa'] . ', ' .
+    $user['kode_pos'] . ' - ' . $user['alamat'];
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +87,7 @@ if (isset($_POST['checkout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Urban Hype</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -62,81 +99,12 @@ if (isset($_POST['checkout'])) {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #EAE2E4 0%, #B7C5DA 50%, #1E5DAC 100%);
             min-height: 100vh;
-            padding-bottom: 60px;
+            padding: 2rem;
         }
 
-        /* Navbar styling with Urban Hype branding */
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1.2rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(30, 93, 172, 0.1);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1E5DAC;
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #2c3e50;
-            font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-            position: relative;
-            padding: 0.5rem 0;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #1E5DAC;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(-50%);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: #1E5DAC;
-        }
-
-        /* Checkout container with elegant card design */
         .checkout-container {
-            max-width: 900px;
-            margin: 3rem auto;
-            padding: 0 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .checkout-header {
@@ -148,392 +116,369 @@ if (isset($_POST['checkout'])) {
             font-family: 'Playfair Display', serif;
             font-size: 3rem;
             color: #fff;
-            margin-bottom: 1rem;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .checkout-header p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
         }
 
         .checkout-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: white;
             border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 40px rgba(30, 93, 172, 0.2);
-            animation: slideUp 0.6s ease-out;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Order summary section */
-        .order-summary {
-            margin-bottom: 2.5rem;
-        }
-
-        .order-summary h2 {
+        .card-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #1E5DAC;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid #E8D3C1;
+            border-bottom: 2px solid #B7C5DA;
         }
 
-        .order-items {
+        .product-list {
             margin-bottom: 2rem;
         }
 
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(183, 197, 218, 0.3);
-            transition: background 0.3s ease;
-        }
-
-        .order-item:hover {
-            background: rgba(183, 197, 218, 0.1);
-            padding-left: 1rem;
-            margin-left: -1rem;
-            padding-right: 1rem;
-            margin-right: -1rem;
-            border-radius: 8px;
-        }
-
-        .item-details {
-            flex: 1;
-        }
-
-        .item-name {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 0.3rem;
-        }
-
-        .item-qty {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-        }
-
-        .item-price {
-            font-weight: 600;
-            color: #1E5DAC;
-            font-size: 1.1rem;
-        }
-
-        .order-total {
+        .product-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 0;
-            margin-top: 1.5rem;
-            border-top: 3px solid #1E5DAC;
         }
 
-        .order-total .label {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .order-total .amount {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
+        .product-info h4 {
             color: #1E5DAC;
+            margin-bottom: 0.5rem;
         }
 
-        /* Payment form styling */
-        .payment-section {
-            margin-bottom: 2rem;
+        .product-info p {
+            color: #666;
+            font-size: 0.9rem;
         }
 
-        .payment-section h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            color: #2c3e50;
-            margin-bottom: 1rem;
+        .product-price {
+            font-weight: 600;
+            color: #1E5DAC;
+            font-size: 1.1rem;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
         }
 
-        .form-group label {
+        label {
             display: block;
+            font-weight: 600;
+            color: #1E5DAC;
             margin-bottom: 0.5rem;
-            color: #2c3e50;
-            font-weight: 500;
-            font-size: 0.95rem;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        input[type="text"],
+        textarea,
+        select {
             width: 100%;
-            padding: 1rem;
-            border: 2px solid #E8D3C1;
+            padding: 0.8rem;
+            border: 2px solid #B7C5DA;
             border-radius: 10px;
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             transition: all 0.3s ease;
-            background: #fff;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
             outline: none;
             border-color: #1E5DAC;
             box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
         }
 
-        .form-row {
+        input[type="text"]:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .kurir-options {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        /* Checkout button with premium styling */
-        .checkout-actions {
-            display: flex;
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
-            margin-top: 2rem;
         }
 
-        .btn {
-            flex: 1;
-            padding: 1.2rem 2.5rem;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #1E5DAC 0%, #2868bd 100%);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(30, 93, 172, 0.4);
-        }
-
-        .btn-secondary {
-            background: #fff;
-            color: #1E5DAC;
-            border: 2px solid #1E5DAC;
-        }
-
-        .btn-secondary:hover {
-            background: #1E5DAC;
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(30, 93, 172, 0.3);
-        }
-
-        /* Security badge */
-        .security-badge {
-            text-align: center;
-            margin-top: 2rem;
+        .kurir-option {
             padding: 1rem;
-            background: rgba(30, 93, 172, 0.05);
+            border: 2px solid #B7C5DA;
             border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
         }
 
-        .security-badge p {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin: 0;
+        .kurir-option:hover {
+            border-color: #1E5DAC;
+            background: rgba(30, 93, 172, 0.05);
         }
 
-        /* Responsive design */
+        .kurir-option input[type="radio"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .order-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1E5DAC;
+            padding-top: 1rem;
+            border-top: 2px solid #1E5DAC;
+        }
+
+        .btn-complete {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1E5DAC 0%, #164a8a 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .btn-complete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 93, 172, 0.3);
+        }
+
+        .btn-complete:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         @media (max-width: 768px) {
-            .nav-links {
-                gap: 1.5rem;
-            }
-
-            .checkout-header h1 {
-                font-size: 2rem;
-            }
-
-            .checkout-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .form-row {
+            .checkout-content {
                 grid-template-columns: 1fr;
             }
 
-            .checkout-actions {
-                flex-direction: column-reverse;
-            }
-
-            .order-total .label {
-                font-size: 1.2rem;
-            }
-
-            .order-total .amount {
-                font-size: 1.6rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav-container {
-                padding: 0 1rem;
-            }
-
-            .logo {
-                font-size: 1.4rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-                font-size: 0.85rem;
-            }
-
-            .checkout-container {
-                padding: 0 1rem;
+            .kurir-options {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Navbar with Urban Hype branding -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.php" class="logo">URBAN HYPE</a>
-            <ul class="nav-links">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="cart.php">Cart</a></li>
-                <li><a href="checkout.php">Checkout</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Checkout content with elegant card design -->
     <div class="checkout-container">
         <div class="checkout-header">
-            <h1>Secure Checkout</h1>
-            <p>Complete your order with confidence</p>
+            <h1>🛒 Checkout</h1>
+            <p>Selesaikan pemesanan Anda</p>
         </div>
 
-        <div class="checkout-card">
-            <!-- Order summary section -->
-            <div class="order-summary">
-                <h2>Order Summary</h2>
-                <div class="order-items">
-                    <?php foreach ($cart as $item): ?>
-                        <div class="order-item">
-                            <div class="item-details">
-                                <div class="item-name"><?php echo htmlspecialchars($item['nama']); ?></div>
-
-                                <div class="item-qty">
-                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                        <button type="button" class="qty-btn" onclick="updateQty(this, -1)">−</button>
-                                        <input type="number" class="qty-input" value="<?php echo $item['qty']; ?>" min="1" data-product="<?php echo $item['id']; ?>" onchange="updateQuantity(this)">
-                                        <button type="button" class="qty-btn" onclick="updateQty(this, 1)">+</button>
-                                    </div>
+        <div class="checkout-content">
+            <!-- LEFT SIDE: Order Details -->
+            <form id="checkoutForm">
+                <!-- ORDER SUMMARY -->
+                <div class="checkout-card">
+                    <h3 class="card-title">Produk yang Dipesan</h3>
+                    <div class="product-list">
+                        <?php foreach ($cart as $item): ?>
+                            <div class="product-item">
+                                <div class="product-info">
+                                    <h4><?php echo htmlspecialchars($item['nama']); ?></h4>
+                                    <p>Qty: <?php echo $item['quantity']; ?> × Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></p>
                                 </div>
-
-                                <div class="item-price">
-                                    $<?php echo number_format($item['harga'] * $item['qty'], 2); ?>
+                                <div class="product-price">
+                                    Rp <?php echo number_format($item['harga'] * $item['quantity'], 0, ',', '.'); ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                        </div>
-                        <div class="order-total">
-                            <span class="label">Total Amount:</span>
-                            <span class="amount">$<?php echo number_format($total, 2); ?></span>
-                        </div>
+                    </div>
                 </div>
 
-                <!-- Payment form section -->
-                <form method="POST">
-                    <div class="payment-section">
-                        <h3>Shipping Information</h3>
-                        <div class="form-group">
-                            <label for="fullname">Full Name</label>
-                            <input type="text" id="fullname" name="fullname" required>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Shipping Address</label>
-                            <textarea id="address" name="address" rows="3" required></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <input type="text" id="city" name="city" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="zipcode">ZIP Code</label>
-                                <input type="text" id="zipcode" name="zipcode" required>
-                            </div>
-                        </div>
+                <!-- SHIPPING INFORMATION -->
+                <div class="checkout-card">
+                    <h3 class="card-title">Informasi Pengiriman</h3>
+
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" value="<?php echo htmlspecialchars($user['nama_lengkap']); ?>" disabled>
                     </div>
 
-                    <div class="payment-section">
-                        <h3>Payment Method</h3>
-                        <div class="form-group">
-                            <label for="payment">Select Payment Method</label>
-                            <select id="payment" name="payment" required>
-                                <option value="">Choose payment method</option>
-                                <option value="credit">Credit Card</option>
-                                <option value="debit">Debit Card</option>
-                                <option value="paypal">PayPal</option>
-                                <option value="bank">Bank Transfer</option>
-                            </select>
+                    <div class="form-group">
+                        <label>Alamat Lengkap</label>
+                        <textarea disabled><?php echo htmlspecialchars($alamat_lengkap); ?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nomor HP</label>
+                        <input type="text" value="<?php echo htmlspecialchars($user['nomor_hp']); ?>" disabled>
+                    </div>
+                </div>
+
+                <!-- PAYMENT METHOD -->
+                <div class="checkout-card">
+                    <h3 class="card-title">Metode Pembayaran</h3>
+                    <div class="form-group">
+                        <label>Pilih Metode Pembayaran</label>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; text-align: center;">
+                            <input type="radio" name="payment_method" value="COD" checked disabled>
+                            <label style="display: inline; margin-left: 0.5rem; font-weight: 600;">💵 Cash on Delivery (COD)</label>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Action buttons -->
-                    <div class="checkout-actions">
-                        <a href="cart.php" class="btn btn-secondary">Back to Cart</a>
-                        <button type="submit" name="checkout" class="btn btn-primary">Complete Payment</button>
+                <!-- COURIER SELECTION -->
+                <div class="checkout-card">
+                    <h3 class="card-title">Pilih Kurir Pengiriman</h3>
+                    <div class="kurir-options">
+                        <label class="kurir-option">
+                            <input type="radio" name="kurir" value="JNE" required>
+                            <div>📦 JNE</div>
+                        </label>
+                        <label class="kurir-option">
+                            <input type="radio" name="kurir" value="JNT" required>
+                            <div>📦 JNT</div>
+                        </label>
+                        <label class="kurir-option">
+                            <input type="radio" name="kurir" value="ID Express" required>
+                            <div>📦 ID Express</div>
+                        </label>
+                        <label class="kurir-option">
+                            <input type="radio" name="kurir" value="Si Cepat" required>
+                            <div>📦 Si Cepat</div>
+                        </label>
+                        <label class="kurir-option">
+                            <input type="radio" name="kurir" value="Pos Indonesia" required>
+                            <div>📦 Pos Indonesia</div>
+                        </label>
                     </div>
+                </div>
+            </form>
 
-                    <!-- Security badge -->
-                    <div class="security-badge">
-                        <p>🔒 Your payment information is secure and encrypted</p>
+            <!-- RIGHT SIDE: Order Summary -->
+            <div class="order-summary">
+                <h3 class="card-title">Ringkasan Pesanan</h3>
+
+                <?php foreach ($cart as $item): ?>
+                    <div class="summary-item">
+                        <span><?php echo htmlspecialchars($item['nama']); ?> (×<?php echo $item['quantity']; ?>)</span>
+                        <span>Rp <?php echo number_format($item['harga'] * $item['quantity'], 0, ',', '.'); ?></span>
                     </div>
-                </form>
+                <?php endforeach; ?>
+
+                <div class="summary-total">
+                    <span>Total:</span>
+                    <span>Rp <?php echo number_format($total, 0, ',', '.'); ?></span>
+                </div>
+
+                <button type="button" class="btn-complete" onclick="completePayment()">
+                    ✓ Selesaikan Pesanan
+                </button>
             </div>
         </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script>
+        function completePayment() {
+            const kurir = document.querySelector('input[name="kurir"]:checked');
+
+            if (!kurir) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Pilih Kurir',
+                    text: 'Silakan pilih kurir pengiriman terlebih dahulu',
+                    confirmButtonColor: '#1E5DAC'
+                });
+                return;
+            }
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Konfirmasi Pesanan',
+                text: 'Pesanan tidak bisa dibatalkan setelah dikonfirmasi. Lanjutkan?',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Lanjutkan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#1E5DAC',
+                cancelButtonColor: '#dc3545'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitOrder();
+                }
+            });
+        }
+
+        function submitOrder() {
+            const formData = new FormData(document.getElementById('checkoutForm'));
+            formData.append('complete_payment', '1');
+
+            fetch('checkout.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pesanan Berhasil!',
+                            text: 'Pesanan Anda telah dibuat. Terima kasih telah berbelanja!',
+                            confirmButtonColor: '#1E5DAC'
+                        }).then(() => {
+                            window.location.href = '../../index.php';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: data.message,
+                            confirmButtonColor: '#1E5DAC'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan pada sistem',
+                        confirmButtonColor: '#1E5DAC'
+                    });
+                });
+        }
+    </script>
 </body>
 
 </html>

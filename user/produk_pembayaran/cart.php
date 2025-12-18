@@ -44,6 +44,20 @@ if (isset($_POST['remove'])) {
     exit;
 }
 
+// Proses checkout (hanya produk yang dipilih)
+if (isset($_POST['checkout_selected'])) {
+    $selected_products = isset($_POST['selected_products']) ? $_POST['selected_products'] : [];
+
+    if (empty($selected_products)) {
+        $error_msg = "Pilih minimal satu produk untuk checkout!";
+    } else {
+        // Simpan selected products ke session untuk dibawa ke halaman checkout
+        $_SESSION['checkout_items'] = $selected_products;
+        header("Location: checkout.php");
+        exit;
+    }
+}
+
 // Ambil data keranjang dari database
 $cart_query = "SELECT k.*, p.nama, p.harga, p.foto_produk, p.stok FROM keranjang k JOIN products p ON k.product_id = p.id WHERE k.user_id='$user_id'";
 $cart_result = mysqli_query($koneksi, $cart_query);
@@ -443,6 +457,9 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                             $total += $subtotal;
                         ?>
                             <tr>
+                                <td>
+                                    <input type="checkbox" name="selected_products[]" value="<?php echo $item['product_id']; ?>" class="product-checkbox">
+                                </td>
                                 <td class="product-name"><?php echo htmlspecialchars($item['nama']); ?></td>
                                 <td class="price">Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></td>
                                 <td>
@@ -460,10 +477,11 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                                         <button type="submit" name="remove" class="remove-btn">Remove</button>
                                     </form>
                                 </td>
-                            </tr> <?php endforeach; ?>
+                            </tr>
+                        <?php endforeach; ?>
                         <tr class="total-row">
-                            <td colspan="3" style="text-align: right;">Total</td>
-                            <td colspan="2">Rp <?php echo number_format($total, 0, ',', '.'); ?></td>
+                            <td colspan="2" style="text-align: right;">Total</td>
+                            <td colspan="4">Rp <span id="totalPrice"><?php echo number_format($total, 0, ',', '.'); ?></span></td>
                         </tr>
                     </tbody>
                 </table>

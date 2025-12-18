@@ -245,8 +245,7 @@ session_start();
                 <!-- USERNAME -->
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($_SESSION['form_data']['username']) ? htmlspecialchars($_SESSION['form_data']['username']) : ''; ?>" required pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 karakter, hanya huruf, angka, underscore">
-                    <small id="usernameStatus" class="text-muted"></small>
+                    <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($_SESSION['form_data']['username']) ? htmlspecialchars($_SESSION['form_data']['username']) : ''; ?>" required pattern="^[a-zA-Z0-9_]{8,20}$" title="8-20 karakter, hanya huruf, angka, underscore"></small>
                 </div>
 
                 <script>
@@ -381,7 +380,7 @@ session_start();
                         }
                     });
                 </script>
-                
+
                 <!-- EMAIL -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>

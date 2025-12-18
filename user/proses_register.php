@@ -22,6 +22,7 @@ $kode_pos       = $_POST['kode_pos'];
 
 $alamat         = ucwords(strtolower($_POST['alamat']));
 $email          = $_POST['email'];
+$nomor_hp       = preg_replace('/[^0-9]/', '', $_POST['nomor_hp']); // Hapus karakter non-digit
 
 $password       = $_POST['password'];
 $confirm        = $_POST['password_confirm'];
@@ -38,7 +39,8 @@ $_SESSION['form_data'] = [
     'kelurahan_desa' => $_POST['kelurahan_desa'],
     'kode_pos'       => $kode_pos,
     'alamat'         => $_POST['alamat'],
-    'email'          => $email
+    'email'          => $email,
+    'nomor_hp'       => $_POST['nomor_hp']
 ];
 
 // === VALIDASI USERNAME DAN EMAIL BELUM TERDAFTAR ===
@@ -93,9 +95,9 @@ $token = bin2hex(random_bytes(20));
 
 // INSERT DATA
 $query = "INSERT INTO akun_user 
-(username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, password, foto_profil, status, token)
+(username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, nomor_hp, password, foto_profil, status, token)
 VALUES 
-('$username', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$provinsi', '$kabupaten_kota', '$kecamatan', '$kelurahan_desa', '$kode_pos', '$alamat', '$email', '$hash', '$foto_nama', '0', '$token')";
+('$username', '$nama_lengkap', '$jenis_kelamin', '$tanggal_lahir', '$provinsi', '$kabupaten_kota', '$kecamatan', '$kelurahan_desa', '$kode_pos', '$alamat', '$email', '$nomor_hp', '$hash', '$foto_nama', '0', '$token')";
 
 if (!mysqli_query($koneksi, $query)) {
     showAlert('error', 'Error: ' . mysqli_error($koneksi), 'register.php');
