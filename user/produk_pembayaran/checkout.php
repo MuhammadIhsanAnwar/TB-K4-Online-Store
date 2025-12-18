@@ -38,28 +38,46 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
 
 // Proses complete payment
 if (isset($_POST['complete_payment'])) {
-    $nama_lengkap = $user['nama_lengkap'];
-    $alamat_lengkap = $user['provinsi'] . ', ' . $user['kabupaten_kota'] . ', ' .
-        $user['kecamatan'] . ', ' . $user['kelurahan_desa'] . ', ' .
-        $user['kode_pos'] . ' - ' . $user['alamat'];
-    $nomor_hp = $user['nomor_hp'];
+    $nama_lengkap = mysqli_real_escape_string($koneksi, $user['nama_lengkap']);
+
+    // Gabungkan alamat dengan urutan: alamat, kelurahan_desa, kecamatan, kabupaten_kota, provinsi, kode_pos
+    $alamat_lengkap = mysqli_real_escape_string(
+        $koneksi,
+        $user['alamat'] . ', ' .
+            $user['kelurahan_desa'] . ', ' .
+            $user['kecamatan'] . ', ' .
+            $user['kabupaten_kota'] . ', ' .
+            $user['provinsi'] . ', ' .
+            $user['kode_pos']
+    );
+
+    $nomor_hp = mysqli_real_escape_string($koneksi, $user['nomor_hp']);
     $metode_pembayaran = 'COD';
     $kurir = mysqli_real_escape_string($koneksi, $_POST['kurir']);
     $waktu_pemesanan = date('Y-m-d H:i:s');
 
-    // Insert setiap produk ke tabel pemesanan
+    // Gabungkan semua nama produk dengan koma
+    $nama_produk_array = [];
     foreach ($cart as $item) {
-        $nama_produk = mysqli_real_escape_string($koneksi, $item['nama']);
-        $quantity = $item['quantity'];
+        $nama_produk_array[] = $item['nama'];
+    }
+    $nama_produk_gabung = mysqli_real_escape_string($koneksi, implode(', ', $nama_produk_array));
 
-        $order_query = "INSERT INTO pemesanan 
-                        (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, waktu_pemesanan)
-                        VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk', '$quantity', '$metode_pembayaran', '$kurir', '$waktu_pemesanan')";
+    // Gabungkan semua quantity dengan koma
+    $quantity_array = [];
+    foreach ($cart as $item) {
+        $quantity_array[] = $item['quantity'];
+    }
+    $quantity_gabung = implode(', ', $quantity_array);
 
-        if (!mysqli_query($koneksi, $order_query)) {
-            echo json_encode(['status' => 'error', 'message' => 'Gagal membuat pesanan: ' . mysqli_error($koneksi)]);
-            exit;
-        }
+    // Insert 1 baris ke tabel pemesanan dengan produk yang digabung
+    $order_query = "INSERT INTO pemesanan 
+                    (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, waktu_pemesanan)
+                    VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$waktu_pemesanan')";
+
+    if (!mysqli_query($koneksi, $order_query)) {
+        echo json_encode(['status' => 'error', 'message' => 'Gagal membuat pesanan: ' . mysqli_error($koneksi)]);
+        exit;
     }
 
     // Hapus dari keranjang setelah berhasil
@@ -73,10 +91,13 @@ if (isset($_POST['complete_payment'])) {
     exit;
 }
 
-// Gabungkan alamat lengkap
-$alamat_lengkap = $user['provinsi'] . ', ' . $user['kabupaten_kota'] . ', ' .
-    $user['kecamatan'] . ', ' . $user['kelurahan_desa'] . ', ' .
-    $user['kode_pos'] . ' - ' . $user['alamat'];
+// Gabungkan alamat lengkap dengan urutan: alamat, kelurahan_desa, kecamatan, kabupaten_kota, provinsi, kode_pos
+$alamat_lengkap = $user['alamat'] . ', ' .
+    $user['kelurahan_desa'] . ', ' .
+    $user['kecamatan'] . ', ' .
+    $user['kabupaten_kota'] . ', ' .
+    $user['provinsi'] . ', ' .
+    $user['kode_pos'];
 ?>
 
 <!DOCTYPE html>
