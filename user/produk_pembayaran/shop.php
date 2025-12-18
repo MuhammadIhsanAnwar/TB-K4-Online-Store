@@ -385,7 +385,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="products-grid">
                 <?php foreach ($products as $product): ?>
                     <div class="product-card" onclick="openProductDetail(<?php echo $product['id']; ?>)">
-                        <img src="foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>"
+                        <img src="../../foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>"
                             alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image">
                         <div class="product-info">
                             <span class="product-kategori"><?php echo htmlspecialchars($product['kategori']); ?></span>
