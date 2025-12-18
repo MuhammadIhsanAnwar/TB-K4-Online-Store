@@ -269,34 +269,41 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
                             <td><?= $no++ ?></td>
                             <td><?= htmlspecialchars($row['nama']) ?></td>
                             <td><?= htmlspecialchars($row['email']) ?></td>
-<td><?= nl2br(htmlspecialchars($row['pesan'])) ?></td>
-<td>
-    <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
-        <!-- Tombol Balas Pesan -->
-        <a href="balas_pesan.php?id=<?= $row['id'] ?>&email=<?= urlencode($row['email']) ?>&nama=<?= urlencode($row['nama']) ?>" 
-           class="btn btn-sm btn-primary" 
-           title="Balas Pesan"
-           style="text-decoration: none;">
-            <i class="bi bi-reply"></i> Balas
-        </a>
+                            <td><?= nl2br(htmlspecialchars($row['pesan'])) ?></td>
+                            <td>
+                                <?php if ($row['status'] == 'baru'): ?>
+                                    <span class="badge-baru">Baru</span>
+                                <?php else: ?>
+                                    <span class="badge-dibaca">Dibaca</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
+                                    <!-- Tombol Balas Pesan -->
+                                    <a href="balas_pesan.php?id=<?= $row['id'] ?>&email=<?= urlencode($row['email']) ?>&nama=<?= urlencode($row['nama']) ?>"
+                                        class="btn btn-sm btn-primary"
+                                        title="Balas Pesan"
+                                        style="text-decoration: none;">
+                                        <i class="bi bi-reply"></i> Balas
+                                    </a>
 
-        <!-- Tombol Tandai Dibaca -->
-        <?php if ($row['status'] == 'baru'): ?>
-            <button class="btn btn-sm btn-info"
-                onclick="tandaiDibaca(<?= $row['id'] ?>)"
-                title="Tandai Dibaca">
-                <i class="bi bi-check2-circle"></i> Dibaca
-            </button>
-        <?php endif; ?>
+                                    <!-- Tombol Tandai Dibaca -->
+                                    <?php if ($row['status'] == 'baru'): ?>
+                                        <button class="btn btn-sm btn-info"
+                                            onclick="tandaiDibaca(<?= $row['id'] ?>)"
+                                            title="Tandai Dibaca">
+                                            <i class="bi bi-check2-circle"></i> Dibaca
+                                        </button>
+                                    <?php endif; ?>
 
-        <!-- Tombol Hapus -->
-        <button class="btn btn-sm btn-danger"
-            onclick="hapusPesan(<?= $row['id'] ?>)"
-            title="Hapus Pesan">
-            <i class="bi bi-trash"></i> Hapus
-        </button>
-    </div>
-</td>
+                                    <!-- Tombol Hapus -->
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="hapusPesan(<?= $row['id'] ?>)"
+                                        title="Hapus Pesan">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
