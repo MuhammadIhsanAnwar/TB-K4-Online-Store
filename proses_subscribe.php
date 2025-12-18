@@ -48,7 +48,7 @@ try {
     $mail->isSMTP();
     $mail->Host = 'urbanhype.neoverse.my.id';                    // GANTI: Sesuai domain Anda
     $mail->SMTPAuth = true;
-    $mail->Username = 'mailreset@urbanhype.neoverse.my.id';       // GANTI: Email sender
+    $mail->Username = 'newslater@urbanhype.neoverse.my.id';       // GANTI: Email sender
     $mail->Password = 'administrator-online-store';               // GANTI: Email password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = 465;
@@ -63,9 +63,9 @@ try {
     ];
 
     // ============ RECIPIENTS ============
-    $mail->setFrom('mailreset@urbanhype.neoverse.my.id', 'URBANHYPE Newsletter');
+    $mail->setFrom('newslater@urbanhype.neoverse.my.id', 'URBANHYPE Newsletter');
     $mail->addAddress($email);
-    $mail->addReplyTo('mailreset@urbanhype.neoverse.my.id', 'URBANHYPE Support');
+    $mail->addReplyTo('newslater@urbanhype.neoverse.my.id', 'URBANHYPE Support');
 
     // ============ EMAIL CONTENT ============
     $mail->isHTML(true);
