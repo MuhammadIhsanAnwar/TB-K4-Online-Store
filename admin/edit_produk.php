@@ -145,7 +145,85 @@ if (isset($_POST['update'])) {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, var(--misty) 0%, #f5f5f5 100%);
             min-height: 100vh;
+            margin: 0;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e63b6, #0f3f82);
+            padding: 18px 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .logo-box {
+            text-align: center;
+            padding: 10px 0 18px;
+        }
+
+        .logo-box img {
+            width: 72px;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
+            transition: .3s ease;
+        }
+
+        .logo-box img:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-title {
+            color: #dbe6ff;
+            font-size: 13px;
+            padding: 8px 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 10px;
+            transition: .25s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, .18);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, .32);
+            font-weight: 600;
+        }
+
+        .sidebar .logout {
+            margin-top: auto;
+            background: rgba(255, 80, 80, .15);
+            color: #ffd6d6 !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 14px;
+            transition: .3s ease;
+            margin-bottom: 12px;
+        }
+
+        .sidebar .logout:hover {
+            background: #ff4d4d;
+            color: #fff !important;
+            box-shadow: 0 10px 25px rgba(255, 77, 77, .6);
+            transform: translateY(-2px);
+        }
+
+        /* ================= CONTENT ================= */
+        .content {
+            margin-left: 220px;
             padding: 30px 20px;
+            min-height: 100vh;
         }
 
         .container {
@@ -394,8 +472,10 @@ if (isset($_POST['update'])) {
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.92);
             animation: fadeIn 0.3s ease-out;
+            padding: 20px;
+            overflow-y: auto;
         }
 
         .cropper-modal.show {
@@ -415,68 +495,134 @@ if (isset($_POST['update'])) {
         }
 
         .cropper-container-wrapper {
-            background: white;
+            background: #ffffff;
             border-radius: 20px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease-out;
         }
 
         .cropper-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 2rem;
+            font-weight: 700;
             color: var(--blue);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             text-align: center;
         }
 
         .cropper-wrapper {
             width: 100%;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #ffffff;
+            border: 3px solid #e0e0e0;
+            position: relative;
+            min-height: 350px;
+            max-height: 500px;
         }
 
         .cropper-wrapper img {
-            max-width: 100%;
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            object-fit: contain !important;
+            background: white !important;
+        }
+
+        /* Pastikan Cropper.js tidak transparan */
+        .cropper-canvas {
+            background: white !important;
+            opacity: 1 !important;
+        }
+
+        .cropper-container {
+            background: white !important;
+        }
+
+        .cropper-crop-box {
+            opacity: 1 !important;
+        }
+
+        .cropper-crop-box .cropper-face {
+            background: rgba(30, 93, 172, 0.15) !important;
+            opacity: 1 !important;
+        }
+
+        .cropper-crop-box .cropper-line {
+            border-color: var(--blue) !important;
+            opacity: 1 !important;
+        }
+
+        .cropper-crop-box .cropper-point {
+            background: var(--blue) !important;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--blue) !important;
+            width: 12px !important;
+            height: 12px !important;
+            opacity: 1 !important;
+        }
+
+        .cropper-center {
+            background: var(--blue) !important;
+            opacity: 1 !important;
+        }
+
+        .cropper-grid {
+            border-color: rgba(30, 93, 172, 0.6) !important;
+            opacity: 1 !important;
         }
 
         .cropper-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 1.5rem;
+            width: 100%;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 24px;
             border: none;
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
         }
 
         .btn-crop {
-            background: linear-gradient(135deg, var(--blue), var(--alley));
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.3);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
         .btn-crop:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(30, 93, 172, 0.4);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-crop:active {
+            transform: translateY(0);
         }
 
         .btn-cancel {
-            background: var(--misty);
+            background: white;
             color: var(--blue);
-            border: 2px solid var(--alley);
+            border: 2px solid var(--blue);
         }
 
         .btn-cancel:hover {
-            background: var(--alley);
+            background: var(--blue);
             color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel:active {
+            transform: translateY(0);
         }
 
         /* FORM BUTTONS */
@@ -554,7 +700,36 @@ if (isset($_POST['update'])) {
             margin-top: 0.5rem;
         }
 
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .content {
+                margin-left: 200px;
+            }
+
+            .cropper-container-wrapper {
+                padding: 2rem;
+                max-width: 90%;
+            }
+
+            .cropper-wrapper {
+                min-height: 320px;
+                max-height: 450px;
+            }
+        }
+
         @media (max-width: 768px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .content {
+                margin-left: 180px;
+                padding: 20px 15px;
+            }
+
             .form-card {
                 padding: 1.5rem;
             }
@@ -571,164 +746,253 @@ if (isset($_POST['update'])) {
                 font-size: 2rem;
             }
 
+            .cropper-modal {
+                padding: 15px;
+            }
+
             .cropper-container-wrapper {
-                width: 95%;
                 padding: 1.5rem;
+                max-width: 100%;
+                border-radius: 15px;
+            }
+
+            .cropper-title {
+                font-size: 1.4rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .cropper-wrapper {
+                min-height: 280px;
+                max-height: 400px;
+                border-radius: 10px;
+                margin-bottom: 1.5rem;
+            }
+
+            .cropper-buttons {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 160px;
+            }
+
+            .content {
+                margin-left: 160px;
+                padding: 15px 10px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .logo-box img {
+                width: 60px;
+            }
+
+            .menu-title {
+                font-size: 11px;
+            }
+
+            .sidebar a {
+                padding: 10px 15px;
+                margin: 3px 8px;
+                font-size: 0.9rem;
+            }
+
+            .form-card {
+                padding: 1rem;
+            }
+
+            .cropper-modal {
+                padding: 10px;
+            }
+
+            .cropper-container-wrapper {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            .cropper-title {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .cropper-wrapper {
+                min-height: 250px;
+                max-height: 350px;
+                margin-bottom: 1rem;
+                border: 2px solid #e0e0e0;
+            }
+
+            .cropper-buttons {
+                gap: 0.75rem;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <nav class="breadcrumb">
-            <a class="breadcrumb-item" href="dashboard.php">Dashboard</a>
-            <a class="breadcrumb-item" href="data_produk.php">Data Produk</a>
-            <span class="breadcrumb-item active">Edit Produk</span>
-        </nav>
+    <?php include 'sidebar.php'; ?>
 
-        <h1 class="page-title">✏️ Edit Produk</h1>
+    <div class="content">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a class="breadcrumb-item" href="dashboard.php">Dashboard</a>
+                <a class="breadcrumb-item" href="data_produk.php">Data Produk</a>
+                <span class="breadcrumb-item active">Edit Produk</span>
+            </nav>
 
-        <?php if ($success): ?>
-            <div class="alert alert-success">
-                ✅ Produk berhasil diperbarui!
-            </div>
-        <?php elseif (!empty($error_msg)): ?>
-            <div class="alert alert-danger">
-                <?php echo $error_msg; ?>
-            </div>
-        <?php endif; ?>
+            <h1 class="page-title">✏️ Edit Produk</h1>
 
-        <div class="form-card">
-            <form method="POST" id="formEditProduk">
-                <!-- ID (READONLY) -->
-                <div class="form-section">
-                    <h3 class="section-title">📋 Informasi Dasar</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="id">ID Produk</label>
-                            <input type="text" id="id" value="<?php echo htmlspecialchars($product['id']); ?>" disabled class="readonly-field">
-                            <div class="info-text">ID produk tidak dapat diubah</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="kategori">Kategori Produk *</label>
-                            <select id="kategori" name="kategori" required>
-                                <option value="">-- Pilih Kategori --</option>
-                                <option value="Men" <?php echo $product['kategori'] === 'Men' ? 'selected' : ''; ?>>Men</option>
-                                <option value="Women" <?php echo $product['kategori'] === 'Women' ? 'selected' : ''; ?>>Women</option>
-                                <option value="Shoes" <?php echo $product['kategori'] === 'Shoes' ? 'selected' : ''; ?>>Shoes</option>
-                                <option value="Accessories" <?php echo $product['kategori'] === 'Accessories' ? 'selected' : ''; ?>>Accessories</option>
-                            </select>
-                            <div class="info-text">Pilih kategori yang sesuai untuk produk</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="nama">Nama Produk *</label>
-                            <input type="text" id="nama" name="nama" placeholder="Nama produk" 
-                                   value="<?php echo htmlspecialchars($product['nama']); ?>" required>
-                            <div class="info-text">Nama produk harus unik</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="merk">Merk Produk *</label>
-                            <input type="text" id="merk" name="merk" placeholder="Merk atau brand" 
-                                   value="<?php echo htmlspecialchars($product['merk']); ?>" required>
-                            <div class="info-text">Masukkan merk atau brand resmi</div>
-                        </div>
-                    </div>
+            <?php if ($success): ?>
+                <div class="alert alert-success">
+                    ✅ Produk berhasil diperbarui!
                 </div>
+            <?php elseif (!empty($error_msg)): ?>
+                <div class="alert alert-danger">
+                    <?php echo $error_msg; ?>
+                </div>
+            <?php endif; ?>
 
-                <!-- DESKRIPSI & HARGA -->
-                <div class="form-section">
-                    <h3 class="section-title">💬 Detail Produk</h3>
+            <div class="form-card">
+                <form method="POST" id="formEditProduk">
+                    <!-- KATEGORI & NAMA -->
+                    <div class="form-section">
+                        <h3 class="section-title">📋 Informasi Dasar</h3>
 
-                    <div class="form-group">
-                        <label for="deskripsi">Deskripsi Produk *</label>
-                        <textarea id="deskripsi" name="deskripsi" placeholder="Jelaskan spesifikasi produk..." required><?php echo htmlspecialchars($product['deskripsi']); ?></textarea>
-                        <div class="info-text">Deskripsi yang detail membantu pelanggan memahami produk</div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="harga">Harga Produk (Rp) *</label>
-                            <div class="price-input-wrapper">
-                                <span class="currency-symbol">Rp</span>
-                                <input type="number" id="harga" name="harga" placeholder="Harga produk" 
-                                       value="<?php echo htmlspecialchars($product['harga']); ?>" min="1" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="kategori">Kategori Produk *</label>
+                                <select id="kategori" name="kategori" required>
+                                    <option value="">-- Pilih Kategori --</option>
+                                    <option value="Men" <?php echo $product['kategori'] === 'Men' ? 'selected' : ''; ?>>Men</option>
+                                    <option value="Women" <?php echo $product['kategori'] === 'Women' ? 'selected' : ''; ?>>Women</option>
+                                    <option value="Shoes" <?php echo $product['kategori'] === 'Shoes' ? 'selected' : ''; ?>>Shoes</option>
+                                    <option value="Accessories" <?php echo $product['kategori'] === 'Accessories' ? 'selected' : ''; ?>>Accessories</option>
+                                </select>
+                                <div class="info-text">Pilih kategori yang sesuai untuk produk</div>
                             </div>
-                            <div class="info-text">Harga produk dalam rupiah</div>
+
+                            <div class="form-group">
+                                <label for="nama">Nama Produk *</label>
+                                <input type="text" id="nama" name="nama" placeholder="Contoh: T-Shirt Premium Cotton" 
+                                       value="<?php echo htmlspecialchars($product['nama']); ?>" required>
+                                <div class="info-text">Nama produk harus unik dan tidak boleh sama dengan yang lain</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="merk">Merk Produk *</label>
+                                <input type="text" id="merk" name="merk" placeholder="Contoh: Urban Hype, Nike, Adidas" 
+                                       value="<?php echo htmlspecialchars($product['merk']); ?>" required>
+                                <div class="info-text">Masukkan merk atau brand resmi produk</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stok">Stok Produk *</label>
+                                <input type="number" id="stok" name="stok" placeholder="Contoh: 50" 
+                                       value="<?php echo $product['stok']; ?>" min="0" required>
+                                <div class="info-text">Jumlah stok barang yang tersedia</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DESKRIPSI & HARGA -->
+                    <div class="form-section">
+                        <h3 class="section-title">💬 Detail Produk</h3>
+
+                        <div class="form-group">
+                            <label for="deskripsi">Deskripsi Produk *</label>
+                            <textarea id="deskripsi" name="deskripsi" placeholder="Jelaskan spesifikasi, fitur, dan keunggulan produk..." required><?php echo htmlspecialchars($product['deskripsi']); ?></textarea>
+                            <div class="info-text">Deskripsi yang detail membantu pelanggan memahami produk dengan lebih baik</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="harga">Harga Produk (Rp) *</label>
+                                <div class="price-input-wrapper">
+                                    <span class="currency-symbol">Rp</span>
+                                    <input type="number" id="harga" name="harga" placeholder="Contoh: 150000" 
+                                           value="<?php echo $product['harga']; ?>" min="1" required>
+                                </div>
+                                <div class="info-text">Harga produk dalam rupiah (tanpa titik/koma)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FOTO PRODUK -->
+                    <div class="form-section">
+                        <h3 class="section-title">📸 Foto Produk</h3>
+
+                        <div class="form-group">
+                            <label>Foto Saat Ini:</label>
+                            <div class="foto-preview show" style="margin-bottom: 1.5rem;">
+                                <img src="../foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" alt="<?php echo htmlspecialchars($product['nama']); ?>">
+                            </div>
+                        </div>
+
+                        <div class="foto-section" id="fotoSection">
+                            <div class="foto-preview" id="fotoPreview">
+                                <img id="previewImage" src="" alt="Foto Produk">
+                            </div>
+
+                            <div class="foto-input-wrapper">
+                                <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/jpg">
+                                <label for="fotoInput" class="file-input-label">
+                                    🖼️ Ganti Foto Produk
+                                </label>
+                            </div>
+
+                            <div class="foto-info">
+                                Format: JPG, JPEG, PNG | Ukuran max: 5MB | Akan dicrop menjadi square (1:1)
+                            </div>
+
+                            <input type="hidden" id="fotoData" name="foto_data">
+                        </div>
+                    </div>
+
+                    <!-- INFORMASI TAMBAHAN -->
+                    <div class="form-section">
+                        <h3 class="section-title">📝 Informasi Tambahan</h3>
+
+                        <div class="form-group">
+                            <label>ID Produk:</label>
+                            <input type="text" value="<?php echo $product['id']; ?>" disabled class="readonly-field">
                         </div>
 
                         <div class="form-group">
-                            <label for="stok">Stok Produk *</label>
-                            <input type="number" id="stok" name="stok" placeholder="Jumlah stok" 
-                                   value="<?php echo htmlspecialchars($product['stok']); ?>" min="0" required>
-                            <div class="info-text">Jumlah stok barang yang tersedia</div>
+                            <label>Tanggal Dibuat:</label>
+                            <div class="created-at-info">
+                                <?php echo date('d/m/Y H:i', strtotime($product['created_at'])); ?>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- TANGGAL PUBLISH (READONLY) -->
-                <div class="form-section">
-                    <h3 class="section-title">📅 Tanggal</h3>
-
-                    <div class="form-group">
-                        <label for="created_at">Tanggal Publish</label>
-                        <input type="text" id="created_at" 
-                               value="<?php echo date('d/m/Y H:i:s', strtotime($product['created_at'])); ?>" 
-                               disabled class="readonly-field">
-                        <div class="created-at-info">📌 Tanggal publish tidak dapat diubah. Data ini bersifat otomatis dan permanen.</div>
+                    <!-- FORM BUTTONS -->
+                    <div class="form-actions">
+                        <button type="submit" name="update" class="btn btn-submit">
+                            ✅ Update Produk
+                        </button>
+                        <a href="data_produk.php" class="btn btn-cancel-form" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                            ❌ Batal
+                        </a>
                     </div>
-                </div>
-
-                <!-- FOTO PRODUK -->
-                <div class="form-section">
-                    <h3 class="section-title">📸 Foto Produk</h3>
-
-                    <!-- Preview Foto Saat Ini -->
-                    <?php if (!empty($product['foto_produk']) && file_exists("../foto_produk/" . $product['foto_produk'])): ?>
-                        <div style="margin-bottom: 1.5rem;">
-                            <p style="color: var(--blue); font-weight: 600; margin-bottom: 0.5rem;">Foto Produk Saat Ini:</p>
-                            <img src="../foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>" 
-                                 alt="Foto Produk" style="width: 200px; height: 200px; border-radius: 10px; object-fit: cover; border: 3px solid var(--blue);">
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="foto-section" id="fotoSection">
-                        <div class="foto-preview" id="fotoPreview">
-                            <img id="previewImage" src="" alt="Foto Produk">
-                        </div>
-
-                        <div class="foto-input-wrapper">
-                            <input type="file" id="fotoInput" accept="image/jpeg,image/png,image/jpg">
-                            <label for="fotoInput" class="file-input-label">
-                                🖼️ Ganti Foto Produk
-                            </label>
-                        </div>
-
-                        <div class="foto-info">
-                            Format: JPG, JPEG, PNG | Ukuran max: 5MB | Akan dicrop menjadi square (1:1)
-                        </div>
-
-                        <!-- Hidden input untuk foto crop data -->
-                        <input type="hidden" id="fotoData" name="foto_data">
-                    </div>
-                </div>
-
-                <!-- FORM BUTTONS -->
-                <div class="form-actions">
-                    <button type="submit" name="update" class="btn btn-submit">
-                        ✅ Simpan Perubahan
-                    </button>
-                    <a href="data_produk.php" class="btn btn-cancel-form" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                        ❌ Batal
-                    </a>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 
