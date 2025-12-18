@@ -13,14 +13,18 @@ if (isset($_SESSION['user_id'])) {
 
 // Ambil kategori dari URL (default: Men)
 $kategori = isset($_GET['kategori']) ? mysqli_real_escape_string($koneksi, $_GET['kategori']) : 'Men';
-$valid_categories = ['Men', 'Women', 'Shoes', 'Accessories'];
+$valid_categories = ['Men', 'Women', 'Shoes', 'Accessories', 'All'];
 
 if (!in_array($kategori, $valid_categories)) {
     $kategori = 'Men';
 }
 
 // Ambil data produk berdasarkan kategori
-$query = "SELECT * FROM products WHERE kategori='$kategori' ORDER BY created_at DESC";
+if ($kategori === 'All') {
+    $query = "SELECT * FROM products ORDER BY created_at DESC";
+} else {
+    $query = "SELECT * FROM products WHERE kategori='$kategori' ORDER BY created_at DESC";
+}
 $result = mysqli_query($koneksi, $query);
 $products = [];
 while ($row = mysqli_fetch_assoc($result)) {
@@ -360,6 +364,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     <main class="container-shop">
         <!-- CATEGORY TABS -->
         <div class="category-tabs">
+            <a href="shop.php?kategori=All" class="category-btn <?php echo $kategori === 'All' ? 'active' : ''; ?>">
+                ✨ All
+            </a>
             <a href="shop.php?kategori=Men" class="category-btn <?php echo $kategori === 'Men' ? 'active' : ''; ?>">
                 👕 Men
             </a>
@@ -373,7 +380,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                 ✨ Accessories
             </a>
         </div>
-
         <!-- PRODUCTS GRID -->
         <?php if (count($products) > 0): ?>
             <div class="products-grid">
