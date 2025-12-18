@@ -38,7 +38,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="../../images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <title>Shop - UrbanHype</title>
 
     <!-- Bootstrap CSS -->

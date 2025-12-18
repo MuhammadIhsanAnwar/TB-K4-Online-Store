@@ -65,12 +65,14 @@ $base_path = $is_subdir ? '../../' : './';
         height: 3px;
         background: linear-gradient(90deg, var(--primary), var(--secondary));
         transition: var(--transition);
+        display: none;
+        /* Hilangkan garis bawah */
     }
 
     .navbar-brand:hover::before {
-        width: 100%;
+        width: 0;
+        /* Jangan tampilkan saat hover */
     }
-
     .navbar-brand:hover {
         transform: translateY(-2px);
         color: var(--primary) !important;

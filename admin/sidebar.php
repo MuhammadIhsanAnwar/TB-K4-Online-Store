@@ -28,7 +28,7 @@ $notifPesan = mysqli_fetch_assoc($qPesan)['total'];
 
     <!-- LOGO -->
     <div class="logo-box">
-        <img src="../images/Background dan Logo/logo.png" alt="Logo">
+        <img src="../images/icon/logo.png" alt="Logo">
     </div>
 
     <p class="menu-title">Menu Admin</p>

@@ -77,7 +77,7 @@ if (isset($_POST['add_to_cart'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="../../images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <title><?php echo htmlspecialchars($product['nama']); ?> - UrbanHype</title>
 
     <!-- Bootstrap CSS -->

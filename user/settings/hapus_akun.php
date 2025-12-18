@@ -75,10 +75,9 @@ function showAlert($type, $title, $message, $redirect)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hapus Akun - Urban Hype</title>
-    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
+    <title>Hapus Akun</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../images/icon/logo.png">
     <style>
         /* ================= PALETTE ================= */
         :root {

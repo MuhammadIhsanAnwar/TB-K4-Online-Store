@@ -25,7 +25,7 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Admin</title>
-    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../images/icon/logo.png">
 
     <link rel="stylesheet" href="../css/bootstrap.css">
 
@@ -51,7 +51,7 @@ if (isset($_POST['login'])) {
 
         /* BACKGROUND FOTO TAJAM (NO BLUR) */
         body {
-            background-image: url("../images/Background dan Logo/bg admin.jpg");
+            background-image: url("../images/background/bg_admin.jpg");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -166,7 +166,7 @@ if (isset($_POST['login'])) {
                 <div class="card">
 
                     <div class="text-center mb-3">
-                        <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo" class="login-logo" style="max-width: 160px; height: auto;" />
+                        <img src="../images/icon/logo.png" alt="Urban Hype Logo" class="login-logo" style="max-width: 160px; height: auto;" />
                     </div>
 
                     <h3 class="text-center mb-3">Admin Login</h3>

@@ -8,7 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register Akun</title>
-    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../images/icon/logo.png">
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
@@ -30,7 +30,7 @@ session_start();
         }
 
         body {
-            background-image: url("../images/Background dan Logo/bg regis.jpg");
+            background-image: url("../images/background/bg_regis.jpg");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -223,7 +223,7 @@ session_start();
         <div class="card p-4" style="max-width:520px;width:100%;">
 
             <div class="text-center mb-3">
-                <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo" class="login-logo" style="max-width: 160px; height: auto;" />
+                <img src="../images/icon/logo.png" alt="Urban Hype Logo" class="login-logo" style="max-width: 160px; height: auto;" />
             </div>
 
             <h4 class="text-center mb-4">Register Akun</h4>

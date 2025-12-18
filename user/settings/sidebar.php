@@ -205,7 +205,7 @@
     <!-- HEADER DENGAN LOGO -->
     <div class="sidebar-header">
         <div class="sidebar-logo">
-            <img src="../../images/Background dan Logo/logo.png" alt="Urban Hype Logo">
+            <img src="../../images/icon/logo.png" alt="Urban Hype Logo">
         </div>
         <div class="title">Settings</div>
     </div>

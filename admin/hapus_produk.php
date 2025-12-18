@@ -17,7 +17,7 @@ if (isset($_GET['hapus'])) {
     <meta charset="UTF-8">
     <title>Hapus Produk</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
+    <link rel="icon" type="image/png" href="../images/icon/logo.png">
 
     <style>
         .sidebar {
