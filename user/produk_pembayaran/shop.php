@@ -1,6 +1,6 @@
 <?php
-include "admin/koneksi.php";
-include "navbar.php";
+include "../../admin/koneksi.php";
+include "../../navbar.php";
 session_start();
 
 // Ambil data user jika sudah login
