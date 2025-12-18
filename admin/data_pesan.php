@@ -8,7 +8,7 @@ if (isset($_POST['delete_id'])) {
     $id = intval($_POST['delete_id']);
 
     mysqli_query($koneksi, "DELETE FROM pesan_kontak WHERE id='$id'");
-    echo 'success';
+    echo json_encode(['status' => 'success', 'message' => 'Pesan berhasil dihapus']);
     exit;
 }
 
@@ -16,7 +16,7 @@ if (isset($_POST['delete_id'])) {
 if (isset($_POST['read_id'])) {
     $id = intval($_POST['read_id']);
     mysqli_query($koneksi, "UPDATE pesan_kontak SET status='dibaca' WHERE id='$id'");
-    echo 'success';
+    echo json_encode(['status' => 'success', 'message' => 'Pesan ditandai dibaca']);
     exit;
 }
 
@@ -28,129 +28,39 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Pesan - Admin</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
-    <!-- 🔥 CSS DISAMAKAN DENGAN DATA PRODUK -->
     <style>
-        :root {
-            --primary: #1e5dac;
-            --bg: #f3eded;
-            --white: #ffffff;
-            --hover-blue: rgba(30, 93, 172, .1);
-        }
-
-        body {
+        * {
             margin: 0;
-            background: var(--bg);
-            font-family: Poppins, system-ui, sans-serif;
-        }
-
-        /* ===== CONTENT ===== */
-        .content {
-            margin-left: 220px;
-            padding: 30px 40px;
-            animation: fade .5s ease;
-        }
-
-        @keyframes fade {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h2 {
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        hr {
-            border-top: 2px solid #cfd6e6;
-            margin-bottom: 20px;
-            opacity: .6;
-        }
-
-        /* ===== TABLE CONTAINER ===== */
-        .table-container {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, .1);
-        }
-
-        .table {
-            border-collapse: separate !important;
-            border-spacing: 0 10px;
-        }
-
-        .table thead tr {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .table tbody tr {
-            background: #fff;
-            transition: .3s;
-        }
-
-        .table tbody tr:hover {
-            background: var(--hover-blue);
-        }
-
-        .table td,
-        .table th {
-            padding: 12px;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        .table td:nth-child(4) {
-            text-align: left;
-        }
-
-        .badge-baru {
-            background: #dc3545;
-            padding: 6px 10px;
-            border-radius: 20px;
-            color: #fff;
-            font-size: 12px;
-        }
-
-        .badge-dibaca {
-            background: #198754;
-            padding: 6px 10px;
-            border-radius: 20px;
-            color: #fff;
-            font-size: 12px;
-        }
-
-        .btn-info {
-            border-radius: 8px;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         :root {
-            --primary: #1e5dac;
-            --bg: #f3eded;
+            --blue: #1E5DAC;
+            --beige: #E8D3C1;
+            --alley: #B7C5DA;
+            --misty: #EAE2E4;
             --white: #ffffff;
         }
 
         body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--misty) 0%, #f5f5f5 100%);
+            min-height: 100vh;
             margin: 0;
-            background: var(--bg);
-            font-family: Poppins, system-ui, sans-serif;
         }
 
-        /* ===== SIDEBAR ===== */
+        /* ================= SIDEBAR ================= */
         .sidebar {
             position: fixed;
             top: 0;
@@ -172,6 +82,11 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
         .logo-box img {
             width: 72px;
             filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
+            transition: .3s ease;
+        }
+
+        .logo-box img:hover {
+            transform: scale(1.05);
         }
 
         .menu-title {
@@ -181,7 +96,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
         }
 
         .sidebar a {
-            color: #fff;
+            color: white;
             text-decoration: none;
             padding: 12px 20px;
             margin: 4px 12px;
@@ -202,32 +117,289 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
             margin-top: auto;
             background: rgba(255, 80, 80, .15);
             color: #ffd6d6 !important;
+            font-weight: 600;
             text-align: center;
             border-radius: 14px;
+            transition: .3s ease;
+            margin-bottom: 12px;
         }
 
-        /* ===== CONTENT ===== */
+        .sidebar .logout:hover {
+            background: #ff4d4d;
+            color: #fff !important;
+            box-shadow: 0 10px 25px rgba(255, 77, 77, .6);
+            transform: translateY(-2px);
+        }
+
+        /* ================= CONTENT ================= */
         .content {
-            padding: 30px;
-            transition: .3s;
+            margin-left: 220px;
+            padding: 30px 20px;
+            min-height: 100vh;
         }
 
-        /* Desktop saja */
-        @media (min-width: 992px) {
-            .content {
-                margin-left: 220px;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        hr {
+            border-top: 2px solid #cfd6e6;
+            margin-bottom: 20px;
+            opacity: .6;
+        }
+
+        /* TABLE SECTION */
+        .table-wrapper {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(30, 93, 172, 0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* SIDEBAR MOBILE */
-        @media (max-width: 991px) {
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--blue), var(--alley));
+            color: white;
+        }
+
+        th {
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--misty);
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--misty);
+        }
+
+        /* KOLOM NOMOR */
+        .nomor-col {
+            font-weight: 600;
+            color: var(--blue);
+            text-align: center;
+        }
+
+        /* KOLOM PESAN */
+        .pesan-col {
+            max-width: 300px;
+            color: #6b7280;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* KOLOM STATUS */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-baru {
+            background: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+        }
+
+        .badge-dibaca {
+            background: rgba(25, 135, 84, 0.2);
+            color: #155724;
+        }
+
+        /* KOLOM AKSI */
+        .aksi-col {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-balas {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-balas:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-dibaca {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-dibaca:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--alley);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+            color: #6b7280;
+        }
+
+        @media (max-width: 1024px) {
             .sidebar {
-                transform: translateX(-100%);
-                transition: .3s;
+                width: 200px;
             }
 
-            .sidebar.show {
-                transform: translateX(0);
+            .content {
+                margin-left: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .content {
+                margin-left: 180px;
+                padding: 20px 15px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th,
+            td {
+                padding: 0.75rem;
+            }
+
+            .pesan-col {
+                max-width: 100px;
+            }
+
+            .btn-action {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 160px;
+            }
+
+            .content {
+                margin-left: 160px;
+                padding: 15px 10px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .logo-box img {
+                width: 60px;
+            }
+
+            .menu-title {
+                font-size: 11px;
+            }
+
+            .sidebar a {
+                padding: 10px 15px;
+                margin: 3px 8px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -238,77 +410,91 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
     <?php include 'sidebar.php'; ?>
 
     <div class="content">
-        <div class="d-lg-none mb-3">
-            <button class="btn btn-primary" onclick="toggleSidebar()">
-                <i class="bi bi-list"></i>
-            </button>
-        </div>
+        <div class="container">
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+                <h1 class="page-title">💬 Data Pesan</h1>
+            </div>
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-            <h2 class="mb-2 mb-lg-0">Data Pesan</h2>
-        </div>
+            <hr>
 
-        <hr>
+            <!-- TABLE SECTION -->
+            <div class="table-wrapper">
+                <?php
+                $count = mysqli_num_rows($query);
+                mysqli_data_seek($query, 0);
+                ?>
 
-        <div class="table-container table-responsive">
-            <table class="table table-bordered table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Pesan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+                <?php if ($count > 0): ?>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Pesan</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $nomor = 1;
+                                while ($row = mysqli_fetch_assoc($query)):
+                                ?>
+                                    <tr id="row-<?= $row['id'] ?>">
+                                        <td class="nomor-col"><?= $nomor++ ?></td>
+                                        <td><strong><?= htmlspecialchars($row['nama']) ?></strong></td>
+                                        <td><?= htmlspecialchars($row['email']) ?></td>
+                                        <td class="pesan-col" title="<?= htmlspecialchars($row['pesan']) ?>"><?= htmlspecialchars($row['pesan']) ?></td>
+                                        <td>
+                                            <?php if ($row['status'] == 'baru'): ?>
+                                                <span class="status-badge badge-baru">🔔 Baru</span>
+                                            <?php else: ?>
+                                                <span class="status-badge badge-dibaca">✓ Dibaca</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= date('d/m/Y H:i', strtotime($row['created_at'])) ?></td>
+                                        <td>
+                                            <div class="aksi-col">
+                                                <!-- Tombol Balas Pesan -->
+                                                <a href="balas_pesan.php?id=<?= $row['id'] ?>&email=<?= urlencode($row['email']) ?>&nama=<?= urlencode($row['nama']) ?>"
+                                                    class="btn-action btn-balas"
+                                                    title="Balas Pesan">
+                                                    <i class="bi bi-reply"></i> Balas
+                                                </a>
 
-                <tbody>
-                    <?php $no = 1;
-                    while ($row = mysqli_fetch_assoc($query)): ?>
-                        <tr id="row-<?= $row['id'] ?>">
-                            <td><?= $no++ ?></td>
-                            <td><?= htmlspecialchars($row['nama']) ?></td>
-                            <td><?= htmlspecialchars($row['email']) ?></td>
-                            <td><?= nl2br(htmlspecialchars($row['pesan'])) ?></td>
-                            <td>
-                                <?php if ($row['status'] == 'baru'): ?>
-                                    <span class="badge-baru">Baru</span>
-                                <?php else: ?>
-                                    <span class="badge-dibaca">Dibaca</span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
-                                    <!-- Tombol Balas Pesan -->
-                                    <a href="balas_pesan.php?id=<?= $row['id'] ?>&email=<?= urlencode($row['email']) ?>&nama=<?= urlencode($row['nama']) ?>"
-                                        class="btn btn-sm btn-primary"
-                                        title="Balas Pesan"
-                                        style="text-decoration: none;">
-                                        <i class="bi bi-reply"></i> Balas
-                                    </a>
+                                                <!-- Tombol Tandai Dibaca -->
+                                                <?php if ($row['status'] == 'baru'): ?>
+                                                    <button class="btn-action btn-dibaca"
+                                                        onclick="tandaiDibaca(<?= $row['id'] ?>)"
+                                                        title="Tandai Dibaca">
+                                                        <i class="bi bi-check2-circle"></i> Dibaca
+                                                    </button>
+                                                <?php endif; ?>
 
-                                    <!-- Tombol Tandai Dibaca -->
-                                    <?php if ($row['status'] == 'baru'): ?>
-                                        <button class="btn btn-sm btn-info"
-                                            onclick="tandaiDibaca(<?= $row['id'] ?>)"
-                                            title="Tandai Dibaca">
-                                            <i class="bi bi-check2-circle"></i> Dibaca
-                                        </button>
-                                    <?php endif; ?>
-
-                                    <!-- Tombol Hapus -->
-                                    <button class="btn btn-sm btn-danger"
-                                        onclick="hapusPesan(<?= $row['id'] ?>)"
-                                        title="Hapus Pesan">
-                                        <i class="bi bi-trash"></i> Hapus
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                                                <!-- Tombol Hapus -->
+                                                <button class="btn-action btn-delete"
+                                                    onclick="hapusPesan(<?= $row['id'] ?>, '<?= htmlspecialchars(addslashes($row['nama'])) ?>')"
+                                                    title="Hapus Pesan">
+                                                    <i class="bi bi-trash"></i> Hapus
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💬</div>
+                        <p class="empty-state-text">Belum ada pesan masuk</p>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
@@ -319,20 +505,33 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
             xhr.open("POST", "", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onload = function() {
-                if (xhr.responseText.trim() === "success") {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.status === "success") {
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: response.message,
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                } catch (e) {
                     location.reload();
                 }
             };
             xhr.send("read_id=" + id);
         }
 
-        function hapusPesan(id) {
+        function hapusPesan(id, nama) {
             Swal.fire({
                 title: 'Hapus Pesan?',
-                text: 'Pesan ini akan dihapus secara permanen!',
+                html: `<p>Yakin ingin menghapus pesan dari <strong>${nama}</strong>?</p>`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#dc3545',
+                confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#6c757d',
                 confirmButtonText: 'Ya, Hapus!',
                 cancelButtonText: 'Batal',
@@ -346,17 +545,25 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
                     xhr.open("POST", "", true);
                     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xhr.onload = function() {
-                        if (xhr.responseText.trim() === "success") {
-                            const row = document.getElementById("row-" + id);
-                            if (row) row.remove();
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                const row = document.getElementById("row-" + id);
+                                if (row) {
+                                    row.style.animation = "fadeOut 0.3s ease";
+                                    setTimeout(() => row.remove(), 300);
+                                }
 
-                            Swal.fire({
-                                title: 'Berhasil!',
-                                text: 'Pesan telah dihapus',
-                                icon: 'success',
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        } catch (e) {
+                            console.error(e);
                         }
                     };
                     xhr.send("delete_id=" + id);

@@ -677,7 +677,7 @@ while ($row = mysqli_fetch_assoc($query)) {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Nomor</th>
+                                    <th>No.</th>
                                     <th>Foto</th>
                                     <th>Kategori</th>
                                     <th>Nama Produk</th>

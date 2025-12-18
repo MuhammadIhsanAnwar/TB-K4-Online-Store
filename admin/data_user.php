@@ -364,7 +364,7 @@ include '../admin/koneksi.php';
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Nomor</th>
+                                    <th>No.</th>
                                     <th>Username</th>
                                     <th>Nama Lengkap</th>
                                     <th>Email</th>
@@ -401,10 +401,10 @@ include '../admin/koneksi.php';
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <?php if ($row['status'] === 'aktif'): ?>
-                                                <span class="status-badge status-aktif">✓ Aktif</span>
+                                            <?php if ($row['status'] == 1): ?>
+                                                <span class="status-badge status-aktif">✓ Akun Aktif</span>
                                             <?php else: ?>
-                                                <span class="status-badge status-nonaktif">✗ Nonaktif</span>
+                                                <span class="status-badge status-nonaktif">⏳ Belum Aktif</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>

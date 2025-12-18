@@ -837,10 +837,6 @@ if (isset($_POST['submit'])) {
 
     <div class="content">
         <div class="container">
-            <nav class="breadcrumb">
-                <a class="breadcrumb-item" href="dashboard.php">Dashboard</a>
-                <span class="breadcrumb-item active">Tambah Produk</span>
-            </nav>
 
             <h1 class="page-title">➕ Tambah Produk Baru</h1>
 
