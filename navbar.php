@@ -419,7 +419,7 @@ $base_path = $is_subdir ? '../../' : './';
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/settings/settings.php"><i class="bi bi-gear me-2"></i>Setting Akun</a></li>
-                            <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/pesanan_saya.php"><i class="bi bi-bag me-2"></i>Pesanan Saya</a></li>
+                            <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/produk_pembayaran/pesanan_saya.php"><i class="bi bi-bag me-2"></i>Pesanan Saya</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
