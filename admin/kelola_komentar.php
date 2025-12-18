@@ -1,20 +1,6 @@
 <?php
-session_start();
-require 'auth_check.php'; 
-include 'koneksi.php'; 
-
-// Proses hapus komentar
-if (isset($_POST['delete_comment'])) {
-    $comment_id = intval($_POST['comment_id']);
-
-    $delete_query = "DELETE FROM komentar_produk WHERE id='$comment_id'";
-    if (mysqli_query($koneksi, $delete_query)) {
-        echo json_encode(['status' => 'success', 'message' => 'Komentar berhasil dihapus']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus komentar']);
-    }
-    exit;
-}
+require 'auth_check.php';
+include 'koneksi.php';
 
 // Proses hapus komentar
 if (isset($_POST['delete_comment'])) {
@@ -66,8 +52,142 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/admin.css">
+
     <style>
+        :root {
+            --primary: #1e5dac;
+            --bg: #f3eded;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: Poppins, system-ui, sans-serif;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e63b6, #0f3f82);
+            padding: 18px 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .logo-box {
+            text-align: center;
+            padding: 10px 0 18px;
+        }
+
+        .logo-box img {
+            width: 72px;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
+            transition: .3s ease;
+        }
+
+        .logo-box img:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-title {
+            color: #dbe6ff;
+            font-size: 13px;
+            padding: 8px 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 10px;
+            transition: .25s;
+            position: relative;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, .18);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, .32);
+            font-weight: 600;
+        }
+
+        .sidebar .logout {
+            margin-top: auto;
+            background: rgba(255, 80, 80, .15);
+            color: #ffd6d6 !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 14px;
+            transition: .3s ease;
+        }
+
+        .sidebar .logout:hover {
+            background: #ff4d4d;
+            color: #fff !important;
+            box-shadow: 0 10px 25px rgba(255, 77, 77, .6);
+            transform: translateY(-2px);
+        }
+
+        /* ================= WRAPPER & CONTENT ================= */
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 30px;
+            flex: 1;
+            animation: fade .5s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .container-fluid {
+            max-width: 100%;
+        }
+
+        /* ================= BADGES ================= */
+        .badge-pesan,
+        .badge-notif {
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            font-size: 11px;
+            padding: 3px 7px;
+            border-radius: 50%;
+            font-weight: 600;
+        }
+
+        /* ================= COMMENT CARDS ================= */
         .comment-card {
             background: white;
             border-radius: 12px;
@@ -240,7 +360,27 @@ while ($row = mysqli_fetch_assoc($result)) {
             color: #999;
         }
 
+        /* ================= RESPONSIVE ================= */
         @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .main-content {
+                margin-left: 70px;
+                padding: 15px;
+            }
+
+            .menu-title,
+            .sidebar a span {
+                display: none;
+            }
+
+            .sidebar a {
+                text-align: center;
+                padding: 15px 10px;
+            }
+
             .comment-header {
                 flex-direction: column;
                 align-items: flex-start;

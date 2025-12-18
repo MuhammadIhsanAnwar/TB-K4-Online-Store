@@ -1,7 +1,7 @@
 <?php
 session_start();
-require 'auth_check.php'; 
-include 'koneksi.php'; 
+require 'auth_check.php';
+include 'koneksi.php';
 
 // Proses update status ke sedang dikemas
 if (isset($_POST['update_status_dikemas'])) {
@@ -55,217 +55,160 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/admin.css">
+
     <style>
-        .order-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #1E5DAC;
+        :root {
+            --primary: #1e5dac;
+            --bg: #f3eded;
+            --white: #ffffff;
         }
 
-        .order-header {
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: Poppins, system-ui, sans-serif;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1e63b6, #0f3f82);
+            padding: 18px 0;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-            flex-wrap: wrap;
-            gap: 1rem;
+            flex-direction: column;
+            z-index: 1000;
         }
 
-        .order-id {
-            font-weight: 600;
-            color: #1E5DAC;
-            font-size: 1.1rem;
-        }
-
-        .order-status {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .status-menunggu {
-            background: #f3e5f5;
-            color: #6a1b9a;
-        }
-
-        .status-dikemas {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-dikirim {
-            background: #cfe2ff;
-            color: #084298;
-        }
-
-        .order-info {
-            margin-bottom: 1rem;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #333;
-            min-width: 150px;
-        }
-
-        .info-value {
-            color: #666;
-            flex: 1;
-            word-break: break-word;
-        }
-
-        .order-products {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        .products-title {
-            font-weight: 600;
-            color: #1E5DAC;
-            margin-bottom: 0.5rem;
-        }
-
-        .btn-action {
-            padding: 0.6rem 1.2rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            margin-right: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .btn-dikemas {
-            background: #ffc107;
-            color: white;
-        }
-
-        .btn-dikemas:hover {
-            background: #e0a800;
-            transform: translateY(-2px);
-        }
-
-        .btn-resi {
-            background: #1E5DAC;
-            color: white;
-        }
-
-        .btn-resi:hover {
-            background: #164a8a;
-            transform: translateY(-2px);
-        }
-
-        .btn-disabled {
-            background: #ccc;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        .resi-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .resi-input {
-            flex: 1;
-            padding: 0.6rem;
-            border: 2px solid #1E5DAC;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .resi-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
-        }
-
-        .filter-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .filter-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border: 2px solid #1E5DAC;
-            background: white;
-            color: #1E5DAC;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active {
-            background: #1E5DAC;
-            color: white;
-        }
-
-        .filter-btn:hover {
-            background: #1E5DAC;
-            color: white;
-        }
-
-        .empty-state {
+        .logo-box {
             text-align: center;
-            padding: 3rem;
-            background: white;
-            border-radius: 12px;
-            color: #999;
+            padding: 10px 0 18px;
         }
 
+        .logo-box img {
+            width: 72px;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .25));
+            transition: .3s ease;
+        }
+
+        .logo-box img:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-title {
+            color: #dbe6ff;
+            font-size: 13px;
+            padding: 8px 20px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 10px;
+            transition: .25s;
+            position: relative;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, .18);
+        }
+
+        .sidebar a.active {
+            background: rgba(255, 255, 255, .32);
+            font-weight: 600;
+        }
+
+        .sidebar .logout {
+            margin-top: auto;
+            background: rgba(255, 80, 80, .15);
+            color: #ffd6d6 !important;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 14px;
+            transition: .3s ease;
+        }
+
+        .sidebar .logout:hover {
+            background: #ff4d4d;
+            color: #fff !important;
+            box-shadow: 0 10px 25px rgba(255, 77, 77, .6);
+            transform: translateY(-2px);
+        }
+
+        /* ================= WRAPPER & CONTENT ================= */
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 30px;
+            flex: 1;
+            animation: fade .5s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .container-fluid {
+            max-width: 100%;
+        }
+
+        /* ================= BADGES ================= */
+        .badge-pesan,
+        .badge-notif {
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            font-size: 11px;
+            padding: 3px 7px;
+            border-radius: 50%;
+            font-weight: 600;
+        }
+
+        /* ================= RESPONSIVE ================= */
         @media (max-width: 768px) {
-            .order-header {
-                flex-direction: column;
-                align-items: flex-start;
+            .sidebar {
+                width: 70px;
             }
 
-            .info-row {
-                flex-direction: column;
+            .main-content {
+                margin-left: 70px;
+                padding: 15px;
             }
 
-            .resi-input-group {
-                flex-direction: column;
+            .menu-title,
+            .sidebar a span {
+                display: none;
             }
 
-            .btn-action {
-                width: 100%;
-                margin-right: 0;
-                margin-bottom: 0.5rem;
+            .sidebar a {
+                text-align: center;
+                padding: 15px 10px;
             }
         }
     </style>
