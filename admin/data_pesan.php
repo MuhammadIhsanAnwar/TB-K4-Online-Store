@@ -2,7 +2,6 @@
 require 'auth_check.php';
 include "../admin/koneksi.php";
 
-
 /* ================= DELETE PESAN ================= */
 if (isset($_POST['delete_id'])) {
     $id = intval($_POST['delete_id']);
@@ -20,7 +19,25 @@ if (isset($_POST['read_id'])) {
     exit;
 }
 
-$query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at DESC");
+// PARAMETER PAGINATION & SEARCH
+$search = isset($_GET['search']) ? mysqli_real_escape_string($koneksi, $_GET['search']) : '';
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$items_per_page = 10;
+$offset = ($page - 1) * $items_per_page;
+
+// BUILD QUERY
+$where = "WHERE 1=1";
+if (!empty($search)) {
+    $where .= " AND (nama LIKE '%$search%' OR email LIKE '%$search%' OR pesan LIKE '%$search%')";
+}
+
+// TOTAL DATA
+$total_query = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM pesan_kontak $where");
+$total_data = mysqli_fetch_assoc($total_query)['total'];
+$total_pages = ceil($total_data / $items_per_page);
+
+// GET DATA
+$query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY created_at DESC LIMIT $offset, $items_per_page");
 ?>
 
 <!DOCTYPE html>
@@ -159,6 +176,82 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
             color: var(--blue);
         }
 
+        /* SEARCH SECTION */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.1);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .search-group {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .search-group input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid var(--alley);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-group input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.15);
+        }
+
+        .btn-search {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--blue), var(--alley));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 93, 172, 0.3);
+        }
+
+        .btn-reset {
+            padding: 10px 20px;
+            background: white;
+            color: var(--blue);
+            border: 2px solid var(--blue);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-reset:hover {
+            background: rgba(30, 93, 172, 0.1);
+        }
+
         hr {
             border-top: 2px solid #cfd6e6;
             margin-bottom: 20px;
@@ -172,6 +265,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(30, 93, 172, 0.1);
             animation: slideUp 0.6s ease-out;
+            margin-bottom: 2rem;
         }
 
         @keyframes slideUp {
@@ -326,6 +420,54 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
             color: #6b7280;
         }
 
+        /* PAGINATION */
+        .pagination-section {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .pagination-info {
+            text-align: center;
+            color: var(--alley);
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .pagination-btn {
+            padding: 10px 14px;
+            border: 2px solid var(--alley);
+            background: white;
+            color: var(--blue);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .pagination-btn:hover {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
+
+        .pagination-btn.active {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         @media (max-width: 1024px) {
             .sidebar {
                 width: 200px;
@@ -353,6 +495,18 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
 
             .page-title {
                 font-size: 1.8rem;
+            }
+
+            .search-section {
+                flex-direction: column;
+            }
+
+            .search-group {
+                flex-direction: column;
+            }
+
+            .search-group input {
+                width: 100%;
             }
 
             table {
@@ -418,11 +572,25 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
 
             <hr>
 
+            <!-- SEARCH SECTION -->
+            <div class="search-section">
+                <form method="GET" class="search-group" style="flex: 1;">
+                    <div style="width: 100%;">
+                        <label for="search">🔍 Cari Pesan</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" id="search" name="search" placeholder="Cari berdasarkan nama, email, atau pesan..."
+                                value="<?php echo htmlspecialchars($search); ?>" style="flex: 1;">
+                            <button type="submit" class="btn-search">Cari</button>
+                        </div>
+                    </div>
+                </form>
+                <a href="data_pesan.php" class="btn-reset">↺ Reset</a>
+            </div>
+
             <!-- TABLE SECTION -->
             <div class="table-wrapper">
                 <?php
                 $count = mysqli_num_rows($query);
-                mysqli_data_seek($query, 0);
                 ?>
 
                 <?php if ($count > 0): ?>
@@ -441,7 +609,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
                             </thead>
                             <tbody>
                                 <?php
-                                $nomor = 1;
+                                $nomor = $offset + 1;
                                 while ($row = mysqli_fetch_assoc($query)):
                                 ?>
                                     <tr id="row-<?= $row['id'] ?>">
@@ -488,10 +656,63 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak ORDER BY created_at 
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- PAGINATION -->
+                    <?php if ($total_pages > 1): ?>
+                        <div class="pagination-section">
+                            <div class="pagination-info">
+                                Menampilkan halaman <?php echo $page; ?> dari <?php echo $total_pages; ?> (Total: <?php echo $total_data; ?> pesan)
+                            </div>
+
+                            <?php
+                            $query_string = !empty($search) ? "&search=" . urlencode($search) : "";
+                            ?>
+
+                            <!-- Tombol Previous -->
+                            <?php if ($page > 1): ?>
+                                <a href="?page=1<?php echo $query_string; ?>" class="pagination-btn">« Pertama</a>
+                                <a href="?page=<?php echo $page - 1;
+                                                echo $query_string; ?>" class="pagination-btn">‹ Sebelumnya</a>
+                            <?php endif; ?>
+
+                            <!-- Tombol Nomor Halaman -->
+                            <?php
+                            $start_page = max(1, $page - 2);
+                            $end_page = min($total_pages, $page + 2);
+
+                            if ($start_page > 1) {
+                                echo '<span style="color: var(--alley); padding: 10px;">...</span>';
+                            }
+
+                            for ($i = $start_page; $i <= $end_page; $i++) {
+                                $active = $i === $page ? 'active' : '';
+                                echo '<a href="?page=' . $i . $query_string . '" class="pagination-btn ' . $active . '">' . $i . '</a>';
+                            }
+
+                            if ($end_page < $total_pages) {
+                                echo '<span style="color: var(--alley); padding: 10px;">...</span>';
+                            }
+                            ?>
+
+                            <!-- Tombol Next -->
+                            <?php if ($page < $total_pages): ?>
+                                <a href="?page=<?php echo $page + 1;
+                                                echo $query_string; ?>" class="pagination-btn">Selanjutnya ›</a>
+                                <a href="?page=<?php echo $total_pages;
+                                                echo $query_string; ?>" class="pagination-btn">Terakhir »</a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
                 <?php else: ?>
                     <div class="empty-state">
                         <div class="empty-state-icon">💬</div>
-                        <p class="empty-state-text">Belum ada pesan masuk</p>
+                        <p class="empty-state-text">Tidak ada pesan yang ditemukan</p>
+                        <?php if (!empty($search)): ?>
+                            <p style="margin-top: 1rem; color: var(--alley);">
+                                <a href="data_pesan.php" style="color: var(--blue); text-decoration: none; font-weight: 600;">Lihat semua pesan</a>
+                            </p>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>

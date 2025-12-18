@@ -773,7 +773,7 @@ if (isset($_SESSION['user_id'])) {
                 <p class="subtitle">New Season Collection</p>
                 <h1>Timeless Style<br>for Everyone</h1>
                 <p class="description">Discover our curated collection of unisex fashion pieces that blend contemporary design with classic elegance.</p>
-                <button class="btn hero-btn">Explore Collection</button>
+                <a href="shop.php" class="btn hero-btn">Explore Collection</a>
             </div>
         </div>
         <div class="hero-image">

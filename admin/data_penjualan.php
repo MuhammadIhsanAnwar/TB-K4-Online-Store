@@ -1,6 +1,117 @@
 <?php
 require 'auth_check.php';
 include '../admin/koneksi.php';
+
+// PROSES DOWNLOAD REPORT
+if (isset($_GET['download'])) {
+    $format = $_GET['download'];
+
+    // Ambil data penjualan
+    $res = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
+    $data = [];
+    while ($row = mysqli_fetch_assoc($res)) {
+        $data[] = $row;
+    }
+
+    // DOWNLOAD PDF
+    if ($format === 'pdf') {
+        require_once '../library/fpdf.php';
+
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(0, 15, 'LAPORAN DATA PENJUALAN', 0, 1, 'C');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 8, 'Tanggal: ' . date('d/m/Y H:i:s'), 0, 1, 'C');
+        $pdf->Ln(5);
+
+        // Header Tabel
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->SetFillColor(30, 93, 172);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(15, 8, 'No', 1, 0, 'C', true);
+        $pdf->Cell(25, 8, 'User ID', 1, 0, 'C', true);
+        $pdf->Cell(60, 8, 'Produk', 1, 0, 'C', true);
+        $pdf->Cell(20, 8, 'Jumlah', 1, 0, 'C', true);
+        $pdf->Cell(45, 8, 'Total Harga', 1, 0, 'C', true);
+        $pdf->Cell(30, 8, 'Tanggal', 1, 1, 'C', true);
+
+        // Data Tabel
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->SetTextColor(0, 0, 0);
+        $nomor = 1;
+        $grand_total = 0;
+
+        foreach ($data as $row) {
+            $grand_total += $row['total_harga'];
+            $pdf->Cell(15, 7, $nomor++, 1, 0, 'C');
+            $pdf->Cell(25, 7, $row['user_id'], 1, 0, 'C');
+            $pdf->Cell(60, 7, substr($row['produk'], 0, 25), 1, 0, 'L');
+            $pdf->Cell(20, 7, $row['jumlah'], 1, 0, 'C');
+            $pdf->Cell(45, 7, 'Rp ' . number_format($row['total_harga'], 0, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(30, 7, date('d/m/Y', strtotime($row['tanggal'])), 1, 1, 'C');
+        }
+
+        // Total
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(230, 230, 230);
+        $pdf->Cell(100, 8, 'TOTAL', 1, 0, 'R', true);
+        $pdf->Cell(45, 8, 'Rp ' . number_format($grand_total, 0, ',', '.'), 1, 1, 'R', true);
+
+        // Output PDF
+        $pdf->Output('D', 'Laporan_Penjualan_' . date('d-m-Y_H-i-s') . '.pdf');
+        exit;
+    }
+
+    // DOWNLOAD EXCEL
+    else if ($format === 'excel') {
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Laporan_Penjualan_' . date('d-m-Y_H-i-s') . '.xls"');
+        header('Cache-Control: max-age=0');
+
+        echo '<html><head><meta charset="UTF-8"></head><body>';
+        echo '<table border="1" cellpadding="5" cellspacing="0">';
+        echo '<tr style="background-color: #1e5dac; color: white; font-weight: bold;">';
+        echo '<td colspan="6" style="text-align: center; font-size: 14px;">LAPORAN DATA PENJUALAN</td>';
+        echo '</tr>';
+        echo '<tr style="background-color: #1e5dac; color: white; font-weight: bold;">';
+        echo '<td colspan="6" style="text-align: center;">Tanggal: ' . date('d/m/Y H:i:s') . '</td>';
+        echo '</tr>';
+        echo '<tr style="background-color: #1e5dac; color: white; font-weight: bold;">';
+        echo '<td>No</td>';
+        echo '<td>User ID</td>';
+        echo '<td>Produk</td>';
+        echo '<td>Jumlah</td>';
+        echo '<td>Total Harga</td>';
+        echo '<td>Tanggal</td>';
+        echo '</tr>';
+
+        $nomor = 1;
+        $grand_total = 0;
+        foreach ($data as $row) {
+            $grand_total += $row['total_harga'];
+            echo '<tr>';
+            echo '<td>' . $nomor++ . '</td>';
+            echo '<td>' . $row['user_id'] . '</td>';
+            echo '<td>' . $row['produk'] . '</td>';
+            echo '<td>' . $row['jumlah'] . '</td>';
+            echo '<td>Rp ' . number_format($row['total_harga'], 0, ',', '.') . '</td>';
+            echo '<td>' . date('d/m/Y H:i', strtotime($row['tanggal'])) . '</td>';
+            echo '</tr>';
+        }
+
+        echo '<tr style="background-color: #e6e6e6; font-weight: bold;">';
+        echo '<td colspan="4" style="text-align: right;">TOTAL</td>';
+        echo '<td>Rp ' . number_format($grand_total, 0, ',', '.') . '</td>';
+        echo '<td></td>';
+        echo '</tr>';
+        echo '</table>';
+        echo '</body></html>';
+        exit;
+    }
+}
+
+$query = mysqli_query($koneksi, "SELECT * FROM penjualan ORDER BY id DESC");
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +125,7 @@ include '../admin/koneksi.php';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
 
     <style>
@@ -135,6 +247,48 @@ include '../admin/koneksi.php';
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--blue);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-download {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-pdf:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-excel {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-excel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
         }
 
         hr {
@@ -314,6 +468,15 @@ include '../admin/koneksi.php';
                 font-size: 1.8rem;
             }
 
+            .btn-group {
+                width: 100%;
+            }
+
+            .btn-download {
+                flex: 1;
+                justify-content: center;
+            }
+
             table {
                 font-size: 0.8rem;
             }
@@ -371,6 +534,14 @@ include '../admin/koneksi.php';
             <!-- PAGE HEADER -->
             <div class="page-header">
                 <h1 class="page-title">📊 Data Penjualan</h1>
+                <div class="btn-group">
+                    <a href="?download=pdf" class="btn-download btn-pdf">
+                        <i class="bi bi-file-pdf"></i> Download PDF
+                    </a>
+                    <a href="?download=excel" class="btn-download btn-excel">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> Download Excel
+                    </a>
+                </div>
             </div>
 
             <hr>
@@ -404,7 +575,7 @@ include '../admin/koneksi.php';
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Username</th>
+                                    <th>User ID</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
                                     <th>Total Harga</th>
