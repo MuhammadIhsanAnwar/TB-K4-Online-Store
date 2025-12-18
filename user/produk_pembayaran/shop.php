@@ -419,7 +419,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-    <script src="js/bootstrap.bundle.js"></script>
+    <script src="../../js/bootstrap.bundle.js"></script>
 
     <script>
         function openProductDetail(productId) {

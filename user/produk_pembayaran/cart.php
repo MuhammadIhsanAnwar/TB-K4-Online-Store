@@ -1,7 +1,6 @@
 <?php
 session_start();
 include "../../admin/koneksi.php";
-include "../../navbar.php";
 $cart = $_SESSION['cart'] ?? [];
 $total = 0;
 
@@ -316,6 +315,7 @@ if (isset($_POST['remove'])) {
 </head>
 
 <body>
+    <?php include "../../navbar.php";?>
     <div class="container">
         <div class="page-header">
             <h1>Shopping Cart</h1>
@@ -368,7 +368,7 @@ if (isset($_POST['remove'])) {
             </div>
 
             <div class="cart-actions">
-                <a href="../../shop.php" class="btn btn-secondary">Continue Shopping</a>
+                <a href="shop.php" class="btn btn-secondary">Continue Shopping</a>
                 <a href="checkout.php" class="btn btn-primary">Proceed to Checkout</a>
             </div>
         <?php endif; ?>
