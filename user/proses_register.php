@@ -2,13 +2,11 @@
 session_start();
 include "../admin/koneksi.php";
 
-// CEK POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: register.php");
     exit;
 }
 
-// Tangkap input
 $username       = $_POST['username'];
 $nama_lengkap   = ucwords(strtolower($_POST['nama_lengkap']));
 $jenis_kelamin  = $_POST['jenis_kelamin'];
@@ -22,12 +20,11 @@ $kode_pos       = $_POST['kode_pos'];
 
 $alamat         = ucwords(strtolower($_POST['alamat']));
 $email          = $_POST['email'];
-$nomor_hp       = preg_replace('/[^0-9]/', '', $_POST['nomor_hp']); // Hapus karakter non-digit
+$nomor_hp       = preg_replace('/[^0-9]/', '', $_POST['nomor_hp']);
 
 $password       = $_POST['password'];
 $confirm        = $_POST['password_confirm'];
 
-// Simpan data form ke session untuk jaga-jaga ada error
 $_SESSION['form_data'] = [
     'username'       => $username,
     'nama_lengkap'   => $_POST['nama_lengkap'],
@@ -43,7 +40,6 @@ $_SESSION['form_data'] = [
     'nomor_hp'       => $_POST['nomor_hp']
 ];
 
-// === VALIDASI USERNAME DAN EMAIL BELUM TERDAFTAR ===
 $cekUsername = mysqli_query($koneksi, "SELECT username FROM akun_user WHERE username = '$username'");
 if (mysqli_num_rows($cekUsername) > 0) {
     showAlert('error', 'Username sudah terdaftar! Gunakan username lain.', 'register.php');
@@ -54,18 +50,15 @@ if (mysqli_num_rows($cekEmail) > 0) {
     showAlert('error', 'Email sudah terdaftar! Gunakan email lain.', 'register.php');
 }
 
-// === PROSES FOTO PROFIL DARI CANVAS ===
 $foto_nama = "";
 
 if (!empty($_POST['foto_cropped'])) {
     $fotoCropped = $_POST['foto_cropped'];
 
-    // Validasi format base64 data URL
     if (strpos($fotoCropped, 'data:image/png;base64,') !== 0) {
         showAlert('error', 'Format foto tidak valid!', 'register.php');
     }
 
-    // Extract base64 data
     $fotoCropped = str_replace('data:image/png;base64,', '', $fotoCropped);
     $fotoData = base64_decode($fotoCropped);
 
@@ -73,11 +66,9 @@ if (!empty($_POST['foto_cropped'])) {
         showAlert('error', 'Gagal memproses foto profil!', 'register.php');
     }
 
-    // Generate nama file
     $foto_nama = "foto-" . time() . "-" . rand(1000, 9999) . ".png";
     $folder = "../foto_profil/" . $foto_nama;
 
-    // Simpan file
     if (file_put_contents($folder, $fotoData) === false) {
         showAlert('error', 'Gagal menyimpan foto profil!', 'register.php');
     }
@@ -85,7 +76,6 @@ if (!empty($_POST['foto_cropped'])) {
     showAlert('error', 'Foto profil harus diupload!', 'register.php');
 }
 
-// VALIDASI PASSWORD
 if ($password !== $confirm) {
     showAlert('error', 'Konfirmasi password tidak cocok!', 'register.php');
 }
@@ -93,7 +83,6 @@ if ($password !== $confirm) {
 $hash = password_hash($password, PASSWORD_DEFAULT);
 $token = bin2hex(random_bytes(20));
 
-// INSERT DATA
 $query = "INSERT INTO akun_user 
 (username, nama_lengkap, jenis_kelamin, tanggal_lahir, provinsi, kabupaten_kota, kecamatan, kelurahan_desa, kode_pos, alamat, email, nomor_hp, password, foto_profil, status, token)
 VALUES 
@@ -103,7 +92,6 @@ if (!mysqli_query($koneksi, $query)) {
     showAlert('error', 'Error: ' . mysqli_error($koneksi), 'register.php');
 }
 
-// Jika berhasil, hapus session form_data
 unset($_SESSION['form_data']);
 
 require "../phpmailer/src/PHPMailer.php";
@@ -159,7 +147,6 @@ function showAlert($type, $message, $redirect)
 
     <head>
         <link rel="icon" type="image/png" href="../images/icon/logo.png">
-
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 

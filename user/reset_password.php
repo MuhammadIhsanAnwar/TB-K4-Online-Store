@@ -3,12 +3,10 @@ include "../admin/koneksi.php";
 
 $token = $_GET['token'] ?? '';
 
-// Validasi token
 if (empty($token)) {
     showErrorPage('Token tidak ditemukan!', 'forgot.php');
 }
 
-// Ambil token
 $cek = mysqli_query($koneksi, "SELECT * FROM reset_password WHERE token='$token'");
 $data = mysqli_fetch_assoc($cek);
 
@@ -16,7 +14,6 @@ if (!$data) {
     showErrorPage('Token tidak valid!', 'forgot.php');
 }
 
-// Cek expired
 if (strtotime($data['expired']) < time()) {
     showErrorPage('Token sudah kedaluwarsa! Silakan minta link reset baru.', 'forgot.php');
 }
@@ -69,257 +66,12 @@ function showErrorPage($message, $redirect)
     <title>Reset Password</title>
     <link rel="icon" type="image/png" href="../images/Background dan Logo/logo.png">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* ================= PALETTE ================= */
-        :root {
-            --blue: #1E5DAC;
-            --beige: #E8D3C1;
-            --alley: #B7C5DA;
-            --misty: #EAE2E4;
-            --white: #ffffff;
-        }
-
-        /* ================= BASE ================= */
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-image: url("../images/Background dan Logo/bg regis.jpg");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            font-family: "Poppins", sans-serif;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg,
-                    rgba(30, 93, 172, 0.40),
-                    rgba(183, 197, 218, 0.30));
-            z-index: -1;
-        }
-
-        .reset-container {
-            padding: 20px;
-            max-width: 450px;
-            width: 100%;
-        }
-
-        /* ================= CARD ================= */
-        .card {
-            border-radius: 22px;
-            background: rgba(234, 226, 228, 0.45);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.45);
-            box-shadow: 0 25px 50px rgba(30, 93, 172, 0.35);
-            padding: 40px 30px;
-        }
-
-        .card h3 {
-            color: var(--blue);
-            font-weight: 700;
-            letter-spacing: 0.6px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .card .subtitle {
-            color: #5a6b80;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .form-label {
-            color: #2d3a4a;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .form-control {
-            border-radius: 12px;
-            padding: 12px 14px;
-            border: none;
-            background: var(--white);
-            font-size: 15px;
-            transition: 0.3s;
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
-            border: none;
-            outline: none;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .password-requirements {
-            background: rgba(30, 93, 172, 0.1);
-            border-left: 3px solid var(--blue);
-            padding: 12px 14px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            color: #2d3a4a;
-        }
-
-        .password-requirements ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-
-        .password-requirements li {
-            margin-bottom: 4px;
-        }
-
-        .password-strength {
-            height: 6px;
-            border-radius: 3px;
-            margin-top: 8px;
-            background: #e0e0e0;
-            transition: 0.3s;
-        }
-
-        .password-strength.weak {
-            background: #f44336;
-            width: 33%;
-        }
-
-        .password-strength.medium {
-            background: #ff9800;
-            width: 66%;
-        }
-
-        .password-strength.strong {
-            background: #4caf50;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--blue), var(--alley));
-            border: none;
-            border-radius: 12px;
-            padding: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: 0.3s ease;
-            font-size: 15px;
-            width: 100%;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, var(--alley), var(--blue));
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(30, 93, 172, 0.45);
-            color: white;
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .text-center-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .text-center-link a {
-            color: var(--blue);
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.2s;
-            font-size: 14px;
-        }
-
-        .text-center-link a:hover {
-            color: #0d3a7a;
-            font-weight: 600;
-        }
-
-        small.text-muted {
-            color: #5a6b80 !important;
-            font-size: 13px;
-        }
-
-        .logo-container {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .logo-container img {
-            max-width: 140px;
-            height: auto;
-        }
-
-        /* ================= RESPONSIVE ================= */
-        @media (max-width: 576px) {
-            .card {
-                padding: 30px 20px;
-            }
-
-            .card h3 {
-                font-size: 24px;
-            }
-
-            .form-control {
-                font-size: 16px;
-                padding: 14px 12px;
-            }
-
-            .reset-container {
-                padding: 15px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .card {
-                padding: 25px 18px;
-                border-radius: 18px;
-            }
-
-            .card h3 {
-                font-size: 22px;
-                margin-bottom: 8px;
-            }
-
-            .card .subtitle {
-                font-size: 13px;
-                margin-bottom: 25px;
-            }
-
-            .password-requirements {
-                font-size: 12px;
-                padding: 10px 12px;
-            }
-
-            .btn-primary {
-                padding: 11px;
-                font-size: 14px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css_user/reset_password.css">
 </head>
 
 <body>
     <div class="reset-container">
         <div class="card">
-            <!-- LOGO -->
             <div class="logo-container">
                 <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo">
             </div>
@@ -327,7 +79,6 @@ function showErrorPage($message, $redirect)
             <h3>Reset Password</h3>
             <p class="subtitle">Buat password baru untuk akun Anda</p>
 
-            <!-- PASSWORD REQUIREMENTS -->
             <div class="password-requirements">
                 <strong>Password harus mengandung:</strong>
                 <ul>
@@ -342,7 +93,6 @@ function showErrorPage($message, $redirect)
             <form action="proses_reset_password.php" method="POST" onsubmit="return validateForm()">
                 <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
 
-                <!-- PASSWORD BARU -->
                 <div class="form-group">
                     <label class="form-label">Password Baru</label>
                     <input type="password" name="password" id="password" class="form-control" required onkeyup="checkPasswordStrength()">
@@ -350,7 +100,6 @@ function showErrorPage($message, $redirect)
                     <small class="text-muted d-block mt-2" id="passwordStrengthText">Masukkan password yang kuat</small>
                 </div>
 
-                <!-- KONFIRMASI PASSWORD -->
                 <div class="form-group">
                     <label class="form-label">Konfirmasi Password</label>
                     <input type="password" name="password_confirm" id="password_confirm" class="form-control" required onkeyup="checkPasswordMatch()">
@@ -370,7 +119,6 @@ function showErrorPage($message, $redirect)
 
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script>
-        // Check password strength
         function checkPasswordStrength() {
             const pw = document.getElementById('password').value;
             const strength = document.getElementById('passwordStrength');
@@ -384,7 +132,7 @@ function showErrorPage($message, $redirect)
 
             if (pw.length < 8) {
                 strength.className = 'password-strength weak';
-                strengthText.textContent = '⚠️ Password terlalu pendek (min 8 karakter)';
+                strengthText.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg> Password terlalu pendek (min 8 karakter)';
                 return;
             }
 
@@ -397,17 +145,16 @@ function showErrorPage($message, $redirect)
 
             if (score <= 2) {
                 strength.className = 'password-strength weak';
-                strengthText.textContent = '❌ Password lemah - tambahkan huruf besar, kecil, angka, dan simbol';
+                strengthText.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg> Password lemah - tambahkan huruf besar, kecil, angka, dan simbol';
             } else if (score === 3) {
                 strength.className = 'password-strength medium';
-                strengthText.textContent = '⚠️ Password sedang - hampir sempurna!';
+                strengthText.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg> Password sedang - hampir sempurna!';
             } else if (score === 4) {
                 strength.className = 'password-strength strong';
-                strengthText.textContent = '✅ Password kuat!';
+                strengthText.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> Password kuat!';
             }
         }
 
-        // Check password match
         function checkPasswordMatch() {
             const pw = document.getElementById('password').value;
             const confirm = document.getElementById('password_confirm').value;
@@ -419,15 +166,14 @@ function showErrorPage($message, $redirect)
             }
 
             if (pw === confirm) {
-                match.textContent = '✓ Password cocok';
+                match.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> Password cocok';
                 match.style.color = '#4caf50';
             } else {
-                match.textContent = '✗ Password tidak cocok';
+                match.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg> Password tidak cocok';
                 match.style.color = '#f44336';
             }
         }
 
-        // Validasi form
         function validateForm() {
             const pw = document.getElementById('password').value;
             const confirm = document.getElementById('password_confirm').value;

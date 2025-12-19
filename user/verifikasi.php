@@ -1,15 +1,12 @@
 <?php
 include "../admin/koneksi.php";
 
-// Menghindari error karakter URL
 $email = urldecode($_GET['email']);
 $token = urldecode($_GET['token']);
 
-// Prevent SQL injection
 $email = mysqli_real_escape_string($koneksi, $email);
 $token = mysqli_real_escape_string($koneksi, $token);
 
-// Cek data
 $cek = mysqli_query($koneksi, "
     SELECT * FROM akun_user 
     WHERE email='$email' AND token='$token'

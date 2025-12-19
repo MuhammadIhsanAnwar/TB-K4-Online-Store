@@ -9,21 +9,17 @@ require '../phpmailer/src/Exception.php';
 require '../phpmailer/src/PHPMailer.php';
 require '../phpmailer/src/SMTP.php';
 
-// CEK POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    // Bisa redirect ke halaman lain atau tampilkan error
     header("Location: ../index.php");
     exit;
 }
 
 $email = $_POST['email'] ?? '';
 
-// Validasi sederhana
 if (empty($email)) {
     showAlert('error', 'Input Tidak Valid', 'Email tidak boleh kosong!', 'forgot.php');
 }
 
-// Cari email
 $q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE email='$email'");
 $data = mysqli_fetch_assoc($q);
 
@@ -31,17 +27,14 @@ if (!$data) {
     showAlert('error', 'Email Tidak Terdaftar', 'Email yang Anda masukkan tidak terdaftar dalam sistem kami.', 'forgot.php');
 }
 
-// Token reset
 $token = bin2hex(random_bytes(32));
 $expired = date("Y-m-d H:i:s", time() + 3600);
 
-// Simpan token
 mysqli_query($koneksi, "INSERT INTO reset_password (email, token, expired) 
                         VALUES ('$email', '$token', '$expired')");
 
 $link_reset = "https://urbanhype.neoverse.my.id/user/reset_password.php?token=$token";
 
-// SEND EMAIL
 $mail = new PHPMailer(true);
 
 try {
