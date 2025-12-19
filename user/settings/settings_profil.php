@@ -182,9 +182,21 @@ if (isset($_POST['update'])) {
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Nomor HP</label>
-                        <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
-                        <div class="info-text">Contoh: 08123456789 (10-13 digit)</div>
+                        <label>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 6px;">
+                                <path d="M11 1H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zM5 0a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3h6zm1 1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM8 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                            </svg>
+                            Nomor HP
+                        </label>
+                        <div class="input-wrapper">
+                            <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka" placeholder="08123456789">
+                        </div>
+                        <div class="info-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 4px;">
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.753.23 1.278.563.528.34 1.189.957 1.568 1.41H14V6h-3.753a9.48 9.48 0 0 0-1.518-1.412zm.027 11.412h-6a1 1 0 0 1-1-1v-1h3.294a6.6 6.6 0 0 1 .258-1.844H3.066V5.411h5.555a3.08 3.08 0 0 1 .863-1.299c-.726-.341-1.75-.564-2.772-.564H5.039l-.015-.5h4.887a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-1 0v1.294h-3.668a.5.5 0 0 0-.5.5v.5h1.039c1.022 0 1.629.28 2.25.606.584.336 1.139.922 1.502 1.694.087.166.187.33.277.458h.975a7 7 0 0 0-.313-.957c-.468-1.05-1.47-2.118-2.98-2.514a2.26 2.26 0 0 0-.383-.09h-.014.014z"/>
+                            </svg>
+                            10-13 digit angka (Contoh: 08123456789)
+                        </div>
                     </div>
                 </div>
             </div>

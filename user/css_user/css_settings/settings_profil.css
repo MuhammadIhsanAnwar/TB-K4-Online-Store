@@ -94,6 +94,7 @@
     input[type="text"],
     input[type="date"],
     input[type="number"],
+    input[type="tel"],
     input[type="file"],
     select,
     textarea {
@@ -110,6 +111,7 @@
     input[type="text"]:focus,
     input[type="date"]:focus,
     input[type="number"]:focus,
+    input[type="tel"]:focus,
     select:focus,
     textarea:focus {
         outline: none;
@@ -248,5 +250,21 @@
     input:disabled {
         background-color: #f0f0f0;
         cursor: not-allowed;
+    }
+
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-wrapper input[type="tel"] {
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .input-wrapper input[type="tel"]::placeholder {
+        color: #B7C5DA;
+        font-weight: 500;
     }
 
