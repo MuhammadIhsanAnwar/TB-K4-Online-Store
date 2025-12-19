@@ -197,6 +197,7 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css_user/css_produk_pembayaran/product_detail.css">
 
     <style>
         :root {

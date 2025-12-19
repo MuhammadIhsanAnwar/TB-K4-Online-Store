@@ -164,6 +164,7 @@ $alamat_lengkap = $user['alamat'] . ', ' .
     <title>Checkout - Urban Hype</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css_user/css_produk_pembayaran/checkout.css">
     <style>
         * {
             margin: 0;
