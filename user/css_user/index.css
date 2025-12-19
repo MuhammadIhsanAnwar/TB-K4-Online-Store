@@ -194,7 +194,7 @@
         }
 
         .hero-btn:hover {
-            background: transparent;
+            background: white;
             color: white;
             transform: translateY(-5px);
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
@@ -320,7 +320,7 @@
         .section-bg-light {
             background: var(--light);
         }
-        
+
         .spinner-overlay {
             position: fixed;
             top: 0;
