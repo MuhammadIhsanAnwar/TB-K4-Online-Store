@@ -20,7 +20,15 @@ $kode_pos       = $_POST['kode_pos'];
 
 $alamat         = ucwords(strtolower($_POST['alamat']));
 $email          = $_POST['email'];
-$nomor_hp       = preg_replace('/[^0-9]/', '', $_POST['nomor_hp']);
+
+// Validasi dan sanitasi nomor HP
+$nomor_hp_input = trim($_POST['nomor_hp']);
+$nomor_hp       = preg_replace('/[^0-9]/', '', $nomor_hp_input);
+
+// Validasi panjang nomor HP harus 10-13 digit
+if (empty($nomor_hp) || strlen($nomor_hp) < 10 || strlen($nomor_hp) > 13) {
+    showAlert('error', 'Nomor HP harus 10-13 digit angka! Anda input: ' . htmlspecialchars($nomor_hp_input), 'register.php');
+}
 
 $password       = $_POST['password'];
 $confirm        = $_POST['password_confirm'];

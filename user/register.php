@@ -163,16 +163,46 @@ session_start();
 
                 <div class="mb-3">
                     <label class="form-label">Nomor HP</label>
-                    <input type="tel" name="nomor_hp" id="nomor_hp" class="form-control" value="<?php echo isset($_SESSION['form_data']['nomor_hp']) ? htmlspecialchars($_SESSION['form_data']['nomor_hp']) : ''; ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka">
-                    <small class="text-muted">Contoh: 08123456789 (10-13 digit)</small>
+                    <input type="tel" name="nomor_hp" id="nomor_hp" class="form-control" value="<?php echo isset($_SESSION['form_data']['nomor_hp']) ? htmlspecialchars($_SESSION['form_data']['nomor_hp']) : ''; ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka" placeholder="08123456789">
+                    <small class="text-muted d-block">Contoh: 08123456789 (10-13 digit)</small>
+                    <small id="nomorHpStatus" class="text-muted"></small>
                 </div>
 
                 <script>
-                    document.getElementById('nomor_hp').addEventListener('blur', function() {
-                        const nomorHp = this.value.trim();
-                        if (nomorHp && !/^[0-9]{10,13}$/.test(nomorHp)) {
-                            alert('Nomor HP harus 10-13 digit angka!');
-                            this.value = '';
+                    const nomorHpInput = document.getElementById('nomor_hp');
+
+                    // Filter real-time: hanya angka
+                    nomorHpInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/[^0-9]/g, '');
+                        e.target.value = value;
+                        
+                        const statusMsg = document.getElementById('nomorHpStatus');
+                        const length = value.length;
+                        
+                        if (length > 0) {
+                            if (length >= 10 && length <= 13) {
+                                statusMsg.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> Format nomor HP benar (' + length + ' digit)';
+                                statusMsg.style.color = '#4caf50';
+                            } else if (length < 10) {
+                                statusMsg.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg> Minimal 10 digit (sekarang ' + length + ')';
+                                statusMsg.style.color = '#ff9800';
+                            } else {
+                                statusMsg.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg> Maksimal 13 digit (sekarang ' + length + ')';
+                                statusMsg.style.color = '#f44336';
+                            }
+                        } else {
+                            statusMsg.textContent = '';
+                        }
+                        
+                        console.log('Nomor HP:', value, 'Panjang:', length);
+                    });
+
+                    // Validasi saat blur
+                    nomorHpInput.addEventListener('blur', function() {
+                        const value = this.value.trim();
+                        if (value && (value.length < 10 || value.length > 13)) {
+                            alert('⚠️ Nomor HP harus 10-13 digit!\nAnda input: ' + value.length + ' digit');
+                            this.focus();
                         }
                     });
                 </script>
