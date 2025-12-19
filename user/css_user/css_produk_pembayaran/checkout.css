@@ -1,0 +1,207 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #EAE2E4 0%, #B7C5DA 50%, #1E5DAC 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .checkout-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .checkout-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .checkout-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .checkout-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #1E5DAC;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #B7C5DA;
+        }
+
+        .product-list {
+            margin-bottom: 2rem;
+        }
+
+        .product-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-info h4 {
+            color: #1E5DAC;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-weight: 600;
+            color: #1E5DAC;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #1E5DAC;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #B7C5DA;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #1E5DAC;
+            box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.1);
+        }
+
+        input[type="text"]:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .kurir-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .kurir-option {
+            padding: 1rem;
+            border: 2px solid #B7C5DA;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .kurir-option:hover {
+            border-color: #1E5DAC;
+            background: rgba(30, 93, 172, 0.05);
+        }
+
+        .kurir-option input[type="radio"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .order-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1E5DAC;
+            padding-top: 1rem;
+            border-top: 2px solid #1E5DAC;
+        }
+
+        .btn-complete {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1E5DAC 0%, #164a8a 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .btn-complete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 93, 172, 0.3);
+        }
+
+        .btn-complete:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+
+            .kurir-options {
+                grid-template-columns: 1fr;
+            }
+        }
