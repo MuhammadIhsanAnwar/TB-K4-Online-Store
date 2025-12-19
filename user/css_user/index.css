@@ -23,7 +23,6 @@
             position: relative;
         }
 
-        /* ===== ANIMATED BACKGROUND ===== */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -230,7 +229,6 @@
             filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.3));
         }
 
-        /* ===== CATEGORY FILTERS (MODERN TABS) ===== */
         .category-filters {
             padding: 3rem 5%;
             background: var(--white);
@@ -308,7 +306,6 @@
             left: 0;
         }
 
-        /* ===== SCROLL REVEAL ===== */
         .scroll-reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -320,12 +317,10 @@
             transform: translateY(0);
         }
 
-        /* ===== ABOUT & CONTACT SECTION STYLE ===== */
         .section-bg-light {
             background: var(--light);
         }
-
-        /* ===== LOADING SPINNER ===== */
+        
         .spinner-overlay {
             position: fixed;
             top: 0;
