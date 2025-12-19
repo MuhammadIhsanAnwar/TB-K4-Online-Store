@@ -1,8 +1,6 @@
 <?php
-// Koneksi database
 include "../../admin/koneksi.php";
 
-// Pastikan user sudah login
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login_user.php");
     exit;
@@ -12,14 +10,12 @@ $user_id = $_SESSION['user_id'];
 $success = false;
 $error_msg = "";
 
-// Ambil data user dari database
 $q = mysqli_query($koneksi, "SELECT * FROM akun_user WHERE id='$user_id'");
 if (!$q || mysqli_num_rows($q) == 0) {
     die("User tidak ditemukan!");
 }
 $user = mysqli_fetch_assoc($q);
 
-// PROSES UPDATE
 if (isset($_POST['update'])) {
 
     $username       = mysqli_real_escape_string($koneksi, $_POST['username']);
@@ -27,7 +23,7 @@ if (isset($_POST['update'])) {
     $tanggal_lahir  = $_POST['tanggal_lahir'];
     $alamat         = mysqli_real_escape_string($koneksi, $_POST['alamat']);
     $jenis_kelamin  = $_POST['jenis_kelamin'];
-    $nomor_hp       = preg_replace('/[^0-9]/', '', $_POST['nomor_hp']); // Hapus karakter non-digit
+    $nomor_hp       = preg_replace('/[^0-9]/', '', $_POST['nomor_hp']);
 
     $provinsi       = mysqli_real_escape_string($koneksi, $_POST['provinsi']);
     $kabupaten_kota = mysqli_real_escape_string($koneksi, $_POST['kabupaten_kota']);
@@ -36,7 +32,6 @@ if (isset($_POST['update'])) {
     $kode_pos       = mysqli_real_escape_string($koneksi, $_POST['kode_pos']);
     $update_foto_sql = "";
 
-    // UPLOAD FOTO
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] != 4) {
 
         $allowed_ext = ['jpg', 'jpeg', 'png'];
@@ -116,9 +111,19 @@ if (isset($_POST['update'])) {
         <h2>Edit Profil</h2>
 
         <?php if ($success): ?>
-            <div class="alert alert-success">✓ Data berhasil diperbarui!</div>
+            <div class="alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 4px;">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                </svg>
+                Data berhasil diperbarui!
+            </div>
         <?php elseif (!empty($error_msg)): ?>
-            <div class="alert alert-danger">✗ <?= $error_msg ?></div>
+            <div class="alert alert-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 4px;">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <?= $error_msg ?>
+            </div>
         <?php endif; ?>
 
         <form method="POST" enctype="multipart/form-data">
@@ -225,7 +230,10 @@ if (isset($_POST['update'])) {
             </div>
 
             <button type="submit" name="update" class="btn-submit">
-                💾 Simpan Perubahan
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 6px;">
+                    <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.125.312l-2.5 2.5a.5.5 0 0 1-.75.063L9.566 4.9a.5.5 0 0 0-.75-.063l-2.5 2.5A.5.5 0 0 1 6 7.25V1.5a.5.5 0 0 1 .5-.5zM11 2v1h2V2h-2zm-2 2v1h3V4h-3zm-2 2v1h5V6h-5zm-2 2v1h7V8h-7zm0 2v1h7v-1h-7zm2 2v1h5v-1h-5zm2 2v1h3v-1h-3zm2 2v1h1v-1h-1z"/>
+                </svg>
+                Simpan Perubahan
             </button>
         </form>
     </div>
@@ -237,14 +245,12 @@ if (isset($_POST['update'])) {
         fotoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // Validasi tipe file
                 if (!['image/jpeg', 'image/png'].includes(file.type)) {
                     alert('Hanya JPG dan PNG yang diizinkan!');
                     this.value = '';
                     return;
                 }
 
-                // Validasi ukuran file
                 if (file.size > 2 * 1024 * 1024) {
                     alert('Ukuran file maksimal 2MB!');
                     this.value = '';
