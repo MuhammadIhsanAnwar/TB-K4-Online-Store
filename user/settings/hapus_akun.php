@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['confirm_delete']) && $_POST['confirm_delete'] == 'yes') {
         $user_id = $_SESSION['user_id'];
 
-        // Delete user account
         $sql = "DELETE FROM akun_user WHERE id = '$user_id'";
 
         if (mysqli_query($koneksi, $sql)) {
@@ -33,18 +32,7 @@ function showAlert($type, $title, $message, $redirect)
         <title><?php echo $title; ?></title>
         <link rel="icon" type="image/png" href="../../images/icon/logo.png">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                background: linear-gradient(135deg, #1E5DAC 0%, #B7C5DA 100%);
-                font-family: 'Poppins', sans-serif;
-            }
-        </style>
+        <link rel="stylesheet" href="../css_user/css_settings/hapus_akun.css">
     </head>
 
     <body>
@@ -78,6 +66,7 @@ function showAlert($type, $title, $message, $redirect)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hapus Akun</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/icon/logo.png">
     <link rel="stylesheet" href="../css_user/css_settings/hapus_akun.css">
 </head>
@@ -85,18 +74,14 @@ function showAlert($type, $title, $message, $redirect)
 <body>
 
     <div class="card">
-        <!-- ICON WARNING -->
-        <div class="warning-icon">⚠️</div>
+        <div class="warning-icon"><i class="fas fa-exclamation-triangle"></i></div>
 
-        <!-- TITLE -->
         <h2>Hapus Akun?</h2>
 
-        <!-- WARNING MESSAGE -->
         <div class="warning-text">
             Anda akan menghapus akun secara permanen. Tindakan ini <strong>TIDAK DAPAT DIBATALKAN</strong> dan semua data Anda akan hilang selamanya.
         </div>
 
-        <!-- DATA YANG AKAN DIHAPUS -->
         <div class="danger-list">
             <strong style="color: #dc2626;">Data yang akan dihapus:</strong>
             <ul>
@@ -108,7 +93,6 @@ function showAlert($type, $title, $message, $redirect)
             </ul>
         </div>
 
-        <!-- BUTTONS -->
         <div class="button-group">
             <button class="btn btn-cancel" onclick="window.history.back()">
                 Batal
@@ -121,7 +105,6 @@ function showAlert($type, $title, $message, $redirect)
             </form>
         </div>
 
-        <!-- FOOTER LINK -->
         <div class="text-center">
             <small>Jika ragu, Anda bisa kembali ke <a href="settings.php">Pengaturan</a></small>
         </div>
