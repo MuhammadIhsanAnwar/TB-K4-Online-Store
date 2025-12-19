@@ -49,7 +49,12 @@ while ($row = mysqli_fetch_assoc($result)) {
     <?php include "../../navbar.php"; ?>
     <section class="hero-shop">
         <div class="container-shop">
-            <h1>🛍️ Shop UrbanHype</h1>
+            <h1>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 8px;">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                Shop UrbanHype
+            </h1>
             <p>Temukan gaya fashion terbaik untuk Anda</p>
         </div>
     </section>
@@ -57,19 +62,34 @@ while ($row = mysqli_fetch_assoc($result)) {
     <main class="container-shop">
         <div class="category-tabs">
             <a href="shop.php?kategori=All" class="category-btn <?php echo $kategori === 'All' ? 'active' : ''; ?>">
-                ✨ All
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                </svg>
+                All
             </a>
             <a href="shop.php?kategori=Men" class="category-btn <?php echo $kategori === 'Men' ? 'active' : ''; ?>">
-                👕 Men
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
+                    <path d="M8 8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm2.146-2.146a.5.5 0 0 1 .707 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.707-.708L11.293 9H9.5a.5.5 0 0 0 0 1h1.793l-1.147 1.146a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 0-.708l-2-2z"/>
+                </svg>
+                Men
             </a>
             <a href="shop.php?kategori=Women" class="category-btn <?php echo $kategori === 'Women' ? 'active' : ''; ?>">
-                👗 Women
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
+                    <path d="M4.5 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V3zm-.5-2a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H4z"/>
+                </svg>
+                Women
             </a>
             <a href="shop.php?kategori=Shoes" class="category-btn <?php echo $kategori === 'Shoes' ? 'active' : ''; ?>">
-                👟 Shoes
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
+                    <path d="m11.537 6.502-.003-.052-.117-.274a.5.5 0 0 0-.24-.232L8.5 4.568l-.11-.055a.5.5 0 0 0-.46 0l-.11.055-2.677 1.376a.5.5 0 0 0-.24.232l-.117.274-.003.052V12c0 .338.07.587.15.782.11.267.325.52.657.721.332.2.778.333 1.32.396l.7.07v1.5h2.3l.7-.07c.542-.063.988-.195 1.32-.396.332-.201.547-.454.657-.721.08-.195.15-.444.15-.782V6.502z"/>
+                </svg>
+                Shoes
             </a>
             <a href="shop.php?kategori=Accessories" class="category-btn <?php echo $kategori === 'Accessories' ? 'active' : ''; ?>">
-                ✨ Accessories
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                </svg>
+                Accessories
             </a>
         </div>
         <?php if (count($products) > 0): ?>
@@ -95,7 +115,11 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         <?php else: ?>
             <div class="empty-state">
-                <div class="empty-state-icon">📦</div>
+                <div class="empty-state-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                    </svg>
+                </div>
                 <p class="empty-state-text">Tidak ada produk di kategori ini</p>
             </div>
         <?php endif; ?>
