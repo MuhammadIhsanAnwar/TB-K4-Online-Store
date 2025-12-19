@@ -10,7 +10,7 @@
     <title>Lupa Password</title>
     <link rel="icon" type="image/png" href="../images/icon/logo.png">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css_user/lupa_password.css">
+    <link rel="stylesheet" href="css_user/lupa_password.css">
 </head>
 
 <body class="bg-light">

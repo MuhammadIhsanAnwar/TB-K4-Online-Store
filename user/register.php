@@ -12,7 +12,7 @@ session_start();
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    <link rel="stylesheet" href="../css_user/register.css">
+    <link rel="stylesheet" href="css_user/register.css">
 </head>
 
 <body>

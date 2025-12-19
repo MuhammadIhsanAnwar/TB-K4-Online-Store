@@ -34,7 +34,7 @@ function showErrorPage($message, $redirect)
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Error</title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <link rel="stylesheet" href="../css_user/reset_password.css">
+        <link rel="stylesheet" href="css_user/reset_password.css">
     </head>
 
     <body>

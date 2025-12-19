@@ -39,7 +39,7 @@ function showAlert($type, $title, $message, $redirect)
         <title><?php echo $title; ?></title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="icon" type="image/png" href="../images/icon/logo.png">
-        <link rel="stylesheet" href="../css_user/verifikasi.css">
+        <link rel="stylesheet" href="css_user/verifikasi.css">
     </head>
 
     <body>
