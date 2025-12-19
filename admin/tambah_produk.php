@@ -6,7 +6,6 @@ include "koneksi.php";
 $msg = '';
 $msg_type = '';
 
-// PROSES TAMBAH PRODUK
 if (isset($_POST['submit'])) {
 
     $kategori = mysqli_real_escape_string($koneksi, $_POST['kategori']);

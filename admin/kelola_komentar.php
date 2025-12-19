@@ -2,7 +2,6 @@
 require 'auth_check.php';
 include 'koneksi.php';
 
-// Proses hapus komentar
 if (isset($_POST['delete_comment'])) {
     $comment_id = intval($_POST['comment_id']);
 
@@ -15,7 +14,6 @@ if (isset($_POST['delete_comment'])) {
     exit;
 }
 
-// Proses approve komentar (update status)
 if (isset($_POST['approve_comment'])) {
     $comment_id = intval($_POST['comment_id']);
 
@@ -28,7 +26,6 @@ if (isset($_POST['approve_comment'])) {
     exit;
 }
 
-// Ambil semua komentar dengan info produk dan user
 $query = "SELECT k.*, p.nama as nama_produk, u.nama_lengkap, u.foto_profil
           FROM komentar_produk k
           JOIN products p ON k.product_id = p.id
@@ -61,9 +58,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <div class="main-content">
             <div class="container-fluid">
-                <h1 class="page-title">💬 Kelola Komentar</h1>
+                <h1 class="page-title">
+                    <i class="bi bi-chat-dots"></i> Kelola Komentar
+                </h1>
 
-                <!-- Filter Section -->
                 <div class="filter-section">
                     <div class="filter-title">Filter Status:</div>
                     <div class="filter-buttons">
@@ -73,7 +71,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </div>
                 </div>
 
-                <!-- Comments List -->
                 <div id="commentsList">
                     <?php if (empty($komentar)): ?>
                         <div class="empty-state">
@@ -88,21 +85,34 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         alt="<?php echo htmlspecialchars($comment['nama_lengkap']); ?>"
                                         class="comment-avatar"
                                         onerror="this.src='https://via.placeholder.com/50'">
+
                                     <div class="comment-user-info">
                                         <div class="comment-user-name"><?php echo htmlspecialchars($comment['nama_lengkap']); ?></div>
-                                        <div class="comment-product">Produk: <strong><?php echo htmlspecialchars($comment['nama_produk']); ?></strong></div>
-                                        <div class="comment-date">Tanggal: <?php echo date('d M Y H:i', strtotime($comment['created_at'])); ?></div>
+                                        <div class="comment-product">
+                                            Produk: <strong><?php echo htmlspecialchars($comment['nama_produk']); ?></strong>
+                                        </div>
+                                        <div class="comment-date">
+                                            <i class="bi bi-calendar-event"></i>
+                                            <?php echo date('d M Y H:i', strtotime($comment['created_at'])); ?>
+                                        </div>
                                     </div>
+
                                     <span class="status-badge <?php echo !empty($comment['status']) && $comment['status'] === 'approved' ? 'status-approved' : 'status-pending'; ?>">
-                                        <?php echo !empty($comment['status']) && $comment['status'] === 'approved' ? '✓ Disetujui' : '⏳ Menunggu'; ?>
+                                        <?php if (!empty($comment['status']) && $comment['status'] === 'approved'): ?>
+                                            <i class="bi bi-check-circle"></i> Disetujui
+                                        <?php else: ?>
+                                            <i class="bi bi-hourglass-split"></i> Menunggu
+                                        <?php endif; ?>
                                     </span>
                                 </div>
 
                                 <div class="comment-rating">
                                     <?php for ($i = 0; $i < $comment['rating']; $i++): ?>
-                                        <span class="star">★</span>
+                                        <i class="bi bi-star-fill star"></i>
                                     <?php endfor; ?>
-                                    <span style="color: #999; font-size: 0.9rem; margin-left: 0.5rem;"><?php echo $comment['rating']; ?>/5</span>
+                                    <span style="color:#999;font-size:.9rem;margin-left:.5rem;">
+                                        <?php echo $comment['rating']; ?>/5
+                                    </span>
                                 </div>
 
                                 <div class="comment-text">
@@ -112,11 +122,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <div class="comment-actions">
                                     <?php if (empty($comment['status']) || $comment['status'] !== 'approved'): ?>
                                         <button class="btn-action btn-approve" onclick="approveComment(<?php echo $comment['id']; ?>)">
-                                            ✓ Setujui
+                                            <i class="bi bi-check-lg"></i> Setujui
                                         </button>
                                     <?php endif; ?>
+
                                     <button class="btn-action btn-delete" onclick="deleteComment(<?php echo $comment['id']; ?>)">
-                                        🗑️ Hapus
+                                        <i class="bi bi-trash"></i> Hapus
                                     </button>
                                 </div>
                             </div>
@@ -145,22 +156,20 @@ while ($row = mysqli_fetch_assoc($result)) {
                     formData.append('comment_id', commentId);
 
                     fetch('kelola_komentar.php', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: data.message,
-                                    confirmButtonColor: '#1E5DAC'
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            }
-                        });
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: data.message,
+                                confirmButtonColor: '#1E5DAC'
+                            }).then(() => location.reload());
+                        }
+                    });
                 }
             });
         }
@@ -181,22 +190,20 @@ while ($row = mysqli_fetch_assoc($result)) {
                     formData.append('comment_id', commentId);
 
                     fetch('kelola_komentar.php', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: data.message,
-                                    confirmButtonColor: '#1E5DAC'
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            }
-                        });
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: data.message,
+                                confirmButtonColor: '#1E5DAC'
+                            }).then(() => location.reload());
+                        }
+                    });
                 }
             });
         }
@@ -205,24 +212,25 @@ while ($row = mysqli_fetch_assoc($result)) {
             const cards = document.querySelectorAll('.comment-card');
             const buttons = document.querySelectorAll('.filter-btn');
 
-            // Update button active state
+            buttons.forEach(btn => btn.classList.remove('active'));
+
             buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if ((status === 'semua' && btn.textContent.includes('Semua')) ||
+                if (
+                    (status === 'semua' && btn.textContent.includes('Semua')) ||
                     (status === 'pending' && btn.textContent.includes('Menunggu')) ||
-                    (status === 'approved' && btn.textContent.includes('Disetujui'))) {
+                    (status === 'approved' && btn.textContent.includes('Disetujui'))
+                ) {
                     btn.classList.add('active');
                 }
             });
 
-            // Filter cards
             cards.forEach(card => {
                 const cardStatus = card.dataset.status;
-                if (status === 'semua') {
-                    card.style.display = 'block';
-                } else if (status === 'pending' && (cardStatus === 'pending' || cardStatus === '')) {
-                    card.style.display = 'block';
-                } else if (status === 'approved' && cardStatus === 'approved') {
+                if (
+                    status === 'semua' ||
+                    (status === 'pending' && (cardStatus === 'pending' || cardStatus === '')) ||
+                    (status === 'approved' && cardStatus === 'approved')
+                ) {
                     card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
@@ -231,5 +239,4 @@ while ($row = mysqli_fetch_assoc($result)) {
         }
     </script>
 </body>
-
 </html>

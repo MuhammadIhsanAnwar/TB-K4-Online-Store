@@ -2,9 +2,6 @@
 require 'auth_check.php';
 include '../admin/koneksi.php';
 
-/* =======================
-   PROSES DOWNLOAD REPORT
-   ======================= */
 if (isset($_GET['download'])) {
     $format = $_GET['download'];
 
@@ -86,7 +83,6 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
 <div class="content">
     <div class="container">
 
-        <!-- HEADER -->
         <div class="page-header">
             <h1 class="page-title">
                 <i class="bi bi-graph-up-arrow"></i> Data Penjualan
@@ -104,7 +100,6 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
 
         <hr>
 
-        <!-- SUMMARY -->
         <?php
         $total = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT COUNT(*) as total FROM history_penjualan"));
         $pendapatan = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(harga_total) as total FROM history_penjualan"));
@@ -128,7 +123,6 @@ $query = mysqli_query($koneksi, "SELECT * FROM history_penjualan ORDER BY tangga
             </div>
         </div>
 
-        <!-- TABLE -->
         <div class="table-wrapper">
             <?php if (mysqli_num_rows($query) > 0): ?>
                 <table>

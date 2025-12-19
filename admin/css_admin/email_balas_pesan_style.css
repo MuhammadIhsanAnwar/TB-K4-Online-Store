@@ -1,0 +1,82 @@
+ body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background-color: #f5f5f5;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 20px auto;
+                    background-color: white;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                }
+                .header {
+                    background: linear-gradient(135deg, #1E5DAC 0%, #1a4d8f 100%);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                }
+                .header h1 {
+                    margin: 0;
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+                .header p {
+                    margin: 10px 0 0 0;
+                    font-size: 14px;
+                    opacity: 0.9;
+                }
+                .content {
+                    padding: 30px;
+                }
+                .greeting {
+                    color: #333;
+                    font-size: 16px;
+                    margin-bottom: 20px;
+                }
+                .message-box {
+                    background-color: #f8f9fa;
+                    border-left: 4px solid #1E5DAC;
+                    padding: 20px;
+                    margin: 20px 0;
+                    border-radius: 5px;
+                    line-height: 1.6;
+                    color: #333;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                }
+                .original-message-box {
+                    background-color: #f0f7ff;
+                    border-left: 4px solid #B7C5DA;
+                    padding: 20px;
+                    margin: 15px 0;
+                    border-radius: 5px;
+                    line-height: 1.6;
+                    color: #555;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    font-size: 14px;
+                }
+                .original-message-section h3 {
+                    font-size: 14px;
+                    color: #1E5DAC;
+                }
+                .footer {
+                    background-color: #f5f5f5;
+                    padding: 20px;
+                    text-align: center;
+                    font-size: 12px;
+                    color: #666;
+                    border-top: 1px solid #ddd;
+                }
+                .footer a {
+                    color: #1E5DAC;
+                    text-decoration: none;
+                }
+                .divider {
+                    height: 1px;
+                    background-color: #ddd;
+                    margin: 30px 0;
+                }

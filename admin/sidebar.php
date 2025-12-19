@@ -9,7 +9,6 @@ $qPesan = mysqli_query(
 );
 $notifPesan = mysqli_fetch_assoc($qPesan)['total'];
 
-// Hitung notifikasi pesanan yang menunggu konfirmasi
 $qPesananBaru = mysqli_query(
     $koneksi,
     "SELECT COUNT(*) AS total
@@ -18,7 +17,6 @@ $qPesananBaru = mysqli_query(
 );
 $notifPesananBaru = mysqli_fetch_assoc($qPesananBaru)['total'];
 
-// Hitung notifikasi komentar belum di-review
 $qKomentarBaru = mysqli_query(
     $koneksi,
     "SELECT COUNT(*) AS total
@@ -57,7 +55,6 @@ $notifKomentarBaru = mysqli_fetch_assoc($qKomentarBaru)['total'];
 
 <div class="sidebar">
 
-    <!-- LOGO -->
     <div class="logo-box">
         <img src="../images/icon/logo.png" alt="Logo">
     </div>
@@ -70,7 +67,6 @@ $notifKomentarBaru = mysqli_fetch_assoc($qKomentarBaru)['total'];
     <a href="tambah_produk.php" class="<?= basename($_SERVER['PHP_SELF']) == 'tambah_produk.php' ? 'active' : '' ?>">Tambah Produk</a>
     <a href="data_penjualan.php" class="<?= basename($_SERVER['PHP_SELF']) == 'data_penjualan.php' ? 'active' : '' ?>">Data Penjualan</a>
 
-    <!-- PESANAN MASUK -->
     <a href="pesanan_masuk.php"
         class="<?= basename($_SERVER['PHP_SELF']) == 'pesanan_masuk.php' ? 'active' : '' ?>"
         style="position:relative;">
@@ -80,7 +76,6 @@ $notifKomentarBaru = mysqli_fetch_assoc($qKomentarBaru)['total'];
         <?php endif; ?>
     </a>
 
-    <!-- KELOLA KOMENTAR -->
     <a href="kelola_komentar.php"
         class="<?= basename($_SERVER['PHP_SELF']) == 'kelola_komentar.php' ? 'active' : '' ?>"
         style="position:relative;">

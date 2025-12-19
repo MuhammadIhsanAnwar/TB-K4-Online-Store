@@ -2,7 +2,6 @@
 require 'auth_check.php';
 include "../admin/koneksi.php";
 
-/* ================= DELETE PESAN ================= */
 if (isset($_POST['delete_id'])) {
     $id = intval($_POST['delete_id']);
 
@@ -11,7 +10,6 @@ if (isset($_POST['delete_id'])) {
     exit;
 }
 
-/* Tandai pesan dibaca */
 if (isset($_POST['read_id'])) {
     $id = intval($_POST['read_id']);
     mysqli_query($koneksi, "UPDATE pesan_kontak SET status='dibaca' WHERE id='$id'");
@@ -19,24 +17,20 @@ if (isset($_POST['read_id'])) {
     exit;
 }
 
-// PARAMETER PAGINATION & SEARCH
 $search = isset($_GET['search']) ? mysqli_real_escape_string($koneksi, $_GET['search']) : '';
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $items_per_page = 10;
 $offset = ($page - 1) * $items_per_page;
 
-// BUILD QUERY
 $where = "WHERE 1=1";
 if (!empty($search)) {
     $where .= " AND (nama LIKE '%$search%' OR email LIKE '%$search%' OR pesan LIKE '%$search%')";
 }
 
-// TOTAL DATA
 $total_query = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM pesan_kontak $where");
 $total_data = mysqli_fetch_assoc($total_query)['total'];
 $total_pages = ceil($total_data / $items_per_page);
 
-// GET DATA
 $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY created_at DESC LIMIT $offset, $items_per_page");
 ?>
 
@@ -63,18 +57,18 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY crea
 
     <div class="content">
         <div class="container">
-            <!-- PAGE HEADER -->
+  
             <div class="page-header">
-                <h1 class="page-title">💬 Data Pesan</h1>
+                <h1 class="page-title"><i class="bi bi-chat-dots"></i> Data Pesan</h1>
             </div>
 
             <hr>
 
-            <!-- SEARCH SECTION -->
+  
             <div class="search-section">
                 <form method="GET" class="search-group" style="flex: 1;">
                     <div style="width: 100%;">
-                        <label for="search">🔍 Cari Pesan</label>
+                        <label for="search"><i class="bi bi-search"></i> Cari Pesan</label>
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="text" id="search" name="search" placeholder="Cari berdasarkan nama, email, atau pesan..."
                                 value="<?php echo htmlspecialchars($search); ?>" style="flex: 1;">
@@ -82,10 +76,9 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY crea
                         </div>
                     </div>
                 </form>
-                <a href="data_pesan.php" class="btn-reset">↺ Reset</a>
+                <a href="data_pesan.php" class="btn-reset"><i class="bi bi-arrow-clockwise"></i> Reset</a>
             </div>
 
-            <!-- TABLE SECTION -->
             <div class="table-wrapper">
                 <?php
                 $count = mysqli_num_rows($query);
@@ -117,36 +110,29 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY crea
                                         <td class="pesan-col" title="<?= htmlspecialchars($row['pesan']) ?>"><?= htmlspecialchars($row['pesan']) ?></td>
                                         <td>
                                             <?php if ($row['status'] == 'baru'): ?>
-                                                <span class="status-badge badge-baru">🔔 Baru</span>
+                                                <span class="status-badge badge-baru"><i class="bi bi-bell-fill"></i> Baru</span>
                                             <?php else: ?>
-                                                <span class="status-badge badge-dibaca">✓ Dibaca</span>
+                                                <span class="status-badge badge-dibaca"><i class="bi bi-check-circle-fill"></i> Dibaca</span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?= date('d/m/Y H:i', strtotime($row['created_at'])) ?></td>
                                         <td>
                                             <div class="aksi-col">
-                                                <!-- Tombol Balas Pesan -->
                                                 <a href="balas_pesan.php?id=<?= $row['id'] ?>&email=<?= urlencode($row['email']) ?>&nama=<?= urlencode($row['nama']) ?>"
                                                     class="btn-action btn-balas"
                                                     title="Balas Pesan">
                                                     <i class="bi bi-reply"></i> Balas
                                                 </a>
 
-                                                <!-- Tombol Tandai Dibaca -->
                                                 <?php if ($row['status'] == 'baru'): ?>
                                                     <button class="btn-action btn-dibaca"
                                                         onclick="tandaiDibaca(<?= $row['id'] ?>)"
-                                                        title="Tandai Dibaca">
-                                                        <i class="bi bi-check2-circle"></i> Dibaca
-                                                    </button>
+                                                        title="Tandai Dibaca"><i class="bi bi-check2-circle"></i> Dibaca</button>
                                                 <?php endif; ?>
 
-                                                <!-- Tombol Hapus -->
                                                 <button class="btn-action btn-delete"
                                                     onclick="hapusPesan(<?= $row['id'] ?>, '<?= htmlspecialchars(addslashes($row['nama'])) ?>')"
-                                                    title="Hapus Pesan">
-                                                    <i class="bi bi-trash"></i> Hapus
-                                                </button>
+                                                    title="Hapus Pesan"><i class="bi bi-trash"></i> Hapus</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -155,7 +141,6 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY crea
                         </table>
                     </div>
 
-                    <!-- PAGINATION -->
                     <?php if ($total_pages > 1): ?>
                         <div class="pagination-section">
                             <div class="pagination-info">
@@ -166,14 +151,12 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY crea
                             $query_string = !empty($search) ? "&search=" . urlencode($search) : "";
                             ?>
 
-                            <!-- Tombol Previous -->
                             <?php if ($page > 1): ?>
                                 <a href="?page=1<?php echo $query_string; ?>" class="pagination-btn">« Pertama</a>
                                 <a href="?page=<?php echo $page - 1;
                                                 echo $query_string; ?>" class="pagination-btn">‹ Sebelumnya</a>
                             <?php endif; ?>
 
-                            <!-- Tombol Nomor Halaman -->
                             <?php
                             $start_page = max(1, $page - 2);
                             $end_page = min($total_pages, $page + 2);
@@ -192,7 +175,6 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY crea
                             }
                             ?>
 
-                            <!-- Tombol Next -->
                             <?php if ($page < $total_pages): ?>
                                 <a href="?page=<?php echo $page + 1;
                                                 echo $query_string; ?>" class="pagination-btn">Selanjutnya ›</a>
@@ -204,7 +186,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pesan_kontak $where ORDER BY crea
 
                 <?php else: ?>
                     <div class="empty-state">
-                        <div class="empty-state-icon">💬</div>
+                        <div class="empty-state-icon"><i class="bi bi-chat-left-text"></i></div>
                         <p class="empty-state-text">Tidak ada pesan yang ditemukan</p>
                         <?php if (!empty($search)): ?>
                             <p style="margin-top: 1rem; color: var(--alley);">

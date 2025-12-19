@@ -3,7 +3,6 @@ session_start();
 require 'auth_check.php';
 include "koneksi.php";
 
-// PROSES HAPUS PRODUK
 if (isset($_POST['delete_id'])) {
     $delete_id = intval($_POST['delete_id']);
 
@@ -25,14 +24,13 @@ if (isset($_POST['delete_id'])) {
     exit;
 }
 
-// PARAMETER FILTER & PAGINATION
 $kategori = isset($_GET['kategori']) ? mysqli_real_escape_string($koneksi, $_GET['kategori']) : '';
 $search   = isset($_GET['search']) ? mysqli_real_escape_string($koneksi, $_GET['search']) : '';
 $page     = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $items_per_page = 10;
 $offset = ($page - 1) * $items_per_page;
 
-// BUILD QUERY
+
 $where = "WHERE 1=1";
 if (!empty($kategori)) {
     $where .= " AND kategori='$kategori'";
@@ -41,12 +39,10 @@ if (!empty($search)) {
     $where .= " AND (nama LIKE '%$search%' OR merk LIKE '%$search%' OR deskripsi LIKE '%$search%')";
 }
 
-// TOTAL DATA
 $total_query = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM products $where");
 $total_data = mysqli_fetch_assoc($total_query)['total'];
 $total_pages = ceil($total_data / $items_per_page);
 
-// GET DATA
 $query = mysqli_query($koneksi, "
     SELECT id, kategori, nama, merk, deskripsi, harga, stok, created_at, foto_produk
     FROM products
@@ -85,7 +81,6 @@ while ($row = mysqli_fetch_assoc($query)) {
 <div class="content">
 <div class="container">
 
-    <!-- PAGE HEADER -->
     <div class="page-header">
         <h1 class="page-title">
             <i class="bi bi-box-seam"></i> Data Produk
@@ -95,7 +90,6 @@ while ($row = mysqli_fetch_assoc($query)) {
         </a>
     </div>
 
-    <!-- FILTER & SEARCH -->
     <form method="GET" class="filter-search-section">
 
         <div class="filter-group">
@@ -134,7 +128,6 @@ while ($row = mysqli_fetch_assoc($query)) {
 
     </form>
 
-    <!-- TABLE -->
     <div class="table-wrapper">
     <?php if (count($products) > 0): ?>
 

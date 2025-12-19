@@ -1,0 +1,103 @@
+:root {
+    --blue: #1E5DAC;
+    --beige: #E8D3C1;
+    --alley: #B7C5DA;
+    --misty: #EAE2E4;
+    --white: #ffffff;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-image: url("../images/background/bg_admin.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: "Poppins", sans-serif;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(30, 93, 172, 0.45),
+        rgba(183, 197, 218, 0.35)
+    );
+    z-index: -1;
+}
+
+.card {
+    border-radius: 22px;
+    background: rgba(234, 226, 228, 0.40);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 25px 50px rgba(30, 93, 172, 0.35);
+    padding: 35px 30px;
+}
+
+.logo-box {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.logo-box img {
+    width: 150px;
+    filter: drop-shadow(0 6px 12px rgba(30, 93, 172, 0.5));
+}
+
+.card h3 {
+    color: var(--blue);
+    font-weight: 700;
+    letter-spacing: 0.6px;
+}
+
+.form-label {
+    color: #2d3a4a;
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: none;
+    background: var(--white);
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(30, 93, 172, 0.25);
+}
+
+.btn-login {
+    background: linear-gradient(135deg, var(--blue), var(--alley));
+    border: none;
+    border-radius: 14px;
+    padding: 12px;
+    font-weight: 600;
+    color: #fff;
+    transition: 0.3s ease;
+}
+
+.btn-login:hover {
+    background: linear-gradient(135deg, var(--alley), var(--blue));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(30, 93, 172, 0.45);
+}
+
+.small a {
+    color: var(--blue);
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.small a:hover {
+    color: #000;
+    font-weight: 600;
+}

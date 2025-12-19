@@ -18,33 +18,7 @@ if (isset($_GET['hapus'])) {
     <title>Hapus Produk</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="icon" type="image/png" href="../images/icon/logo.png">
-
-    <style>
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            width: 220px;
-            background-color: #343a40;
-            padding-top: 70px;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .sidebar a:hover {
-            background-color: #495057;
-            border-radius: 5px;
-        }
-
-        .content {
-            margin-left: 230px;
-            padding: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css_admin/hapus_produk_style.css">
 </head>
 
 <body>

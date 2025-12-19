@@ -7,12 +7,9 @@
     <meta charset="UTF-8">
     <title>Dashboard Admin</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="css_admin/dashboard_style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <!-- Icon -->
     <link rel="icon" type="image/png" href="../images/icon/logo.png">
 </head>
 
@@ -26,7 +23,6 @@
 
         <div class="cards-wrapper">
 
-            <!-- Total Produk -->
             <div class="card primary">
                 <div class="card-content">
                     <div class="card-header">
@@ -47,7 +43,6 @@
                 </div>
             </div>
 
-            <!-- Total User -->
             <div class="card success">
                 <div class="card-content">
                     <div class="card-header">
@@ -68,7 +63,6 @@
                 </div>
             </div>
 
-            <!-- Pesanan Masuk -->
             <div class="card info">
                 <div class="card-content">
                     <div class="card-header">
@@ -89,7 +83,6 @@
                 </div>
             </div>
 
-            <!-- Total Penjualan -->
             <div class="card warning">
                 <div class="card-content">
                     <div class="card-header">
@@ -110,7 +103,6 @@
                 </div>
             </div>
 
-            <!-- Komentar -->
             <div class="card danger">
                 <div class="card-content">
                     <div class="card-header">
@@ -132,7 +124,6 @@
                 </div>
             </div>
 
-            <!-- Data Pesan -->
             <div class="card primary">
                 <div class="card-content">
                     <div class="card-header">
@@ -157,7 +148,6 @@
         </div>
     </div>
 
-    <!-- JS -->
     <script src="../js/bootstrap.bundle.js"></script>
 
 </body>
