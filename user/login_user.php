@@ -7,7 +7,7 @@
     <title>Login User</title>
     <link rel="icon" type="image/png" href="../images/icon/logo.png">
     <link href="../css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css_user/login_user.css">
+    <link rel="stylesheet" href="css_user/login_user.css">
 </head>
 
 <body class="bg-light">
