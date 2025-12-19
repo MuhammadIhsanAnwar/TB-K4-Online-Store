@@ -69,13 +69,13 @@ while ($row = mysqli_fetch_assoc($result)) {
             </a>
             <a href="shop.php?kategori=Men" class="category-btn <?php echo $kategori === 'Men' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
-                    <path d="M8 8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm2.146-2.146a.5.5 0 0 1 .707 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.707-.708L11.293 9H9.5a.5.5 0 0 0 0 1h1.793l-1.147 1.146a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 0-.708l-2-2z"/>
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.336C3.154 12.014 3 12.754 3 13h10c0-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c2.21 0 3.542.588 4.168 1.336z"/>
                 </svg>
                 Men
             </a>
             <a href="shop.php?kategori=Women" class="category-btn <?php echo $kategori === 'Women' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
-                    <path d="M4.5 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V3zm-.5-2a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H4z"/>
+                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-4 3a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm10 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm-8 2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                 </svg>
                 Women
             </a>
@@ -87,11 +87,12 @@ while ($row = mysqli_fetch_assoc($result)) {
             </a>
             <a href="shop.php?kategori=Accessories" class="category-btn <?php echo $kategori === 'Accessories' ? 'active' : ''; ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.15em; margin-right: 4px;">
-                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    <path d="M4.5 5a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5z"/>
                 </svg>
                 Accessories
             </a>
         </div>
+
         <?php if (count($products) > 0): ?>
             <div class="products-grid">
                 <?php foreach ($products as $product): ?>
