@@ -92,19 +92,7 @@ function showAlert($type, $title, $message, $redirect)
         <title><?php echo $title; ?></title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="icon" type="image/png" href="../images/icon/logo.png">
-
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                background: linear-gradient(135deg, #1E5DAC 0%, #B7C5DA 100%);
-                font-family: 'Poppins', sans-serif;
-            }
-        </style>
+        <link rel="stylesheet" href="../css_user/proses_kirim_reset.css">
     </head>
 
     <body>

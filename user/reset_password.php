@@ -34,18 +34,7 @@ function showErrorPage($message, $redirect)
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Error</title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                background: linear-gradient(135deg, #1E5DAC 0%, #B7C5DA 100%);
-                font-family: 'Poppins', sans-serif;
-            }
-        </style>
+        <link rel="stylesheet" href="../css_user/reset_password.css">
     </head>
 
     <body>
