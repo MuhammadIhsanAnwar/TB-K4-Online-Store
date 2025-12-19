@@ -80,7 +80,7 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <link rel="stylesheet" href="../../css/bootstrap.css">
-    <link rel="stylesheet" href="css_user/css_produk_pembayaran/cart.css">
+    <link rel="stylesheet" href="../css_user/css_produk_pembayaran/cart.css">
 </head>
 
 <body>
