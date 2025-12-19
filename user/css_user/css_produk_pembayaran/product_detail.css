@@ -21,7 +21,6 @@
             color: var(--dark);
         }
 
-        /* BREADCRUMB */
         .breadcrumb-section {
             background: white;
             padding: 1.5rem 0;
@@ -46,14 +45,12 @@
             text-decoration: underline;
         }
 
-        /* CONTAINER */
         .container-detail {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* PRODUCT DETAIL */
         .product-detail {
             background: white;
             border-radius: 20px;
@@ -165,7 +162,6 @@
             color: var(--dark);
         }
 
-        /* QUANTITY & ADD TO CART */
         .add-to-cart-section {
             display: flex;
             gap: 1rem;
@@ -257,7 +253,6 @@
             color: #ef4444;
         }
 
-        /* COMMENTS SECTION */
         .comments-section {
             margin-top: 4rem;
             padding: 2rem;
@@ -470,7 +465,6 @@
             margin-bottom: 1rem;
         }
 
-        /* EDIT FORM MODAL */
         .edit-comment-form {
             display: none;
             background: linear-gradient(135deg, var(--light) 0%, rgba(183, 197, 218, 0.2) 100%);
@@ -533,7 +527,6 @@
             background: #d1d5db;
         }
 
-        /* FOOTER */
         .footer {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;

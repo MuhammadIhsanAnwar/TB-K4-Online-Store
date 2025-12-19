@@ -1,8 +1,7 @@
 <?php
-session_start();  // HARUS PERTAMA
+session_start(); 
 include "../../admin/koneksi.php";
 
-// Ambil data user jika sudah login
 $user = null;
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -10,7 +9,6 @@ if (isset($_SESSION['user_id'])) {
     $user = mysqli_fetch_assoc($result);
 }
 
-// Ambil ID produk dari URL
 if (!isset($_GET['id'])) {
     header("Location: shop.php");
     exit;
@@ -18,7 +16,6 @@ if (!isset($_GET['id'])) {
 
 $product_id = intval($_GET['id']);
 
-// Ambil data produk
 $query = "SELECT * FROM products WHERE id='$product_id'";
 $result = mysqli_query($koneksi, $query);
 
@@ -29,7 +26,6 @@ if (!$result || mysqli_num_rows($result) == 0) {
 
 $product = mysqli_fetch_assoc($result);
 
-// PROSES TAMBAH KOMENTAR
 if (isset($_POST['add_comment'])) {
     if (!$user) {
         echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
@@ -59,7 +55,6 @@ if (isset($_POST['add_comment'])) {
     exit;
 }
 
-// PROSES EDIT KOMENTAR
 if (isset($_POST['edit_comment'])) {
     if (!$user) {
         echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
@@ -79,7 +74,6 @@ if (isset($_POST['edit_comment'])) {
         $rating = 5;
     }
 
-    // Verifikasi bahwa komentar milik user yang sedang login
     $check_query = "SELECT user_id FROM komentar_produk WHERE id='$comment_id'";
     $check_result = mysqli_query($koneksi, $check_query);
     $comment_data = mysqli_fetch_assoc($check_result);
@@ -99,7 +93,6 @@ if (isset($_POST['edit_comment'])) {
     exit;
 }
 
-// PROSES DELETE KOMENTAR
 if (isset($_POST['delete_comment'])) {
     if (!$user) {
         echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
@@ -108,7 +101,6 @@ if (isset($_POST['delete_comment'])) {
 
     $comment_id = intval($_POST['comment_id']);
 
-    // Verifikasi bahwa komentar milik user yang sedang login
     $check_query = "SELECT user_id FROM komentar_produk WHERE id='$comment_id'";
     $check_result = mysqli_query($koneksi, $check_query);
     $comment_data = mysqli_fetch_assoc($check_result);
@@ -128,7 +120,6 @@ if (isset($_POST['delete_comment'])) {
     exit;
 }
 
-// PROSES TAMBAH KE KERANJANG
 if (isset($_POST['add_to_cart'])) {
     if (!$user) {
         echo json_encode(['status' => 'error', 'message' => 'Anda harus login terlebih dahulu']);
@@ -142,12 +133,10 @@ if (isset($_POST['add_to_cart'])) {
         exit;
     }
 
-    // Cek apakah produk sudah ada di keranjang
     $check_query = "SELECT * FROM keranjang WHERE user_id='$user_id' AND product_id='$product_id'";
     $check_result = mysqli_query($koneksi, $check_query);
 
     if (mysqli_num_rows($check_result) > 0) {
-        // Update quantity
         $existing = mysqli_fetch_assoc($check_result);
         $new_quantity = $existing['quantity'] + $quantity;
 
@@ -159,7 +148,6 @@ if (isset($_POST['add_to_cart'])) {
         $update_query = "UPDATE keranjang SET quantity='$new_quantity' WHERE user_id='$user_id' AND product_id='$product_id'";
         mysqli_query($koneksi, $update_query);
     } else {
-        // Insert ke keranjang
         $insert_query = "INSERT INTO keranjang (user_id, product_id, quantity) VALUES ('$user_id', '$product_id', '$quantity')";
         mysqli_query($koneksi, $insert_query);
     }
@@ -168,7 +156,6 @@ if (isset($_POST['add_to_cart'])) {
     exit;
 }
 
-// Ambil komentar produk
 $comments_query = "SELECT k.*, u.nama_lengkap, u.foto_profil FROM komentar_produk k 
                    JOIN akun_user u ON k.user_id = u.id 
                    WHERE k.product_id = '$product_id' 
@@ -189,13 +176,9 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
     <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <title><?php echo htmlspecialchars($product['nama']); ?> - UrbanHype</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../css/bootstrap.css">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="../../icons/bootstrap-icons.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css_user/css_produk_pembayaran/product_detail.css">
 
@@ -203,7 +186,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
 
 <body>
     <?php include "../../navbar.php"; ?>
-    <!-- BREADCRUMB -->
     <section class="breadcrumb-section">
         <div class="container-detail">
             <nav aria-label="breadcrumb">
@@ -217,26 +199,21 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
         </div>
     </section>
 
-    <!-- PRODUCT DETAIL -->
     <main class="container-detail">
         <div class="product-detail">
-            <!-- IMAGE SECTION -->
             <div class="product-image-section">
                 <img src="../../foto_produk/<?php echo htmlspecialchars($product['foto_produk']); ?>"
                     alt="<?php echo htmlspecialchars($product['nama']); ?>" class="product-image-main">
             </div>
 
-            <!-- INFO SECTION -->
             <div class="product-info-section">
                 <span class="product-kategori">📂 <?php echo htmlspecialchars($product['kategori']); ?></span>
                 <h1 class="product-name"><?php echo htmlspecialchars($product['nama']); ?></h1>
                 <p class="product-merk">Brand: <?php echo htmlspecialchars($product['merk']); ?></p>
                 <div class="product-rating">⭐⭐⭐⭐⭐ (4.8/5) · 125 Ulasan</div>
 
-                <!-- PRICE -->
                 <div class="product-harga">Rp <?php echo number_format($product['harga'], 0, ',', '.'); ?></div>
 
-                <!-- STOK STATUS -->
                 <div class="stok-status <?php echo $product['stok'] > 10 ? 'stok-ready' : ($product['stok'] > 0 ? 'stok-low' : 'stok-out'); ?>">
                     <?php
                     if ($product['stok'] > 10) {
@@ -249,10 +226,8 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                     ?>
                 </div>
 
-                <!-- DESCRIPTION -->
                 <p class="product-description"><?php echo nl2br(htmlspecialchars($product['deskripsi'])); ?></p>
 
-                <!-- SPECIFICATIONS -->
                 <div class="product-specs">
                     <div class="spec-item">
                         <span class="spec-label">SKU</span>
@@ -280,7 +255,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                     </div>
                 </div>
 
-                <!-- ADD TO CART -->
                 <?php if ($product['stok'] > 0): ?>
                     <div class="add-to-cart-section">
                         <div class="quantity-selector">
@@ -300,7 +274,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             </div>
         </div>
 
-        <!-- COMMENTS SECTION -->
         <section class="comments-section">
             <h3>💬 Komentar Produk</h3>
 
@@ -377,7 +350,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                                 </div>
                             <?php endif; ?>
 
-                            <!-- EDIT FORM -->
                             <?php if ($user && $user['id'] == $comment['user_id']): ?>
                                 <div class="edit-comment-form" id="edit-form-<?php echo $comment['id']; ?>">
                                     <div class="rating-input" style="margin-bottom: 1rem;">
@@ -405,14 +377,12 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
         </section>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container-detail">
             <p>&copy; 2025 UrbanHype. Kelompok 4 Tugas Besar Pemrograman Web. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="../../js/bootstrap.bundle.js"></script>
 
@@ -496,7 +466,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                 });
         }
 
-        // ===== RATING STARS FUNCTIONALITY =====
         const ratingStars = document.querySelectorAll('#ratingStars .star');
         const ratingValue = document.getElementById('ratingValue');
 
@@ -541,7 +510,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             });
         });
 
-        // ===== COMMENT FORM SUBMISSION =====
         document.getElementById('commentForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -621,14 +589,12 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                 });
         });
 
-        // ===== EDIT COMMENT FUNCTIONALITY =====
         function showEditForm(commentId) {
             const editForm = document.getElementById(`edit-form-${commentId}`);
             const commentText = document.getElementById(`comment-text-${commentId}`);
             editForm.style.display = 'block';
             commentText.style.display = 'none';
 
-            // Initialize rating stars untuk edit form
             const editRatingStars = document.querySelectorAll(`#editRatingStars-${commentId} .star`);
             const editRatingValue = document.querySelector(`.edit-rating-value[data-comment-id="${commentId}"]`);
             const currentRating = editRatingValue.value;
@@ -807,7 +773,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             });
         }
 
-        // Initialize rating stars with default value (5)
         window.addEventListener('load', function() {
             const defaultRating = 5;
             ratingStars.forEach(star => {

@@ -1,8 +1,7 @@
 <?php
-session_start();  // HARUS PERTAMA
+session_start(); 
 include "../../admin/koneksi.php";
 
-// Ambil data user jika sudah login
 $user = null;
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -10,7 +9,6 @@ if (isset($_SESSION['user_id'])) {
     $user = mysqli_fetch_assoc($result);
 }
 
-// Ambil kategori dari URL (default: All)
 $kategori = isset($_GET['kategori']) ? mysqli_real_escape_string($koneksi, $_GET['kategori']) : 'All';
 $valid_categories = ['Men', 'Women', 'Shoes', 'Accessories', 'All'];
 
@@ -18,7 +16,6 @@ if (!in_array($kategori, $valid_categories)) {
     $kategori = 'All';
 }
 
-// Ambil data produk berdasarkan kategori
 if ($kategori === 'All') {
     $query = "SELECT * FROM products ORDER BY created_at DESC";
 } else {
@@ -40,20 +37,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <title>Shop - UrbanHype</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../css/bootstrap.css">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="../../icons/bootstrap-icons.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css_user/css_produk_pembayaran/shop.css">
 </head>
 
 <body>
     <?php include "../../navbar.php"; ?>
-    <!-- HERO SECTION -->
     <section class="hero-shop">
         <div class="container-shop">
             <h1>🛍️ Shop UrbanHype</h1>
@@ -61,9 +53,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         </div>
     </section>
 
-    <!-- MAIN CONTENT -->
     <main class="container-shop">
-        <!-- CATEGORY TABS -->
         <div class="category-tabs">
             <a href="shop.php?kategori=All" class="category-btn <?php echo $kategori === 'All' ? 'active' : ''; ?>">
                 ✨ All
@@ -81,7 +71,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                 ✨ Accessories
             </a>
         </div>
-        <!-- PRODUCTS GRID -->
         <?php if (count($products) > 0): ?>
             <div class="products-grid">
                 <?php foreach ($products as $product): ?>
@@ -111,14 +100,12 @@ while ($row = mysqli_fetch_assoc($result)) {
         <?php endif; ?>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container-shop">
             <p>&copy; 2025 UrbanHype. Kelompok 4 Tugas Besar Pemrograman Web. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="../../js/bootstrap.bundle.js"></script>
 

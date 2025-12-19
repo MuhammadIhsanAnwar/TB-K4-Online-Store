@@ -2,7 +2,6 @@
 session_start();
 include "../../admin/koneksi.php";
 
-// Cek login
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../../user/login_user.php");
     exit;
@@ -10,12 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Ambil data user
 $user_query = "SELECT * FROM akun_user WHERE id='$user_id'";
 $user_result = mysqli_query($koneksi, $user_query);
 $user = mysqli_fetch_assoc($user_result);
 
-// Ambil selected products atau semua keranjang
 $selected_products = isset($_SESSION['checkout_items']) ? $_SESSION['checkout_items'] : [];
 
 if (empty($selected_products)) {
@@ -23,7 +20,6 @@ if (empty($selected_products)) {
     exit;
 }
 
-// Ambil detail produk yang akan dibeli
 $placeholders = implode(',', array_map('intval', $selected_products));
 $cart_query = "SELECT k.*, p.nama, p.harga FROM keranjang k 
                JOIN products p ON k.product_id = p.id 
@@ -36,7 +32,6 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
     $total += $row['harga'] * $row['quantity'];
 }
 
-// Proses complete payment
 if (isset($_POST['complete_payment'])) {
     header('Content-Type: application/json');
 
@@ -53,7 +48,6 @@ if (isset($_POST['complete_payment'])) {
 
     $nama_lengkap = mysqli_real_escape_string($koneksi, $user['nama_lengkap']);
 
-    // Gabungkan alamat dengan urutan: alamat, kelurahan_desa, kecamatan, kabupaten_kota, provinsi, kode_pos
     $alamat_lengkap = mysqli_real_escape_string(
         $koneksi,
         $user['alamat'] . ', ' .
@@ -70,25 +64,22 @@ if (isset($_POST['complete_payment'])) {
     $status = 'Menunggu Konfirmasi';
     $waktu_pemesanan = date('Y-m-d H:i:s');
 
-    // Gabungkan semua nama produk dengan koma
     $nama_produk_array = [];
     foreach ($cart as $item) {
         $nama_produk_array[] = $item['nama'];
     }
     $nama_produk_gabung = mysqli_real_escape_string($koneksi, implode(', ', $nama_produk_array));
 
-    // Gabungkan semua quantity dengan koma
     $quantity_array = [];
     foreach ($cart as $item) {
         $quantity_array[] = (int)$item['quantity'];
     }
     $quantity_gabung = mysqli_real_escape_string($koneksi, implode(', ', $quantity_array));
 
-    // Mulai transaksi database
     mysqli_begin_transaction($koneksi);
 
     try {
-        // 1) Kurangi stok untuk setiap produk di keranjang
+
         foreach ($cart as $item) {
             $product_id = (int)$item['product_id'];
             $qty = (int)$item['quantity'];
@@ -97,7 +88,6 @@ if (isset($_POST['complete_payment'])) {
                 throw new Exception('Quantity tidak valid.');
             }
 
-            // Update stok hanya jika stok cukup (tidak boleh minus)
             $update_stok = "UPDATE products
                         SET stok = stok - $qty
                         WHERE id = $product_id AND stok >= $qty";
@@ -106,7 +96,6 @@ if (isset($_POST['complete_payment'])) {
                 throw new Exception('Gagal update stok: ' . mysqli_error($koneksi));
             }
 
-            // Cek apakah update berhasil (affected rows > 0)
             if (mysqli_affected_rows($koneksi) === 0) {
                 $stok_res = mysqli_query($koneksi, "SELECT stok FROM products WHERE id = $product_id");
                 $stok_row = $stok_res ? mysqli_fetch_assoc($stok_res) : null;
@@ -117,7 +106,6 @@ if (isset($_POST['complete_payment'])) {
             }
         }
 
-        // 2) Insert 1 baris ke tabel pemesanan dengan produk yang digabung
         $order_query = "INSERT INTO pemesanan 
                     (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, status, waktu_pemesanan)
                     VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
@@ -126,27 +114,23 @@ if (isset($_POST['complete_payment'])) {
             throw new Exception('Gagal membuat pesanan: ' . mysqli_error($koneksi));
         }
 
-        // 3) Hapus dari keranjang setelah berhasil
         $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id' AND product_id IN ($placeholders)";
         if (!mysqli_query($koneksi, $delete_query)) {
             throw new Exception('Gagal menghapus keranjang: ' . mysqli_error($koneksi));
         }
 
-        // Commit transaksi jika semua berhasil
         mysqli_commit($koneksi);
 
         unset($_SESSION['checkout_items']);
         echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil dibuat']);
         exit;
     } catch (Exception $e) {
-        // Rollback jika ada error
         mysqli_rollback($koneksi);
         echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         exit;
     }
 }
 
-// Gabungkan alamat lengkap dengan urutan: alamat, kelurahan_desa, kecamatan, kabupaten_kota, provinsi, kode_pos
 $alamat_lengkap = $user['alamat'] . ', ' .
     $user['kelurahan_desa'] . ', ' .
     $user['kecamatan'] . ', ' .
@@ -175,9 +159,7 @@ $alamat_lengkap = $user['alamat'] . ', ' .
         </div>
 
         <div class="checkout-content">
-            <!-- LEFT SIDE: Order Details -->
             <form id="checkoutForm">
-                <!-- ORDER SUMMARY -->
                 <div class="checkout-card">
                     <h3 class="card-title">Produk yang Dipesan</h3>
                     <div class="product-list">
@@ -195,7 +177,6 @@ $alamat_lengkap = $user['alamat'] . ', ' .
                     </div>
                 </div>
 
-                <!-- SHIPPING INFORMATION -->
                 <div class="checkout-card">
                     <h3 class="card-title">Informasi Pengiriman</h3>
 
@@ -215,7 +196,6 @@ $alamat_lengkap = $user['alamat'] . ', ' .
                     </div>
                 </div>
 
-                <!-- PAYMENT METHOD -->
                 <div class="checkout-card">
                     <h3 class="card-title">Metode Pembayaran</h3>
                     <div class="form-group">
@@ -227,7 +207,6 @@ $alamat_lengkap = $user['alamat'] . ', ' .
                     </div>
                 </div>
 
-                <!-- COURIER SELECTION -->
                 <div class="checkout-card">
                     <h3 class="card-title">Pilih Kurir Pengiriman</h3>
                     <div class="kurir-options">
@@ -255,7 +234,6 @@ $alamat_lengkap = $user['alamat'] . ', ' .
                 </div>
             </form>
 
-            <!-- RIGHT SIDE: Order Summary -->
             <div class="order-summary">
                 <h3 class="card-title">Ringkasan Pesanan</h3>
 

@@ -2,7 +2,6 @@
 session_start();
 include "../../admin/koneksi.php";
 
-// Cek login
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../../user/login_user.php");
     exit;
@@ -10,18 +9,15 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// ===== PROSES PEMBATALAN PESANAN =====
 if (isset($_POST['cancel_order'])) {
     $order_id = intval($_POST['order_id']);
 
-    // Cek apakah pesanan milik user dan belum dikirim
     $check_query = "SELECT status FROM pemesanan WHERE id='$order_id' AND user_id='$user_id'";
     $check_result = mysqli_query($koneksi, $check_query);
     $order = mysqli_fetch_assoc($check_result);
 
-    // User bisa membatalkan pesanan jika masih "Menunggu Konfirmasi" atau "Sedang Dikemas"
     if ($order && ($order['status'] === 'Menunggu Konfirmasi' || $order['status'] === 'Sedang Dikemas')) {
-        // Update status ke batal
+
         $update_query = "UPDATE pemesanan SET status='Pesanan Batal' WHERE id='$order_id'";
 
         if (mysqli_query($koneksi, $update_query)) {
@@ -35,15 +31,13 @@ if (isset($_POST['cancel_order'])) {
     exit;
 }
 
-// ===== PROSES MENYELESAIKAN PESANAN =====
 if (isset($_POST['selesaikan_pesanan'])) {
     $order_id = intval($_POST['order_id']);
 
-    // Mulai transaksi
     mysqli_begin_transaction($koneksi);
 
     try {
-        // 1) Ambil data pesanan
+
         $order_query = "SELECT * FROM pemesanan WHERE id='$order_id' AND user_id='$user_id'";
         $order_result = mysqli_query($koneksi, $order_query);
 
@@ -57,12 +51,10 @@ if (isset($_POST['selesaikan_pesanan'])) {
             throw new Exception('Pesanan tidak ditemukan');
         }
 
-        // Cek status harus "Sedang Dikirim"
         if ($order['status'] !== 'Sedang Dikirim') {
             throw new Exception('Pesanan hanya bisa diselesaikan jika sedang dikirim');
         }
 
-        // 2) Insert ke tabel history_penjualan
         $insert_history = "INSERT INTO history_penjualan 
                           (user_id, nama_lengkap, nomor_hp, alamat_lengkap, nama_produk, quantity, 
                            harga_total, metode_pembayaran, kurir, resi, tanggal_dipesan, tanggal_selesai)
@@ -83,7 +75,6 @@ if (isset($_POST['selesaikan_pesanan'])) {
             throw new Exception('Gagal menambah ke history penjualan: ' . mysqli_error($koneksi));
         }
 
-        // 3) Hapus dari pemesanan
         $delete_query = "DELETE FROM pemesanan WHERE id='$order_id'";
         if (!mysqli_query($koneksi, $delete_query)) {
             throw new Exception('Gagal menghapus pesanan: ' . mysqli_error($koneksi));
@@ -99,13 +90,10 @@ if (isset($_POST['selesaikan_pesanan'])) {
     }
 }
 
-// ===== AMBIL DATA PESANAN AKTIF (DARI TABEL pemesanan) =====
 $status_filter = isset($_GET['status']) ? $_GET['status'] : 'semua';
 
-// Query dasar untuk pesanan aktif
 $query = "SELECT * FROM pemesanan WHERE user_id='$user_id'";
 
-// Filter berdasarkan status
 if ($status_filter !== 'semua' && $status_filter !== 'Selesai') {
     $query .= " AND status='" . mysqli_real_escape_string($koneksi, $status_filter) . "'";
 }
@@ -123,7 +111,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     $pesanan[] = $row;
 }
 
-// ===== AMBIL DATA PESANAN SELESAI (DARI TABEL history_penjualan) =====
 $pesanan_selesai = [];
 if ($status_filter === 'semua' || $status_filter === 'Selesai') {
     $history_query = "SELECT * FROM history_penjualan WHERE user_id='$user_id' ORDER BY tanggal_selesai DESC";
@@ -136,7 +123,6 @@ if ($status_filter === 'semua' || $status_filter === 'Selesai') {
     }
 }
 
-// ===== HITUNG PESANAN PER STATUS =====
 $status_counts = [
     'Menunggu Konfirmasi' => 0,
     'Sedang Dikemas' => 0,
@@ -145,7 +131,6 @@ $status_counts = [
     'Pesanan Batal' => 0
 ];
 
-// Hitung dari pesanan aktif
 $count_query = "SELECT status, COUNT(*) as count FROM pemesanan WHERE user_id='$user_id' GROUP BY status";
 $count_result = mysqli_query($koneksi, $count_query);
 while ($row = mysqli_fetch_assoc($count_result)) {
@@ -154,7 +139,6 @@ while ($row = mysqli_fetch_assoc($count_result)) {
     }
 }
 
-// Hitung dari history_penjualan
 $history_count_query = "SELECT COUNT(*) as count FROM history_penjualan WHERE user_id='$user_id'";
 $history_count_result = mysqli_query($koneksi, $history_count_query);
 $history_count = mysqli_fetch_assoc($history_count_result);
@@ -184,7 +168,6 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
             <h1>📦 Pesanan Saya</h1>
         </div>
 
-        <!-- Status Tabs -->
         <div class="status-tabs">
             <a href="?status=semua" class="status-tab <?php echo $status_filter === 'semua' ? 'active' : ''; ?>">
                 <span><i class="bi bi-box-seam"></i> Semua</span>
@@ -212,12 +195,10 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
             </a>
         </div>
 
-        <!-- Orders List -->
         <div class="orders-list">
             <?php
             $show_empty = true;
 
-            // Tampilkan pesanan aktif (non-selesai)
             if (!empty($pesanan)) {
                 $show_empty = false;
                 foreach ($pesanan as $order) {
@@ -256,7 +237,6 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
                             </div>
                             <div class="order-actions">
                                 <?php
-                                // Tombol pembatalan untuk status Menunggu Konfirmasi atau Sedang Dikemas
                                 if ($order['status'] === 'Menunggu Konfirmasi' || $order['status'] === 'Sedang Dikemas') {
                                 ?>
                                     <button class="btn btn-cancel" onclick="cancelOrder(<?php echo $order['id']; ?>)">
@@ -265,7 +245,6 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
                                 <?php } ?>
 
                                 <?php
-                                // Tombol penyelesaian untuk status Sedang Dikirim
                                 if ($order['status'] === 'Sedang Dikirim') {
                                 ?>
                                     <button class="btn btn-complete" onclick="completeOrder(<?php echo $order['id']; ?>)">
@@ -283,7 +262,6 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
                 }
             }
 
-            // Tampilkan pesanan selesai dari history_penjualan
             if (!empty($pesanan_selesai)) {
                 $show_empty = false;
                 foreach ($pesanan_selesai as $order) {
@@ -329,8 +307,6 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
                 <?php
                 }
             }
-
-            // Tampilkan empty state jika tidak ada pesanan
             if ($show_empty) {
                 ?>
                 <div class="empty-state">
@@ -348,7 +324,7 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
-        // Scroll effect untuk navbar
+
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 50) {
@@ -358,7 +334,6 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
             }
         });
 
-        // Cancel order function - untuk pembatalan pesanan
         function cancelOrder(orderId) {
             Swal.fire({
                 icon: 'warning',
@@ -411,7 +386,6 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
             });
         }
 
-        // Complete order function - untuk menyelesaikan pesanan yang sedang dikirim
         function completeOrder(orderId) {
             Swal.fire({
                 icon: 'question',

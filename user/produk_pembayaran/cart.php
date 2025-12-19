@@ -2,7 +2,6 @@
 session_start();
 include "../../admin/koneksi.php";
 
-// Ambil user ID
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../../user/login_user.php");
     exit;
@@ -11,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $total = 0;
 
-// Proses update quantity
 if (isset($_POST['update_qty'])) {
     $product_id = intval($_POST['product_id']);
     $new_quantity = intval($_POST['quantity']);
@@ -20,7 +18,6 @@ if (isset($_POST['update_qty'])) {
         $new_quantity = 1;
     }
 
-    // Cek stok produk
     $stok_query = "SELECT stok FROM products WHERE id='$product_id'";
     $stok_result = mysqli_query($koneksi, $stok_query);
     $stok_row = mysqli_fetch_assoc($stok_result);
@@ -35,7 +32,6 @@ if (isset($_POST['update_qty'])) {
     exit;
 }
 
-// Proses hapus dari keranjang
 if (isset($_POST['remove'])) {
     $product_id = intval($_POST['id']);
     $delete_query = "DELETE FROM keranjang WHERE user_id='$user_id' AND product_id='$product_id'";
@@ -44,21 +40,18 @@ if (isset($_POST['remove'])) {
     exit;
 }
 
-// Proses checkout (hanya produk yang dipilih)
 if (isset($_POST['checkout_selected'])) {
     $selected_products = isset($_POST['selected_products']) ? $_POST['selected_products'] : [];
 
     if (empty($selected_products)) {
         $error_msg = "Pilih minimal satu produk untuk checkout!";
     } else {
-        // Simpan selected products ke session untuk dibawa ke halaman checkout
         $_SESSION['checkout_items'] = $selected_products;
         header("Location: checkout.php");
         exit;
     }
 }
 
-// Ambil data keranjang dari database
 $cart_query = "SELECT k.*, p.nama, p.harga, p.foto_produk, p.stok FROM keranjang k JOIN products p ON k.product_id = p.id WHERE k.user_id='$user_id'";
 $cart_result = mysqli_query($koneksi, $cart_query);
 $cart = [];
@@ -201,7 +194,6 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                 const qtyInput = row.querySelector('.qty-input-cart');
 
                 if (checkbox && checkbox.checked && priceText && qtyInput) {
-                    // Ambil harga dari text (format: "Rp XXX.XXX.XXX")
                     const price = parseInt(priceText.replace(/[^\d]/g, ''));
                     const qty = parseInt(qtyInput.value);
                     const subtotal = price * qty;
@@ -209,7 +201,6 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                 }
             });
 
-            // Update display total
             document.getElementById('totalPrice').textContent = newTotal.toLocaleString('id-ID');
         }
 
@@ -221,13 +212,10 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
                 return false;
             }
 
-            // Buat hidden inputs untuk produk yang dicentang
             const form = document.getElementById('checkoutForm');
 
-            // Hapus hidden inputs lama jika ada
             form.querySelectorAll('input[name="selected_products[]"]').forEach(el => el.remove());
 
-            // Tambahkan hidden inputs untuk produk yang dicentang
             checkedItems.forEach(checkbox => {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -239,7 +227,6 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
             return true;
         }
 
-        // Update total saat page load
         updateTotal();
     </script>
 </body>
