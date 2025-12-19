@@ -84,7 +84,6 @@
             }
         }
 
-        /* ===== HERO SECTION (MODERN & DYNAMIC) ===== */
         .hero-section {
             height: 90vh;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
