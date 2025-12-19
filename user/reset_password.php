@@ -73,7 +73,7 @@ function showErrorPage($message, $redirect)
     <div class="reset-container">
         <div class="card">
             <div class="logo-container">
-                <img src="../images/Background dan Logo/logo.png" alt="Urban Hype Logo">
+                <img src="../images/background_logo/logo.png" alt="Urban Hype Logo">
             </div>
 
             <h3>Reset Password</h3>
