@@ -188,7 +188,10 @@ if (isset($_POST['update'])) {
                             </svg>
                             Nomor HP
                         </label>
-                        <div class="input-wrapper">
+                        <div class="phone-input-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#1E5DAC" viewBox="0 0 16 16" class="phone-icon">
+                                <path d="M11 1H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zM5 0a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3h6zm1 1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM8 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                            </svg>
                             <input type="tel" name="nomor_hp" value="<?php echo htmlspecialchars($user['nomor_hp'] ?? ''); ?>" required pattern="[0-9]{10,13}" title="10-13 digit angka" placeholder="08123456789">
                         </div>
                         <div class="info-text">
