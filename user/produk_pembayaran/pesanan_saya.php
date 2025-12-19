@@ -158,6 +158,7 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <link rel="stylesheet" href="../css_user/css_produk_pembayaran/pesanan_saya.css">
+    <link rel="stylesheet" href="../css_user/navbar.css">
 </head>
 
 <body>

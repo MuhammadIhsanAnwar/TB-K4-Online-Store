@@ -74,6 +74,7 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
     <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <link rel="stylesheet" href="../css_user/css_produk_pembayaran/cart.css">
+    <link rel="stylesheet" href="../css_user/navbar.css">
 </head>
 
 <body>
