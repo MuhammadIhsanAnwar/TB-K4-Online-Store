@@ -17,7 +17,7 @@ if (isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/images/icon/logo.png">
     <title>UrbanHype - Fashion Store</title>
-    <link rel="stylesheet" href="../css_user/index.css">
+    <link rel="stylesheet" href="user/css_user/index.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="icons/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
