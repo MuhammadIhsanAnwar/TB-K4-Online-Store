@@ -2,7 +2,6 @@
 include "admin/koneksi.php";
 session_start();
 
-// Jika user sudah login, ambil data user
 $user = null;
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -18,415 +17,24 @@ if (isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/images/icon/logo.png">
     <title>UrbanHype - Fashion Store</title>
-
-    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css_user/index.css">
     <link rel="stylesheet" href="css/bootstrap.css">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="icons/bootstrap-icons.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <style>
-        :root {
-            --primary: #1E5DAC;
-            --secondary: #B7C5DA;
-            --accent: #E8D3C1;
-            --light: #EAE2E4;
-            --dark: #2d3748;
-            --white: #ffffff;
-            --shadow: 0 4px 20px rgba(30, 93, 172, 0.1);
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-            background: var(--white);
-            color: var(--dark);
-            position: relative;
-        }
-
-        /* ===== ANIMATED BACKGROUND ===== */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-animation .shape {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            filter: blur(80px);
-            animation: float 15s ease-in-out infinite;
-        }
-
-        .bg-animation .shape:nth-child(1) {
-            width: 600px;
-            height: 600px;
-            top: -200px;
-            right: -150px;
-            opacity: 0.25;
-        }
-
-        .bg-animation .shape:nth-child(2) {
-            width: 500px;
-            height: 500px;
-            bottom: -100px;
-            left: -100px;
-            opacity: 0.25;
-            animation-delay: -5s;
-        }
-
-        .bg-animation .shape:nth-child(3) {
-            width: 400px;
-            height: 400px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.25;
-            animation-duration: 20s;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translate(0px, 0px) rotate(0deg);
-            }
-
-            50% {
-                transform: translate(15px, -15px) rotate(180deg);
-            }
-
-            100% {
-                transform: translate(0px, 0px) rotate(360deg);
-            }
-        }
-
-        /* ===== HERO SECTION (MODERN & DYNAMIC) ===== */
-        .hero-section {
-            height: 90vh;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            position: relative;
-            margin-top: 70px;
-            overflow-y: visible;
-            overflow-x: hidden;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            color: white;
-            max-width: 600px;
-            padding: 2rem;
-            animation: fadeInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-100px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .hero-content .subtitle {
-            letter-spacing: 6px;
-            font-weight: 300;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            animation: fadeIn 1.5s ease;
-            opacity: 0.9;
-        }
-
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 4rem;
-            line-height: 1.2;
-            margin-bottom: 30px;
-            text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.2);
-            animation: fadeInUp 1.4s ease;
-        }
-
-        .hero-content .description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 40px;
-            opacity: 0.95;
-            animation: fadeIn 1.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-btn {
-            background: white;
-            color: var(--primary);
-            padding: 16px 50px;
-            font-weight: 600;
-            border: 2px solid white;
-            transition: var(--transition);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-            animation: pulse 2.5s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            }
-
-            50% {
-                transform: scale(1.03);
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            }
-        }
-
-        .hero-btn:hover {
-            background: transparent;
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
-            border-color: white;
-        }
-
-        .hero-image {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 45%;
-            z-index: 2;
-            animation: fadeInRight 1.4s ease;
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translate(100px, -50%);
-            }
-
-            to {
-                opacity: 1;
-                transform: translate(0, -50%);
-            }
-        }
-
-        .hero-image img {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.3));
-        }
-
-        /* ===== CATEGORY FILTERS (MODERN TABS) ===== */
-        .category-filters {
-            padding: 3rem 5%;
-            background: var(--white);
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .category-filters h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--primary);
-            position: relative;
-        }
-
-        .category-filters h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-
-        .filter-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-
-        .filter-tab {
-            padding: 0.8rem 1.5rem;
-            background: white;
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-tab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            z-index: -1;
-            transition: var(--transition);
-        }
-
-        .filter-tab:hover::before {
-            left: 0;
-        }
-
-        .filter-tab:hover {
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .filter-tab.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .filter-tab.active::before {
-            left: 0;
-        }
-
-        /* ===== SCROLL REVEAL ===== */
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: var(--transition);
-        }
-
-        .scroll-reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ===== ABOUT & CONTACT SECTION STYLE ===== */
-        .section-bg-light {
-            background: var(--light);
-        }
-
-        /* ===== LOADING SPINNER ===== */
-        .spinner-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            animation: fadeOut 0.8s ease 1.5s forwards;
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-
-        .spinner {
-            width: 70px;
-            height: 70px;
-            border: 6px solid rgba(255, 255, 255, 0.3);
-            border-top: 6px solid white;
-            border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .carousel-caption {
-            background: rgba(30, 93, 172, 0.75);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .carousel-caption h5 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-        }
-
-        .carousel img {
-            object-fit: cover;
-            height: 100%;
-        }
-    </style>
 </head>
 
 <body>
     <?php include "navbar.php"; ?>
-    <!-- LOADING SPINNER -->
     <div class="spinner-overlay">
         <div class="spinner"></div>
     </div>
 
-    <!-- Animated Background -->
     <div class="bg-animation">
         <div class="shape"></div>
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
 
-    <!-- HERO (dari file lama) -->
     <section id="home" class="hero-section">
         <div class="container">
             <div class="hero-content">
@@ -437,13 +45,9 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
         <div class="hero-image">
-            <!-- <img src="img/hero-model.png" alt="Fashion Model"> -->
         </div>
     </section>
 
-
-
-    <!-- ABOUT SECTION (dari file lama) -->
     <section id="about" class="py-5 bg-light scroll-reveal">
         <div class="container">
             <div class="row align-items-center">
@@ -454,44 +58,34 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="col-lg-6">
                     <div id="aboutCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="4000">
-
-                        <!-- Indicators -->
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="0" class="active"></button>
                             <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="1"></button>
                             <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="2"></button>
                         </div>
-
-                        <!-- Slides -->
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <img src="images/slide/slide11.jpg" class="d-block w-100" alt="UrbanHype Collection 1">
                             </div>
-
                             <div class="carousel-item">
                                 <img src="images/slide/slide12.jpg" class="d-block w-100" alt="UrbanHype Collection 2">
                             </div>
-
                             <div class="carousel-item">
                                 <img src="images/slide/slide13.jpg" class="d-block w-100" alt="UrbanHype Collection 3">
                             </div>
-
-                            <!-- Controls -->
                             <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon"></span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel" data-bs-slide="next">
                                 <span class="carousel-control-next-icon"></span>
                             </button>
-
                         </div>
                     </div>
-
                 </div>
             </div>
+        </div>
     </section>
 
-    <!-- CONTACT SECTION (dari file lama) -->
     <section id="contact" class="py-5 scroll-reveal">
         <div class="container">
             <div class="text-center mb-5">
@@ -539,7 +133,6 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- FOOTER (dari file lama) -->
     <footer class="bg-dark text-white pt-5 pb-4">
         <div class="container">
             <div class="row">
@@ -574,11 +167,9 @@ if (isset($_SESSION['user_id'])) {
                             const button = this.querySelector('button');
                             const originalText = button.textContent;
 
-                            // Disable button dan tampilkan loading
                             button.disabled = true;
                             button.textContent = 'Mengirim...';
 
-                            // Kirim request ke proses_subscribe.php
                             fetch('proses_subscribe.php', {
                                     method: 'POST',
                                     headers: {
@@ -641,7 +232,6 @@ if (isset($_SESSION['user_id'])) {
     </footer>
 
     <script>
-        // Category filter active state
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -650,7 +240,6 @@ if (isset($_SESSION['user_id'])) {
             });
         });
 
-        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -664,7 +253,6 @@ if (isset($_SESSION['user_id'])) {
             });
         });
 
-        // Scroll Reveal Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -679,7 +267,6 @@ if (isset($_SESSION['user_id'])) {
             observer.observe(el);
         });
 
-        // Loading Spinner
         window.addEventListener('load', function() {
             const spinner = document.querySelector('.spinner-overlay');
             setTimeout(() => {
@@ -699,7 +286,6 @@ if (isset($_SESSION['user_id'])) {
 
             const form = this;
             const formData = new FormData(form);
-
 
             fetch('simpan_pesan_ajax.php', {
                     method: 'POST',
