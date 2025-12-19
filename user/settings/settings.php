@@ -127,16 +127,6 @@ $menu = isset($_GET['menu']) ? $_GET['menu'] : 'dashboard';
                                 <p>Tingkatkan keamanan akun dengan password yang lebih kuat.</p>
                             </div>
 
-                            <div class="feature-card" onclick="window.location.href='settings.php?menu=payment'">
-                                <div class="feature-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M1.5 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-13zM1.5 4a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-13zM0 8.5A.5.5 0 0 1 .5 8h13a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-5zM1.5 9a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-13z"/>
-                                    </svg>
-                                </div>
-                                <h3>Metode Pembayaran</h3>
-                                <p>Kelola metode pembayaran untuk checkout yang lebih cepat.</p>
-                            </div>
-
                             <div class="feature-card" onclick="window.location.href='settings.php?menu=lain'">
                                 <div class="feature-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
