@@ -118,6 +118,12 @@ $pesanan_selesai = [];
 while ($row = mysqli_fetch_assoc($history_result)) {
     $pesanan_selesai[] = $row;
 }
+
+// Hitung statistik
+$total = count($pesanan);
+$menunggu = count(array_filter($pesanan, fn($p) => $p['status'] == 'Menunggu Konfirmasi'));
+$dikemas = count(array_filter($pesanan, fn($p) => $p['status'] == 'Sedang Dikemas'));
+$dikirim = count(array_filter($pesanan, fn($p) => $p['status'] == 'Sedang Dikirim'));
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -140,6 +146,23 @@ while ($row = mysqli_fetch_assoc($history_result)) {
 
 <div class="main-content">
 <div class="container-fluid">
+
+<?php if (isset($_SESSION['alert'])): ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const alert = <?= json_encode($_SESSION['alert']); ?>;
+        const icon = alert.type === 'success' ? 'success' : 'error';
+        
+        Swal.fire({
+            icon: icon,
+            title: alert.type === 'success' ? 'Berhasil!' : 'Gagal!',
+            text: alert.message,
+            confirmButtonColor: '#1E5DAC'
+        });
+    });
+</script>
+<?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
 
 <div class="page-header">
     <h1 class="page-title">
