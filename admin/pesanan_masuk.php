@@ -271,6 +271,12 @@ $dikirim = count(array_filter($pesanan, fn($p) => $p['status'] == 'Sedang Dikiri
 <i class="bi bi-check2-circle"></i>
 </button>
 <?php endif; ?>
+
+<?php if($o['status']=='Menunggu Konfirmasi' || $o['status']=='Sedang Dikemas'): ?>
+<button class="btn-action btn-batalkan" onclick="batalkanPesanan(<?= $o['id']; ?>)" title="Batalkan Pesanan">
+<i class="bi bi-x-circle"></i>
+</button>
+<?php endif; ?>
 </td>
 </tr>
 <?php endforeach; ?>
@@ -360,6 +366,22 @@ function selesaikanPesanan(id) {
     }).then(res => {
         if (res.isConfirmed) {
             location.href = 'update_status.php?id=' + id + '&status=selesai';
+        }
+    });
+}
+
+function batalkanPesanan(id) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Batalkan Pesanan?',
+        text: 'Pesanan akan dihapus dan tidak dapat dipulihkan!',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Batalkan',
+        confirmButtonColor: '#dc3545',
+        cancelButtonText: 'Tidak'
+    }).then(res => {
+        if (res.isConfirmed) {
+            location.href = '../user/produk_pembayaran/cancel_order.php?id=' + id + '&from=admin';
         }
     });
 }

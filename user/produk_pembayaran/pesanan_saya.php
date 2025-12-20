@@ -18,10 +18,11 @@ if (isset($_POST['cancel_order'])) {
 
     if ($order && ($order['status'] === 'Menunggu Konfirmasi' || $order['status'] === 'Sedang Dikemas')) {
 
-        $update_query = "UPDATE pemesanan SET status='Pesanan Batal' WHERE id='$order_id'";
+        // Langsung hapus pesanan
+        $delete_query = "DELETE FROM pemesanan WHERE id='$order_id' AND user_id='$user_id'";
 
-        if (mysqli_query($koneksi, $update_query)) {
-            echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan']);
+        if (mysqli_query($koneksi, $delete_query)) {
+            echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan dan dihapus']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Gagal membatalkan pesanan: ' . mysqli_error($koneksi)]);
         }

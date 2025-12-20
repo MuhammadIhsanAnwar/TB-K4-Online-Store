@@ -107,8 +107,8 @@ if (isset($_POST['complete_payment'])) {
         }
 
         $order_query = "INSERT INTO pemesanan 
-                    (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, metode_pembayaran, kurir, status, waktu_pemesanan)
-                    VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
+                    (user_id, nama_lengkap, alamat_lengkap, nomor_hp, nama_produk, quantity, harga_total, metode_pembayaran, kurir, status, waktu_pemesanan)
+                    VALUES ('$user_id', '$nama_lengkap', '$alamat_lengkap', '$nomor_hp', '$nama_produk_gabung', '$quantity_gabung', '$total', '$metode_pembayaran', '$kurir', '$status', '$waktu_pemesanan')";
 
         if (!mysqli_query($koneksi, $order_query)) {
             throw new Exception('Gagal membuat pesanan: ' . mysqli_error($koneksi));
