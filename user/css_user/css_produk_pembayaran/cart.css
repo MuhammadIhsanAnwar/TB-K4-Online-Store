@@ -310,9 +310,9 @@
         }
 
         @media (max-width: 768px) {
-            .container {
+            /* .container {
                 margin-top: 80px;
-            }
+            } */
 
             .page-header h1 {
                 font-size: 2rem;
