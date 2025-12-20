@@ -26,6 +26,7 @@ $menu = isset($_GET['menu']) ? $_GET['menu'] : 'dashboard';
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <link rel="stylesheet" href="../css_user/css_settings/settings.css">
+    <link rel="stylesheet" href="../css_user/css_settings/sidebar.css">
 </head>
 
 <body>
