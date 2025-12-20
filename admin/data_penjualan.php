@@ -31,17 +31,17 @@ if (isset($_GET['download'])) {
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->SetFillColor(30, 93, 172);
         $pdf->SetTextColor(255, 255, 255);
-        $pdf->Cell(10, 8, 'No', 1, 0, 'C', true);
-        $pdf->Cell(15, 8, 'User ID', 1, 0, 'C', true);
-        $pdf->Cell(28, 8, 'Nama', 1, 0, 'C', true);
+        $pdf->Cell(8, 8, 'No', 1, 0, 'C', true);
+        $pdf->Cell(12, 8, 'User', 1, 0, 'C', true);
+        $pdf->Cell(32, 8, 'Nama Customer', 1, 0, 'C', true);
         $pdf->Cell(35, 8, 'Produk', 1, 0, 'C', true);
-        $pdf->Cell(10, 8, 'Qty', 1, 0, 'C', true);
-        $pdf->Cell(22, 8, 'Total', 1, 0, 'C', true);
-        $pdf->Cell(18, 8, 'Bayar', 1, 0, 'C', true);
-        $pdf->Cell(18, 8, 'Kurir', 1, 0, 'C', true);
-        $pdf->Cell(28, 8, 'Tanggal', 1, 1, 'C', true);
+        $pdf->Cell(8, 8, 'Qty', 1, 0, 'C', true);
+        $pdf->Cell(24, 8, 'Total', 1, 0, 'C', true);
+        $pdf->Cell(15, 8, 'Bayar', 1, 0, 'C', true);
+        $pdf->Cell(15, 8, 'Kurir', 1, 0, 'C', true);
+        $pdf->Cell(20, 8, 'Tanggal', 1, 1, 'C', true);
 
-        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetFont('Arial', '', 7.5);
         $pdf->SetTextColor(0, 0, 0);
         $nomor = 1;
 
@@ -55,23 +55,26 @@ if (isset($_GET['download'])) {
                 $produk = $produk_array[$i] ?? '-';
                 $qty = $qty_array[$i] ?? '-';
 
-                $pdf->Cell(10, 7, $i === 0 ? $nomor++ : '', 1, 0, 'C');
-                $pdf->Cell(15, 7, $i === 0 ? $row['user_id'] : '', 1, 0, 'C');
-                $pdf->Cell(28, 7, $i === 0 ? substr($row['nama_lengkap'], 0, 12) : '', 1);
-                $pdf->Cell(35, 7, substr($produk, 0, 18), 1);
-                $pdf->Cell(10, 7, $qty, 1, 0, 'C');
-                $pdf->Cell(22, 7, $i === 0 ? 'Rp ' . number_format($harga_total, 0, ',', '.') : '', 1, 0, 'R');
-                $pdf->Cell(18, 7, $i === 0 ? $row['metode_pembayaran'] : '', 1, 0, 'C');
-                $pdf->Cell(18, 7, $i === 0 ? $row['kurir'] : '', 1, 0, 'C');
-                $pdf->Cell(28, 7, $i === 0 ? date('d/m/Y', strtotime($row['tanggal_selesai'])) : '', 1, 1);
+                $pdf->Cell(8, 6.5, $i === 0 ? $nomor++ : '', 1, 0, 'C');
+                $pdf->Cell(12, 6.5, $i === 0 ? $row['user_id'] : '', 1, 0, 'C');
+                $pdf->Cell(32, 6.5, $i === 0 ? substr($row['nama_lengkap'], 0, 18) : '', 1);
+                $pdf->Cell(35, 6.5, substr($produk, 0, 18), 1);
+                $pdf->Cell(8, 6.5, $qty, 1, 0, 'C');
+                $pdf->Cell(24, 6.5, $i === 0 ? 'Rp ' . number_format($harga_total, 0, ',', '.') : '', 1, 0, 'R');
+                $pdf->Cell(15, 6.5, $i === 0 ? $row['metode_pembayaran'] : '', 1, 0, 'C');
+                $pdf->Cell(15, 6.5, $i === 0 ? $row['kurir'] : '', 1, 0, 'C');
+                $pdf->Cell(20, 6.5, $i === 0 ? date('d/m/Y', strtotime($row['tanggal_selesai'])) : '', 1, 1, 'C');
             }
         }
 
-        // Tambah baris total
-        $pdf->SetFont('Arial', 'B', 9);
+        // Tambah baris total dengan alignment yang rapi
+        $pdf->SetFont('Arial', 'B', 8);
         $pdf->SetFillColor(200, 220, 240);
-        $pdf->Cell(113, 8, 'TOTAL PENDAPATAN', 1, 0, 'R', true);
-        $pdf->Cell(22, 8, 'Rp ' . number_format($total_pendapatan, 0, ',', '.'), 1, 1, 'R', true);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(97, 8, 'TOTAL PENDAPATAN', 1, 0, 'R', true);
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(24, 8, 'Rp ' . number_format($total_pendapatan, 0, ',', '.'), 1, 0, 'R', true);
+        $pdf->Cell(60, 8, '', 1, 1, '', true);
 
         $pdf->Output('D', 'Laporan_Penjualan.pdf');
         exit;
