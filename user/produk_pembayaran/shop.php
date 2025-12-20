@@ -43,6 +43,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css_user/css_produk_pembayaran/shop.css">
     <link rel="stylesheet" href="../css_user/navbar.css">
+     <script src="../../js/bootstrap.bundle.js"></script> 
 </head>
 
 <body>
