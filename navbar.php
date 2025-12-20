@@ -1,6 +1,5 @@
 <?php
-session_start(); // ← Tambahkan ini
-// Sesuaikan path koneksi sesuai lokasi navbar.php
+session_start();
 include "../../admin/koneksi.php";
 
 $user = null;
@@ -74,7 +73,6 @@ $base_path = $is_subdir ? '../../' : './';
     </div>
 </nav>
 
-<!-- Pakai $base_path untuk JS juga -->
 <script src="<?php echo $base_path; ?>js/bootstrap.bundle.js"></script>
 
 <script>

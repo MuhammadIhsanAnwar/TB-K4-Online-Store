@@ -2,14 +2,14 @@
 session_start();
 include '../admin/koneksi.php';
 
-// Validasi parameter
+
 if (!isset($_GET['id'])) {
     $_SESSION['alert'] = [
         'type' => 'error',
         'message' => 'Parameter tidak valid'
     ];
     
-    // Redirect sesuai dari mana request datang
+ 
     $from = isset($_GET['from']) ? $_GET['from'] : 'user';
     header("Location: " . ($from === 'admin' ? '../admin/pesanan_masuk.php' : 'pesanan_saya.php'));
     exit;
@@ -18,7 +18,7 @@ if (!isset($_GET['id'])) {
 $order_id = intval($_GET['id']);
 $from = isset($_GET['from']) ? $_GET['from'] : 'user'; // 'admin' atau 'user'
 
-// Cek apakah pesanan ada
+
 $check_query = "SELECT * FROM pemesanan WHERE id='$order_id'";
 $check_result = mysqli_query($koneksi, $check_query);
 
