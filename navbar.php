@@ -36,9 +36,7 @@ $base_path = $is_subdir ? '../../' : './';
             </ul>
 
             <div class="navbar-actions">
-                <div class="nav-icon">
-                    <i class="bi bi-search fs-5"></i>
-                </div>
+                
 
                 <?php if ($user): ?>
                     <a href="<?php echo $base_path; ?>user/produk_pembayaran/cart.php" class="cart-link">
