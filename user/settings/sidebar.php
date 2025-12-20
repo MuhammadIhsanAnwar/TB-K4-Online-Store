@@ -3,7 +3,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css_user/css_settings/sidebar.css">
 
-<div class="sidebar">
+<!-- Toggle Button (akan muncul hanya di <992px) -->
+<button class="toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <div class="sidebar-logo">
             <img src="../../images/icon/logo.png" alt="Urban Hype Logo">
@@ -60,3 +67,26 @@
         </a>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+            });
+        }
+
+        // Tutup sidebar saat klik di luar (opsional, di mobile)
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth < 992 && 
+                sidebar.classList.contains('collapsed') === false &&
+                !sidebar.contains(e.target) && 
+                e.target !== toggleBtn) {
+                sidebar.classList.add('collapsed');
+            }
+        });
+    });
+</script>

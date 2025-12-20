@@ -356,3 +356,105 @@
         }
     }
 
+/* ========== Toggle Button ========== */
+.toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background: #1E5DAC;
+    color: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(30, 93, 172, 0.3);
+    display: none;
+}
+
+.toggle-btn span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.sidebar.collapsed .toggle-btn span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+}
+
+.sidebar.collapsed .toggle-btn span:nth-child(2) {
+    opacity: 0;
+}
+
+.sidebar.collapsed .toggle-btn span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -4px);
+}
+
+/* ========== Sidebar Toggle ========== */
+.sidebar {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+/* ========== Content Shift ========== */
+.content {
+    transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-left: 300px;
+}
+
+.sidebar.collapsed ~ .content {
+    margin-left: 0;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 991px) {
+    .toggle-btn {
+        display: flex;
+    }
+
+    .sidebar {
+        width: 260px;
+    }
+
+    .content {
+        margin-left: 260px;
+    }
+
+    .sidebar.collapsed ~ .content {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 240px;
+    }
+
+    .content {
+        margin-left: 240px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        width: 90vw;
+        max-width: 280px;
+    }
+
+    .content {
+        margin-left: min(280px, 90vw);
+    }
+}
