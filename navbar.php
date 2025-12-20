@@ -49,14 +49,14 @@ $base_path = $is_subdir ? '../../' : './';
                         <?php endif; ?>
                     </a>
                     <div class="dropdown user-dropdown">
-                        <a class="dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="<?php echo $base_path; ?>foto_profil/<?php echo htmlspecialchars($user['foto_profil']); ?>"
                                 alt="<?php echo htmlspecialchars($user['nama_lengkap']); ?>"
                                 class="rounded-circle"
                                 style="width:40px; height:40px; object-fit:cover;">
                             <span class="user-name d-none d-lg-inline"><?php echo htmlspecialchars($user['nama_lengkap']); ?></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/settings/settings.php"><i class="bi bi-gear me-2"></i>Setting Akun</a></li>
                             <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/produk_pembayaran/pesanan_saya.php"><i class="bi bi-bag me-2"></i>Pesanan Saya</a></li>
                             <li>
@@ -76,43 +76,6 @@ $base_path = $is_subdir ? '../../' : './';
 <script src="js/bootstrap.bundle.js"></script>
 
 <script>
-    // Inisialisasi Bootstrap dropdown dengan lebih eksplisit
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdownToggle = document.querySelector('.user-dropdown .dropdown-toggle');
-        
-        if (dropdownToggle) {
-            // Gunakan Bootstrap Dropdown API
-            const dropdown = new bootstrap.Dropdown(dropdownToggle, {
-                autoClose: true,
-                popperConfig: {
-                    modifiers: [
-                        {
-                            name: 'offset',
-                            options: {
-                                offset: [0, 10]
-                            }
-                        },
-                        {
-                            name: 'preventOverflow',
-                            options: {
-                                padding: 8
-                            }
-                        }
-                    ]
-                }
-            });
-
-            // Debug logging
-            console.log('✓ Dropdown profil berhasil diinisialisasi');
-            
-            dropdownToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                dropdown.toggle();
-                console.log('Dropdown toggled');
-            });
-        }
-    });
-
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
         if (window.scrollY > 50) {
