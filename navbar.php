@@ -1,4 +1,8 @@
 <?php
+session_start(); // ← Tambahkan ini
+// Sesuaikan path koneksi sesuai lokasi navbar.php
+include "../../admin/koneksi.php";
+
 $user = null;
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -11,7 +15,9 @@ $is_subdir = (strpos($current_path, '/user/produk_pembayaran/') !== false);
 $base_path = $is_subdir ? '../../' : './';
 ?>
 
-<link rel="stylesheet" href="user/css_user/navbar.css">
+<!-- Gunakan $base_path untuk CSS juga -->
+<link rel="stylesheet" href="<?php echo $base_path; ?>user/css_user/navbar.css">
+
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
         <a class="navbar-brand-wrapper" href="<?php echo $base_path; ?>index.php">
@@ -59,9 +65,7 @@ $base_path = $is_subdir ? '../../' : './';
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/settings/settings.php"><i class="bi bi-gear me-2"></i>Setting Akun</a></li>
                             <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/produk_pembayaran/pesanan_saya.php"><i class="bi bi-bag me-2"></i>Pesanan Saya</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="<?php echo $base_path; ?>user/logout_user.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                         </ul>
                     </div>
@@ -73,15 +77,16 @@ $base_path = $is_subdir ? '../../' : './';
     </div>
 </nav>
 
-<script src="js/bootstrap.bundle.js"></script>
+<!-- Pakai $base_path untuk JS juga -->
+<script src="<?php echo $base_path; ?>js/bootstrap.bundle.js"></script>
 
 <script>
-    window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                navbar.classList.toggle('scrolled', window.scrollY > 50);
+            }
+        });
     });
 </script>
