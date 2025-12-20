@@ -120,12 +120,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 </div>
 
                                 <div class="comment-actions">
-                                    <?php if (empty($comment['status']) || $comment['status'] !== 'approved'): ?>
-                                        <button class="btn-action btn-approve" onclick="approveComment(<?php echo $comment['id']; ?>)">
-                                            <i class="bi bi-check-lg"></i> Setujui
-                                        </button>
-                                    <?php endif; ?>
-
                                     <button class="btn-action btn-delete" onclick="deleteComment(<?php echo $comment['id']; ?>)">
                                         <i class="bi bi-trash"></i> Hapus
                                     </button>
@@ -140,39 +134,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
-        function approveComment(commentId) {
-            Swal.fire({
-                icon: 'question',
-                title: 'Setujui Komentar?',
-                text: 'Komentar akan ditampilkan di halaman produk',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Setujui',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#1E5DAC'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const formData = new FormData();
-                    formData.append('approve_comment', '1');
-                    formData.append('comment_id', commentId);
-
-                    fetch('kelola_komentar.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: data.message,
-                                confirmButtonColor: '#1E5DAC'
-                            }).then(() => location.reload());
-                        }
-                    });
-                }
-            });
-        }
+        
 
         function deleteComment(commentId) {
             Swal.fire({

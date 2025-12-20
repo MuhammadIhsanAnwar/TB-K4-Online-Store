@@ -88,9 +88,12 @@ if (isset($_GET['download'])) {
             <meta charset="UTF-8" />
             <style>
                 table { border-collapse: collapse; width: 100%; }
-                th { background-color: #1E5DAC; color: white; border: 1px solid #000; padding: 8px; font-weight: bold; }
-                td { border: 1px solid #000; padding: 8px; }
+                th { background-color: #1E5DAC; color: white; border: 1px solid #000; padding: 10px; font-weight: bold; text-align: center; }
+                td { border: 1px solid #000; padding: 10px; }
+                .text-center { text-align: center; }
+                .text-right { text-align: right; }
                 .total-row { background-color: #C8DCF0; font-weight: bold; }
+                .total-row td:last-child { text-align: right; font-size: 12pt; }
             </style>
         </head>
         <body>
@@ -99,15 +102,14 @@ if (isset($_GET['download'])) {
         <table>
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>User ID</th>
-                    <th>Nama</th>
-                    <th>Produk</th>
-                    <th>Qty</th>
-                    <th>Total</th>
-                    <th>Pembayaran</th>
-                    <th>Kurir</th>
-                    <th>Tanggal</th>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 8%;">User ID</th>
+                    <th style="width: 20%;">Nama Customer</th>
+                    <th style="width: 25%;">Produk</th>
+                    <th style="width: 7%;">Qty</th>
+                    <th style="width: 15%;">Total</th>
+                    <th style="width: 10%;">Pembayaran</th>
+                    <th style="width: 10%;">Kurir</th>
                 </tr>
             </thead>
             <tbody>';
@@ -124,30 +126,29 @@ if (isset($_GET['download'])) {
 
                 echo '<tr>';
                 if ($i === 0) {
-                    echo '<td>' . $nomor++ . '</td>';
-                    echo '<td>' . $row['user_id'] . '</td>';
+                    echo '<td class="text-center">' . $nomor++ . '</td>';
+                    echo '<td class="text-center">' . $row['user_id'] . '</td>';
                     echo '<td>' . htmlspecialchars($row['nama_lengkap']) . '</td>';
                 } else {
                     echo '<td></td><td></td><td></td>';
                 }
                 echo '<td>' . htmlspecialchars($produk) . '</td>';
-                echo '<td>' . $qty . ' unit</td>';
+                echo '<td class="text-center">' . $qty . ' unit</td>';
                 if ($i === 0) {
-                    echo '<td>Rp ' . number_format($row['harga_total'], 0, ',', '.') . '</td>';
-                    echo '<td>' . $row['metode_pembayaran'] . '</td>';
-                    echo '<td>' . $row['kurir'] . '</td>';
-                    echo '<td>' . date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) . '</td>';
+                    echo '<td class="text-right">Rp ' . number_format($row['harga_total'], 0, ',', '.') . '</td>';
+                    echo '<td class="text-center">' . $row['metode_pembayaran'] . '</td>';
+                    echo '<td class="text-center">' . $row['kurir'] . '</td>';
                 } else {
-                    echo '<td></td><td></td><td></td><td></td>';
+                    echo '<td></td><td></td><td></td>';
                 }
                 echo '</tr>';
             }
         }
 
-        // Tambah baris total
+        // Tambah baris total dengan styling yang rapi
         echo '<tr class="total-row">
-                <td colspan="5" style="text-align: right;">TOTAL PENDAPATAN</td>
-                <td colspan="4">Rp ' . number_format($total_pendapatan, 0, ',', '.') . '</td>
+                <td colspan="5" class="text-right">TOTAL PENDAPATAN</td>
+                <td colspan="3" class="text-right">Rp ' . number_format($total_pendapatan, 0, ',', '.') . '</td>
               </tr>';
 
         echo '</tbody>
