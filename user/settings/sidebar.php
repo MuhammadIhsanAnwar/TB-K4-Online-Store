@@ -3,8 +3,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css_user/css_settings/sidebar.css">
 
-<!-- Toggle Button (akan muncul hanya di <992px) -->
-<button class="toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+<!-- Toggle Button -->
+<button class="toggle-btn" id="sidebarToggle">
     <span></span>
     <span></span>
     <span></span>
