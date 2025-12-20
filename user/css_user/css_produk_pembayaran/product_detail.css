@@ -535,10 +535,7 @@
         }
 
         @media (max-width: 768px) {
-            .breadcrumb-section {
-                margin-top: 70px;
-            }
-
+          
             .product-detail {
                 grid-template-columns: 1fr;
                 gap: 2rem;
