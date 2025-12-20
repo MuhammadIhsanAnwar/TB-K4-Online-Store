@@ -11,6 +11,12 @@ if (isset($_GET['download'])) {
         $data[] = $row;
     }
 
+    // Hitung total pendapatan
+    $total_pendapatan = 0;
+    foreach ($data as $row) {
+        $total_pendapatan += (int)$row['harga_total'];
+    }
+
     if ($format === 'pdf') {
         require_once '../library/fpdf.php';
 
@@ -25,13 +31,15 @@ if (isset($_GET['download'])) {
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->SetFillColor(30, 93, 172);
         $pdf->SetTextColor(255, 255, 255);
-        $pdf->Cell(12, 8, 'No', 1, 0, 'C', true);
-        $pdf->Cell(20, 8, 'User ID', 1, 0, 'C', true);
-        $pdf->Cell(40, 8, 'Nama Customer', 1, 0, 'C', true);
-        $pdf->Cell(50, 8, 'Produk', 1, 0, 'C', true);
-        $pdf->Cell(12, 8, 'Qty', 1, 0, 'C', true);
-        $pdf->Cell(25, 8, 'Harga', 1, 0, 'C', true);
-        $pdf->Cell(30, 8, 'Tanggal', 1, 1, 'C', true);
+        $pdf->Cell(10, 8, 'No', 1, 0, 'C', true);
+        $pdf->Cell(15, 8, 'User ID', 1, 0, 'C', true);
+        $pdf->Cell(28, 8, 'Nama', 1, 0, 'C', true);
+        $pdf->Cell(35, 8, 'Produk', 1, 0, 'C', true);
+        $pdf->Cell(10, 8, 'Qty', 1, 0, 'C', true);
+        $pdf->Cell(22, 8, 'Total', 1, 0, 'C', true);
+        $pdf->Cell(18, 8, 'Bayar', 1, 0, 'C', true);
+        $pdf->Cell(18, 8, 'Kurir', 1, 0, 'C', true);
+        $pdf->Cell(28, 8, 'Tanggal', 1, 1, 'C', true);
 
         $pdf->SetFont('Arial', '', 8);
         $pdf->SetTextColor(0, 0, 0);
@@ -47,17 +55,102 @@ if (isset($_GET['download'])) {
                 $produk = $produk_array[$i] ?? '-';
                 $qty = $qty_array[$i] ?? '-';
 
-                $pdf->Cell(12, 7, $i === 0 ? $nomor++ : '', 1);
-                $pdf->Cell(20, 7, $i === 0 ? $row['user_id'] : '', 1);
-                $pdf->Cell(40, 7, $i === 0 ? substr($row['nama_lengkap'], 0, 15) : '', 1);
-                $pdf->Cell(50, 7, substr($produk, 0, 20), 1);
-                $pdf->Cell(12, 7, $qty, 1, 0, 'C');
-                $pdf->Cell(25, 7, $i === 0 ? 'Rp ' . number_format($harga_total, 0, ',', '.') : '', 1, 0, 'R');
-                $pdf->Cell(30, 7, $i === 0 ? date('d/m/Y', strtotime($row['tanggal_selesai'])) : '', 1, 1);
+                $pdf->Cell(10, 7, $i === 0 ? $nomor++ : '', 1, 0, 'C');
+                $pdf->Cell(15, 7, $i === 0 ? $row['user_id'] : '', 1, 0, 'C');
+                $pdf->Cell(28, 7, $i === 0 ? substr($row['nama_lengkap'], 0, 12) : '', 1);
+                $pdf->Cell(35, 7, substr($produk, 0, 18), 1);
+                $pdf->Cell(10, 7, $qty, 1, 0, 'C');
+                $pdf->Cell(22, 7, $i === 0 ? 'Rp ' . number_format($harga_total, 0, ',', '.') : '', 1, 0, 'R');
+                $pdf->Cell(18, 7, $i === 0 ? $row['metode_pembayaran'] : '', 1, 0, 'C');
+                $pdf->Cell(18, 7, $i === 0 ? $row['kurir'] : '', 1, 0, 'C');
+                $pdf->Cell(28, 7, $i === 0 ? date('d/m/Y', strtotime($row['tanggal_selesai'])) : '', 1, 1);
             }
         }
 
+        // Tambah baris total
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->SetFillColor(200, 220, 240);
+        $pdf->Cell(113, 8, 'TOTAL PENDAPATAN', 1, 0, 'R', true);
+        $pdf->Cell(22, 8, 'Rp ' . number_format($total_pendapatan, 0, ',', '.'), 1, 1, 'R', true);
+
         $pdf->Output('D', 'Laporan_Penjualan.pdf');
+        exit;
+    } elseif ($format === 'excel') {
+        // Export Excel
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="Laporan_Penjualan.xls"');
+        
+        echo '<html xmlns:x="urn:schemas-microsoft-com:office:excel">
+        <head>
+            <meta charset="UTF-8" />
+            <style>
+                table { border-collapse: collapse; width: 100%; }
+                th { background-color: #1E5DAC; color: white; border: 1px solid #000; padding: 8px; font-weight: bold; }
+                td { border: 1px solid #000; padding: 8px; }
+                .total-row { background-color: #C8DCF0; font-weight: bold; }
+            </style>
+        </head>
+        <body>
+        <h2 style="text-align: center;">LAPORAN DATA PENJUALAN</h2>
+        <p style="text-align: center;">Tanggal: ' . date('d/m/Y H:i:s') . '</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>User ID</th>
+                    <th>Nama</th>
+                    <th>Produk</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Pembayaran</th>
+                    <th>Kurir</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        $nomor = 1;
+        foreach ($data as $row) {
+            $produk_array = array_map('trim', explode(',', $row['nama_produk']));
+            $qty_array = array_map('trim', explode(',', $row['quantity']));
+            $max_items = max(count($produk_array), count($qty_array));
+
+            for ($i = 0; $i < $max_items; $i++) {
+                $produk = $produk_array[$i] ?? '-';
+                $qty = $qty_array[$i] ?? '-';
+
+                echo '<tr>';
+                if ($i === 0) {
+                    echo '<td>' . $nomor++ . '</td>';
+                    echo '<td>' . $row['user_id'] . '</td>';
+                    echo '<td>' . htmlspecialchars($row['nama_lengkap']) . '</td>';
+                } else {
+                    echo '<td></td><td></td><td></td>';
+                }
+                echo '<td>' . htmlspecialchars($produk) . '</td>';
+                echo '<td>' . $qty . ' unit</td>';
+                if ($i === 0) {
+                    echo '<td>Rp ' . number_format($row['harga_total'], 0, ',', '.') . '</td>';
+                    echo '<td>' . $row['metode_pembayaran'] . '</td>';
+                    echo '<td>' . $row['kurir'] . '</td>';
+                    echo '<td>' . date('d/m/Y H:i', strtotime($row['tanggal_selesai'])) . '</td>';
+                } else {
+                    echo '<td></td><td></td><td></td><td></td>';
+                }
+                echo '</tr>';
+            }
+        }
+
+        // Tambah baris total
+        echo '<tr class="total-row">
+                <td colspan="5" style="text-align: right;">TOTAL PENDAPATAN</td>
+                <td colspan="4">Rp ' . number_format($total_pendapatan, 0, ',', '.') . '</td>
+              </tr>';
+
+        echo '</tbody>
+        </table>
+        </body>
+        </html>';
         exit;
     }
 }
