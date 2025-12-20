@@ -15,7 +15,6 @@ $is_subdir = (strpos($current_path, '/user/produk_pembayaran/') !== false);
 $base_path = $is_subdir ? '../../' : './';
 ?>
 
-<!-- Gunakan $base_path untuk CSS juga -->
 <link rel="stylesheet" href="<?php echo $base_path; ?>user/css_user/navbar.css">
 
 <nav class="navbar navbar-expand-lg fixed-top">

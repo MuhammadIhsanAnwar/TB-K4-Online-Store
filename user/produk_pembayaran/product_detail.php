@@ -182,7 +182,6 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css_user/css_produk_pembayaran/product_detail.css">
     <link rel="stylesheet" href="../css_user/navbar.css">
-
 </head>
 
 <body>
@@ -208,21 +207,43 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             </div>
 
             <div class="product-info-section">
-                <span class="product-kategori">📂 <?php echo htmlspecialchars($product['kategori']); ?></span>
+                <span class="product-kategori">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;">
+                        <path d="M1 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2zm1 12h12V2H2v12zm4.5-9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                    </svg>
+                    <?php echo htmlspecialchars($product['kategori']); ?>
+                </span>
                 <h1 class="product-name"><?php echo htmlspecialchars($product['nama']); ?></h1>
                 <p class="product-merk">Brand: <?php echo htmlspecialchars($product['merk']); ?></p>
-                <div class="product-rating">⭐⭐⭐⭐⭐ (4.8/5) · 125 Ulasan</div>
+                <div class="product-rating">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#ffc107" viewBox="0 0 16 16" style="margin-right: 2px; vertical-align: -0.2em;">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#ffc107" viewBox="0 0 16 16" style="margin-right: 2px; vertical-align: -0.2em;">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#ffc107" viewBox="0 0 16 16" style="margin-right: 2px; vertical-align: -0.2em;">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#ffc107" viewBox="0 0 16 16" style="margin-right: 2px; vertical-align: -0.2em;">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#e4e5e6" viewBox="0 0 16 16" style="margin-right: 2px; vertical-align: -0.2em;">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                    (4.8/5) · 125 Ulasan
+                </div>
 
                 <div class="product-harga">Rp <?php echo number_format($product['harga'], 0, ',', '.'); ?></div>
 
                 <div class="stok-status <?php echo $product['stok'] > 10 ? 'stok-ready' : ($product['stok'] > 0 ? 'stok-low' : 'stok-out'); ?>">
                     <?php
                     if ($product['stok'] > 10) {
-                        echo "✓ Stok Tersedia (" . $product['stok'] . ")";
+                        echo '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg> Stok Tersedia (' . $product['stok'] . ')';
                     } elseif ($product['stok'] > 0) {
-                        echo "⚠ Stok Terbatas (" . $product['stok'] . ")";
+                        echo '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg> Stok Terbatas (' . $product['stok'] . ')';
                     } else {
-                        echo "✗ Stok Habis";
+                        echo '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg> Stok Habis';
                     }
                     ?>
                 </div>
@@ -264,7 +285,10 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                             <button class="quantity-btn" id="increaseBtn" onclick="increaseQuantity()">+</button>
                         </div>
                         <button class="btn-add-cart" id="addCartBtn" onclick="addToCart()">
-                            🛒 Tambah ke Keranjang
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 4px;">
+                                <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 0-.485.621L1.61 16h11.78a.5.5 0 0 1 .485.621l-.5 2A.5.5 0 0 1 13 19H3a.5.5 0 0 1-.485-.379L.61 14H2a.5.5 0 0 0 .485-.379L3.61 9H1.5a.5.5 0 0 1-.5-.5V2.5zm3.5 2a.5.5 0 0 0 0 1h8a.5.5 0 0 0 0-1h-8zm0 3a.5.5 0 0 0 0 1h8a.5.5 0 0 0 0-1h-8zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/>
+                            </svg>
+                            Tambah ke Keranjang
                         </button>
                     </div>
                 <?php else: ?>
@@ -276,7 +300,12 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
         </div>
 
         <section class="comments-section">
-            <h3>💬 Komentar Produk</h3>
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -0.2em; margin-right: 8px;">
+                    <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.5a.5.5 0 0 1-.778.424L13.5 13H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"/>
+                </svg>
+                Komentar Produk
+            </h3>
 
             <?php if ($user): ?>
                 <div class="comment-form">
@@ -286,11 +315,31 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                         <div class="rating-input">
                             <label>Rating:</label>
                             <div id="ratingStars">
-                                <span class="star" data-rating="1">★</span>
-                                <span class="star" data-rating="2">★</span>
-                                <span class="star" data-rating="3">★</span>
-                                <span class="star" data-rating="4">★</span>
-                                <span class="star" data-rating="5">★</span>
+                                <span class="star" data-rating="1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ddd" viewBox="0 0 16 16" class="star-icon">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                </span>
+                                <span class="star" data-rating="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ddd" viewBox="0 0 16 16" class="star-icon">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                </span>
+                                <span class="star" data-rating="3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ddd" viewBox="0 0 16 16" class="star-icon">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                </span>
+                                <span class="star" data-rating="4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ddd" viewBox="0 0 16 16" class="star-icon">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                </span>
+                                <span class="star" data-rating="5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ddd" viewBox="0 0 16 16" class="star-icon">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
+                                </span>
                             </div>
                             <input type="hidden" id="ratingValue" name="rating" value="5">
                         </div>
@@ -309,7 +358,12 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
             <div class="comments-list" style="margin-top: 2rem;">
                 <?php if (empty($comments)): ?>
                     <div class="no-comments">
-                        <div class="no-comments-icon">📝</div>
+                        <div class="no-comments-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                            </svg>
+                        </div>
                         <p>Belum ada komentar. Jadilah yang pertama memberikan komentar!</p>
                     </div>
                 <?php else: ?>
@@ -326,18 +380,26 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                                 <?php if ($user && $user['id'] == $comment['user_id']): ?>
                                     <div class="comment-actions">
                                         <button class="btn-edit-comment" onclick="showEditForm(<?php echo $comment['id']; ?>)" title="Edit Komentar">
-                                            ✏️
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
                                         </button>
                                         <button class="btn-delete-comment" onclick="deleteComment(<?php echo $comment['id']; ?>)" title="Hapus Komentar">
-                                            🗑️
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                            </svg>
                                         </button>
                                     </div>
                                 <?php endif; ?>
                             </div>
 
                             <div class="comment-rating">
-                                <?php for ($i = 0; $i < $comment['rating']; $i++): ?>
-                                    <span class="star-display">★</span>
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="<?php echo $i <= $comment['rating'] ? '#ffc107' : '#e4e5e6'; ?>" viewBox="0 0 16 16" style="margin-right: 2px;">
+                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                    </svg>
                                 <?php endfor; ?>
                             </div>
 
@@ -356,11 +418,13 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
                                     <div class="rating-input" style="margin-bottom: 1rem;">
                                         <label>Rating:</label>
                                         <div id="editRatingStars-<?php echo $comment['id']; ?>" class="edit-rating-stars">
-                                            <span class="star" data-rating="1" data-comment-id="<?php echo $comment['id']; ?>">★</span>
-                                            <span class="star" data-rating="2" data-comment-id="<?php echo $comment['id']; ?>">★</span>
-                                            <span class="star" data-rating="3" data-comment-id="<?php echo $comment['id']; ?>">★</span>
-                                            <span class="star" data-rating="4" data-comment-id="<?php echo $comment['id']; ?>">★</span>
-                                            <span class="star" data-rating="5" data-comment-id="<?php echo $comment['id']; ?>">★</span>
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <span class="star" data-rating="<?php echo $i; ?>" data-comment-id="<?php echo $comment['id']; ?>">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="<?php echo $i <= $comment['rating'] ? '#ffc107' : '#ddd'; ?>" viewBox="0 0 16 16" class="star-icon">
+                                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                    </svg>
+                                                </span>
+                                            <?php endfor; ?>
                                         </div>
                                         <input type="hidden" class="edit-rating-value" data-comment-id="<?php echo $comment['id']; ?>" value="<?php echo $comment['rating']; ?>">
                                     </div>
@@ -388,6 +452,7 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
     <script src="../../js/bootstrap.bundle.js"></script>
 
     <script>
+        
         const maxStok = <?php echo $product['stok']; ?>;
 
         function decreaseQuantity() {
@@ -786,3 +851,4 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
 </body>
 
 </html>
+
