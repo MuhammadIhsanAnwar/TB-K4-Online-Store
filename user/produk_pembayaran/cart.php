@@ -152,27 +152,12 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
         function toggleSelectAll(checkbox) {
             const checkboxes = document.querySelectorAll('.product-checkbox');
             checkboxes.forEach(cb => cb.checked = checkbox.checked);
-        }
-
-        document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', updateSelectAllStatus);
-        });
-
-        function updateSelectAllStatus() {
-            const checkboxes = document.querySelectorAll('.product-checkbox');
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const checkedCount = document.querySelectorAll('.product-checkbox:checked').length;
-            selectAllCheckbox.checked = checkedCount === checkboxes.length && checkboxes.length > 0;
-        }
-
-        function toggleSelectAll(checkbox) {
-            const checkboxes = document.querySelectorAll('.product-checkbox');
-            checkboxes.forEach(cb => cb.checked = checkbox.checked);
             updateTotal();
         }
 
         document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
+            checkbox.addEventListener('change', function(e) {
+                // Jangan preventDefault - biarkan event bubble ke dropdown
                 updateSelectAllStatus();
                 updateTotal();
             });
@@ -228,7 +213,10 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
             return true;
         }
 
-        updateTotal();
+        // Initialize total on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTotal();
+        });
     </script>
 </body>
 
