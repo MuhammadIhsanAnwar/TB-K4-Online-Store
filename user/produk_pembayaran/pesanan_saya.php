@@ -160,6 +160,7 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
     <link rel="icon" type="image/png" href="../../images/icon/logo.png">
     <link rel="stylesheet" href="../css_user/css_produk_pembayaran/pesanan_saya.css">
     <link rel="stylesheet" href="../css_user/navbar.css">
+    <script src="../../js/bootstrap.bundle.js"></script> 
 </head>
 
 <body>

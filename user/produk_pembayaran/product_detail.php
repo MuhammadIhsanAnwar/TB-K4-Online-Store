@@ -177,7 +177,7 @@ while ($row = mysqli_fetch_assoc($comments_result)) {
     <title><?php echo htmlspecialchars($product['nama']); ?> - UrbanHype</title>
 
     <link rel="stylesheet" href="../../css/bootstrap.css">
-    <script src="../../js/bootstrap.bundle.js"></script> <!-- ⬅️ DI SINI -->
+    <script src="../../js/bootstrap.bundle.js"></script> 
 
     <link rel="stylesheet" href="../../icons/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
