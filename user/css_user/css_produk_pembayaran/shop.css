@@ -265,9 +265,7 @@
         }
 
         @media (max-width: 768px) {
-            .hero-shop {
-                margin-top: 70px;
-            }
+            
 
             .hero-shop h1 {
                 font-size: 2rem;
