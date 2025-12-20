@@ -78,7 +78,7 @@ while ($row = mysqli_fetch_assoc($cart_result)) {
 </head>
 
 <body>
-    <?php include '../navbar.php'; ?>
+    <?php include "../../navbar.php"; ?>
     <div class="cart-container">
         <div class="page-header">
             <h1>Shopping Cart</h1>
