@@ -1,125 +1,226 @@
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #EAE2E4 0%, #B7C5DA 50%, #1E5DAC 100%);
-            min-height: 100vh;
-            padding: 2rem 1rem;
-        }
+body {
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(135deg, #eae2e4 0%, #b7c5da 50%, #1e5dac 100%);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+/* ========== Container ========== */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-        .page-header {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1E5DAC;
-            margin-bottom: 0.5rem;
-            animation: fadeInDown 0.6s ease;
-        }
+/* ========== Page Header ========== */
+.page-header {
+  font-family: "Playfair Display", serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e5dac;
+  margin-bottom: 0.5rem;
+  animation: fadeInDown 0.6s ease;
+}
 
-        .page-subtitle {
-            color: #6B7280;
-            margin-bottom: 2rem;
-            animation: fadeInDown 0.6s ease 0.1s backwards;
-        }
+.page-subtitle {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.6s ease 0.1s backwards;
+  line-height: 1.5;
+}
 
-        .danger-zone {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.1);
-            border: 2px solid #fee2e2;
-            animation: fadeInUp 0.6s ease 0.3s backwards;
-        }
+/* ========== Danger Zone ========== */
+.danger-zone {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(239, 68, 68, 0.1);
+  border: 2px solid #fee2e2;
+  animation: fadeInUp 0.6s ease 0.3s backwards;
+}
 
-        .danger-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #dc2626;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+.danger-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
 
-        .danger-description {
-            color: #6B7280;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
+.danger-description {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
 
-        .btn {
-            padding: 0.875rem 2rem;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-        }
+/* ========== Button ========== */
+.btn {
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
 
-        .btn-danger {
-            background: white;
-            color: #dc2626;
-            border: 2px solid #dc2626;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
-        }
+.btn-danger {
+  background: white;
+  color: #dc2626;
+  border: 2px solid #dc2626;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+}
 
-        .btn-danger:hover {
-            background: #dc2626;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(239, 68, 68, 0.3);
-        }
+.btn-danger:hover {
+  background: #dc2626;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(239, 68, 68, 0.3);
+}
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+/* ========== Animations ========== */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem 0.5rem;
-            }
+/* ========== Responsive Design ========== */
 
-            .page-header {
-                font-size: 2rem;
-            }
+/* Tablets */
+@media (max-width: 991px) {
+  body {
+    padding: 1.75rem 0.875rem;
+  }
 
-            .danger-zone {
-                padding: 1.5rem;
-            }
-        }
+  .page-header {
+    font-size: 2.25rem;
+  }
+
+  .danger-zone {
+    padding: 2rem;
+  }
+}
+
+/* Mobile landscape and small tablets */
+@media (max-width: 768px) {
+  body {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .page-header {
+    font-size: 2rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .danger-zone {
+    padding: 1.75rem;
+    border-radius: 16px;
+  }
+
+  .danger-title {
+    font-size: 1.35rem;
+  }
+
+  .danger-description {
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.75rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 576px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+
+  .page-header {
+    font-size: 1.75rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .danger-zone {
+    padding: 1.5rem;
+  }
+
+  .danger-title {
+    font-size: 1.25rem;
+    gap: 0.5rem;
+  }
+
+  .danger-description {
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+    display: block;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .page-header {
+    font-size: 1.5rem;
+  }
+
+  .danger-zone {
+    padding: 1.25rem;
+  }
+
+  .danger-title {
+    font-size: 1.15rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
