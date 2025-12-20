@@ -11,7 +11,6 @@ body {
   padding: 20px;
 }
 
-/* ========== Profile Container ========== */
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
@@ -27,7 +26,6 @@ h2 {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ========== Alerts ========== */
 .alert {
   padding: 1rem 1.5rem;
   border-radius: 12px;
@@ -59,7 +57,6 @@ h2 {
   }
 }
 
-/* ========== Form ========== */
 form {
   background: white;
   border-radius: 20px;
@@ -93,7 +90,6 @@ label {
   font-size: 0.95rem;
 }
 
-/* ========== Form Inputs ========== */
 input[type="text"],
 input[type="date"],
 input[type="number"],
@@ -143,14 +139,12 @@ input:disabled {
   opacity: 0.7;
 }
 
-/* ========== Form Row ========== */
 .form-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
-/* ========== Photo Section ========== */
 .photo-section {
   text-align: center;
   padding: 2rem;
@@ -196,7 +190,6 @@ input[type="file"]::file-selector-button:hover {
   box-shadow: 0 4px 12px rgba(30, 93, 172, 0.3);
 }
 
-/* ========== Submit Button ========== */
 .btn-submit {
   width: 100%;
   padding: 1rem 2rem;
@@ -237,7 +230,6 @@ input[type="file"]::file-selector-button:hover {
   transform: translateY(0);
 }
 
-/* ========== Other Elements ========== */
 hr {
   border: none;
   height: 2px;
@@ -255,9 +247,7 @@ hr {
   line-height: 1.4;
 }
 
-/* ========== Responsive Design ========== */
 
-/* Tablets */
 @media (max-width: 991px) {
   body {
     padding: 15px;
@@ -272,7 +262,6 @@ hr {
   }
 }
 
-/* Mobile landscape and small tablets */
 @media (max-width: 768px) {
   body {
     padding: 12px;
@@ -288,7 +277,6 @@ hr {
     border-radius: 16px;
   }
 
-  /* Single column layout for form rows on mobile */
   .form-row {
     grid-template-columns: 1fr;
     gap: 1.25rem;
@@ -345,7 +333,6 @@ hr {
     font-size: 0.9rem;
   }
 
-  /* Ensure minimum font size of 16px for iOS to prevent zoom */
   input[type="text"],
   input[type="date"],
   input[type="number"],

@@ -11,7 +11,6 @@ body {
   min-height: 100vh;
 }
 
-/* ========== Main Content ========== */
 .content {
   margin-left: 280px;
   padding: 2rem;
@@ -19,7 +18,7 @@ body {
   transition: margin-left 0.3s ease;
 }
 
-/* ========== Welcome Container ========== */
+
 .welcome-container {
   max-width: 900px;
   margin: 0 auto;
@@ -45,7 +44,7 @@ body {
   }
 }
 
-/* ========== Welcome Header ========== */
+
 .welcome-header {
   display: flex;
   align-items: center;
@@ -87,7 +86,6 @@ body {
   margin-top: 0.4rem;
 }
 
-/* ========== Welcome Content ========== */
 .welcome-content {
   margin: 1.75rem 0;
   color: #2d3a4a;
@@ -107,7 +105,6 @@ body {
   font-size: 0.95rem;
 }
 
-/* ========== Features Grid ========== */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -150,7 +147,6 @@ body {
   line-height: 1.5;
 }
 
-/* ========== Quick Stats ========== */
 .quick-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -178,7 +174,6 @@ body {
   opacity: 0.9;
 }
 
-/* ========== CTA Buttons ========== */
 .cta-buttons {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -227,9 +222,7 @@ body {
   margin: 1.75rem 0;
 }
 
-/* ========== Responsive Design ========== */
 
-/* Large tablets and small desktops */
 @media (max-width: 1199px) {
   .content {
     margin-left: 260px;
@@ -240,12 +233,11 @@ body {
   }
 }
 
-/* Tablets */
 @media (max-width: 991px) {
   .content {
     margin-left: 0;
     padding: 1.5rem;
-    padding-top: 80px; /* Added from updates */
+    padding-top: 80px; 
   }
 
   .welcome-card {
@@ -270,11 +262,10 @@ body {
   }
 }
 
-/* Mobile landscape and small tablets */
 @media (max-width: 768px) {
   .content {
     padding: 1.25rem;
-    padding-top: 70px; /* Added from updates */
+    padding-top: 70px;
   }
 
   .welcome-card {
@@ -323,11 +314,11 @@ body {
   }
 }
 
-/* Mobile portrait */
+
 @media (max-width: 576px) {
   .content {
     padding: 1rem;
-    padding-top: 60px; /* Added from updates */
+    padding-top: 60px;
   }
 
   .welcome-card {
@@ -371,7 +362,6 @@ body {
   }
 }
 
-/* Extra small devices */
 @media (max-width: 400px) {
   .content {
     padding: 0.75rem;

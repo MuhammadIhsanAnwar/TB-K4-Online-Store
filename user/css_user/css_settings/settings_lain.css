@@ -11,13 +11,11 @@ body {
   padding: 2rem 1rem;
 }
 
-/* ========== Container ========== */
 .container {
   max-width: 800px;
   margin: 0 auto;
 }
 
-/* ========== Page Header ========== */
 .page-header {
   font-family: "Playfair Display", serif;
   font-size: 2.5rem;
@@ -34,7 +32,6 @@ body {
   line-height: 1.5;
 }
 
-/* ========== Danger Zone ========== */
 .danger-zone {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -63,7 +60,6 @@ body {
   line-height: 1.6;
 }
 
-/* ========== Button ========== */
 .btn {
   padding: 0.875rem 2rem;
   border: none;
@@ -92,7 +88,6 @@ body {
   box-shadow: 0 6px 25px rgba(239, 68, 68, 0.3);
 }
 
-/* ========== Animations ========== */
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -117,9 +112,6 @@ body {
   }
 }
 
-/* ========== Responsive Design ========== */
-
-/* Tablets */
 @media (max-width: 991px) {
   body {
     padding: 1.75rem 0.875rem;
@@ -134,7 +126,6 @@ body {
   }
 }
 
-/* Mobile landscape and small tablets */
 @media (max-width: 768px) {
   body {
     padding: 1.5rem 0.75rem;
@@ -169,7 +160,6 @@ body {
   }
 }
 
-/* Mobile portrait */
 @media (max-width: 576px) {
   body {
     padding: 1rem 0.5rem;
@@ -205,7 +195,6 @@ body {
   }
 }
 
-/* Extra small devices */
 @media (max-width: 400px) {
   .page-header {
     font-size: 1.5rem;

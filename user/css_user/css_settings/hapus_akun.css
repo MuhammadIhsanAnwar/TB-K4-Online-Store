@@ -40,7 +40,6 @@ body::before {
   z-index: -1;
 }
 
-/* ========== Card ========== */
 .card {
   border-radius: 22px;
   background: rgba(234, 226, 228, 0.45);
@@ -75,7 +74,6 @@ body::before {
   text-align: center;
 }
 
-/* ========== Warning ========== */
 .warning-icon {
   font-size: 4rem;
   text-align: center;
@@ -105,7 +103,6 @@ body::before {
   font-size: 0.95rem;
 }
 
-/* ========== Danger List ========== */
 .danger-list {
   background: rgba(239, 68, 68, 0.05);
   padding: 16px;
@@ -136,7 +133,6 @@ body::before {
   font-weight: bold;
 }
 
-/* ========== Buttons ========== */
 .button-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -183,7 +179,6 @@ body::before {
   transform: translateY(0);
 }
 
-/* ========== Text Center ========== */
 .text-center {
   text-align: center;
   margin-top: 1.5rem;
@@ -208,9 +203,7 @@ small {
   line-height: 1.4;
 }
 
-/* ========== Responsive Design ========== */
 
-/* Tablets */
 @media (max-width: 768px) {
   body {
     padding: 15px;
@@ -234,7 +227,6 @@ small {
   }
 }
 
-/* Mobile portrait */
 @media (max-width: 576px) {
   body {
     padding: 12px;
@@ -293,7 +285,6 @@ small {
   }
 }
 
-/* Extra small devices */
 @media (max-width: 400px) {
   .card {
     padding: 25px 16px;
