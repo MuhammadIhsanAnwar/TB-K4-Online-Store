@@ -167,7 +167,7 @@ $status_counts['Selesai'] = $history_count['count'] ?? 0;
 
     <div class="orders-container">
         <div class="orders-header">
-            <h1>📦 Pesanan Saya</h1>
+            <h1>Pesanan Saya </h1>
         </div>
 
         <div class="status-tabs">
