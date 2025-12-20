@@ -25,7 +25,7 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #EAE2E4 0%, #B7C5DA 50%, #1E5DAC 100%);
             min-height: 100vh;
-            padding-top: 80px;
+            padding-top: 0px;
         }
 
         /* ===== NAVBAR STYLING ===== */
